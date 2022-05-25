@@ -15,9 +15,8 @@ const buttonSecondStyle = {
   marginTop: "10px"
 }
 
-const MenuItemStyle = {
+const menuItemStyle = {
   margin: '10px 0',
-
 }
 
 const Slider = () => {
@@ -52,25 +51,25 @@ const Slider = () => {
         Create Organization
       </Button>
       <MenuList>
-        <MenuItem sx={MenuItemStyle}>
+        <MenuItem sx={menuItemStyle}>
           <ListItemIcon>
             <ContentCut fontSize="small"/>
           </ListItemIcon>
           <ListItemText>One</ListItemText>
         </MenuItem>
-        <MenuItem sx={MenuItemStyle}>
+        <MenuItem sx={menuItemStyle}>
           <ListItemIcon>
             <ContentCopy fontSize="small"/>
           </ListItemIcon>
           <ListItemText>Two</ListItemText>
         </MenuItem>
-        <MenuItem sx={MenuItemStyle}>
+        <MenuItem sx={menuItemStyle}>
           <ListItemIcon>
             <ContentPaste fontSize="small"/>
           </ListItemIcon>
           <ListItemText>three</ListItemText>
         </MenuItem>
-        <MenuItem sx={MenuItemStyle}>
+        <MenuItem sx={menuItemStyle}>
           <ListItemIcon>
             <Cloud fontSize="small"/>
           </ListItemIcon>

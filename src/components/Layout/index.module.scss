@@ -1,0 +1,46 @@
+@import "../../styles/globalVar.scss";
+
+$header-height: 60px;
+
+.header {
+  height: $header-height;
+  min-width: $global-min-width;
+}
+
+.contentWrappper {
+  width: 100%;
+  min-height: calc(100vh - $header-height);
+  min-width: $global-min-width;
+  background: linear-gradient(90deg, #fff 40%, rgb(248 249 252) 60%);
+}
+
+.content {
+  display: flex;
+  max-width: $global-max-width;
+  padding: 0 23px;
+  margin: 0 auto;
+  flex-grow: 1;
+  width: 100%;
+  min-height: 100%;
+
+  .left {
+    width: 320px;
+    display: flex;
+    background-color: #fff;
+    min-height: calc(100vh - $header-height);
+  }
+
+  .center {
+    background-color: #fff;
+    width: calc(100% - 700px);
+    border-left: 1px solid rgb(225, 228, 239);
+    border-right: 1px solid rgb(225, 228, 239);
+  }
+
+  .right {
+    width: 380px;
+    background-color: rgb(248 249 252);
+  }
+}
+
+

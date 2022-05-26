@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 import {Context} from "@/utils/store";
 
 const page = () => {
-  const { a , dispatch } = useContext(Context);
+  const { a, dispatch } = useContext(Context);
 
   function dispatchFun(){
     dispatch({a: '333'})

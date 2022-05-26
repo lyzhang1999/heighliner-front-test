@@ -3,13 +3,12 @@ import type {AppProps} from 'next/app'
 import Head from 'next/head'
 
 import {TokenContext, useTokenReducer} from '@/hooks/token';
-import {initState, Context, reducer} from '@/utils/store.ts'
+import {initState, Context, reducer} from "@/utils/store.ts";
 
-import '@/styles/globals.css'
-
+import '@/styles/globals.css';
 
 function App({Component, pageProps}: AppProps) {
-  // const [token, dispatchToken] = useTokenReducer();
+  const [token, dispatchToken] = useTokenReducer();
   const [state, dispatch] = useReducer(reducer, initState);
 
   return (
@@ -20,9 +19,9 @@ function App({Component, pageProps}: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
       <Context.Provider value={{state, dispatch, ...state as object}}>
-        {/*<TokenContext.Provider value={{token, dispatchToken}}>*/}
+        <TokenContext.Provider value={{token, dispatchToken}}>
           <Component {...pageProps} />
-        {/*</TokenContext.Provider>*/}
+        </TokenContext.Provider>
       </Context.Provider>
     </div>
   )

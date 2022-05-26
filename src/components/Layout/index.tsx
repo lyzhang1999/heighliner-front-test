@@ -9,27 +9,33 @@ import styles from './index.module.scss';
 
 interface HomeProps {
   children?: react.ReactNode,
+  hiddenContent?: boolean
 }
 
-const Layout = ({children}: HomeProps): react.ReactElement => {
+const Layout = ({children, hiddenContent}: HomeProps): react.ReactElement => {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.header}>
         <Header/>
       </div>
-      <div className={styles.contentWrappper}>
-        <div className={styles.content}>
-          <div className={styles.left}>
-            <Slider />
+      {
+        hiddenContent ?
+          children
+          :
+          <div className={styles.contentWrappper}>
+            <div className={styles.content}>
+              <div className={styles.left}>
+                <Slider />
+              </div>
+              <div className={styles.center}>
+                {children}
+              </div>
+              <div className={styles.right}>
+                right
+              </div>
+            </div>
           </div>
-          <div className={styles.center}>
-            {children}
-          </div>
-          <div className={styles.right}>
-            right
-          </div>
-        </div>
-      </div>
+      }
     </ThemeProvider>
   )
 }

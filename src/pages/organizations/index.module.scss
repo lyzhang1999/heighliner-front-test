@@ -1,0 +1,46 @@
+@import "../../styles/globalVar.scss";
+
+.header {
+  background-image: linear-gradient(90deg, rgb(60, 131, 231), rgb(104, 40, 195));
+
+  .headerContent {
+    @include globalWidth;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 34px;
+
+    .left {
+      .title {
+        color: #fff;
+        font-size: 22px;
+      }
+
+      .desc {
+        color: rgb(201, 223, 253);
+        font-size: 16px;
+        margin-top: 10px;
+      }
+    }
+
+    .right {
+      cursor: pointer;
+      color: #fff;
+      font-size: 14px;
+      line-height: 42px;
+      padding: 0 20px;
+      border-radius: 4px;
+      background: linear-gradient(to right bottom, rgb(78, 201, 212), rgb(38, 115, 223));
+      box-shadow: 0 1px 1px hsl(215deg 75% 36% / 8%), 0 2px 4px hsl(215deg 75% 36% / 12%);
+
+      &:hover {
+        background: linear-gradient(to right bottom, rgb(42, 196, 210), rgb(16, 100, 218));
+      }
+    }
+  }
+}
+
+.tableWrapper {
+  @include globalWidth;
+  padding: 34px;
+}

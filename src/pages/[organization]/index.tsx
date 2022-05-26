@@ -4,7 +4,9 @@
 
 
 const Dashboard = () => {
-  return <></>
+  return <>
+    Dashboard
+  </>
 }
 
 export default Dashboard;

@@ -3,3 +3,9 @@
 $global-max-width: 1620px;
 
 $global-min-width: 1100px;
+
+@mixin globalWidth {
+  max-width: $global-max-width;
+  min-width: $global-min-width;
+}
+

@@ -1,12 +1,9 @@
 import {
-  Typography,
-  Modal,
   Box,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   TextField,
 } from '@mui/material';
@@ -17,10 +14,9 @@ import hljs from 'highlight.js';
 import yaml from 'highlight.js/lib/languages/yaml';
 import 'highlight.js/styles/a11y-dark.css' // 导入代码高亮样式
 
-
 interface Props {
-  setModalDispay?: boolean
-  modalDisplay?: () => {},
+  modalDisplay: boolean
+  setModalDispay: (dispaly: any) => void,
   modalConfirm?: () => {}
 }
 
@@ -37,13 +33,10 @@ const NewClusterModal = ({modalDisplay, setModalDispay, modalConfirm}: Props) =>
   //   }
   // }, [modalDisplay])
 
-
   const [value, setValue] = React.useState('');
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
-
 
   return (
     <div>

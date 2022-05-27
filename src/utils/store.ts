@@ -1,6 +1,6 @@
 import React, {createContext} from 'react'
 
-interface State {
+export interface State {
   a?: string,
   b?: string,
   c?: string
@@ -12,12 +12,27 @@ export const initState: State = {
   c: '7'
 }
 
-export const reducer = (state: State, params: State ) => {
+export const reducer = (state: State, params: State) => {
   return {
     ...state,
     ...params
   };
 }
-export const Context = React.createContext(null);
+
+// const DispatchContext = createContext<{
+//   token: Token;
+//   dispatchToken: React.Dispatch<any>;
+// }>({
+//   token: initialToken,
+//   dispatchToken: () => null,
+// });
+
+export const Context = createContext<{
+  dispatch: React.Dispatch<any>;
+}>({
+  dispatch: () => null,
+});
+
+// export const Context = React.createContext(initState);
 
 

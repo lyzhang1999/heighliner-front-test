@@ -34,7 +34,7 @@ const Clusters = () => {
         {...{
           setModalDispay,
           modalDisplay,
-          modalConfirm
+
         }}
       />
     </Layout>

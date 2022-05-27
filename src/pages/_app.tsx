@@ -1,9 +1,9 @@
 import {useReducer} from "react";
-import type {AppProps} from 'next/app'
-import Head from 'next/head'
+import type {AppProps} from 'next/app';
+import Head from 'next/head';
 
 import {TokenContext, useTokenReducer} from '@/hooks/token';
-import {initState, Context, reducer} from "@/utils/store.ts";
+import {initState, Context, reducer} from "@/utils/store";
 
 import '@/styles/globals.css';
 
@@ -18,7 +18,8 @@ function App({Component, pageProps}: AppProps) {
         <meta name="description" content="Heighliner Cloud · Speed up Cloud Native Application Development"/>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
-      <Context.Provider value={{state, dispatch, ...state as object}}>
+      {/*@ts-ignore*/}
+      <Context.Provider value={{state, dispatch}}>
         <TokenContext.Provider value={{token, dispatchToken}}>
           <Component {...pageProps} />
         </TokenContext.Provider>

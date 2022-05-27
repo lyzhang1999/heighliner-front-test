@@ -49,8 +49,8 @@ export default function MenuAppBar() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Organizations</MenuItem>
+            {/*<MenuItem onClick={handleClose}>Profile</MenuItem>*/}
+            {/*<MenuItem onClick={handleClose}>Organizations</MenuItem>*/}
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </div>

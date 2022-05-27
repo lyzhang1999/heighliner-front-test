@@ -1,6 +1,6 @@
 import * as React from 'react';
-
-import {ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Select, SelectChangeEvent, Button} from "@mui/material";
+import Link from 'next/link'
+import {ListItemIcon, ListItemText, MenuItem, MenuList, Select, SelectChangeEvent, Button} from "@mui/material";
 import {Cloud, ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
 
 import styles from "./index.module.scss";
@@ -51,30 +51,22 @@ const Slider = () => {
         Create Organization
       </Button>
       <MenuList>
-        <MenuItem sx={menuItemStyle}>
-          <ListItemIcon>
-            <ContentCut fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>One</ListItemText>
-        </MenuItem>
-        <MenuItem sx={menuItemStyle}>
-          <ListItemIcon>
-            <ContentCopy fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>Two</ListItemText>
-        </MenuItem>
-        <MenuItem sx={menuItemStyle}>
-          <ListItemIcon>
-            <ContentPaste fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>three</ListItemText>
-        </MenuItem>
-        <MenuItem sx={menuItemStyle}>
-          <ListItemIcon>
-            <Cloud fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>Four</ListItemText>
-        </MenuItem>
+        <Link href="/xxx/applications">
+          <MenuItem sx={menuItemStyle}>
+            <ListItemIcon>
+              <ContentCut fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>Applications</ListItemText>
+          </MenuItem>
+        </Link>
+        <Link href="/xxx/clusters">
+          <MenuItem sx={menuItemStyle}>
+            <ListItemIcon>
+              <ContentPaste fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>Clusters</ListItemText>
+          </MenuItem>
+        </Link>
       </MenuList>
     </div>
   )

@@ -9,10 +9,11 @@ import styles from './index.module.scss';
 
 interface HomeProps {
   children?: react.ReactNode,
-  hiddenContent?: boolean
+  hiddenContent?: boolean,
+  pageHeader?: string
 }
 
-const Layout = ({children, hiddenContent}: HomeProps): react.ReactElement => {
+const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactElement => {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.header}>
@@ -28,10 +29,16 @@ const Layout = ({children, hiddenContent}: HomeProps): react.ReactElement => {
                 <Slider />
               </div>
               <div className={styles.center}>
+                {
+                  pageHeader &&
+                  <div className={styles.pageHeader}>
+                    {pageHeader}
+                  </div>
+                }
                 {children}
               </div>
               <div className={styles.right}>
-                right
+                {/*right*/}
               </div>
             </div>
           </div>

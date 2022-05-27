@@ -5,7 +5,7 @@ import Head from 'next/head';
 import {TokenContext, useTokenReducer} from '@/hooks/token';
 import {initState, Context, reducer} from "@/utils/store";
 
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 
 function App({Component, pageProps}: AppProps) {
   const [token, dispatchToken] = useTokenReducer();

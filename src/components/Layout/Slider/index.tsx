@@ -28,15 +28,15 @@ const Slider = () => {
   return (
     <div className={styles.slider}>
       <div className={styles.title}>
-        Organization
+        Organization:
       </div>
       <Select
         onChange={handleChange}
         sx={{width: "100%", height: '40px'}}
+        defaultValue={"1"}
       >
-        <MenuItem value={10}>Twenty</MenuItem>
-        <MenuItem value={21}>Twenty one</MenuItem>
-        <MenuItem value={22}>Twenty two</MenuItem>
+        <MenuItem value={1}>Org one</MenuItem>
+        <MenuItem value={2}>Org two</MenuItem>
       </Select>
       <Button
         variant="contained"

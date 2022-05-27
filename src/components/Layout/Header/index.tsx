@@ -23,12 +23,12 @@ export default function MenuAppBar() {
           <span className={styles.companyName}>Heighliner</span>
         </div>
         <div className={styles.right}>
-          <Button
-            color="inherit"
-            startIcon={<DashboardIcon color="primary"/>}
-          >
-            Dashboard
-          </Button>
+          {/*<Button*/}
+          {/*  color="inherit"*/}
+          {/*  startIcon={<DashboardIcon color="primary"/>}*/}
+          {/*>*/}
+          {/*  Dashboard*/}
+          {/*</Button>*/}
           <Button
             color="inherit"
             id="basic-button"

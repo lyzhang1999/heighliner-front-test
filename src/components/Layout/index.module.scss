@@ -4,13 +4,11 @@ $header-height: 60px;
 
 .header {
   height: $header-height;
-  min-width: $global-min-width;
 }
 
 .contentWrappper {
   width: 100%;
   min-height: calc(100vh - $header-height);
-  min-width: $global-min-width;
   background: linear-gradient(90deg, #fff 40%, rgb(248 249 252) 60%);
 }
 
@@ -24,7 +22,7 @@ $header-height: 60px;
   min-height: 100%;
 
   .left {
-    width: 320px;
+    width: 20%;
     display: flex;
     background-color: #fff;
     min-height: calc(100vh - $header-height);
@@ -32,10 +30,11 @@ $header-height: 60px;
 
   .center {
     background-color: #fff;
-    width: calc(100% - 700px);
+    width: 60%;
     border-left: 1px solid rgb(225, 228, 239);
     border-right: 1px solid rgb(225, 228, 239);
-    .pageHeader{
+
+    .pageHeader {
       padding: 24px 24px 16px 24px;
       border-bottom: 1px solid rgb(225, 228, 239);
       font-size: 18px;
@@ -43,7 +42,7 @@ $header-height: 60px;
   }
 
   .right {
-    width: 380px;
+    width: 20%;
     background-color: rgb(248 249 252);
   }
 }

@@ -1,0 +1,32 @@
+.container {
+  background-image: url("/img/login/login-page-bg@3x.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+
+  .logo {
+    top: 48px;
+    left: 64.2px;
+  }
+
+  .card {
+    top: 300px;
+    left: 195px;
+    width: 366px;
+    height: 278px;
+
+    .title {
+      font-size: 23px;
+      color: #6002ee;
+    }
+
+    .githubLoginBtn {
+      background-color: rgba(217, 217, 217, 0);
+      border-color: #d9dfe8;
+      border-radius: 0;
+      color: #000;
+    }
+  }
+}

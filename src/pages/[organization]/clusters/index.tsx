@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import {Button} from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import '@/utils/axios';
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";

@@ -1,23 +1,34 @@
-import {useContext, useEffect, useReducer, useState} from "react";
+import {useContext, useState} from "react";
 import {NextPage} from "next";
 import clsx from "clsx";
 import {LoadingButton} from "@mui/lab";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import {Card, Typography, Box} from "@mui/material";
+import {useRouter} from "next/router";
 
 import {getPopUpsWindowFeatures} from "@/utils/window";
 import {TokenAction, useTokenContext} from "@/hooks/token";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
-import useGetOriList from "@/hooks/getOriList";
 import {Context} from "@/utils/store";
+import http from "@/utils/axios";
 
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
   const {token, dispatchToken} = useTokenContext();
   const {dispatch} = useContext(Context);
-  const {getOriList} = useGetOriList(dispatch);
+  const router = useRouter();
+
+  function getOriList() {
+    http.get('/orgs').then((res: any[]) => {
+      dispatch({organizationList: res});
+      if (res.length) {
+        let oriName = res[0].name;
+        router.push(`${decodeURIComponent(oriName)}/applications`);
+      }
+    })
+  }
 
   const handleGitHubLogin = () => {
     dispatchToken({type: TokenAction.Remove});

@@ -4,6 +4,7 @@ import React, {createContext, useContext, useReducer} from "react";
 interface Token {
   jwt: string;
 };
+
 type Reducer = (
   token: Token,
   action: { type: TokenAction; payload: Token }

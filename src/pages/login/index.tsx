@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { NextPage } from "next";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import clsx from "clsx";
 import { LoadingButton } from "@mui/lab";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import { Card, Typography, Box } from "@mui/material";
 
 import { getPopUpsWindowFeatures } from "@/utils/window";
 import { TokenAction, useTokenContext } from "@/hooks/token";
 
-const pages = ["About us", "Blog", "GitHub"];
+import styles from "./index.module.scss";
+import Image from "next/image";
 
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
@@ -50,44 +48,45 @@ const Login: NextPage = () => {
   };
 
   return (
-    <>
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" component="div" className="flex mr-2" noWrap>
-            LOGO
-          </Typography>
-          <Box className="flex grow-1">
-            {pages.map((page) => (
-              <Button
-                key={page}
-                className="my-2 text-white block my-auto mx-2"
-                variant="contained"
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Box className="flex flex-col justify-center gap-4 h-100vh">
-        <Typography variant="h4" className="flex justify-center text-[#1976d2]">
-          Make Application Faster!
-        </Typography>
-        <Box className="flex justify-center">
-          <LoadingButton
-            loading={logining}
-            className="normal-case"
-            variant="outlined"
-            startIcon={<GitHubIcon className="text-4xl m-1" />}
-            loadingPosition="start"
-            size="large"
-            onClick={handleGitHubLogin}
+    <div className={clsx("relative", styles.container)}>
+      <div className={clsx("absolute flex gap-4", styles.logo)}>
+        <Image
+          src="/img/logo/header-logo.webp"
+          alt="Heighliner"
+          width={51}
+          height={33}
+        />
+        <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5} />
+      </div>
+      <Card
+        className={clsx(
+          "flex flex-col justify-center rounded-none absolute",
+          styles.card
+        )}
+      >
+        <Box className="flex flex-col justify-center gap-4">
+          <Typography
+            variant="h4"
+            className={clsx("flex justify-center", styles.title)}
           >
-            Log in with GitHub
-          </LoadingButton>
+            Sign in to Your Account
+          </Typography>
+          <Box className="flex justify-center">
+            <LoadingButton
+              loading={logining}
+              className={clsx("normal-case", styles.githubLoginBtn)}
+              variant="outlined"
+              startIcon={<GitHubIcon className="text-4xl m-1" />}
+              loadingPosition="start"
+              size="large"
+              onClick={handleGitHubLogin}
+            >
+              Log in with GitHub
+            </LoadingButton>
+          </Box>
         </Box>
-      </Box>
-    </>
+      </Card>
+    </div>
   );
 };
 

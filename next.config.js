@@ -8,6 +8,9 @@ const nextConfig = {
     loader: 'akamai',
     path: '/',
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack: (config, options) => {
     config.resolve.alias['@'] = path.resolve(__dirname, './src');
     

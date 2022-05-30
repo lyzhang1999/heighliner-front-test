@@ -1,11 +1,12 @@
 import http from "@/utils/axios";
 import {useRouter} from "next/router";
+import * as React from 'react';
 
-function useGetOriList(dispatch) {
+function useGetOriList(dispatch: React.Dispatch<object>) {
   const router = useRouter();
 
   function getOriList() {
-    http.get("/orgs").then(res => {
+    http.get("/orgs").then((res: any[]) => {
       dispatch({organizationList: res})
       if (res.length) {
         if (['/', '/login'].includes(router.asPath)) {

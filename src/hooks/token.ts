@@ -1,5 +1,5 @@
-import { Token } from "@mui/icons-material";
-import React, { createContext, useContext, useReducer } from "react";
+import {Token} from "@mui/icons-material";
+import React, {createContext, useContext, useReducer} from "react";
 
 interface Token {
   jwt: string;
@@ -42,4 +42,4 @@ const TokenContext = createContext<{
 });
 const useTokenContext = () => useContext(TokenContext);
 
-export { TokenAction, TokenContext, useTokenReducer, useTokenContext };
+export {TokenAction, TokenContext, useTokenReducer, useTokenContext};

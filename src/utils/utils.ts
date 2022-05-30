@@ -1,4 +1,4 @@
-function isBrowser() {
+export function isBrowser() {
   return process.title === "browser";
 }
 

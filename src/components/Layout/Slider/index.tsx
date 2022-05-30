@@ -1,9 +1,15 @@
 import * as React from 'react';
 import Link from 'next/link'
 import {ListItemIcon, ListItemText, MenuItem, MenuList, Select, SelectChangeEvent, Button} from "@mui/material";
-import {Cloud, ContentCopy, ContentCut, ContentPaste} from "@mui/icons-material";
+import {Cloud} from "@mui/icons-material";
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+
+import {getOriginzationByUrl} from "@/utils/utils";
 
 import styles from "./index.module.scss";
+import {useContext} from "react";
+import {Context} from "@/utils/store";
+import utils from "@/utils/utils";
 
 const buttonOneStyle = {
   width: "100%",
@@ -19,11 +25,34 @@ const menuItemStyle = {
   margin: '10px 0',
 }
 
+const navList = [
+  {
+    icon: <Cloud fontSize="small"/>,
+    href: `/${getOriginzationByUrl()}/applications`,
+    name: "Applications"
+  },
+  {
+    icon: <AccountTreeIcon fontSize="small"/>,
+    href: `/${getOriginzationByUrl()}/clusters`,
+    name: "Clusters"
+  }
+]
+
+function isActiveNav(currentPath: string) {
+  if (utils.isBrowser()) {
+    return (location.href as string).includes(currentPath);
+  } else {
+    return false;
+  }
+}
+
 const Slider = () => {
-  const [age, setAge] = React.useState('');
+  const {state} = useContext(Context);
+  const {organizationList} = state;
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+
   };
+  const oriKey = getOriginzationByUrl();
 
   return (
     <div className={styles.slider}>
@@ -33,10 +62,15 @@ const Slider = () => {
       <Select
         onChange={handleChange}
         sx={{width: "100%", height: '40px'}}
-        defaultValue={"1"}
+        defaultValue={oriKey}
       >
-        <MenuItem value={1}>Org one</MenuItem>
-        <MenuItem value={2}>Org two</MenuItem>
+        {
+          organizationList.map(item => {
+            return (
+              <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
+            )
+          })
+        }
       </Select>
       <Button
         variant="contained"
@@ -51,26 +85,29 @@ const Slider = () => {
         Create Organization
       </Button>
       <MenuList>
-        <Link href="/xxx/applications">
-          <MenuItem sx={menuItemStyle}>
-            <ListItemIcon>
-              <ContentCut fontSize="small"/>
-            </ListItemIcon>
-            <ListItemText>Applications</ListItemText>
-          </MenuItem>
-        </Link>
-        <Link href="/xxx/clusters">
-          <MenuItem sx={menuItemStyle}>
-            <ListItemIcon>
-              <ContentPaste fontSize="small"/>
-            </ListItemIcon>
-            <ListItemText>Clusters</ListItemText>
-          </MenuItem>
-        </Link>
+        {
+          navList.map(item => {
+            let {icon, href, name} = item;
+            let isSelected = isActiveNav(href)
+            return (
+              <Link href={href} key={name}>
+                <MenuItem
+                  selected={isSelected}
+                  sx={menuItemStyle}
+                >
+                  <ListItemIcon>
+                    {icon}
+                  </ListItemIcon>
+                  <ListItemText>{name}</ListItemText>
+                </MenuItem>
+
+              </Link>
+            )
+          })
+        }
       </MenuList>
     </div>
   )
 };
-
 
 export default Slider;

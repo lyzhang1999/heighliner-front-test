@@ -24,8 +24,8 @@ function App({Component, pageProps}: AppProps) {
     if (!['/login/github'].includes(router.pathname)) {
       if (token) {
         http.get('/orgs').then((res: any[]) => {
+          dispatch({organizationList: res});
           if (res.length && (["/", '/login'].includes(router.pathname))) {
-            dispatch({organizationList: res});
             let oriName = res[0].name;
             router.push(`${decodeURIComponent(oriName)}/applications`);
           }

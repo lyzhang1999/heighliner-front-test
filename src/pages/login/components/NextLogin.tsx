@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { Alert, AlertTitle, LinearProgress } from "@mui/material";
+import {useEffect, useState} from "react";
+import {Alert, AlertTitle, LinearProgress} from "@mui/material";
 
-import { TokenAction, useTokenContext } from "@/hooks/token";
-import { Result } from "@/utils/constants";
-import { useApi } from "@/utils/http";
+import {TokenAction, useTokenContext} from "@/hooks/token";
+import {Result} from "@/utils/constants";
+import {useApi} from "@/utils/http";
+import axios from "@/utils/axios";
+import cookie from "@/utils/cookie";
 
 import CloseWindowCounter from "./CloseWindowCounter";
 
@@ -11,30 +13,40 @@ interface Props {
   code: string;
 }
 
-export default function NextLogin({ code }: Props) {
-  const { token, dispatchToken } = useTokenContext();
+export default function NextLogin({code}: Props) {
+  const {token, dispatchToken} = useTokenContext();
   const [result, setResult] = useState(Result.Loading);
 
-  const { data, error } = useApi(
-    "/user/login?" +
-      new URLSearchParams({
-        code: code,
-      })
-  );
+  // const { data, error } = useApi(
+  //   "/user/login?" +
+  //     new URLSearchParams({
+  //       code: code,
+  //     })
+  // );
 
   useEffect(() => {
-    if (error) {
-      setResult(Result.Error);
-    } else if (!data) {
-      setResult(Result.Loading);
-    } else if (data) {
+    axios.get(`auth/token?code=${code}&login_type=github`).then(res => {
+      let {token} = res;
+      cookie.setCookie('token', token, 1000 * 60 * 60 * 48); // 48h
       setResult(Result.Success);
-      dispatchToken({
-        type: TokenAction.Set,
-        payload: { token: data.token },
-      });
-    }
-  }, [error, data, dispatchToken]);
+    }).catch(err => {
+
+    })
+  }, [])
+
+  // useEffect(() => {
+  //   if (error) {
+  //     setResult(Result.Error);
+  //   } else if (!data) {
+  //     setResult(Result.Loading);
+  //   } else if (data) {
+  //     setResult(Result.Success);
+  //     dispatchToken({
+  //       type: TokenAction.Set,
+  //       payload: { token: data.token },
+  //     });
+  //   }
+  // }, [error, data, dispatchToken]);
 
   switch (result) {
     case Result.Error:
@@ -48,10 +60,10 @@ export default function NextLogin({ code }: Props) {
       return (
         <Alert severity="success">
           <AlertTitle>Login Successfully</AlertTitle>
-          The window will automatically closed after <CloseWindowCounter seconds={3} /> second.
+          The window will automatically closed after <CloseWindowCounter seconds={3}/> second.
         </Alert>
       );
     default:
-      return <LinearProgress color="secondary" />;
+      return <LinearProgress color="secondary"/>;
   }
 }

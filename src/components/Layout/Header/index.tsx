@@ -1,20 +1,29 @@
 import * as React from 'react';
+import {useRouter} from "next/router";
 
 import {MenuItem, Button, Menu} from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import cookie from "@/utils/cookie";
 
 import styles from './index.module.scss';
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  }
+
+  const handleLogout = () => {
+    cookie.delCookie('token');
+    router.push('/login');
   };
+
   return (
     <div className={styles.header}>
       <div className={styles.headerWrapper}>
@@ -51,7 +60,7 @@ export default function MenuAppBar() {
           >
             {/*<MenuItem onClick={handleClose}>Profile</MenuItem>*/}
             {/*<MenuItem onClick={handleClose}>Organizations</MenuItem>*/}
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>
       </div>

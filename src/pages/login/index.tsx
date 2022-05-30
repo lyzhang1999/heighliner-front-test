@@ -1,12 +1,15 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { NextPage } from "next";
 import clsx from "clsx";
 import { LoadingButton } from "@mui/lab";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Card, Typography, Box } from "@mui/material";
+import { useRouter } from 'next/router'
 
 import { getPopUpsWindowFeatures } from "@/utils/window";
 import { TokenAction, useTokenContext } from "@/hooks/token";
+import axios from "@/utils/axios";
+import cookie from "@/utils/cookie";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
@@ -14,6 +17,24 @@ import Image from "next/image";
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
   const { token, dispatchToken } = useTokenContext();
+  const router = useRouter()
+
+  // judge login
+  useEffect(() => {
+    const token = cookie.getCookie('token');
+    if(token){
+      goDashBoard();
+    }
+  }, [])
+
+  const goDashBoard = () => {
+    axios.get("/orgs").then(res => {
+      if(res.length){
+        let oriName = res[0].name;
+        router.push(`${decodeURIComponent(oriName)}/applications`)
+      }
+    })
+  }
 
   const handleGitHubLogin = () => {
     dispatchToken({ type: TokenAction.Remove });
@@ -23,6 +44,8 @@ const Login: NextPage = () => {
     const state = window.crypto.randomUUID();
     window.localStorage.setItem("state", state);
     url.searchParams.set("state", state);
+
+    console.warn(url)
 
     const GitHubLoginWindow = window.open(
       url,
@@ -37,12 +60,13 @@ const Login: NextPage = () => {
         clearInterval(timer);
         setLogining(false);
         window.localStorage.removeItem("state");
+        goDashBoard();
 
         // Redirect to the Dashboard page if exist token
-        const token = window.localStorage.getItem("token");
-        if (token) {
-          location.href = process.env.NEXT_PUBLIC_DASHBOARD_URL as string;
-        }
+        // const token = window.localStorage.getItem("token");
+        // if (token) {
+        //   location.href = process.env.NEXT_PUBLIC_DASHBOARD_URL as string;
+        // }
       }
     }, 1000);
   };

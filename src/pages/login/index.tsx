@@ -1,51 +1,32 @@
-import {useEffect, useState} from "react";
-import { NextPage } from "next";
+import {useContext, useEffect, useReducer, useState} from "react";
+import {NextPage} from "next";
 import clsx from "clsx";
-import { LoadingButton } from "@mui/lab";
+import {LoadingButton} from "@mui/lab";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { Card, Typography, Box } from "@mui/material";
-import { useRouter } from 'next/router'
+import {Card, Typography, Box} from "@mui/material";
 
-import { getPopUpsWindowFeatures } from "@/utils/window";
-import { TokenAction, useTokenContext } from "@/hooks/token";
-import axios from "@/utils/axios";
-import cookie from "@/utils/cookie";
+import {getPopUpsWindowFeatures} from "@/utils/window";
+import {TokenAction, useTokenContext} from "@/hooks/token";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
+import useGetOriList from "@/hooks/getOriList";
+import {Context} from "@/utils/store";
 
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
-  const { token, dispatchToken } = useTokenContext();
-  const router = useRouter()
-
-  // judge login
-  useEffect(() => {
-    const token = cookie.getCookie('token');
-    if(token){
-      goDashBoard();
-    }
-  }, [])
-
-  const goDashBoard = () => {
-    axios.get("/orgs").then(res => {
-      if(res.length){
-        let oriName = res[0].name;
-        router.push(`${decodeURIComponent(oriName)}/applications`)
-      }
-    })
-  }
+  const {token, dispatchToken} = useTokenContext();
+  const {dispatch} = useContext(Context);
+  const {getOriList} = useGetOriList(dispatch);
 
   const handleGitHubLogin = () => {
-    dispatchToken({ type: TokenAction.Remove });
+    dispatchToken({type: TokenAction.Remove});
 
     const url = new URL(process.env.NEXT_PUBLIC_GITHUB_URL!);
     // Using in url request to github to prevent from forgery attack
     const state = window.crypto.randomUUID();
     window.localStorage.setItem("state", state);
     url.searchParams.set("state", state);
-
-    console.warn(url)
 
     const GitHubLoginWindow = window.open(
       url,
@@ -60,13 +41,7 @@ const Login: NextPage = () => {
         clearInterval(timer);
         setLogining(false);
         window.localStorage.removeItem("state");
-        goDashBoard();
-
-        // Redirect to the Dashboard page if exist token
-        // const token = window.localStorage.getItem("token");
-        // if (token) {
-        //   location.href = process.env.NEXT_PUBLIC_DASHBOARD_URL as string;
-        // }
+        getOriList();
       }
     }, 1000);
   };
@@ -80,7 +55,7 @@ const Login: NextPage = () => {
           width={51}
           height={33}
         />
-        <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5} />
+        <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5}/>
       </div>
       <Card
         className={clsx(
@@ -100,7 +75,7 @@ const Login: NextPage = () => {
               loading={logining}
               className={clsx("normal-case", styles.githubLoginBtn)}
               variant="outlined"
-              startIcon={<GitHubIcon className="text-4xl m-1" />}
+              startIcon={<GitHubIcon className="text-4xl m-1"/>}
               loadingPosition="start"
               size="large"
               onClick={handleGitHubLogin}

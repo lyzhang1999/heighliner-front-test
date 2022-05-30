@@ -1,4 +1,4 @@
-import {useReducer} from "react";
+import {useEffect, useReducer} from "react";
 import type {AppProps} from 'next/app';
 import Head from 'next/head';
 
@@ -6,10 +6,24 @@ import {TokenContext, useTokenReducer} from '@/hooks/token';
 import {initState, Context, reducer} from "@/utils/store";
 
 import '@/styles/globals.scss';
+import cookie from "@/utils/cookie";
+import useGetOriList from "@/hooks/getOriList";
 
 function App({Component, pageProps}: AppProps) {
   const [token, dispatchToken] = useTokenReducer();
   const [state, dispatch] = useReducer(reducer, initState);
+  const {getOriList} = useGetOriList(dispatch);
+
+  useEffect(() => {
+    loginCheck();
+  }, [])
+
+  function loginCheck(){
+    const token = cookie.getCookie('token');
+    if(token){
+      getOriList();
+    }
+  }
 
   return (
     <div>

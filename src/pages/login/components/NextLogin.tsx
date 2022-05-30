@@ -13,6 +13,11 @@ interface Props {
   code: string;
 }
 
+
+interface Res{
+  token?: string
+}
+
 export default function NextLogin({code}: Props) {
   const {token, dispatchToken} = useTokenContext();
   const [result, setResult] = useState(Result.Loading);

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import cookie from "@/utils/cookie";
 
-
 export const http = axios.create({
   baseURL: 'http://heighliner-cloud.heighliner.cloud/api/',
   timeout: 10000,

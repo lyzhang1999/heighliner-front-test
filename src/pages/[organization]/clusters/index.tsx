@@ -45,7 +45,7 @@ const Clusters = () => {
         {
           clusterList.map(item => {
             return (
-              <div className={styles.card}>
+              <div className={styles.card} key={item.name}>
                 <div className={styles.clusterName}>{item.name}</div>
               </div>
             )

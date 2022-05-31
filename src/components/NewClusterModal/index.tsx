@@ -115,7 +115,7 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
                 <TextField
                   label="Kube Config"
                   multiline
-                  rows={6}
+                  rows={8}
                   value={configValue}
                   onChange={handleConfigValue}
                 />

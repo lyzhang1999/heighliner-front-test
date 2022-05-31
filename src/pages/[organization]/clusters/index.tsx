@@ -7,12 +7,25 @@ import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
 
 import styles from './index.module.scss';
+import http from "@/utils/axios";
+import {getOriginzationByUrl} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDispay] = useState<boolean>(false);
+  const [clusterList, setClusterList] = useState([]);
 
   function successCb(params: any) {
     console.warn(params)
+  }
+
+  useEffect(() => {
+    getClusterList()
+  }, [])
+
+  function getClusterList() {
+    http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then(res => {
+      setClusterList(res)
+    })
   }
 
   return (
@@ -29,6 +42,15 @@ const Clusters = () => {
             Create a Cluster
           </Button>
         </div>
+        {
+          clusterList.map(item => {
+            return (
+              <div className={styles.card}>
+                <div className={styles.clusterName}>{item.name}</div>
+              </div>
+            )
+          })
+        }
       </div>
       <NewClusterModal
         {...{

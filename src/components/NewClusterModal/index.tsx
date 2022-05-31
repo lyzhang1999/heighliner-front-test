@@ -5,7 +5,7 @@ import {
   Drawer,
 } from '@mui/material';
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styles from './index.module.scss';
 import hljs from 'highlight.js';
 import yaml from 'highlight.js/lib/languages/yaml';
@@ -48,6 +48,11 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
   const handleConfigValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setConfigValue(event.target.value);
   };
+
+  useEffect(() => {
+    setConfigName("");
+    setConfigValue("")
+  }, [modalDisplay])
 
   function handleConfirm() {
     if (!configName) {

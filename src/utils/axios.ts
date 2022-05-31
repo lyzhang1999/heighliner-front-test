@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axios';
 import cookie from "@/utils/cookie";
+import {NoticeRef} from "@/components/Notice";
 
 export const http = axios.create({
   baseURL: 'http://heighliner-cloud.heighliner.cloud/api/',
@@ -24,7 +25,12 @@ http.interceptors.response.use((res: AxiosResponse) => {
   return data //该返回对象会传到请求方法的响应对象中
 }, err => {
   // 响应错误处理
-  console.error(err);
+  let errMsg = err?.response?.data?.err_msg;
+  console.error(errMsg)
+  NoticeRef.current?.open({
+    message: errMsg,
+    type: "error",
+  });
   return Promise.reject(err);
 })
 

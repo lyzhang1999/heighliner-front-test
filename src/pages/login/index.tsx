@@ -24,8 +24,8 @@ const Login: NextPage = () => {
     http.get('/orgs').then((res: any[]) => {
       dispatch({organizationList: res});
       if (res.length) {
-        let oriName = res[0].name;
-        router.push(`${decodeURIComponent(oriName)}/applications`);
+        let oriName = res[0].id;
+        router.push(`${oriName}/applications`);
       }
     })
   }

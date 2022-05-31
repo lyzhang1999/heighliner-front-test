@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import {Button} from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -12,7 +11,7 @@ import styles from './index.module.scss';
 const Clusters = () => {
   const [modalDisplay, setModalDispay] = useState<boolean>(false);
 
-  function modalConfirm(params: any){
+  function successCb(params: any) {
     console.warn(params)
   }
 
@@ -35,7 +34,7 @@ const Clusters = () => {
         {...{
           setModalDispay,
           modalDisplay,
-
+          successCb,
         }}
       />
     </Layout>

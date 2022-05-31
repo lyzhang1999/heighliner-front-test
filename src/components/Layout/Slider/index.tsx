@@ -75,7 +75,7 @@ const Slider = () => {
         {
           organizationList.map((item: typeof organizationList) => {
             return (
-              <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
+              <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
             )
           })
         }

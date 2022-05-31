@@ -1,26 +1,32 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
+  Drawer,
 } from '@mui/material';
 
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import styles from './index.module.scss';
 import hljs from 'highlight.js';
 import yaml from 'highlight.js/lib/languages/yaml';
-import 'highlight.js/styles/a11y-dark.css' // 导入代码高亮样式
+import 'highlight.js/styles/a11y-dark.css';
+
+import http from "@/utils/axios";
+import {getOriginzationByUrl} from "@/utils/utils";
+import {NoticeRef} from "@/components/Notice";
+
 
 interface Props {
   modalDisplay: boolean
   setModalDispay: (dispaly: any) => void,
-  modalConfirm?: () => {}
+  successCb?: () => {},
 }
 
-const NewClusterModal = ({modalDisplay, setModalDispay, modalConfirm}: Props) => {
+const buttonStyles = {
+  marginRight: "10px",
+}
+
+const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
   // useEffect(() => {
   //   if (modalDisplay) {
   //     setTimeout(() => {
@@ -33,23 +39,53 @@ const NewClusterModal = ({modalDisplay, setModalDispay, modalConfirm}: Props) =>
   //   }
   // }, [modalDisplay])
 
-  const [value, setValue] = React.useState('');
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+  const [configName, setConfigName] = useState<string>('');
+  const handleConfigName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfigName(event.target.value);
   };
+
+  const [configValue, setConfigValue] = useState<string>('');
+  const handleConfigValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfigValue(event.target.value);
+  };
+
+  function handleConfirm() {
+    if (!configName) {
+      NoticeRef.current?.open({
+        message: "Please input cluster name",
+        type: "error",
+      });
+      return;
+    }
+    if (!configValue) {
+      NoticeRef.current?.open({
+        message: "Please input kube config",
+        type: "error",
+      });
+      return;
+    }
+    http.post(`/orgs/${getOriginzationByUrl()}/clusters`,
+      {
+        "kubeconfig": configValue,
+        "name": configName,
+        "provider": "kubeconfig"
+      }
+    ).then(res => {
+      setModalDispay(false);
+      successCb && successCb();
+    })
+  }
 
   return (
     <div>
-      <Dialog
+      <Drawer
+        anchor="right"
         open={modalDisplay}
-        onClose={() => setModalDispay(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          Create a new Cluster
-        </DialogTitle>
-        <DialogContent>
+        <div className={styles.drawerWrap}>
+          <div className={styles.header}>
+            Create a new cluster
+          </div>
           <div className={styles.content}>
             <Box
               component="form"
@@ -62,40 +98,98 @@ const NewClusterModal = ({modalDisplay, setModalDispay, modalConfirm}: Props) =>
             >
               <div>
                 <TextField
-                  id="outlined-multiline-flexible"
                   label="Name"
                   multiline
                   maxRows={4}
-                  value={value}
-                  defaultValue=""
-                  onChange={handleChange}
+                  value={configName}
+                  // defaultValue=""
+                  onChange={handleConfigName}
                 />
               </div>
               <div>
                 <TextField
-                  id="outlined-multiline-static"
                   label="Kube Config"
                   multiline
                   rows={6}
-                  defaultValue=""
+                  value={configValue}
+                  onChange={handleConfigValue}
                 />
               </div>
             </Box>
-            {/*<div id="heightWrapper">*/}
-            {/*  test*/}
-            {/*</div>*/}
           </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setModalDispay(false)}>Cancel</Button>
-          <Button
-            onClick={modalConfirm}
-            variant="contained"
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <div className={styles.bottom}>
+            <Button
+              variant="outlined"
+              sx={buttonStyles}
+              onClick={() => setModalDispay(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              // sx={buttonStyles}
+              onClick={handleConfirm}
+            >
+              Confirm
+            </Button>
+          </div>
+        </div>
+      </Drawer>
+
+
+      {/*<Dialog*/}
+      {/*  open={modalDisplay}*/}
+      {/*  onClose={() => setModalDispay(false)}*/}
+      {/*  aria-labelledby="alert-dialog-title"*/}
+      {/*  aria-describedby="alert-dialog-description"*/}
+      {/*>*/}
+      {/*  <DialogTitle id="alert-dialog-title">*/}
+      {/*    Create a new Cluster*/}
+      {/*  </DialogTitle>*/}
+      {/*  <DialogContent>*/}
+      {/*    <div className={styles.content}>*/}
+      {/*      <Box*/}
+      {/*        component="form"*/}
+      {/*        sx={{*/}
+      {/*          width: "100%",*/}
+      {/*          '& .MuiTextField-root': {marginTop: "20px", width: '100%'},*/}
+      {/*        }}*/}
+      {/*        noValidate*/}
+      {/*        autoComplete="off"*/}
+      {/*      >*/}
+      {/*        <div>*/}
+      {/*          <TextField*/}
+      {/*            id="outlined-multiline-flexible"*/}
+      {/*            label="Name"*/}
+      {/*            multiline*/}
+      {/*            maxRows={4}*/}
+      {/*            value={value}*/}
+      {/*            defaultValue=""*/}
+      {/*            onChange={handleChange}*/}
+      {/*          />*/}
+      {/*        </div>*/}
+      {/*        <div>*/}
+      {/*          <TextField*/}
+      {/*            id="outlined-multiline-static"*/}
+      {/*            label="Kube Config"*/}
+      {/*            multiline*/}
+      {/*            rows={6}*/}
+      {/*            defaultValue=""*/}
+      {/*          />*/}
+      {/*        </div>*/}
+      {/*      </Box>*/}
+      {/*    </div>*/}
+      {/*  </DialogContent>*/}
+      {/*  <DialogActions>*/}
+      {/*    <Button onClick={() => setModalDispay(false)}>Cancel</Button>*/}
+      {/*    <Button*/}
+      {/*      onClick={modalConfirm}*/}
+      {/*      variant="contained"*/}
+      {/*    >*/}
+      {/*      Confirm*/}
+      {/*    </Button>*/}
+      {/*  </DialogActions>*/}
+      {/*</Dialog>*/}
     </div>
   )
 }

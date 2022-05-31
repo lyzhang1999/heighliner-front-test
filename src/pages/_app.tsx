@@ -6,9 +6,11 @@ import {useRouter} from "next/router";
 import {TokenContext, useTokenReducer} from '@/hooks/token';
 import {initState, Context, reducer} from "@/utils/store";
 
+
 import '@/styles/globals.scss';
 import cookie from "@/utils/cookie";
 import http from "@/utils/axios";
+import Notice from '@/components/Notice/index'
 
 function App({Component, pageProps}: AppProps) {
   const [token, dispatchToken] = useTokenReducer();
@@ -26,8 +28,8 @@ function App({Component, pageProps}: AppProps) {
         http.get('/orgs').then((res: any[]) => {
           dispatch({organizationList: res});
           if (res.length && (["/", '/login'].includes(router.pathname))) {
-            let oriName = res[0].name;
-            router.push(`${decodeURIComponent(oriName)}/applications`);
+            let oriName = res[0].id;
+            router.push(`${oriName}/applications`);
           }
         })
       } else {
@@ -46,6 +48,7 @@ function App({Component, pageProps}: AppProps) {
       {/*@ts-ignore*/}
       <Context.Provider value={{state, dispatch}}>
         <TokenContext.Provider value={{token, dispatchToken}}>
+          <Notice/>
           <Component {...pageProps} />
         </TokenContext.Provider>
       </Context.Provider>

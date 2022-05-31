@@ -38,6 +38,7 @@ const Login: NextPage = () => {
     const state = window.crypto.randomUUID();
     window.localStorage.setItem("state", state);
     url.searchParams.set("state", state);
+    url.searchParams.set('redirect_uri',  location.origin + "/login/github")
 
     const GitHubLoginWindow = window.open(
       url,

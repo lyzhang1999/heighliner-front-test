@@ -1,6 +1,15 @@
 import * as React from 'react';
 import Link from 'next/link'
-import {ListItemIcon, ListItemText, MenuItem, MenuList, Select, SelectChangeEvent, Button} from "@mui/material";
+import {
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Select,
+  SelectChangeEvent,
+  Button,
+  typographyClasses
+} from "@mui/material";
 import {Cloud} from "@mui/icons-material";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
@@ -50,7 +59,6 @@ const Slider = () => {
   const {state} = useContext(Context);
   const {organizationList} = state;
   const handleChange = (event: SelectChangeEvent) => {
-
   };
   const oriKey = getOriginzationByUrl();
 
@@ -65,7 +73,7 @@ const Slider = () => {
         defaultValue={oriKey}
       >
         {
-          organizationList.map(item => {
+          organizationList.map((item: typeof organizationList) => {
             return (
               <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
             )
@@ -100,7 +108,6 @@ const Slider = () => {
                   </ListItemIcon>
                   <ListItemText>{name}</ListItemText>
                 </MenuItem>
-
               </Link>
             )
           })

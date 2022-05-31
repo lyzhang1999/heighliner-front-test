@@ -3,7 +3,7 @@ const path = require('path')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode:  false,
+  reactStrictMode: false,
   images: {
     loader: 'akamai',
     path: '/',
@@ -11,9 +11,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    styledComponents: true
+  },
   webpack: (config, options) => {
     config.resolve.alias['@'] = path.resolve(__dirname, './src');
-    
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"]

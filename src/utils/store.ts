@@ -2,10 +2,12 @@ import React, {createContext} from 'react'
 
 export interface State {
   organizationList?: any[],
+  router?: any,
 }
 
 export const initState: State = {
   organizationList: [],
+  router: undefined,
 }
 
 export const reducer = (state: State, params: State) => {

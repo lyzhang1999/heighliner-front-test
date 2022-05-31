@@ -107,7 +107,6 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
                   multiline
                   maxRows={4}
                   value={configName}
-                  // defaultValue=""
                   onChange={handleConfigName}
                 />
               </div>
@@ -140,61 +139,6 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
           </div>
         </div>
       </Drawer>
-
-
-      {/*<Dialog*/}
-      {/*  open={modalDisplay}*/}
-      {/*  onClose={() => setModalDispay(false)}*/}
-      {/*  aria-labelledby="alert-dialog-title"*/}
-      {/*  aria-describedby="alert-dialog-description"*/}
-      {/*>*/}
-      {/*  <DialogTitle id="alert-dialog-title">*/}
-      {/*    Create a new Cluster*/}
-      {/*  </DialogTitle>*/}
-      {/*  <DialogContent>*/}
-      {/*    <div className={styles.content}>*/}
-      {/*      <Box*/}
-      {/*        component="form"*/}
-      {/*        sx={{*/}
-      {/*          width: "100%",*/}
-      {/*          '& .MuiTextField-root': {marginTop: "20px", width: '100%'},*/}
-      {/*        }}*/}
-      {/*        noValidate*/}
-      {/*        autoComplete="off"*/}
-      {/*      >*/}
-      {/*        <div>*/}
-      {/*          <TextField*/}
-      {/*            id="outlined-multiline-flexible"*/}
-      {/*            label="Name"*/}
-      {/*            multiline*/}
-      {/*            maxRows={4}*/}
-      {/*            value={value}*/}
-      {/*            defaultValue=""*/}
-      {/*            onChange={handleChange}*/}
-      {/*          />*/}
-      {/*        </div>*/}
-      {/*        <div>*/}
-      {/*          <TextField*/}
-      {/*            id="outlined-multiline-static"*/}
-      {/*            label="Kube Config"*/}
-      {/*            multiline*/}
-      {/*            rows={6}*/}
-      {/*            defaultValue=""*/}
-      {/*          />*/}
-      {/*        </div>*/}
-      {/*      </Box>*/}
-      {/*    </div>*/}
-      {/*  </DialogContent>*/}
-      {/*  <DialogActions>*/}
-      {/*    <Button onClick={() => setModalDispay(false)}>Cancel</Button>*/}
-      {/*    <Button*/}
-      {/*      onClick={modalConfirm}*/}
-      {/*      variant="contained"*/}
-      {/*    >*/}
-      {/*      Confirm*/}
-      {/*    </Button>*/}
-      {/*  </DialogActions>*/}
-      {/*</Dialog>*/}
     </div>
   )
 }

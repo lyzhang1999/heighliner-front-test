@@ -6,11 +6,13 @@ import {useRouter} from "next/router";
 import {TokenContext, useTokenReducer} from '@/hooks/token';
 import {initState, Context, reducer} from "@/utils/store";
 
-
 import '@/styles/globals.scss';
 import cookie from "@/utils/cookie";
 import http from "@/utils/axios";
-import Notice from '@/components/Notice/index'
+import Notice from '@/components/Notice/index';
+import {judgeCurrentOri} from "@/utils/utils";
+
+const noCheckOriPage = ['/login/github'];
 
 function App({Component, pageProps}: AppProps) {
   const [token, dispatchToken] = useTokenReducer();
@@ -23,13 +25,23 @@ function App({Component, pageProps}: AppProps) {
 
   function loginCheck() {
     const token = cookie.getCookie('token');
-    if (!['/login/github'].includes(router.pathname)) {
+    if (location.pathname === '/') {
+      router.push("/login");
+      return;
+    }
+    //
+    if (!noCheckOriPage.includes(router.pathname)) {
       if (token) {
         http.get('/orgs').then((res: any[]) => {
           dispatch({organizationList: res});
+          let oriId = res[0].id;
           if (res.length && (["/", '/login'].includes(router.pathname))) {
-            let oriName = res[0].id;
-            router.push(`${oriName}/applications`);
+            router.push(`${oriId}/applications`);
+          } else {
+            if (!judgeCurrentOri(res)) {
+              // router.replace(`${oriId}/applications`);
+              location.pathname = `${oriId}/applications`;
+            }
           }
         })
       } else {

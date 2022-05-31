@@ -8,26 +8,26 @@ export const http = axios.create({
 });
 
 http.interceptors.request.use((config: AxiosRequestConfig) => {
-  // 发生请求前的处理
   const token = cookie.getCookie('token');
   if (token) {
     (config.headers as AxiosRequestHeaders).Authorization = `Bearer ${token}`
   }
   return config
 }, err => {
-  // 请求错误处理
   return Promise.reject(err);
 })
 
 http.interceptors.response.use((res: AxiosResponse) => {
-  //请求成功对响应数据做处理
   let {data} = res;
-  return data //该返回对象会传到请求方法的响应对象中
-}, err => {
-  // 响应错误处理
-  let errMsg = err?.response?.data?.err_msg;
-  console.error(errMsg)
-  NoticeRef.current?.open({
+  return data
+}, (err) => {
+  let {status, data} = err.response;
+  if (status === '401') {
+    location.pathname = '/login';
+    return;
+  }
+  let errMsg = data?.err_msg;
+  errMsg && NoticeRef.current?.open({
     message: errMsg,
     type: "error",
   });

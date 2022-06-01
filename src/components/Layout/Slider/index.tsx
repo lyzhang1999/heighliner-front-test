@@ -1,6 +1,14 @@
 import * as React from 'react';
 import Link from 'next/link'
-import {ListItemIcon, ListItemText, MenuItem, MenuList, Select, SelectChangeEvent, Button} from "@mui/material";
+import {
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Select,
+  SelectChangeEvent,
+  Button,
+} from "@mui/material";
 import {Cloud} from "@mui/icons-material";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
@@ -26,18 +34,20 @@ const menuItemStyle: React.CSSProperties = {
   margin: '10px 0',
 }
 
-const navList = [
-  {
-    icon: <Cloud fontSize="small"/>,
-    href: `/${getOriginzationByUrl()}/applications`,
-    name: "Applications"
-  },
-  {
-    icon: <AccountTreeIcon fontSize="small"/>,
-    href: `/${getOriginzationByUrl()}/clusters`,
-    name: "Clusters"
-  }
-]
+function getNavlist() {
+  return [
+    {
+      icon: <Cloud fontSize="small"/>,
+      href: `/${getOriginzationByUrl()}/applications`,
+      name: "Applications"
+    },
+    {
+      icon: <AccountTreeIcon fontSize="small"/>,
+      href: `/${getOriginzationByUrl()}/clusters`,
+      name: "Clusters"
+    }
+  ]
+}
 
 const buttonLinks: {[index: string]: string} = {
   createApplication: `/${getOriginzationByUrl()}/applications/create`
@@ -57,14 +67,13 @@ const Slider = () => {
   const router = useRouter();
 
   const handleChange = (event: SelectChangeEvent) => {
-
   };
   const oriKey = getOriginzationByUrl();
 
   return (
     <div className={styles.slider}>
       <div className={styles.title}>
-        Organization:
+        Organization
       </div>
       <Select
         onChange={handleChange}
@@ -72,9 +81,9 @@ const Slider = () => {
         defaultValue={oriKey}
       >
         {
-          organizationList.map(item => {
+          organizationList.map((item: typeof organizationList) => {
             return (
-              <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
+              <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
             )
           })
         }
@@ -94,13 +103,13 @@ const Slider = () => {
       </Button>
       <MenuList>
         {
-          navList.map(item => {
+          getNavlist().map(item => {
             let {icon, href, name} = item;
-            let isSelected = isActiveNav(href)
+            // let isSelected = isActiveNav(href)
             return (
               <Link href={href} key={name}>
                 <MenuItem
-                  selected={isSelected}
+                  selected={isActiveNav(href)}
                   sx={menuItemStyle}
                 >
                   <ListItemIcon>
@@ -108,7 +117,6 @@ const Slider = () => {
                   </ListItemIcon>
                   <ListItemText>{name}</ListItemText>
                 </MenuItem>
-
               </Link>
             )
           })

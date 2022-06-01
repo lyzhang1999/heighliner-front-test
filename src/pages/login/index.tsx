@@ -13,6 +13,7 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 import {Context} from "@/utils/store";
 import http from "@/utils/axios";
+import {uuid} from "@/utils/utils";
 
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
@@ -24,8 +25,8 @@ const Login: NextPage = () => {
     http.get('/orgs').then((res: any[]) => {
       dispatch({organizationList: res});
       if (res.length) {
-        let oriName = res[0].name;
-        router.push(`${decodeURIComponent(oriName)}/applications`);
+        let oriName = res[0].id;
+        router.push(`${oriName}/applications`);
       }
     })
   }
@@ -35,9 +36,10 @@ const Login: NextPage = () => {
 
     const url = new URL(process.env.NEXT_PUBLIC_GITHUB_URL!);
     // Using in url request to github to prevent from forgery attack
-    const state = window.crypto.randomUUID();
+    const state = uuid();
     window.localStorage.setItem("state", state);
     url.searchParams.set("state", state);
+    url.searchParams.set('redirect_uri',  location.origin + "/login/github")
 
     const GitHubLoginWindow = window.open(
       url,

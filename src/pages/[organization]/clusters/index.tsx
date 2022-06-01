@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Button} from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import '@/utils/axios';
 
 import Layout from "@/components/Layout";
@@ -29,13 +30,15 @@ const Clusters = () => {
   }
 
   return (
-    <Layout pageHeader="Cluster">
+    <Layout pageHeader="CLUSTERS">
       <div className={styles.wrapper}>
         <div className={styles.card} onClick={() => setModalDispay(!modalDisplay)}>
-          <AddCircleOutlineOutlinedIcon
-            sx={{marginBottom: '20px'}}
-            fontSize="large"
-          />
+          {/*<AddBoxOutlinedIcon*/}
+          {/*  sx={{marginBottom: '20px',  color: "#ba77ff"}}*/}
+
+          {/*  fontSize="large"*/}
+          {/*/>*/}
+          {/*import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';*/}
           <Button
             variant="outlined"
           >

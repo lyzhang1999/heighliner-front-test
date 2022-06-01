@@ -24,8 +24,27 @@ const CreatingApplication = () => {
 
   return (
     <Layout pageHeader="CreatingApplication">
-      <div id="creatingTerminal" className={styles.terminal}>
-        tewstdfafs
+      <div id="creatingTerminal" className={styles.wrapper}>
+
+        <div className={styles.timeLine}>
+          <div className={styles.circleWrapper}>
+            <div className={styles.circle}>
+
+              <div className={styles.circlePoint}></div>
+            </div>
+          </div>
+          <div className={styles.circle}>
+
+            <div className={styles.circlePoint}></div>
+          </div>
+          <div className={styles.line}></div>
+          <div className={styles.circle}></div>
+          <div className={styles.line}></div>
+          <div className={styles.circle}></div>
+          <div className={styles.line}></div>
+
+        </div>
+
       </div>
     </Layout>
   )
@@ -33,4 +52,5 @@ const CreatingApplication = () => {
 
 
 export default CreatingApplication
+// http://localhost/2/applications/creatingApplication
 

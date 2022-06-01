@@ -5,15 +5,48 @@
   width: 100%;
   padding: 20px 20px 20px 0;
 
-  .title {
-    font-size: 16px;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: $global-font-color;
+  .navTitle {
+    color: #647284;
+    border-bottom: 1px solid #eceff0;
+    padding-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
 
-  .Mui-selected {
-    color: red;
+  .menuList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .memuItem {
+      width: 144px;
+      font-size: 15px;
+      line-height: 33px;
+      padding: 0px 22px;
+      background: #fff;
+      margin: 5px 0;
+      border: solid 1px #ba77ff;
+      border-radius: 4px;
+      text-align: center;
+      cursor: pointer;
+      color: #ba77ff;
+
+      &:hover {
+        background: #efe5fd;
+        border-color: #efe5fd;
+      }
+    }
+
+    .activeMenu {
+      background: #ba77ff;
+      color: #fff;
+      border-color: #ba77ff;
+
+      &:hover {
+        background: #ba77ff;
+        border-color: #ba77ff;
+      }
+    }
   }
 }
 

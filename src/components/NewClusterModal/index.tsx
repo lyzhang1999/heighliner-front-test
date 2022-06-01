@@ -108,6 +108,7 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
                   maxRows={4}
                   value={configName}
                   onChange={handleConfigName}
+                  color="textColor"
                 />
               </div>
               <div>
@@ -116,6 +117,7 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
                   multiline
                   rows={8}
                   value={configValue}
+                  color="textColor"
                   onChange={handleConfigValue}
                 />
               </div>

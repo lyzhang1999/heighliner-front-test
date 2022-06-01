@@ -1,8 +1,71 @@
+//@import "../src/styles/globalVar.scss";
+@import "../../../../styles/globalVar";
 
 
+.wrapper {
 
-.terminal{
-  height: 400px;
-  background-color: #000;
-  background: 1px solid #ccc;
+
 }
+
+.timeLine {
+  margin: 0 auto;
+  //width: 20px;
+  //border: 1px solid black;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  //justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin-top: 100px;
+
+
+  .circle {
+    //background: $theme-color;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    //padding: 10px;
+    //background: $theme-color;
+
+    //border: 2px solid transparent;
+    border-top: 2px solid $theme-color;
+    animation: load 1s linear infinite;
+    display: flex;
+    //align-items: center;
+    //justify-content: center;
+    position: relative;
+
+    .circlePoint {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 10px;
+      height: 10px;
+      //z-index: 10
+      //border: 1px solid black;
+      background: $theme-color;
+      border-radius: 50%;
+    }
+  }
+
+  .line {
+    width: 2px;
+    height: 100px;
+    background: $theme-color;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+

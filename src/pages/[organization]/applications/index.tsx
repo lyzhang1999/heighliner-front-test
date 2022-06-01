@@ -20,13 +20,13 @@ const Applications = () => {
   }, [])
 
   function getClusterList() {
-    http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then(res => {
-      // setClusterList(res)
-    })
+    // http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then(res => {
+    //   setClusterList(res)
+    // })
   }
 
   return (
-    <Layout pageHeader="Applications">
+    <Layout pageHeader="APPLICATIONS">
       <div className={styles.wrapper}>
         <div className={styles.card} onClick={() => {}}>
           <AddCircleOutlineOutlinedIcon

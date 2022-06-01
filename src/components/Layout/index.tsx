@@ -38,7 +38,6 @@ const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactEl
                 {children}
               </div>
               <div className={styles.right}>
-
               </div>
             </div>
           </div>

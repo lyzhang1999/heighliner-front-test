@@ -47,9 +47,9 @@ const Notice = (): ReactElement => {
   const close: any = useCallback(() => setState(false), []);
 
   const open = useCallback(({message, type, origin}: IOpen) => {
+    setMessage(message);
     type && setType(type);
     origin && setOrigin(origin);
-    setMessage(message);
     setState(true);
   }, []);
 
@@ -58,7 +58,7 @@ const Notice = (): ReactElement => {
   return (
     <Snackbar message={message} open={state} anchorOrigin={origin}
               sx={{
-                top: "10px!important",
+                // top: "10px!important",
                 maxWidth: '400px'
               }}
     >

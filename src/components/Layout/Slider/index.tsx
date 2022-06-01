@@ -8,7 +8,6 @@ import {
   Select,
   SelectChangeEvent,
   Button,
-  typographyClasses
 } from "@mui/material";
 import {Cloud} from "@mui/icons-material";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
@@ -67,7 +66,7 @@ const Slider = () => {
   return (
     <div className={styles.slider}>
       <div className={styles.title}>
-        Organization:
+        Organization
       </div>
       <Select
         onChange={handleChange}

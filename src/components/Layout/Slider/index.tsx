@@ -34,18 +34,20 @@ const menuItemStyle = {
   margin: '10px 0',
 }
 
-const navList = [
-  {
-    icon: <Cloud fontSize="small"/>,
-    href: `/${getOriginzationByUrl()}/applications`,
-    name: "Applications"
-  },
-  {
-    icon: <AccountTreeIcon fontSize="small"/>,
-    href: `/${getOriginzationByUrl()}/clusters`,
-    name: "Clusters"
-  }
-]
+function getNavlist() {
+  return [
+    {
+      icon: <Cloud fontSize="small"/>,
+      href: `/${getOriginzationByUrl()}/applications`,
+      name: "Applications"
+    },
+    {
+      icon: <AccountTreeIcon fontSize="small"/>,
+      href: `/${getOriginzationByUrl()}/clusters`,
+      name: "Clusters"
+    }
+  ]
+}
 
 function isActiveNav(currentPath: string) {
   if (utils.isBrowser()) {
@@ -94,13 +96,13 @@ const Slider = () => {
       </Button>
       <MenuList>
         {
-          navList.map(item => {
+          getNavlist().map(item => {
             let {icon, href, name} = item;
-            let isSelected = isActiveNav(href)
+            // let isSelected = isActiveNav(href)
             return (
               <Link href={href} key={name}>
                 <MenuItem
-                  selected={isSelected}
+                  selected={isActiveNav(href)}
                   sx={menuItemStyle}
                 >
                   <ListItemIcon>

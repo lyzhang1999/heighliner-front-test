@@ -13,6 +13,7 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 import {Context} from "@/utils/store";
 import http from "@/utils/axios";
+import {uuid} from "@/utils/utils";
 
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
@@ -35,7 +36,7 @@ const Login: NextPage = () => {
 
     const url = new URL(process.env.NEXT_PUBLIC_GITHUB_URL!);
     // Using in url request to github to prevent from forgery attack
-    const state = window.crypto.randomUUID();
+    const state = uuid();
     window.localStorage.setItem("state", state);
     url.searchParams.set("state", state);
     url.searchParams.set('redirect_uri',  location.origin + "/login/github")

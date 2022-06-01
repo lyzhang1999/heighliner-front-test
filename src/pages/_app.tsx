@@ -25,21 +25,15 @@ function App({Component, pageProps}: AppProps) {
 
   function loginCheck() {
     const token = cookie.getCookie('token');
-    if (location.pathname === '/') {
-      router.push("/login");
-      return;
-    }
-    //
     if (!noCheckOriPage.includes(router.pathname)) {
       if (token) {
         http.get('/orgs').then((res: any[]) => {
           dispatch({organizationList: res});
-          let oriId = res[0].id;
+          let oriId = res[0]?.id;
           if (res.length && (["/", '/login'].includes(router.pathname))) {
             router.push(`${oriId}/applications`);
           } else {
             if (!judgeCurrentOri(res)) {
-              // router.replace(`${oriId}/applications`);
               location.pathname = `${oriId}/applications`;
             }
           }

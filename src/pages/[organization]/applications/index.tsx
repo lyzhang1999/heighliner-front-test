@@ -4,14 +4,12 @@ import Layout from "@/components/Layout";
 
 import styles from './index.module.scss';
 
-const Clusters = () => {
-
-
+const Applications = () => {
   return (
     <Layout pageHeader="Applications">
       Applications
     </Layout>
   )
 }
-export default Clusters;
+export default Applications;
 // http://localhost/xxx/applications

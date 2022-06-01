@@ -10,18 +10,19 @@ import styles from "./index.module.scss";
 import {useContext} from "react";
 import {Context} from "@/utils/store";
 import utils from "@/utils/utils";
+import { useRouter } from 'next/router';
 
-const buttonOneStyle = {
+const buttonOneStyle: React.CSSProperties = {
   width: "100%",
   marginTop: "30px"
 }
 
-const buttonSecondStyle = {
+const buttonSecondStyle: React.CSSProperties = {
   width: "100%",
   marginTop: "10px"
 }
 
-const menuItemStyle = {
+const menuItemStyle: React.CSSProperties = {
   margin: '10px 0',
 }
 
@@ -38,6 +39,10 @@ const navList = [
   }
 ]
 
+const buttonLinks: {[index: string]: string} = {
+  createApplication: `/${getOriginzationByUrl()}/applications/create`
+}
+
 function isActiveNav(currentPath: string) {
   if (utils.isBrowser()) {
     return (location.href as string).includes(currentPath);
@@ -49,6 +54,8 @@ function isActiveNav(currentPath: string) {
 const Slider = () => {
   const {state} = useContext(Context);
   const {organizationList} = state;
+  const router = useRouter();
+
   const handleChange = (event: SelectChangeEvent) => {
 
   };
@@ -75,6 +82,7 @@ const Slider = () => {
       <Button
         variant="contained"
         sx={buttonOneStyle}
+        onClick={() => {router.push(buttonLinks.createApplication)}}
       >
         Create Application
       </Button>

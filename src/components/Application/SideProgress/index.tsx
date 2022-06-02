@@ -1,51 +1,25 @@
-import { Box } from "@mui/material";
-import { useReducer } from "react";
+import clsx from "clsx";
 
-import { ChangeStatusAction, Status } from "@/utils/constants";
 
-interface StageIndicator {
-  stages: {
-    [index: number]: Status
-  };
-  currentStageIndex: number;
-}
+import styles from "./index.module.scss";
+import { CommonProps } from "@/utils/commonType";
+import { StageIndicator } from "@/pages/[organization]/applications/create";
 
-interface Props {
+interface Props extends CommonProps{
   stageIndicator: StageIndicator;
 }
 
 export default function SideProgress({
   stageIndicator,
+  className
 }: Props): React.ReactElement {
   return (
-    <Box>
-      <ul></ul>
-    </Box>
+    <div className={clsx(styles.sideProgressWrap, className)}>
+      <ul>
+        {stageIndicator.stages.map((status, index) => {
+          return <li key={index}>{status}</li>;
+        })}
+      </ul>
+    </div>
   );
 }
-
-
-
-export function useStageIndicator(stageNumber: number, currentStageIndex = 0) {
-  const initialStageIndicator: StageIndicator = {
-    stages: new Array(stageNumber).fill({
-      status: Status.Initial
-    }),
-    currentStageIndex: currentStageIndex
-  }
-
-  function reducer(state: StageIndicator, action) {
-    switch(action.type) {
-      case ChangeStatusAction.ToInitial:
-        state[state.currentStageIndex] = Status.Initial;
-        break;
-    }
-  }
-
-  const stageIndicatorReducer = useReducer(reducer);
-
-
-      
-}
-
-export { type StageIndicator };

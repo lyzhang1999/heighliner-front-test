@@ -1,0 +1,27 @@
+.createApplicationWrapper {
+  display: flex;
+}
+
+$sideWidth: 10%;
+$mainWidth: 100% - $sideWidth;
+.side {
+  width: $sideWidth;
+}
+
+.main {
+  // width: $mainWidth;
+  flex-grow: 1;
+  background-color:aquamarine;
+  position: relative;
+
+  .suspendBtn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+  }
+
+}
+

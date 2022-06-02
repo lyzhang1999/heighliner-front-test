@@ -1,0 +1,4 @@
+@mixin setHorizontalMargin($val) {
+  margin-right: $val;
+  margin-left: $val;
+}

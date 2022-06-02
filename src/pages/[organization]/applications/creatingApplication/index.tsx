@@ -45,7 +45,12 @@ const CreatingApplication = () => {
             list.map((item, index) => {
               return (
                 <div key={index} className={styles.lineItem}>
-                  <div className={clsx(styles.line, (number >= index) && styles.lineDone)}></div>
+                  <div className={clsx(styles.line)}>
+                    {
+                      (number >= index) &&
+                      <div className={styles.activeLine}></div>
+                    }
+                  </div>
                   <div className={styles.circleWrapper}>
                     <div className={clsx(styles.circlePoint, (number >= index) && styles.circlePointDone)}></div>
                     <div

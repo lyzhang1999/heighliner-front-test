@@ -1,13 +1,9 @@
 import * as React from 'react';
-import Link from 'next/link'
 import {
-  ListItemIcon,
-  ListItemText,
   MenuItem,
-  MenuList,
   Select,
   SelectChangeEvent,
-  Button,
+  Button
 } from "@mui/material";
 import {Cloud} from "@mui/icons-material";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
@@ -20,20 +16,6 @@ import {useContext} from "react";
 import {Context} from "@/utils/store";
 import utils from "@/utils/utils";
 import {useRouter} from "next/router";
-
-const buttonOneStyle = {
-  width: "100%",
-  marginTop: "30px"
-}
-
-const buttonSecondStyle = {
-  width: "100%",
-  marginTop: "10px"
-}
-
-const menuItemStyle = {
-  margin: '10px 0',
-}
 
 function getNavlist() {
   return [

@@ -29,25 +29,16 @@ const Applications = () => {
     <Layout pageHeader="APPLICATIONS">
       <div className={styles.wrapper}>
         <div className={styles.card} onClick={() => {}}>
-          <AddCircleOutlineOutlinedIcon
-            sx={{marginBottom: '20px'}}
-            fontSize="large"
-          />
+          {/*<AddCircleOutlineOutlinedIcon*/}
+          {/*  sx={{marginBottom: '20px'}}*/}
+          {/*  fontSize="large"*/}
+          {/*/>*/}
           <Button
             variant="outlined"
           >
             Create a Application
           </Button>
         </div>
-        {/*{*/}
-        {/*  clusterList.map(item => {*/}
-        {/*    return (*/}
-        {/*      <div className={styles.card} key={item.name}>*/}
-        {/*        <div className={styles.clusterName}>{item.name}</div>*/}
-        {/*      </div>*/}
-        {/*    )*/}
-        {/*  })*/}
-        {/*}*/}
       </div>
     </Layout>
   )

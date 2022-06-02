@@ -36,7 +36,7 @@ const CreatingApplication = () => {
 
 
   return (
-    <Layout pageHeader="CreatingApplication">
+    <Layout pageHeader="Creating Application">
       <div id="creatingTerminal" className={styles.wrapper}>
 
 

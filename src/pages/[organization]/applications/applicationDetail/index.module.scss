@@ -1,0 +1,78 @@
+
+.pageWrapper {
+  background: #fff;
+  box-shadow: 0 0 10px 0 rgba(102, 151, 245, 0.25);
+  border: solid 2px #e9eaef;
+  margin: 0 90px 0 10px;
+  min-height: 800px;
+  padding: 0 50px;
+
+  .title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    margin-top: 36px;
+    margin-bottom: 22px;
+  }
+
+  .cardWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .card {
+    box-shadow: 0 4px 6px 0 #e8e9eb;
+    background-color: #fff;
+    padding: 18px;
+    width: 48%;
+
+    .iconAndContent {
+      display: flex;
+      border-bottom: 1px solid #f3f4f5;
+      padding-bottom: 18px;
+
+      .icon {
+        width: 33px;
+        height: 33px;
+        box-shadow: 0 4px 6px 0 #e8e9eb;
+        margin-right: 20px;
+      }
+
+      .content {
+        .name {
+          color: #000;
+          font-size: 15px;
+        }
+
+        .tag {
+          color: #656e7c;
+          font-size: 9px;
+        }
+
+        .repo {
+          font-size: 9px;
+          color: #000;
+
+          .labelRepo {
+            color: #656e7c;
+          }
+        }
+      }
+    }
+
+    .url {
+      font-size: 9px;
+      color: #000;
+      margin-top: 9px;
+      //margin-bottom: 20px;
+
+      .urlLabel {
+        color: #656e7c;
+      }
+    }
+  }
+}
+
+

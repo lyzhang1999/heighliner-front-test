@@ -15,17 +15,44 @@ body {
 
 * {
   box-sizing: border-box;
+  font-family: Jost;
 }
 
 body {
   min-width: $global-min-width;
+
   .MuiButton-root {
     text-transform: none;
   }
 }
 
-.MuiButton-containedPrimary{
-  background-color: #ba77ff;
-  color: #fff;
+.MuiButton-containedPrimary {
+  background-color: #6002ee;
+}
+
+
+@font-face {
+  font-family: 'Jost';
+  src: url("./fonts/Jost-Light.ttf");
+  font-style: normal;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Jost';
+  src: url("./fonts/Jost-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Jost';
+  src: url("./fonts/Jost-Medium.ttf");
+  font-style: normal;
+  font-weight: 500;
+}
+
+
+:global(.Mui-focused){
+
 }
 

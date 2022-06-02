@@ -20,34 +20,25 @@ const Applications = () => {
   }, [])
 
   function getClusterList() {
-    http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then(res => {
-      // setClusterList(res)
-    })
+    // http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then(res => {
+    //   setClusterList(res)
+    // })
   }
 
   return (
-    <Layout pageHeader="Applications">
+    <Layout pageHeader="APPLICATIONS">
       <div className={styles.wrapper}>
         <div className={styles.card} onClick={() => {}}>
-          <AddCircleOutlineOutlinedIcon
-            sx={{marginBottom: '20px'}}
-            fontSize="large"
-          />
+          {/*<AddCircleOutlineOutlinedIcon*/}
+          {/*  sx={{marginBottom: '20px'}}*/}
+          {/*  fontSize="large"*/}
+          {/*/>*/}
           <Button
             variant="outlined"
           >
             Create a Application
           </Button>
         </div>
-        {/*{*/}
-        {/*  clusterList.map(item => {*/}
-        {/*    return (*/}
-        {/*      <div className={styles.card} key={item.name}>*/}
-        {/*        <div className={styles.clusterName}>{item.name}</div>*/}
-        {/*      </div>*/}
-        {/*    )*/}
-        {/*  })*/}
-        {/*}*/}
       </div>
     </Layout>
   )

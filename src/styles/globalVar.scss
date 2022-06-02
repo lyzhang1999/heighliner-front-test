@@ -1,5 +1,3 @@
-
-
 $global-max-width: 1620px;
 
 $global-min-width: 900px;
@@ -7,6 +5,8 @@ $global-min-width: 900px;
 $global-font-color: #4C4E67;
 
 $global-primary-color: #6002ee;
+
+$theme-color: #6002ee;
 
 @mixin globalWidth {
   max-width: $global-max-width;

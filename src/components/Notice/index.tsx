@@ -29,7 +29,7 @@ const Notice = (): ReactElement => {
   const [type, setType] = useState<AlertColor>("info");
   const [origin, setOrigin] = useState<SnackbarOrigin>({
     vertical: "top",
-    horizontal: "center",
+    horizontal: "right",
   });
 
   useEffect(() => {

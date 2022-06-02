@@ -6,6 +6,12 @@ import Slider from './Slider'
 
 import theme from './theme.js';
 import styles from './index.module.scss';
+import dynamic from 'next/dynamic'
+
+const SlinderNoSSR = dynamic(
+  () => import('./Slider/index'),
+  { ssr: false }
+)
 
 interface HomeProps {
   children?: react.ReactNode,
@@ -26,7 +32,8 @@ const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactEl
           <div className={styles.contentWrappper}>
             <div className={styles.content}>
               <div className={styles.left}>
-                <Slider/>
+                {/*<Slider/>*/}
+                <SlinderNoSSR/>
               </div>
               <div className={styles.center}>
                 {
@@ -38,7 +45,6 @@ const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactEl
                 {children}
               </div>
               <div className={styles.right}>
-
               </div>
             </div>
           </div>

@@ -29,7 +29,7 @@ $header-height: 60px;
 
   .center {
     background-color: #f7f9ff;
-    width: calc(100% - 237px - 400px);
+    width: calc(100% - 237px - 350px);
     border-left: 1px solid rgb(225, 228, 239);
     border-right: 1px solid rgb(225, 228, 239);
 
@@ -44,11 +44,11 @@ $header-height: 60px;
   }
 
   .right {
-    width: 400px;
+    width: 350px;
     background: #fff;
   }
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1300px) {
     .center {
       width: calc(100% - 237px - 100px);
     }

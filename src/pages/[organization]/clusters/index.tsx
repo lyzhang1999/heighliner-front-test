@@ -16,7 +16,7 @@ const Clusters = () => {
   const [clusterList, setClusterList] = useState([]);
 
   function successCb(params: any) {
-    console.warn(params)
+    getClusterList();
   }
 
   useEffect(() => {

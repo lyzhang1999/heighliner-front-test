@@ -32,8 +32,8 @@ const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactEl
           <div className={styles.contentWrappper}>
             <div className={styles.content}>
               <div className={styles.left}>
-                <Slider/>
-                {/*<SlinderNoSSR/>*/}
+                {/*<Slider/>*/}
+                <SlinderNoSSR/>
               </div>
               <div className={styles.center}>
                 {

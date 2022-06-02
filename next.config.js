@@ -12,7 +12,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    styledComponents: true
+    outputStandalone: true,
   },
   webpack: (config, options) => {
     config.resolve.alias['@'] = path.resolve(__dirname, './src');

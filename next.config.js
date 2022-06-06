@@ -7,6 +7,7 @@ const nextConfig = {
   images: {
     loader: 'akamai',
     path: '/',
+    domains: ['assets-1309519128.cos.ap-hongkong.myqcloud.com']
   },
   typescript: {
     ignoreBuildErrors: true,

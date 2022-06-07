@@ -5,12 +5,14 @@ import {useRouter} from "next/router";
 
 import {TokenContext, useTokenReducer} from '@/hooks/token';
 import {initState, Context, reducer} from "@/utils/store";
+import {ThemeProvider} from '@mui/material/styles';
 
 import '@/styles/globals.scss';
 import cookie from "@/utils/cookie";
 import http from "@/utils/axios";
 import Notice from '@/components/Notice/index';
 import {judgeCurrentOri} from "@/utils/utils";
+import theme from "@/utils/theme";
 
 const noCheckOriPage = ['/login/github'];
 
@@ -52,12 +54,14 @@ function App({Component, pageProps}: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
       {/*@ts-ignore*/}
-      <Context.Provider value={{state, dispatch}}>
-        <TokenContext.Provider value={{token, dispatchToken}}>
-          <Notice/>
-          <Component {...pageProps} />
-        </TokenContext.Provider>
-      </Context.Provider>
+      <ThemeProvider theme={theme}>
+        <Context.Provider value={{state, dispatch}}>
+          {/*<TokenContext.Provider value={{token, dispatchToken}}>*/}
+            <Notice/>
+            <Component {...pageProps} />
+          {/*</TokenContext.Provider>*/}
+        </Context.Provider>
+      </ThemeProvider>
     </div>
   )
 }

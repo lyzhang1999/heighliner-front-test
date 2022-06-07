@@ -3,20 +3,20 @@ import {NextPage} from "next";
 import clsx from "clsx";
 import {LoadingButton} from "@mui/lab";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import {Card, Typography, Box, Divider, TextField} from "@mui/material";
+import {Box, Divider, TextField} from "@mui/material";
 import {useRouter} from "next/router";
 
 import {getPopUpsWindowFeatures} from "@/utils/window";
-import {TokenAction, useTokenContext} from "@/hooks/token";
 import {trim} from "lodash-es";
-import cookie from "@/utils/cookie";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
 import {Context} from "@/utils/store";
 import http from "@/utils/axios";
-import {getOriginzationByUrl, uuid} from "@/utils/utils";
+import {setLoginToken, uuid} from "@/utils/utils";
 import {NoticeRef} from "@/components/Notice";
+import {login, LoginType, Res} from "@/utils/api/login";
+import {getOrgList} from "@/utils/api/org";
 
 const inputStyle = {
   marginTop: "6px",
@@ -28,8 +28,8 @@ const Login: NextPage = () => {
   const {dispatch} = useContext(Context);
   const router = useRouter();
 
-  function getOriList() {
-    http.get('/orgs').then((res: any[]) => {
+  function oriList() {
+    getOrgList().then(res => {
       dispatch({organizationList: res});
       if (res.length) {
         let oriName = res[0].id;
@@ -59,7 +59,7 @@ const Login: NextPage = () => {
         clearInterval(timer);
         setLogining(false);
         window.localStorage.removeItem("state");
-        getOriList();
+        oriList();
       }
     }, 1000);
   };
@@ -85,13 +85,11 @@ const Login: NextPage = () => {
       });
       return;
     }
-    http.get(`/auth/token?login_type=account&username=${user}&password=${pass}`,).then(res => {
-      let {token} = res;
-      cookie.setCookie('token', token, 1000 * 60 * 60 * 48); // 48h
-      getOriList();
+    login({logintype: LoginType.ACCOUNT, user, pass}).then((res) => {
+      setLoginToken(res.token)
+      oriList();
     })
   }
-
 
   return (
     <div className={clsx("relative", styles.container)}>

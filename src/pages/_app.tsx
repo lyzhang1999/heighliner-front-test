@@ -3,7 +3,7 @@ import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {useRouter} from "next/router";
 
-import {TokenContext, useTokenReducer} from '@/hooks/token';
+import {useTokenReducer} from '@/hooks/token';
 import {initState, Context, reducer} from "@/utils/store";
 import {ThemeProvider} from '@mui/material/styles';
 
@@ -13,6 +13,8 @@ import http from "@/utils/axios";
 import Notice from '@/components/Notice/index';
 import {judgeCurrentOri} from "@/utils/utils";
 import theme from "@/utils/theme";
+import {AxiosResponse} from "axios";
+import {getOrgList} from "@/utils/api/org";
 
 const noCheckOriPage = ['/login/github'];
 
@@ -29,7 +31,7 @@ function App({Component, pageProps}: AppProps) {
     const token = cookie.getCookie('token');
     if (!noCheckOriPage.includes(router.pathname)) {
       if (token) {
-        http.get('/orgs').then((res: any[]) => {
+        getOrgList().then(res => {
           dispatch({organizationList: res});
           let oriId = res[0]?.id;
           if (res.length && (["/", '/login'].includes(router.pathname))) {
@@ -53,13 +55,10 @@ function App({Component, pageProps}: AppProps) {
         <meta name="description" content="Heighliner Cloud · Speed up Cloud Native Application Development"/>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
-      {/*@ts-ignore*/}
       <ThemeProvider theme={theme}>
         <Context.Provider value={{state, dispatch}}>
-          {/*<TokenContext.Provider value={{token, dispatchToken}}>*/}
-            <Notice/>
-            <Component {...pageProps} />
-          {/*</TokenContext.Provider>*/}
+          <Notice/>
+          <Component {...pageProps} />
         </Context.Provider>
       </ThemeProvider>
     </div>

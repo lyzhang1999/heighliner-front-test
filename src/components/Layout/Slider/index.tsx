@@ -16,6 +16,7 @@ import {useContext} from "react";
 import {Context} from "@/utils/store";
 import utils from "@/utils/utils";
 import {useRouter} from "next/router";
+import {OrgList} from "@/utils/api/org";
 
 function getNavlist() {
   return [
@@ -74,7 +75,7 @@ const Slider = () => {
         defaultValue={oriKey}
       >
         {
-          organizationList.map((item: typeof organizationList) => {
+          (organizationList as OrgList[]).map((item) => {
             return (
               <MenuItem value={item.id} key={item.id}
                         sx={{fontSize: '14px', color: "#121226", fontWeight: '300'}}

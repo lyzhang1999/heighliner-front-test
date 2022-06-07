@@ -11,6 +11,8 @@ import cookie from "@/utils/cookie";
 import http from "@/utils/axios";
 import Notice from '@/components/Notice/index';
 import {judgeCurrentOri} from "@/utils/utils";
+// import CustomTheme from "@/styles/theme/CustomTheme";
+// import { ThemeProvider } from "@mui/material";
 
 const noCheckOriPage = ['/login/github'];
 
@@ -52,12 +54,14 @@ function App({Component, pageProps}: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
       {/*@ts-ignore*/}
+      {/* <ThemeProvider theme={CustomTheme}> */}
       <Context.Provider value={{state, dispatch}}>
         <TokenContext.Provider value={{token, dispatchToken}}>
           <Notice/>
           <Component {...pageProps} />
         </TokenContext.Provider>
       </Context.Provider>
+      {/* </ThemeProvider> */}
     </div>
   )
 }

@@ -1,3 +1,29 @@
+@import '../../../styles/utils';
+
 .basicApplicationInfoWrap {
-  padding: 49px;
+
+}
+
+.applicationName, .cluster {
+  margin-bottom: 47px;
+}
+
+.stacks {
+  display: flex;
+  gap: 15px;
+
+  & > li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 139px;
+    height: 139px;
+    border: solid 2px #e9eaef;
+    box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+  }
+  
+  .icons {
+    display: flex;
+    justify-content: center;
+  }
 }

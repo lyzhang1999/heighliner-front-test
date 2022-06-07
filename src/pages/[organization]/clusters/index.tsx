@@ -12,7 +12,7 @@ import http from "@/utils/axios";
 import {getOriginzationByUrl} from "@/utils/utils";
 
 const Clusters = () => {
-  const [modalDisplay, setModalDispay] = useState<boolean>(false);
+  const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [clusterList, setClusterList] = useState([]);
 
   function successCb(params: any) {
@@ -32,7 +32,7 @@ const Clusters = () => {
   return (
     <Layout pageHeader="CLUSTERS">
       <div className={styles.wrapper}>
-        <div className={styles.card} onClick={() => setModalDispay(!modalDisplay)}>
+        <div className={styles.card} onClick={() => setModalDisplay(!modalDisplay)}>
           {/*<AddBoxOutlinedIcon*/}
           {/*  sx={{marginBottom: '20px',  color: "#ba77ff"}}*/}
 
@@ -57,7 +57,7 @@ const Clusters = () => {
       </div>
       <NewClusterModal
         {...{
-          setModalDispay,
+          setModalDisplay,
           modalDisplay,
           successCb,
         }}

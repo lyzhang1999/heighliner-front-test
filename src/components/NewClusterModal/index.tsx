@@ -18,7 +18,7 @@ import {NoticeRef} from "@/components/Notice";
 
 interface Props {
   modalDisplay: boolean
-  setModalDispay: (dispaly: any) => void,
+  setModalDisplay: (dispaly: any) => void,
   successCb?: () => {},
 }
 
@@ -26,7 +26,7 @@ const buttonStyles = {
   marginRight: "10px",
 }
 
-const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
+const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
   // useEffect(() => {
   //   if (modalDisplay) {
   //     setTimeout(() => {
@@ -76,7 +76,7 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
         "provider": "kubeconfig"
       }
     ).then(res => {
-      setModalDispay(false);
+      setModalDisplay(false);
       successCb && successCb();
     })
   }
@@ -127,7 +127,7 @@ const NewClusterModal = ({modalDisplay, setModalDispay, successCb}: Props) => {
             <Button
               variant="outlined"
               sx={buttonStyles}
-              onClick={() => setModalDispay(false)}
+              onClick={() => setModalDisplay(false)}
             >
               Cancel
             </Button>

@@ -5,7 +5,7 @@
   border: solid 2px #e9eaef;
   margin: 0 90px 0 10px;
   min-height: 800px;
-  padding: 0 50px;
+  padding: 20px 93px 20px 47px;
 
   .title {
     font-size: 18px;
@@ -38,6 +38,11 @@
         height: 33px;
         box-shadow: 0 4px 6px 0 #e8e9eb;
         margin-right: 20px;
+
+        img {
+          width: 33px;
+          height: 33px;
+        }
       }
 
       .content {
@@ -69,6 +74,52 @@
 
       .urlLabel {
         color: #656e7c;
+      }
+    }
+  }
+}
+
+
+.contentWrapper {
+  .itemCard {
+    padding: 16px;
+    margin-top: 20px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+    .itemCardTitle {
+      font-size: 20px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    .itemCardContent {
+      margin-top: 16px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    .itemButton {
+      display: flex;
+      margin-top: 30px;
+
+      @mixin Button {
+        width: 90px;
+        background-color: #7368db;
+        font-size: 14px;
+        line-height: 24px;
+        text-align: center;
+        cursor: pointer;
+        color: #fff;
+      }
+
+      .leftButton {
+        @include Button;
+        margin-right: 30px;
+      }
+
+      .rightButton {
+        @include Button;
+
       }
     }
   }

@@ -32,7 +32,7 @@ function getNavlist() {
   ]
 }
 
-const buttonLinks: {[index: string]: string} = {
+const buttonLinks: { [index: string]: string } = {
   createApplication: `/${getOriginzationByUrl()}/applications/create`
 }
 
@@ -45,12 +45,21 @@ function isActiveNav(currentPath: string) {
 }
 
 const Slider = () => {
+
+  const [hasMounted, setHasMounted] = React.useState(false);
   const {state} = useContext(Context);
   const router = useRouter();
+
+  // close server render
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  if (!hasMounted) return null;
+
   const {organizationList} = state;
-  // const router = useRouter();
 
   const handleChange = (event: SelectChangeEvent) => {
+
   };
   const oriKey = getOriginzationByUrl();
 

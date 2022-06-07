@@ -4,10 +4,11 @@ const path = require('path')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  images: {
-    loader: 'akamai',
-    path: '/',
-  },
+  // images: {
+  //   loader: 'akamai',
+  //   path: '/',
+  // },
+  compress: true,
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -20,7 +21,6 @@ const nextConfig = {
       test: /\.svg$/,
       use: ["@svgr/webpack"]
     });
-
     return config
   },
 }

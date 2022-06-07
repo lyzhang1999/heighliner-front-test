@@ -21,6 +21,10 @@
 
     .title {
       font-size: 23px;
+      font-weight: 500;
+      line-height: 2;
+      text-align: left;
+      color: #6002ee;
     }
 
     .githubLoginBtn {
@@ -31,3 +35,66 @@
     }
   }
 }
+
+
+.cardWrapper {
+  width: 366px;
+  background-color: #fff;
+  position: absolute;
+  left: 30%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 24px 40px 40px 40px;
+
+  .title {
+    font-size: 23px;
+    font-weight: 500;
+    text-align: left;
+    line-height: 2;
+    color: #6002ee;
+  }
+
+  .githubLoginBtn {
+    background-color: rgba(217, 217, 217, 0);
+    border-color: #d9dfe8;
+    border-radius: 0;
+    color: #000;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .divider {
+    margin-top: 30px;
+  }
+
+  .action {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 2;
+    text-align: left;
+    color: #6002ee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+
+    .btn {
+      cursor: pointer;
+    }
+  }
+
+  .signIn {
+    margin-top: 30px;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    background-color: #6002ee;
+    line-height: 37px;
+  }
+}
+
+
+
+

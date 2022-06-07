@@ -26,7 +26,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
     location.pathname = '/login';
     return;
   }
-  let errMsg = data?.err_msg;
+  let errMsg = data?.err_msg || data;
   errMsg && NoticeRef.current?.open({
     message: errMsg,
     type: "error",

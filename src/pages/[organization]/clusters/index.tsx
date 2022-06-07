@@ -10,6 +10,7 @@ import NewClusterModal from "@/components/NewClusterModal";
 import styles from './index.module.scss';
 import http from "@/utils/axios";
 import {getOriginzationByUrl} from "@/utils/utils";
+import {AxiosResponse} from "axios";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -24,8 +25,8 @@ const Clusters = () => {
   }, [])
 
   function getClusterList() {
-    http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then(res => {
-      setClusterList(res)
+    http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then((res: AxiosResponse) => {
+      return setClusterList(res);
     })
   }
 
@@ -33,12 +34,6 @@ const Clusters = () => {
     <Layout pageHeader="CLUSTERS">
       <div className={styles.wrapper}>
         <div className={styles.card} onClick={() => setModalDisplay(!modalDisplay)}>
-          {/*<AddBoxOutlinedIcon*/}
-          {/*  sx={{marginBottom: '20px',  color: "#ba77ff"}}*/}
-
-          {/*  fontSize="large"*/}
-          {/*/>*/}
-          {/*import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';*/}
           <Button
             variant="outlined"
           >

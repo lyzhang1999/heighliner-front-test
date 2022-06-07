@@ -9,6 +9,11 @@ const nextConfig = {
     path: '/',
     domains: ['assets-1309519128.cos.ap-hongkong.myqcloud.com']
   },
+  // images: {
+  //   loader: 'akamai',
+  //   path: '/',
+  // },
+  compress: true,
   typescript: {
     ignoreBuildErrors: true,
   },

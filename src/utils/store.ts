@@ -19,7 +19,9 @@ export const reducer = (state: State, params: State) => {
 
 export const Context = createContext<{
   dispatch: React.Dispatch<any>;
+  state: State;
 }>({
   dispatch: () => null,
+  state: initState,
 });
 

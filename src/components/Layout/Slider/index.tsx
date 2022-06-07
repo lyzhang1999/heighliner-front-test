@@ -16,6 +16,7 @@ import {useContext} from "react";
 import {Context} from "@/utils/store";
 import utils from "@/utils/utils";
 import {useRouter} from "next/router";
+import {OrgList} from "@/utils/api/org";
 
 function getNavlist() {
   return [
@@ -32,7 +33,7 @@ function getNavlist() {
   ]
 }
 
-const buttonLinks: {[index: string]: string} = {
+const buttonLinks: { [index: string]: string } = {
   createApplication: `/${getOriginzationByUrl()}/applications/create`
 }
 
@@ -45,12 +46,21 @@ function isActiveNav(currentPath: string) {
 }
 
 const Slider = () => {
+
+  const [hasMounted, setHasMounted] = React.useState(false);
   const {state} = useContext(Context);
   const router = useRouter();
+
+  // close server render
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  if (!hasMounted) return null;
+
   const {organizationList} = state;
-  // const router = useRouter();
 
   const handleChange = (event: SelectChangeEvent) => {
+
   };
   const oriKey = getOriginzationByUrl();
 
@@ -65,7 +75,7 @@ const Slider = () => {
         defaultValue={oriKey}
       >
         {
-          organizationList.map((item: typeof organizationList) => {
+          (organizationList as OrgList[]).map((item) => {
             return (
               <MenuItem value={item.id} key={item.id}
                         sx={{fontSize: '14px', color: "#121226", fontWeight: '300'}}

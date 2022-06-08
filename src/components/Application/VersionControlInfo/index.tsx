@@ -22,6 +22,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import http from "@/utils/axios";
 import { getOriginzationByUrl } from "@/utils/utils";
 import { getGitHubTokenList, TokenList } from "@/utils/api/githubToken";
+import { createApplication } from "@/utils/api/application";
 
 interface Props extends CommonProps, FormReducerReturnType {}
 
@@ -31,6 +32,7 @@ export default function VersionControllInfo({
 }: Props): React.ReactElement {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [gitTokenList, setGitTokenList] = useState<TokenList>([]);
+  const [chosenGitTokenId, setChosenGitTokenId] = useState("");
 
   const changeHandler = (
     event:
@@ -49,32 +51,34 @@ export default function VersionControllInfo({
   };
 
   const chooseGitHandler = (event: SelectChangeEvent<string>) => {
+    if (+event.target.value === -99) {
+      setModalDisplay(true);
+      return;
+    }
+
     const chosenGitToken = gitTokenList.find(
       (gitToken) => gitToken.id === +event.target.value
     );
     const gitConfig: GitConfig = {
-      [AllFieldName.OrgName]: chosenGitToken!.github_org_name,
+      [AllFieldName.OrgName]: chosenGitToken!.git_org_name,
       [AllFieldName.GitProvider]: chosenGitToken!.provider,
       [AllFieldName.GitToken]: chosenGitToken!.token,
     };
-    console.log(gitConfig);
 
     formDataDispatch({
       type: FieldChangeType.Git,
       field: AllFieldName.GitConfig,
       payload: gitConfig,
     });
-  };
 
-  const openHandler = () => {
-    getGitHubTokenList().then((res) => {
-      setGitTokenList(res);
-    });
+    setChosenGitTokenId(event.target.value);
+
   };
 
   useEffect(() => {
     getGitHubTokenList().then((res) => {
       setGitTokenList(res);
+      console.log(res);
     });
   }, []);
 
@@ -90,17 +94,17 @@ export default function VersionControllInfo({
         Git Provider
       </SubTitle>
       <Select
-        value={formData[AllFieldName.GitConfig][AllFieldName.GitToken]}
+        // value={showChosenGitToken}
+        value={chosenGitTokenId}
         onChange={chooseGitHandler}
-        onOpen={openHandler}
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}
-        name={AllFieldName.GitHubToken}
+        name={AllFieldName.GitConfig}
         style={{ minWidth: 195 }}
       >
-        {gitTokenList.map(({ token, id }) => (
+        {gitTokenList.map(({ token, id, git_org_name }) => (
           <MenuItem key={token} value={id}>
-            {token}
+            {git_org_name + ":" + token}
           </MenuItem>
         ))}
         <MenuItem value={-99}>

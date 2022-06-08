@@ -2,9 +2,10 @@ import { AllFieldName, FormData } from "@/components/Application/formData";
 import http from "../axios";
 import { getOriginzationByUrl } from "../utils";
 
-interface CreateApplicationRequest {
+export interface CreateApplicationRequest {
   cluster_id: number;
   git_config: {
+    org_name: string
     provider: string;
     token: string;
   };
@@ -15,22 +16,11 @@ interface CreateApplicationRequest {
   stack_id: number;
 }
 
-export function createApplication(formData: FormData) {
-  const createApplicationRequest: CreateApplicationRequest = {
-    cluster_id: formData[AllFieldName.Cluster],
-    git_config: {
-      provider: "GITHUB",
-      token: formData[AllFieldName.GitHubToken],
-    },
-    name: formData[AllFieldName.ApplicationName],
-    networking: {
-      domain: formData[AllFieldName.Domain],
-    },
-    stack_id: formData[AllFieldName.StackCode],
-  };
-
+export function createApplication(
+  createApplicationRequest: CreateApplicationRequest
+) {
   return http.post(
-    `/orgs/${getOriginzationByUrl()}/clusters`,
+    `/orgs/${getOriginzationByUrl()}/applications`,
     createApplicationRequest
   );
 }

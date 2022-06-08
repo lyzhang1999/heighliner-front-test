@@ -10,12 +10,13 @@ import { ChangeStatusAction, Status } from "@/utils/constants";
 
 import styles from "./index.module.scss";
 import {
+  AllFieldName,
   FormReducerReturnType,
   useFormReducer,
 } from "../../../../components/Application/formData";
 import { Alert, Button } from "@mui/material";
 import { NoticeRef } from "@/components/Notice";
-import { createApplication } from "@/utils/api/application";
+import { createApplication, CreateApplicationRequest } from "@/utils/api/application";
 import { useRouter } from "next/router";
 import { getOriginzationByUrl } from "@/utils/utils";
 
@@ -66,22 +67,36 @@ export default function Create() {
 
   const createApplicationHandler = () => {
     // Validate all fields
-    for (const [fieldName, fieldValue] of Object.entries(formData)) {
-      console.log(typeof fieldName);
-      if ((typeof fieldValue === "string" && fieldValue.length <= 0) ||
-      (typeof fieldValue === "number" && fieldValue < 0)
-      ) {
-        NoticeRef.current?.open({
-          message: `Please check ${fieldName} item.`,
-          type: "error",
-        });
-        return;
-      }
-    }
+    // for (const [fieldName, fieldValue] of Object.entries(formData)) {
+    //   console.log(typeof fieldName);
+    //   if ((typeof fieldValue === "string" && fieldValue.length <= 0) ||
+    //   (typeof fieldValue === "number" && fieldValue < 0)
+    //   ) {
+    //     NoticeRef.current?.open({
+    //       message: `Please check ${fieldName} item.`,
+    //       type: "error",
+    //     });
+    //     return;
+    //   }
+    // }
+    const createApplicationRequest: CreateApplicationRequest = {
+      cluster_id: formData[AllFieldName.Cluster],
+      git_config: {
+        org_name: formData[AllFieldName.GitConfig][AllFieldName.OrgName],
+        provider: formData[AllFieldName.GitConfig][AllFieldName.GitProvider],
+        token: formData[AllFieldName.GitConfig][AllFieldName.GitToken],
+      },
+      name: formData[AllFieldName.ApplicationName],
+      networking: {
+        domain: formData[AllFieldName.Domain],
+      },
+      stack_id: formData[AllFieldName.StackCode],
+    };
 
 
-    createApplication(formData);
-    // router.push(`/orgs/${getOriginzationByUrl()}/creating`);
+    createApplication(createApplicationRequest).then(() => {
+      router.push(`/${getOriginzationByUrl()}/applications/creating`);
+    });
   };
 
   return (

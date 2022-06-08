@@ -44,7 +44,7 @@ export interface FieldAction {
 
 export function getInitialFormData() {
   const initialFormData: FormData = {
-    [AllFieldName.ApplicationName]: "My-Application",
+    [AllFieldName.ApplicationName]: "my-application",
     [AllFieldName.Cluster]: -1,
     [AllFieldName.StackCode]: -1,
     [AllFieldName.GitHubToken]: "",

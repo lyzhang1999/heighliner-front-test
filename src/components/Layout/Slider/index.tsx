@@ -29,6 +29,11 @@ function getNavlist() {
       icon: <AccountTreeIcon fontSize="small"/>,
       href: `/${getOriginzationByUrl()}/clusters`,
       name: "Clusters"
+    },
+    {
+      icon: <AccountTreeIcon fontSize="small"/>,
+      href: `/${getOriginzationByUrl()}/gitProvider`,
+      name: "Git Provider"
     }
   ]
 }
@@ -66,24 +71,24 @@ const Slider = () => {
 
   return (
     <div className={styles.slider}>
-      <div className={styles.navTitle}>
-        Organization
-      </div>
-      <Select
-        onChange={handleChange}
-        sx={{width: "100%", height: '40px', fontSize: '14px', color: "#121226", fontWeight: '300'}}
-        defaultValue={oriKey}
-      >
-        {
-          (organizationList as OrgList[]).map((item) => {
-            return (
-              <MenuItem value={item.id} key={item.id}
-                        sx={{fontSize: '14px', color: "#121226", fontWeight: '300'}}
-              >{item.name}</MenuItem>
-            )
-          })
-        }
-      </Select>
+      {/*<div className={styles.navTitle}>*/}
+      {/*  Organization*/}
+      {/*</div>*/}
+      {/*<Select*/}
+      {/*  onChange={handleChange}*/}
+      {/*  sx={{width: "100%", height: '40px', fontSize: '14px', color: "#121226", fontWeight: '300'}}*/}
+      {/*  defaultValue={oriKey}*/}
+      {/*>*/}
+      {/*  {*/}
+      {/*    (organizationList as OrgList[]).map((item) => {*/}
+      {/*      return (*/}
+      {/*        <MenuItem value={item.id} key={item.id}*/}
+      {/*                  sx={{fontSize: '14px', color: "#121226", fontWeight: '300'}}*/}
+      {/*        >{item.name}</MenuItem>*/}
+      {/*      )*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*</Select>*/}
       {/*<Button*/}
       {/*  variant="contained"*/}
       {/*  sx={buttonOneStyle}*/}

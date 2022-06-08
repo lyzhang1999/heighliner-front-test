@@ -7,7 +7,6 @@ import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHu
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import styles from './index.module.scss';
-import {ClusterItem} from "@/utils/api/cluster";
 import {getProviderList, deleteProviderList, GitProviderType} from "@/utils/api/gitProvider";
 
 const Clusters = () => {
@@ -52,7 +51,7 @@ const Clusters = () => {
                   <DeleteIcon onClick={() => deleteProvider(item.id)}/>
                 </div>
                 <div className={styles.clusterName}>{item.name}</div>
-                <div className={styles.clusterName}>{item.github_org_name}</div>
+                <div className={styles.clusterName}>{item.git_org_name}</div>
               </div>
             )
           })

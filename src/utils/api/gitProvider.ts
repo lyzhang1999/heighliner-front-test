@@ -3,7 +3,7 @@ import {getOriginzationByUrl} from "@/utils/utils";
 
 export interface GitProviderType {
   "created_at": number;
-  "github_org_name": string;
+  "git_org_name": string;
   "id": number;
   "name": string;
   "org_id": number;
@@ -18,7 +18,7 @@ export const getProviderList = (): Promise<GitProviderType[]> => {
 }
 
 interface CreateProviderReq {
-  "github_org_name": string;
+  "git_org_name": string;
   // "name": string;
   "provider": string;
   "token": string;

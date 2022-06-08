@@ -1,13 +1,11 @@
-import { Box, Button, TextField, Drawer } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import {Box, Button, TextField, Drawer} from "@mui/material";
+import React, {useEffect, useState} from "react";
 
 import styles from "./index.module.scss";
 import "highlight.js/styles/a11y-dark.css";
 
-import http from "@/utils/axios";
-import { getOriginzationByUrl } from "@/utils/utils";
-import { NoticeRef } from "@/components/Notice";
-import { addGitHubToken } from "@/utils/api/githubToken";
+import {NoticeRef} from "@/components/Notice";
+import {addGitHubToken} from "@/utils/api/githubToken";
 
 interface Props {
   modalDisplay: boolean;
@@ -24,13 +22,6 @@ export default function NewGitHubToken({
   setModalDisplay,
   successCb,
 }: Props) {
-  const [tokenName, setTokenName] = useState<string>("");
-  const changeTokenNameHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTokenName(event.target.value);
-  };
-
   const [gitHubOrgName, setGitHubOrgName] = useState<string>("");
   const changeGitHubOrgNameHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -44,7 +35,6 @@ export default function NewGitHubToken({
   };
 
   useEffect(() => {
-    setTokenName("");
     setGitHubOrgName("");
     setToken("");
   }, [modalDisplay]);
@@ -57,13 +47,6 @@ export default function NewGitHubToken({
       });
       return;
     }
-    // if (!tokenName) {
-    //   NoticeRef.current?.open({
-    //     message: "Please input GitHub personal access token name",
-    //     type: "error",
-    //   });
-    //   return;
-    // }
     if (!token) {
       NoticeRef.current?.open({
         message: "Please input GitHub personal access token",
@@ -73,8 +56,7 @@ export default function NewGitHubToken({
     }
 
     addGitHubToken({
-      github_org_name: gitHubOrgName,
-      // name: tokenName,
+      git_org_name: gitHubOrgName,
       provider: "github",
       token: token,
     }).then((res) => {
@@ -99,7 +81,7 @@ export default function NewGitHubToken({
               component="form"
               sx={{
                 width: "100%",
-                "& .MuiTextField-root": { marginTop: "20px", width: "100%" },
+                "& .MuiTextField-root": {marginTop: "20px", width: "100%"},
               }}
               noValidate
               autoComplete="off"
@@ -114,16 +96,6 @@ export default function NewGitHubToken({
                   color="textColor"
                 />
               </div>
-              {/*<div>*/}
-              {/*  <TextField*/}
-              {/*    label="GitHub Personal Access Token Name"*/}
-              {/*    multiline*/}
-              {/*    maxRows={4}*/}
-              {/*    value={tokenName}*/}
-              {/*    onChange={changeTokenNameHandler}*/}
-              {/*    color="textColor"*/}
-              {/*  />*/}
-              {/*</div>*/}
               <div>
                 <TextField
                   label="GitHub Personal Access Token"

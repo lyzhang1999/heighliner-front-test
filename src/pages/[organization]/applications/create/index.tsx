@@ -13,6 +13,7 @@ import {
   FormReducerReturnType,
   useFormReducer,
 } from "../../../../components/Application/formData";
+import { Button } from "@mui/material";
 
 export interface StageIndicator {
   stages: Array<Status>;
@@ -67,12 +68,15 @@ export default function Create() {
   return (
     <Layout pageHeader="Create Application">
       <div className={styles.createApplicationWrapper}>
-        <SideProgress stageIndicator={stageIndicator} className={styles.side} />
+        {/* <SideProgress stageIndicator={stageIndicator} className={styles.side} /> */}
         <div className={styles.main}>
           <div className={styles.panel}>
-            {getCurrentStage(stageIndicator.currentStageIndex)}
+            {/* {getCurrentStage(stageIndicator.currentStageIndex)} */}
+            {getCurrentStage(0)}
+            {getCurrentStage(1)}
           </div>
-          <div className={styles.suspendBtn}>
+          <Button variant="contained" className={styles.createBtn}>Create Application</Button>
+          {/* <div className={styles.suspendBtn}>
             <button
               onClick={() => {
                 stageIndicatorDispatch({ type: ChangeCurrentStageIndex.Minus });
@@ -87,7 +91,7 @@ export default function Create() {
             >
               <span className={styles.right}></span>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </Layout>

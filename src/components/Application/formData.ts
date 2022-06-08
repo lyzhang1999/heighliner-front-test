@@ -6,6 +6,7 @@ export enum AllFieldName {
   Cluster = "Cluster",
   StackCode = "StackCode",
   GitHubToken = "GitHubToken",
+  Domain = "Domain",
 }
 
 export interface FormData {
@@ -14,6 +15,7 @@ export interface FormData {
   [AllFieldName.Cluster]: string;
   [AllFieldName.StackCode]: number;
   [AllFieldName.GitHubToken]: string;
+  [AllFieldName.Domain]: string;
   // Repos: string[];
   // Addons: string[];
 }
@@ -36,6 +38,7 @@ export function getInitialFormData() {
     [AllFieldName.Cluster]: "",
     [AllFieldName.StackCode]: 0,
     [AllFieldName.GitHubToken]: "",
+    [AllFieldName.Domain]: "",
   };
   return initialFormData;
 }

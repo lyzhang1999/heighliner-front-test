@@ -11,10 +11,11 @@ export interface ClusterItem {
   kubeconfig: string;
 }
 
+export type Clusters = ClusterItem[];
+
 export const getClusterList = (): Promise<ClusterItem[]> => {
   return http.get(`/orgs/${getOriginzationByUrl()}/clusters`);
 }
-
 
 export interface CreateClusterReq {
   "kubeconfig": string,

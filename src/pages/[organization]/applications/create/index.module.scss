@@ -2,6 +2,7 @@
 
 .createApplicationWrapper {
   display: flex;
+  margin-left: 1vw;
 }
 
 .side {
@@ -22,6 +23,10 @@
   // margin-left: 0.6vw;
   @include setHorizontalPadding(3vw);
   @include setVerticalPadding(24px);
+}
+
+.createBtn {
+  @include setVerticalMargin(10px);
 }
 
 .suspendBtn {

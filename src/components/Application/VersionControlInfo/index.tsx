@@ -14,13 +14,15 @@ import {
   AllFieldName,
   FieldChangeType,
   FormReducerReturnType,
+  GitConfig,
 } from "../formData";
 import SubTitle from "../SubTitle";
 import NewGitHubToken from "./NewGitHubToken";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import http from "@/utils/axios";
 import { getOriginzationByUrl } from "@/utils/utils";
 import { getGitHubTokenList, TokenList } from "@/utils/api/githubToken";
+import { createApplication } from "@/utils/api/application";
 
 interface Props extends CommonProps, FormReducerReturnType {}
 
@@ -29,51 +31,95 @@ export default function VersionControllInfo({
   formDataDispatch,
 }: Props): React.ReactElement {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
-  const [tokenList, setTokenList] = useState<TokenList>([]);
+  const [gitTokenList, setGitTokenList] = useState<TokenList>([]);
+  const [chosenGitTokenId, setChosenGitTokenId] = useState("");
 
-  const changeHandler = (event: SelectChangeEvent<string>) => {
-    if (event.target.value === "new") {
+  const changeHandler = (
+    event:
+      | SelectChangeEvent<string>
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (+event.target.value === -99) {
       setModalDisplay(true);
     } else {
       formDataDispatch({
         type: FieldChangeType.TextInput,
-        field: AllFieldName.GitHubToken,
+        field: event.target.name,
         payload: event.target.value,
       });
     }
   };
 
-  const openHandler = () => {
-    getGitHubTokenList().then((res) => {
-      setTokenList(res);
+  const chooseGitHandler = (event: SelectChangeEvent<string>) => {
+    if (+event.target.value === -99) {
+      setModalDisplay(true);
+      return;
+    }
+
+    const chosenGitToken = gitTokenList.find(
+      (gitToken) => gitToken.id === +event.target.value
+    );
+    const gitConfig: GitConfig = {
+      [AllFieldName.OrgName]: chosenGitToken!.git_org_name,
+      [AllFieldName.GitProvider]: chosenGitToken!.provider,
+      [AllFieldName.GitToken]: chosenGitToken!.token,
+    };
+
+    formDataDispatch({
+      type: FieldChangeType.Git,
+      field: AllFieldName.GitConfig,
+      payload: gitConfig,
     });
+
+    setChosenGitTokenId(event.target.value);
+
   };
+
+  useEffect(() => {
+    getGitHubTokenList().then((res) => {
+      setGitTokenList(res);
+      console.log(res);
+    });
+  }, []);
+
+  useEffect(() => {
+    getGitHubTokenList().then((res) => {
+      setGitTokenList(res);
+    });
+  }, [modalDisplay]);
 
   return (
     <>
       <SubTitle variant="h5" require={true}>
-        GitHub Token
+        Git Provider
       </SubTitle>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <Select
-          value={formData[AllFieldName.GitHubToken]}
-          onChange={changeHandler}
-          onOpen={openHandler}
-          displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          {tokenList.map((token) => (
-            <MenuItem key={token.id} value={token.name}>
-              {token.name}
-            </MenuItem>
-          ))}
-          <MenuItem value={"new"}>
-            <AddCircleOutlineIcon />
-            &nbsp; Add
+      <Select
+        // value={showChosenGitToken}
+        value={chosenGitTokenId}
+        onChange={chooseGitHandler}
+        displayEmpty
+        inputProps={{ "aria-label": "Without label" }}
+        name={AllFieldName.GitConfig}
+        style={{ minWidth: 195 }}
+      >
+        {gitTokenList.map(({ token, id, git_org_name }) => (
+          <MenuItem key={token} value={id}>
+            {git_org_name + ":" + token}
           </MenuItem>
-        </Select>
-        <FormHelperText>Without label</FormHelperText>
-      </FormControl>
+        ))}
+        <MenuItem value={-99}>
+          <AddCircleOutlineIcon />
+          &nbsp; Add
+        </MenuItem>
+      </Select>
+      <SubTitle variant="h5" require={true}>
+        Domain
+      </SubTitle>
+      <TextField
+        value={formData[AllFieldName.Domain]}
+        onChange={changeHandler}
+        name={AllFieldName.Domain}
+      />
       <NewGitHubToken
         modalDisplay={modalDisplay}
         setModalDisplay={setModalDisplay}

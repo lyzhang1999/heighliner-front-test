@@ -57,13 +57,13 @@ export default function NewGitHubToken({
       });
       return;
     }
-    if (!tokenName) {
-      NoticeRef.current?.open({
-        message: "Please input GitHub personal access token name",
-        type: "error",
-      });
-      return;
-    }
+    // if (!tokenName) {
+    //   NoticeRef.current?.open({
+    //     message: "Please input GitHub personal access token name",
+    //     type: "error",
+    //   });
+    //   return;
+    // }
     if (!token) {
       NoticeRef.current?.open({
         message: "Please input GitHub personal access token",
@@ -74,7 +74,7 @@ export default function NewGitHubToken({
 
     addGitHubToken({
       github_org_name: gitHubOrgName,
-      name: tokenName,
+      // name: tokenName,
       provider: "github",
       token: token,
     }).then((res) => {
@@ -111,26 +111,26 @@ export default function NewGitHubToken({
                   maxRows={4}
                   value={gitHubOrgName}
                   onChange={changeGitHubOrgNameHandler}
-                  color="success"
+                  color="textColor"
                 />
               </div>
-              <div>
-                <TextField
-                  label="GitHub Personal Access Token Name"
-                  multiline
-                  maxRows={4}
-                  value={tokenName}
-                  onChange={changeTokenNameHandler}
-                  color="success"
-                />
-              </div>
+              {/*<div>*/}
+              {/*  <TextField*/}
+              {/*    label="GitHub Personal Access Token Name"*/}
+              {/*    multiline*/}
+              {/*    maxRows={4}*/}
+              {/*    value={tokenName}*/}
+              {/*    onChange={changeTokenNameHandler}*/}
+              {/*    color="textColor"*/}
+              {/*  />*/}
+              {/*</div>*/}
               <div>
                 <TextField
                   label="GitHub Personal Access Token"
                   multiline
                   rows={8}
                   value={token}
-                  color="success"
+                  color="textColor"
                   onChange={changeTokenHandler}
                 />
               </div>

@@ -17,6 +17,7 @@ import {setLoginToken, uuid} from "@/utils/utils";
 import {NoticeRef} from "@/components/Notice";
 import {login, LoginType, Res} from "@/utils/api/login";
 import {getOrgList} from "@/utils/api/org";
+import LoadingPoint from "@/pages/login/loadingBtn";
 
 const inputStyle = {
   marginTop: "6px",
@@ -25,6 +26,7 @@ const inputStyle = {
 
 const Login: NextPage = () => {
   const [logining, setLogining] = useState(false);
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const {dispatch} = useContext(Context);
   const router = useRouter();
 
@@ -85,9 +87,12 @@ const Login: NextPage = () => {
       });
       return;
     }
+    setLoginLoading(true);
     login({logintype: LoginType.ACCOUNT, user, pass}).then((res) => {
       setLoginToken(res.token)
       oriList();
+    }).catch(err => {
+      setLoginLoading(false);
     })
   }
 
@@ -108,22 +113,22 @@ const Login: NextPage = () => {
         <div className={styles.title}>
           Sign in to Your Account
         </div>
-        <Box className="flex justify-center">
-          <LoadingButton
-            loading={logining}
-            className={clsx("normal-case", styles.githubLoginBtn)}
-            variant="outlined"
-            startIcon={<GitHubIcon className="text-4xl m-1"/>}
-            loadingPosition="start"
-            size="large"
-            onClick={handleGitHubLogin}
-          >
-            Log in with GitHub
-          </LoadingButton>
-        </Box>
-        <div className={styles.divider}>
-          <Divider>or</Divider>
-        </div>
+        {/*<Box className="flex justify-center">*/}
+        {/*  <LoadingButton*/}
+        {/*    loading={logining}*/}
+        {/*    className={clsx("normal-case", styles.githubLoginBtn)}*/}
+        {/*    variant="outlined"*/}
+        {/*    startIcon={<GitHubIcon className="text-4xl m-1"/>}*/}
+        {/*    loadingPosition="start"*/}
+        {/*    size="large"*/}
+        {/*    onClick={handleGitHubLogin}*/}
+        {/*  >*/}
+        {/*    Log in with GitHub*/}
+        {/*  </LoadingButton>*/}
+        {/*</Box>*/}
+        {/*<div className={styles.divider}>*/}
+        {/*  <Divider>or</Divider>*/}
+        {/*</div>*/}
 
         {/*<div className={styles.inputTitle}>*/}
         {/*  User*/}
@@ -157,8 +162,9 @@ const Login: NextPage = () => {
         {/*    Need an Account?*/}
         {/*  </div>*/}
         {/*</div>*/}
+
         <div className={styles.signIn} onClick={passwordLogin}>
-          Sign In
+          Sign In {loginLoading && <LoadingPoint/>}
         </div>
         {/*<div className={styles.centerLine}>*/}
         {/*  /!*<div className={styles.line}></div>*!/*/}

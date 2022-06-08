@@ -13,7 +13,7 @@ const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [prividerList, setProviderList] = useState<GitProviderType[]>([]);
 
-  function successCb(params: any) {
+  function successCb() {
     getProvider();
   }
 
@@ -27,16 +27,16 @@ const Clusters = () => {
     })
   }
 
-  function deleteProvider(id) {
+  function deleteProvider(id: number) {
     deleteProviderList(id).then(res => {
-      getProvider(res)
+      getProvider()
     })
   }
 
   return (
     <Layout pageHeader="GIT PROVIDER">
       <div className={styles.wrapper}>
-        <div className={styles.card} onClick={() => setModalDisplay(!modalDisplay)}>
+        <div className={styles.card} onClick={() => setModalDisplay(!modalDisplay)} key="0">
           <Button
             variant="outlined"
           >
@@ -46,11 +46,10 @@ const Clusters = () => {
         {
           prividerList.map(item => {
             return (
-              <div className={styles.card} key={item.name}>
+              <div className={styles.card} key={item.git_org_name}>
                 <div className={styles.delete}>
                   <DeleteIcon onClick={() => deleteProvider(item.id)}/>
                 </div>
-                <div className={styles.clusterName}>{item.name}</div>
                 <div className={styles.clusterName}>{item.git_org_name}</div>
               </div>
             )

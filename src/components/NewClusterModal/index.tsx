@@ -7,19 +7,16 @@ import {
 
 import React, {useEffect, useState} from "react";
 import styles from './index.module.scss';
-import hljs from 'highlight.js';
-import yaml from 'highlight.js/lib/languages/yaml';
 import 'highlight.js/styles/a11y-dark.css';
 
-import http from "@/utils/axios";
-import {getOriginzationByUrl} from "@/utils/utils";
 import {NoticeRef} from "@/components/Notice";
-
+import {createCluster} from "@/utils/api/cluster";
+import {trim} from "lodash-es";
 
 interface Props {
   modalDisplay: boolean
   setModalDisplay: (dispaly: any) => void,
-  successCb?: () => {},
+  successCb?: () => void,
 }
 
 const buttonStyles = {
@@ -27,17 +24,6 @@ const buttonStyles = {
 }
 
 const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
-  // useEffect(() => {
-  //   if (modalDisplay) {
-  //     setTimeout(() => {
-  //       let dom = document.querySelector("#heightWrapper")
-  //       console.warn(dom);
-  //       hljs.highlightElement(dom);
-  //       hljs.registerLanguage('yaml', yaml);
-  //
-  //     }, 1000)
-  //   }
-  // }, [modalDisplay])
 
   const [configName, setConfigName] = useState<string>('');
   const handleConfigName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,27 +41,26 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
   }, [modalDisplay])
 
   function handleConfirm() {
-    if (!configName) {
+
+    if (!trim(configName)) {
       NoticeRef.current?.open({
         message: "Please input cluster name",
         type: "error",
       });
       return;
     }
-    if (!configValue) {
+    if (!trim(configValue)) {
       NoticeRef.current?.open({
         message: "Please input kube config",
         type: "error",
       });
       return;
     }
-    http.post(`/orgs/${getOriginzationByUrl()}/clusters`,
-      {
-        "kubeconfig": configValue,
-        "name": configName,
-        "provider": "kubeconfig"
-      }
-    ).then(res => {
+    createCluster({
+      "kubeconfig": trim(configValue),
+      "name": trim(configName),
+      "provider": "kubeconfig"
+    }).then(res => {
       setModalDisplay(false);
       successCb && successCb();
     })
@@ -133,7 +118,6 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
             </Button>
             <Button
               variant="contained"
-              // sx={buttonStyles}
               onClick={handleConfirm}
             >
               Confirm
@@ -144,6 +128,5 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
     </div>
   )
 }
-
 
 export default NewClusterModal;

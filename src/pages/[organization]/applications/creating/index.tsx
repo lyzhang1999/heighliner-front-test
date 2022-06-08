@@ -1,10 +1,10 @@
 import Layout from "@/components/Layout";
-import {DOMElement, useEffect, useState} from "react";
-import clsx from "clsx";
+import {useEffect, useState} from "react";
 import {Terminal} from 'xterm';
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css"
 import * as React from "react";
+// import { FitAddon } from 'xterm-addon-fit';
 
 const list = [
   {
@@ -29,37 +29,64 @@ const CreatingApplication = () => {
   useEffect(() => {
     const initTerminal = async () => {
       const {Terminal} = await import('xterm')
+      const {FitAddon} = await import('xterm-addon-fit');
+      const fitAddon = new FitAddon();
+      const term = new Terminal({
+        // rendererType: 'dom',
+        fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
+        fontSize: 14,
+      })
+      term.loadAddon(fitAddon);
 
-      const term = new Terminal()
 
       // var term = new Terminal();
+      // @ts-ignore
       term.open(document.getElementById('terminal'));
-      term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $  /nfdshiahufiewo /n  \n' +
-        'fhdasuoifhdusaiof/n fhewuoiqhfuiew')
+      fitAddon.fit();
+
+      // term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $  /nfdshiahufiewo /n  \n' +
+      //
+      //   'fhdasuoifhdusaiof/n fhewuoiqhfuiew'
+      // )
+
+      term.onData((val) => {
+        console.warn(val)
+        term.write(val);
+      });
+
+      // term.onData(recv => term.write(recv));
+      term.onData(send => term.write(send));
       // var count = 0
       // setInterval(() => {
       //   term.write(String(count))
       //   count++;
       // }, 500)
       // Add logic with `term`
+      //
+      // let timer = setInterval(() => {
+      //   // setNumber((value) => {
+      //   //   return value + 1;
+      //   // })
+      //   console.warn('---')
+      //   term.write("\n");
+      //   term.write("123");
+      // }, 3000)
+      // return () => {
+      //   clearInterval(timer);
+      // }
+
+
+
+      var stream = new EventSource("http://192.168.0.148:8000/orgs/1/applications/7/releases/7/logs");
+      stream.addEventListener("MESSAGE", function (e) {
+        console.log(e.data);
+        term.writeln(e.data);
+      });
+
     }
-    initTerminal()
-
-    // setTimeout(() => {
-    // var term = new Terminal();
-    // term.open(document.getElementById('terminal'));
-    // term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ')
-    // }, 3000)
-
-
-    let timer = setInterval(() => {
-      setNumber((value) => {
-        return value + 1;
-      })
-    }, 3000)
-    return () => {
-      clearInterval(timer);
-    }
+    setTimeout(() => {
+      initTerminal()
+    }, 100)
 
 
   }, [])
@@ -75,7 +102,7 @@ const CreatingApplication = () => {
     <Layout pageHeader="Creating Application">
       <div id="creatingTerminal" className={styles.wrapper}>
 
-        <div id="terminal" style={{width: '300px', height: '300px'}}
+        <div id="terminal"
              className={styles.terminal}
         >
         </div>

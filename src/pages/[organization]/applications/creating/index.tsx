@@ -4,7 +4,10 @@ import {Terminal} from 'xterm';
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css"
 import * as React from "react";
+import {trim} from "lodash-es";
 // import { FitAddon } from 'xterm-addon-fit';
+// import * as fit from 'xterm/lib/addons/fit';
+
 
 const list = [
   {
@@ -22,7 +25,6 @@ const list = [
 ]
 
 const CreatingApplication = () => {
-  const [number, setNumber] = useState<number>(0);
   const [hasMounted, setHasMounted] = React.useState(false);
 
 
@@ -32,63 +34,33 @@ const CreatingApplication = () => {
       const {FitAddon} = await import('xterm-addon-fit');
       const fitAddon = new FitAddon();
       const term = new Terminal({
-        // rendererType: 'dom',
         fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
         fontSize: 14,
+        lineHeight: 0.2,
+        scrollback: 99999,
       })
       term.loadAddon(fitAddon);
 
-
-      // var term = new Terminal();
       // @ts-ignore
       term.open(document.getElementById('terminal'));
       fitAddon.fit();
-
-      // term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $  /nfdshiahufiewo /n  \n' +
-      //
-      //   'fhdasuoifhdusaiof/n fhewuoiqhfuiew'
-      // )
-
-      term.onData((val) => {
-        console.warn(val)
-        term.write(val);
-      });
-
-      // term.onData(recv => term.write(recv));
-      term.onData(send => term.write(send));
-      // var count = 0
-      // setInterval(() => {
-      //   term.write(String(count))
-      //   count++;
-      // }, 500)
-      // Add logic with `term`
-      //
-      // let timer = setInterval(() => {
-      //   // setNumber((value) => {
-      //   //   return value + 1;
-      //   // })
-      //   console.warn('---')
-      //   term.write("\n");
-      //   term.write("123");
-      // }, 3000)
-      // return () => {
-      //   clearInterval(timer);
-      // }
-
-
+      window.onresize = function () {
+        fitAddon.fit();
+        // term.scrollToBottom();
+      };
 
       var stream = new EventSource("http://192.168.0.148:8000/orgs/1/applications/7/releases/7/logs");
       stream.addEventListener("MESSAGE", function (e) {
-        console.log(e.data);
         term.writeln(e.data);
       });
-
+      stream.addEventListener("END", function (e) {
+        stream.close();
+      });
     }
-    setTimeout(() => {
-      initTerminal()
-    }, 100)
 
-
+    // setTimeout(() => {
+    initTerminal()
+    // }, 100)
   }, [])
 
   // close server render
@@ -99,7 +71,10 @@ const CreatingApplication = () => {
 
 
   return (
-    <Layout pageHeader="Creating Application">
+    <Layout pageHeader="Creating Application"
+
+    >
+
       <div id="creatingTerminal" className={styles.wrapper}>
 
         <div id="terminal"

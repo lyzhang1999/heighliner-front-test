@@ -1,10 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {Button} from '@mui/material';
+import {
+  Button,
+  Popover,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText
+} from '@mui/material';
 import '@/utils/axios';
 
 import Layout from "@/components/Layout";
 import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHubToken";
 import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';
 import {getProviderList, deleteProviderList, GitProviderType} from "@/utils/api/gitProvider";
@@ -12,6 +22,10 @@ import {getProviderList, deleteProviderList, GitProviderType} from "@/utils/api/
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [prividerList, setProviderList] = useState<GitProviderType[]>([]);
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false)
+  const [deleteItemID, setDeleteItemID] = useState<number>(0);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
 
   function successCb() {
     getProvider();
@@ -27,30 +41,90 @@ const Clusters = () => {
     })
   }
 
-  function deleteProvider(id: number) {
-    deleteProviderList(id).then(res => {
-      getProvider()
+  function deleteProvider() {
+    deleteProviderList(deleteItemID).then(res => {
+      getProvider();
+      setDeleteItemID(0);
+      setDialogVisible(false);
+      setAnchorEl(null);
     })
   }
 
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
+    setAnchorEl(event.currentTarget);
+    setDeleteItemID(id);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const closeDialog = () => {
+    setDialogVisible(false);
+  };
+
+
+  function openDeleteDialog() {
+    setDialogVisible(true);
+  }
+
   return (
-    <Layout pageHeader="GIT PROVIDER">
+    <Layout pageHeader="GIT PROVIDER"
+            titleContent={(
+              <Button
+                variant="contained"
+                onClick={() => setModalDisplay(!modalDisplay)}
+              >
+                Add Provider
+              </Button>
+            )}
+    >
       <div className={styles.wrapper}>
-        <div className={styles.card} onClick={() => setModalDisplay(!modalDisplay)} key="0">
-          <Button
-            variant="outlined"
-          >
-            Create a Git Provider
-          </Button>
-        </div>
+        <Dialog onClose={closeDialog} open={dialogVisible}>
+          <DialogTitle>Delete Git-provider</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure to delete the Git-provider?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeDialog}>Cancel</Button>
+            <Button onClick={deleteProvider} autoFocus>
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <div className={styles.deleteIcon} onClick={openDeleteDialog}>
+            <DeleteIcon/>
+            <span>
+              Delete The Provider
+            </span>
+          </div>
+        </Popover>
         {
           prividerList.map(item => {
             return (
               <div className={styles.card} key={item.git_org_name}>
-                <div className={styles.delete}>
-                  <DeleteIcon onClick={() => deleteProvider(item.id)}/>
+                <div className={styles.moreIcon} onClick={(e) => handleClick(e, item.id)}>
+                  <MoreVertIcon/>
                 </div>
-                <div className={styles.clusterName}>{item.git_org_name}</div>
+                <div className={styles.logo}>
+                  <img src="/img/login/login-page-bg@3x.webp" alt=""/>
+                </div>
+                <div className={styles.content}>
+                  <div className={styles.organiztion}>Organization: {item.git_org_name}</div>
+                  <div className={styles.creatTime}>CreateTime: {item.created_at}</div>
+                </div>
               </div>
             )
           })

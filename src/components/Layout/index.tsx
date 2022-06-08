@@ -1,4 +1,4 @@
-import react from 'react';
+import react, {ReactElement} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
 
 import Header from './Header'
@@ -16,10 +16,11 @@ const SlinderNoSSR = dynamic(
 interface HomeProps {
   children?: react.ReactNode,
   hiddenContent?: boolean,
-  pageHeader?: string
+  pageHeader?: string,
+  titleContent?: ReactElement
 }
 
-const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactElement => {
+const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps): react.ReactElement => {
   return (
     <div>
       <div className={styles.header}>
@@ -40,6 +41,9 @@ const Layout = ({children, hiddenContent, pageHeader}: HomeProps): react.ReactEl
                   pageHeader &&
                   <div className={styles.pageHeader}>
                     {pageHeader}
+                    {
+                      titleContent && titleContent
+                    }
                   </div>
                 }
                 {children}

@@ -1,32 +1,29 @@
 import React, {useState, useEffect} from 'react';
 import {Button} from '@mui/material';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import '@/utils/axios';
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
 
 import styles from './index.module.scss';
-import http from "@/utils/axios";
-import {getOriginzationByUrl} from "@/utils/utils";
-import {AxiosResponse} from "axios";
+import {ClusterItem} from "@/utils/api/cluster";
+import {getClusterList} from "@/utils/api/cluster";
 
 const Clusters = () => {
   const [modalDisplay, setModalDispay] = useState<boolean>(false);
-  const [clusterList, setClusterList] = useState([]);
+  const [clusterList, setClusterList] = useState<ClusterItem[]>([]);
 
   function successCb(params: any) {
-    getClusterList();
+    getCluster();
   }
 
   useEffect(() => {
-    getClusterList()
+    getCluster()
   }, [])
 
-  function getClusterList() {
-    http.get(`/orgs/${getOriginzationByUrl()}/clusters`).then((res: AxiosResponse) => {
-      return setClusterList(res);
+  function getCluster() {
+    getClusterList().then(res => {
+      setClusterList(res);
     })
   }
 

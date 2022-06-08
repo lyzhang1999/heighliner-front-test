@@ -108,22 +108,22 @@ const Login: NextPage = () => {
         <div className={styles.title}>
           Sign in to Your Account
         </div>
-        <Box className="flex justify-center">
-          <LoadingButton
-            loading={logining}
-            className={clsx("normal-case", styles.githubLoginBtn)}
-            variant="outlined"
-            startIcon={<GitHubIcon className="text-4xl m-1"/>}
-            loadingPosition="start"
-            size="large"
-            onClick={handleGitHubLogin}
-          >
-            Log in with GitHub
-          </LoadingButton>
-        </Box>
-        <div className={styles.divider}>
-          <Divider>or</Divider>
-        </div>
+        {/*<Box className="flex justify-center">*/}
+        {/*  <LoadingButton*/}
+        {/*    loading={logining}*/}
+        {/*    className={clsx("normal-case", styles.githubLoginBtn)}*/}
+        {/*    variant="outlined"*/}
+        {/*    startIcon={<GitHubIcon className="text-4xl m-1"/>}*/}
+        {/*    loadingPosition="start"*/}
+        {/*    size="large"*/}
+        {/*    onClick={handleGitHubLogin}*/}
+        {/*  >*/}
+        {/*    Log in with GitHub*/}
+        {/*  </LoadingButton>*/}
+        {/*</Box>*/}
+        {/*<div className={styles.divider}>*/}
+        {/*  <Divider>or</Divider>*/}
+        {/*</div>*/}
 
         {/*<div className={styles.inputTitle}>*/}
         {/*  User*/}

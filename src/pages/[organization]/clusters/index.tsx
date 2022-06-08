@@ -10,8 +10,8 @@ import {ClusterItem} from "@/utils/api/cluster";
 import {getClusterList} from "@/utils/api/cluster";
 
 const Clusters = () => {
-  const [modalDisplay, setModalDispay] = useState<boolean>(false);
-  const [clusterList, setClusterList] = useState<ClusterItem[]>([]);
+  const [modalDisplay, setModalDisplay] = useState<boolean>(false);
+  const [clusterList, setClusterList] = useState(ClusterItem[]);
 
   function successCb(params: any) {
     getCluster();
@@ -30,7 +30,7 @@ const Clusters = () => {
   return (
     <Layout pageHeader="CLUSTERS">
       <div className={styles.wrapper}>
-        <div className={styles.card} onClick={() => setModalDispay(!modalDisplay)}>
+        <div className={styles.card} onClick={() => setModalDisplay(!modalDisplay)}>
           <Button
             variant="outlined"
           >
@@ -49,7 +49,7 @@ const Clusters = () => {
       </div>
       <NewClusterModal
         {...{
-          setModalDispay,
+          setModalDisplay,
           modalDisplay,
           successCb,
         }}

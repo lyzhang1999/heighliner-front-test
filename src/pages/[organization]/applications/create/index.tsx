@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Reducer, useReducer } from "react";
-import { Button } from "@mui/material";
+import React, { Reducer, useReducer } from "react";
 import { cloneDeep } from "lodash-es";
 
 import Layout from "@/components/Layout";
@@ -7,9 +6,13 @@ import BasicApplicationInfo from "@/components/Application/BasicApplicationInfo"
 import VersionControllInfo from "@/components/Application/VersionControlInfo";
 import AddonInfo from "@/components/Application/AddonInfo";
 import SideProgress from "@/components/Application/SideProgress";
-import { ChangeStatusAction, Direction, Status } from "@/utils/constants";
+import { ChangeStatusAction, Status } from "@/utils/constants";
 
 import styles from "./index.module.scss";
+import {
+  FormReducerReturnType,
+  useFormReducer,
+} from "../../../../components/Application/formData";
 
 export interface StageIndicator {
   stages: Array<Status>;
@@ -21,13 +24,35 @@ enum ChangeCurrentStageIndex {
   Minus,
 }
 
-const Stage = [
-  <BasicApplicationInfo key={0} />,
-  <VersionControllInfo key={1} />,
-  <AddonInfo key={2} />,
-];
+// Use currying function to reduce duplicate formData parameters.
+function stageWithFormData({
+  formData,
+  formDataDispatch,
+}: FormReducerReturnType) {
+  const Stage = [
+    <BasicApplicationInfo
+      key={0}
+      formData={formData}
+      formDataDispatch={formDataDispatch}
+    />,
+    <VersionControllInfo
+      key={1}
+      formData={formData}
+      formDataDispatch={formDataDispatch}
+    />,
+    <AddonInfo
+      key={2}
+      // formData={formData}
+      // formDataDispatch={formDataDispatch}
+    />,
+  ];
 
-const Create = () => {
+  return function (currentStageIndex: number) {
+    return Stage[currentStageIndex];
+  };
+}
+
+export default function Create() {
   // Side state
   const stageNumber = 3;
   const initialStageIndicator = getInitialStageIndicator(stageNumber);
@@ -35,38 +60,39 @@ const Create = () => {
     initialStageIndicator
   );
 
+  // Form data
+  const [formData, formDataDispatch] = useFormReducer();
+  const getCurrentStage = stageWithFormData({ formData, formDataDispatch });
+
   return (
     <Layout pageHeader="Create Application">
       <div className={styles.createApplicationWrapper}>
         <SideProgress stageIndicator={stageIndicator} className={styles.side} />
         <div className={styles.main}>
           <div className={styles.panel}>
-            {Stage[stageIndicator.currentStageIndex]}
+            {getCurrentStage(stageIndicator.currentStageIndex)}
           </div>
           <div className={styles.suspendBtn}>
-            <Button
-              variant="outlined"
+            <button
               onClick={() => {
                 stageIndicatorDispatch({ type: ChangeCurrentStageIndex.Minus });
               }}
             >
-              pre
-            </Button>
-            <Button
-              variant="outlined"
+              <span className={styles.left}></span>
+            </button>
+            <button
               onClick={() => {
                 stageIndicatorDispatch({ type: ChangeCurrentStageIndex.Plus });
               }}
             >
-              next
-            </Button>
+              <span className={styles.right}></span>
+            </button>
           </div>
         </div>
       </div>
     </Layout>
   );
-};
-export default Create;
+}
 
 export function getInitialStageIndicator(
   stageNumber: number,
@@ -80,7 +106,7 @@ export function getInitialStageIndicator(
   return initialStageIndicator;
 }
 
-export function useStageIndicator(initialStageIndicator: StageIndicator) {
+function useStageIndicator(initialStageIndicator: StageIndicator) {
   type _Reducer = Reducer<
     StageIndicator,
     { type: ChangeStatusAction | ChangeCurrentStageIndex }

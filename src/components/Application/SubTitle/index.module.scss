@@ -1,5 +1,11 @@
+@import '../../../styles/utils';
+
 .subTitle {
   text-transform: uppercase;
+  font-family: Jost;
+  font-size: 1.125em;
+  font-weight: 500;
+  @include setVerticalMargin(22px);
 }
 
 .require {

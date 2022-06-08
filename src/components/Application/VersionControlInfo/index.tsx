@@ -20,21 +20,9 @@ import NewGitHubToken from "./NewGitHubToken";
 import { useState } from "react";
 import http from "@/utils/axios";
 import { getOriginzationByUrl } from "@/utils/utils";
+import { getGitHubTokenList, TokenList } from "@/utils/api/githubToken";
 
 interface Props extends CommonProps, FormReducerReturnType {}
-
-interface Token {
-  created_at: number;
-  github_org_name: string;
-  id: number;
-  name: string;
-  org_id: number;
-  provider: string;
-  token: string;
-  updated_at: number;
-}
-
-type TokenList = Token[];
 
 export default function VersionControllInfo({
   formData,
@@ -56,8 +44,8 @@ export default function VersionControllInfo({
   };
 
   const openHandler = () => {
-    http.get(`/orgs/${getOriginzationByUrl()}/git_tokens`).then((res) => {
-      setTokenList(res as TokenList);
+    getGitHubTokenList().then((res) => {
+      setTokenList(res);
     });
   };
 
@@ -80,14 +68,8 @@ export default function VersionControllInfo({
             </MenuItem>
           ))}
           <MenuItem value={"new"}>
-            {/* <div
-              onClick={() => {
-                setModalDisplay(true);
-              }}
-            > */}
             <AddCircleOutlineIcon />
             &nbsp; Add
-            {/* </div> */}
           </MenuItem>
         </Select>
         <FormHelperText>Without label</FormHelperText>

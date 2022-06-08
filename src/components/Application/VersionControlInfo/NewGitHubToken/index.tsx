@@ -7,6 +7,7 @@ import "highlight.js/styles/a11y-dark.css";
 import http from "@/utils/axios";
 import { getOriginzationByUrl } from "@/utils/utils";
 import { NoticeRef } from "@/components/Notice";
+import { addGitHubToken } from "@/utils/api/githubToken";
 
 interface Props {
   modalDisplay: boolean;
@@ -70,21 +71,20 @@ export default function NewGitHubToken({
       });
       return;
     }
-    http
-      .post(`/orgs/${getOriginzationByUrl()}/git_tokens`, {
-        github_org_name: gitHubOrgName,
-        name: tokenName,
-        provider: "github",
-        token: token,
-      })
-      .then((res) => {
-        NoticeRef.current?.open({
-          message: "Add GitHub personal access token successfully!",
-          type: "success"
-        })
-        setModalDisplay(false);
-        successCb && successCb();
-      })
+
+    addGitHubToken({
+      github_org_name: gitHubOrgName,
+      name: tokenName,
+      provider: "github",
+      token: token,
+    }).then((res) => {
+      NoticeRef.current?.open({
+        message: "Add GitHub personal access token successfully!",
+        type: "success",
+      });
+      setModalDisplay(false);
+      successCb && successCb();
+    });
   }
 
   return (

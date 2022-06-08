@@ -1,6 +1,15 @@
-import { Input, InputLabel, TextField, Typography } from "@mui/material";
+import {
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import clsx from "clsx";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { CommonProps } from "@/utils/commonType";
 import SubTitle from "../SubTitle";
@@ -12,6 +21,8 @@ import {
 } from "../formData";
 import { ChangeEvent, useEffect, useState } from "react";
 import { getStacks, Stacks } from "@/utils/api/stack";
+import { Clusters, getClusterList } from "@/utils/api/cluster";
+import NewClusterModal from "@/components/NewClusterModal";
 
 interface Props extends CommonProps, FormReducerReturnType {}
 
@@ -37,6 +48,8 @@ export default function BasicApplicationInfo({
   formDataDispatch,
 }: Props): React.ReactElement {
   const [stacks, setStacks] = useState<Stacks>([]);
+  const [clusters, setClusters] = useState<Clusters>([]);
+  const [modalDisplay, setModalDisplay] = useState<boolean>(false); // Toggle create cluster drawer knob
 
   const textChangeHandler = (
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -50,21 +63,45 @@ export default function BasicApplicationInfo({
 
   const chooseStackHandler = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number
+    stackCode: number
   ) => {
     formDataDispatch({
       type: FieldChangeType.TextInput,
       field: AllFieldName.StackCode,
-      payload: index,
+      payload: stackCode,
     });
+  };
+
+  const chooseCluster = (
+    event:
+      | SelectChangeEvent<string>
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (+event.target.value === -99) {
+      setModalDisplay(true);
+    } else {
+      formDataDispatch({
+        type: FieldChangeType.TextInput,
+        field: event.target.name,
+        payload: event.target.value,
+      });
+    }
   };
 
   useEffect(() => {
     getStacks().then((res) => {
       setStacks(res);
-      console.log(res);
+    });
+    getClusterList().then((res) => {
+      setClusters(res);
     });
   }, []);
+
+  useEffect(() => {
+    getClusterList().then((res) => {
+      setClusters(res);
+    });
+  }, [modalDisplay]);
 
   return (
     <div style={style} className={styles.basicApplicationInfoWrap}>
@@ -83,7 +120,26 @@ export default function BasicApplicationInfo({
       <SubTitle variant="h5" require>
         Cluster
       </SubTitle>
-      <TextField variant="outlined" className={styles.cluster} />
+      <Select
+        value={formData[AllFieldName.Cluster] + ''}
+        onChange={chooseCluster}
+        // onOpen={openHandler}
+        displayEmpty
+        inputProps={{ "aria-label": "Without label" }}
+        name={AllFieldName.Cluster}
+        style={{ minWidth: 195 }}
+      >
+        {clusters.map(({ id, name }) => (
+          <MenuItem key={id} value={id}>
+            {name}
+          </MenuItem>
+        ))}
+        <MenuItem value={-99}>
+          <AddCircleOutlineIcon />
+          &nbsp; Add
+        </MenuItem>
+      </Select>
+      {/* <TextField variant="outlined" className={styles.cluster} /> */}
       <SubTitle variant="h5" require>
         Stack
       </SubTitle>
@@ -98,7 +154,7 @@ export default function BasicApplicationInfo({
                 chooseStackHandler(event, id);
               }}
               className={clsx(
-                id === formData[AllFieldName.StackCode] && styles.chosenStack
+                id === +formData[AllFieldName.StackCode] && styles.chosenStack
               )}
             >
               <div className={styles.icons}>
@@ -124,42 +180,10 @@ export default function BasicApplicationInfo({
           );
         })}
       </ul>
-
-      {/* <ul className={styles.stacks}>
-        {Object.entries(stacks).map(([stackName, icons], index) => {
-          return (
-            <li
-              key={stackName}
-              onClick={(event) => {
-                chooseStackHandler(event, index);
-              }}
-              className={clsx(
-                index === formData[AllFieldName.StackCode] && styles.chosenStack
-              )}
-            >
-              <div className={styles.icons}>
-                <Image
-                  src={icons[0]}
-                  alt="Without Heighliner"
-                  width={67}
-                  height={67}
-                  loader={({ src }) => src}
-                />
-                {icons[1] && (
-                  <Image
-                    src={icons[1]}
-                    alt="Without Heighliner"
-                    loader={({ src }) => src}
-                    width={67}
-                    height={67}
-                  />
-                )}
-              </div>
-              <Typography align="center">{stackName}</Typography>
-            </li> 
-          );
-        })}
-      </ul> */}
+      <NewClusterModal
+        setModalDisplay={setModalDisplay}
+        modalDisplay={modalDisplay}
+      />
     </div>
   );
 }

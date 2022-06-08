@@ -1,4 +1,4 @@
-import React, { Reducer, useReducer } from "react";
+import React, { Reducer, useReducer, useState } from "react";
 import { cloneDeep } from "lodash-es";
 
 import Layout from "@/components/Layout";
@@ -13,7 +13,11 @@ import {
   FormReducerReturnType,
   useFormReducer,
 } from "../../../../components/Application/formData";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
+import { NoticeRef } from "@/components/Notice";
+import { createApplication } from "@/utils/api/application";
+import { useRouter } from "next/router";
+import { getOriginzationByUrl } from "@/utils/utils";
 
 export interface StageIndicator {
   stages: Array<Status>;
@@ -54,44 +58,47 @@ function stageWithFormData({
 }
 
 export default function Create() {
-  // Side state
-  const stageNumber = 3;
-  const initialStageIndicator = getInitialStageIndicator(stageNumber);
-  const [stageIndicator, stageIndicatorDispatch] = useStageIndicator(
-    initialStageIndicator
-  );
+  const router = useRouter();
 
   // Form data
   const [formData, formDataDispatch] = useFormReducer();
   const getCurrentStage = stageWithFormData({ formData, formDataDispatch });
 
+  const createApplicationHandler = () => {
+    // Validate all fields
+    for (const [fieldName, fieldValue] of Object.entries(formData)) {
+      console.log(typeof fieldName);
+      if ((typeof fieldValue === "string" && fieldValue.length <= 0) ||
+      (typeof fieldValue === "number" && fieldValue < 0)
+      ) {
+        NoticeRef.current?.open({
+          message: `Please check ${fieldName} item.`,
+          type: "error",
+        });
+        return;
+      }
+    }
+
+
+    createApplication(formData);
+    // router.push(`/orgs/${getOriginzationByUrl()}/creating`);
+  };
+
   return (
     <Layout pageHeader="Create Application">
       <div className={styles.createApplicationWrapper}>
-        {/* <SideProgress stageIndicator={stageIndicator} className={styles.side} /> */}
         <div className={styles.main}>
           <div className={styles.panel}>
-            {/* {getCurrentStage(stageIndicator.currentStageIndex)} */}
             {getCurrentStage(0)}
             {getCurrentStage(1)}
           </div>
-          <Button variant="contained" className={styles.createBtn}>Create Application</Button>
-          {/* <div className={styles.suspendBtn}>
-            <button
-              onClick={() => {
-                stageIndicatorDispatch({ type: ChangeCurrentStageIndex.Minus });
-              }}
-            >
-              <span className={styles.left}></span>
-            </button>
-            <button
-              onClick={() => {
-                stageIndicatorDispatch({ type: ChangeCurrentStageIndex.Plus });
-              }}
-            >
-              <span className={styles.right}></span>
-            </button>
-          </div> */}
+          <Button
+            variant="contained"
+            className={styles.createBtn}
+            onClick={createApplicationHandler}
+          >
+            Create Application
+          </Button>
         </div>
       </div>
     </Layout>

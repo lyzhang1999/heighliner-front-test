@@ -7,20 +7,30 @@ export enum AllFieldName {
   StackCode = "StackCode",
   GitHubToken = "GitHubToken",
   Domain = "Domain",
+  GitConfig = "GitConfig",
+  OrgName = "OrgName",
+  GitProvider = "GitProvider",
+  GitToken = "GitToken",
+}
+
+export interface GitConfig {
+  [AllFieldName.OrgName]: string;
+  [AllFieldName.GitProvider]: string;
+  [AllFieldName.GitToken]: string;
 }
 
 export interface FormData {
-  [index: string]: boolean | number | string | string[];
+  [index: string]: boolean | number | string | string[] | GitConfig;
   [AllFieldName.ApplicationName]: string;
-  [AllFieldName.Cluster]: string;
+  [AllFieldName.Cluster]: number;
   [AllFieldName.StackCode]: number;
   [AllFieldName.GitHubToken]: string;
   [AllFieldName.Domain]: string;
-  // Repos: string[];
-  // Addons: string[];
+  [AllFieldName.GitConfig]: GitConfig;
 }
 
 export enum FieldChangeType {
+  Git,
   TextInput,
   Toggle,
 }
@@ -35,10 +45,15 @@ export interface FieldAction {
 export function getInitialFormData() {
   const initialFormData: FormData = {
     [AllFieldName.ApplicationName]: "My-Application",
-    [AllFieldName.Cluster]: "",
-    [AllFieldName.StackCode]: 0,
+    [AllFieldName.Cluster]: -1,
+    [AllFieldName.StackCode]: -1,
     [AllFieldName.GitHubToken]: "",
     [AllFieldName.Domain]: "",
+    [AllFieldName.GitConfig]: {
+      [AllFieldName.OrgName]: "",
+      [AllFieldName.GitProvider]: "",
+      [AllFieldName.GitToken]: "",
+    },
   };
   return initialFormData;
 }
@@ -50,6 +65,9 @@ export function useFormReducer() {
     const nextState: FormData = cloneDeep(preState);
 
     switch (action.type) {
+      case FieldChangeType.Git:
+        nextState[AllFieldName.GitConfig] = action.payload as GitConfig;
+        break;
       case FieldChangeType.TextInput:
         nextState[action.field] = action.payload!;
         break;
@@ -57,7 +75,7 @@ export function useFormReducer() {
         nextState[action.field] = !preState[action.field];
         break;
     }
-    console.log('nextState')
+    console.log("nextState");
     console.log(nextState);
     return nextState;
   };

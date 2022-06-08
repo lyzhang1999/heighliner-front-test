@@ -3,9 +3,9 @@ import { getOriginzationByUrl } from "../utils";
 
 export interface Token {
   github_org_name: string;
-  id?: number;
+  id: number;
   name: string;
-  org_id?: number;
+  org_id: number;
   provider: string;
   token: string;
   created_at?: number;

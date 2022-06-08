@@ -16,7 +16,11 @@ import {
 } from "../../../../components/Application/formData";
 import { Alert, Button } from "@mui/material";
 import { NoticeRef } from "@/components/Notice";
-import { createApplication, CreateApplicationRequest } from "@/utils/api/application";
+import {
+  createApplication,
+  CreateApplicationRequest,
+  CreateApplicationResponse,
+} from "@/utils/api/application";
 import { useRouter } from "next/router";
 import { getOriginzationByUrl } from "@/utils/utils";
 
@@ -93,9 +97,12 @@ export default function Create() {
       stack_id: formData[AllFieldName.StackCode],
     };
 
-
-    createApplication(createApplicationRequest).then(() => {
-      router.push(`/${getOriginzationByUrl()}/applications/creating`);
+    createApplication(createApplicationRequest).then((res) => {
+      router.push(
+        `/${getOriginzationByUrl()}/applications/creating?app_id=${
+          res.app_id
+        }&release_id=${res.release_id}`
+      );
     });
   };
 

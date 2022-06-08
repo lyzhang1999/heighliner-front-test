@@ -5,7 +5,7 @@ import { getOriginzationByUrl } from "../utils";
 export interface CreateApplicationRequest {
   cluster_id: number;
   git_config: {
-    org_name: string
+    org_name: string;
     provider: string;
     token: string;
   };
@@ -16,9 +16,14 @@ export interface CreateApplicationRequest {
   stack_id: number;
 }
 
+export interface CreateApplicationResponse {
+  app_id: number;
+  release_id: number;
+}
+
 export function createApplication(
   createApplicationRequest: CreateApplicationRequest
-) {
+): Promise<CreateApplicationResponse> {
   return http.post(
     `/orgs/${getOriginzationByUrl()}/applications`,
     createApplicationRequest

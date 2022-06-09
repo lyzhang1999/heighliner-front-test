@@ -1,6 +1,6 @@
-import { AllFieldName, FormData } from "@/components/Application/formData";
+import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
-import { getOriginzationByUrl } from "../utils";
+import {getOriginzationByUrl} from "../utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -28,4 +28,23 @@ export function createApplication(
     `/orgs/${getOriginzationByUrl()}/applications`,
     createApplicationRequest
   );
+}
+
+interface GetStatusReq {
+  app_id: string,
+  release_id: string
+}
+
+export enum ApplicationStatus {
+  COMPLETED = "Completed",
+  PROCESSING = "Processing",
+  FAILED = "Failed"
+}
+
+interface GetStatusRes {
+  status: ApplicationStatus
+}
+
+export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
+  return http.get(`/orgs/${getOriginzationByUrl()}/applications/${req.app_id}/releases/${req.release_id}`)
 }

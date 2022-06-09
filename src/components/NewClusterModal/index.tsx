@@ -7,7 +7,7 @@ import {
 
 import React, {useEffect, useState} from "react";
 import styles from './index.module.scss';
-import 'highlight.js/styles/a11y-dark.css';
+// import 'highlight.js/styles/a11y-dark.css';
 
 import {NoticeRef} from "@/components/Notice";
 import {createCluster} from "@/utils/api/cluster";

@@ -149,7 +149,7 @@ const CreatingApplication = () => {
     <Layout pageHeader="Creating Application"
     >
       <div id="creatingTerminal" className={styles.wrapper}>
-        <Alert severity="info">Start {Math.trunc(time / 60)}m {time % 60}s ago</Alert>
+        {/*<Alert severity="info">Start {Math.trunc(time / 60)}m {time % 60}s ago</Alert>*/}
 
         <div id="terminal"
              className={styles.terminal}

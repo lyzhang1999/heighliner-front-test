@@ -2,9 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   Button,
   Popover,
-  Typography,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText
@@ -18,6 +16,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';
 import {getProviderList, deleteProviderList, GitProviderType} from "@/utils/api/gitProvider";
+import {formatDate} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -62,6 +61,7 @@ const Clusters = () => {
 
   const closeDialog = () => {
     setDialogVisible(false);
+    setAnchorEl(null);
   };
 
 
@@ -82,15 +82,15 @@ const Clusters = () => {
     >
       <div className={styles.wrapper}>
         <Dialog onClose={closeDialog} open={dialogVisible}>
-          <DialogTitle>Delete Git-provider</DialogTitle>
+          {/*<DialogTitle>Delete Git-provider</DialogTitle>*/}
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Are you sure to delete the Git-provider?
+              Are you sure to delete the Git-Provider?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={closeDialog}>Cancel</Button>
-            <Button onClick={deleteProvider} autoFocus>
+            <Button onClick={deleteProvider}>
               Confirm
             </Button>
           </DialogActions>
@@ -105,9 +105,9 @@ const Clusters = () => {
           }}
         >
           <div className={styles.deleteIcon} onClick={openDeleteDialog}>
-            <DeleteIcon/>
+            {/*<DeleteIcon/>*/}
             <span>
-              Delete The Provider
+              Delete
             </span>
           </div>
         </Popover>
@@ -119,11 +119,11 @@ const Clusters = () => {
                   <MoreVertIcon/>
                 </div>
                 <div className={styles.logo}>
-                  <img src="/img/login/login-page-bg@3x.webp" alt=""/>
+                  <img src="/img/gitprovider/github.webp" alt="github"/>
                 </div>
                 <div className={styles.content}>
                   <div className={styles.organiztion}>Organization: {item.git_org_name}</div>
-                  <div className={styles.creatTime}>CreateTime: {item.created_at}</div>
+                  <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at)}</div>
                 </div>
               </div>
             )

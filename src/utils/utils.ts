@@ -39,8 +39,20 @@ export function judgeCurrentOri(list: ResultType[]): Boolean {
   return Boolean(currentItem);
 }
 
-export function setLoginToken(value: string){
+export function setLoginToken(value: string) {
   cookie.setCookie('token', value, 1000 * 60 * 60 * 48); // 48h
+}
+
+export function formatDate(d: number) {
+  var now = new Date(d);
+  var year = now.getFullYear();
+  var month = now.getMonth() + 1;
+  var date = now.getDate();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  return year + "/" + month + "/" + date + " " + hour + ":" + minute;
+  // return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
 }
 
 const utils = {

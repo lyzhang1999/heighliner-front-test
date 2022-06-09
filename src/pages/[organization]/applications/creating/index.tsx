@@ -5,79 +5,76 @@ import styles from "./index.module.scss";
 import "xterm/css/xterm.css"
 import * as React from "react";
 import {useRouter} from "next/router";
-import {getOriginzationByUrl} from "@/utils/utils";
-import http from '@/utils/axios';
-import {EventSourcePolyfill} from 'event-source-polyfill';
+import {getOriginzationByUrl, getQuery} from "@/utils/utils";
+import {baseURL} from '@/utils/axios';
+import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/utils/api/application";
 import {Alert} from "@mui/material";
-import {intersection} from "lodash-es";
 
-
-export function getQueryVariable(variable: string): string {
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split("=");
-    if (pair[0] == variable) {
-      return pair[1];
-    }
-  }
-  return "";
+interface LogRes {
+  data: string
 }
-
-//  Completed
-//  Processing
-//  Failed
-
 
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
-  const [time, setTime] = useState<number>(0);
-  const [timer, setTimer] = useState<any>(null);
-  const [appId, setAppId] = useState<string>('');
-  const [releaseId, setReleaseID] = useState<string>('');
+  const [durationTime, setDurationTime] = useState<number>(0);
   const [skipTime, setSkipTime] = useState<number>(5);
-  const [skipTimer, setSkipTimer] = useState<any>(null);
   const router = useRouter();
 
+  let app_id: string = getQuery('app_id');
+  let release_id: string = getQuery('release_id');
+
+  let durationTimeInterval: any = null;
+  let getStatusInterval: any = null;
+  let getlogTimeOut: any = null;
+  let resizeCb: any = null;
+  let skipTimer: any = null;
+
+  // close server render
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(t => t + 1)
-    }, 1000)
-    setTimer(timer);
+    function getStatus(isFirst: boolean) {
+      getApplicationStatus({app_id, release_id}).then(({status}) => {
+        setStatus(status);
+        if (status !== ApplicationStatus.PROCESSING) {
+          if (isFirst) {
+            durationTimeInterval = setInterval(() => {
+              setDurationTime(t => t + 1)
+            }, 1000)
+          }
+        }
+        if (status === ApplicationStatus.COMPLETED) {
+          durationTimeInterval && clearInterval(durationTimeInterval)
+          durationTimeInterval = null;
+          goDashboard();
+          // if (isFirst) {
+          //   goDashboard();
+          // } else {
+          //   skip();
+          // }
+        }
+      })
+    }
+
+    getStatus(true);
+    getStatusInterval = setInterval(getStatus, 5000);
+    getlog();
     return () => {
-      clearInterval(timer)
-      setTimer(null);
+      getStatusInterval && clearInterval(getStatusInterval);
+      getStatusInterval = null;
+      durationTimeInterval && clearInterval(durationTimeInterval);
+      durationTimeInterval = null;
+      resizeCb && window.removeEventListener('resize', resizeCb);
       skipTimer && clearInterval(skipTimer);
+      skipTimer = null;
+      getlogTimeOut && clearTimeout(getlogTimeOut);
+      getlogTimeOut = null;
     }
   }, [])
 
-  useEffect(() => {
-    let app_id: string = getQueryVariable('app_id');
-    let release_id: string = getQueryVariable('release_id');
-    setAppId(app_id);
-    setReleaseID(release_id);
-    console.warn(app_id, release_id)
-
-    let timerGetStatus = setInterval(() => {
-      getApplicationStatus({app_id, release_id}).then((res) => {
-        let {status} = res;
-        setStatus(status);
-        if (status !== ApplicationStatus.PROCESSING) {
-          clearInterval(timerGetStatus);
-        }
-        if (status === ApplicationStatus.COMPLETED) {
-          clearInterval(timer)
-          setTimer(null);
-          // skip();
-          // router.push(`/${getOriginzationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
-        }
-      })
-    }, 5000)
-
+  function getlog() {
     const initTerminal = async () => {
       const {Terminal} = await import('xterm')
       const {FitAddon} = await import('xterm-addon-fit');
@@ -89,67 +86,55 @@ const CreatingApplication = () => {
         scrollback: 99999,
       })
       term.loadAddon(fitAddon);
-
       // @ts-ignore
       term.open(document.getElementById('terminal'));
       fitAddon.fit();
-      window.onresize = function () {
-        try {
-          fitAddon.fit();
-        } catch (e) {
-
-        }
-        // term.scrollToBottom();
-      };
-      const url = `http://heighliner-cloud.heighliner.cloud/api/orgs/${getOriginzationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
+      resizeCb = function () {
+        fitAddon.fit();
+      }
+      window.addEventListener('resize', resizeCb);
+      const url = `${baseURL}orgs/${getOriginzationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
       const token = cookie.getCookie('token');
-
       var test = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
-      test.addEventListener("MESSAGE", function (e) {
-        console.warn(e.data)
+      test.addEventListener("MESSAGE", function (e: LogRes) {
         term.writeln(e.data);
       });
-      test.addEventListener("END", function (e) {
+      test.addEventListener("END", function (e: LogRes) {
         test.close();
       });
     }
-    setTimeout(() => {
+    getlogTimeOut = setTimeout(() => {
       initTerminal()
-    }, 100)
+    }, 1000);
+  }
 
-    return () => {
-      clearInterval(timer);
-    }
-  }, [])
+  function goDashboard() {
+    router.push(`/${getOriginzationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+  }
 
-  // close server render
+  function skip() {
+    skipTimer = setInterval(() => {
+      setSkipTime(t => {
+        console.warn(t)
+        if (t === 1) {
+          clearInterval(skipTimer);
+          // goDashboard();
+        }
+        return t - 1;
+      });
+    }, 1000)
+  }
+
   React.useEffect(() => {
     setHasMounted(true);
   }, []);
   if (!hasMounted) return null;
 
-  function goDashboard() {
-    router.push(`/${getOriginzationByUrl()}/applications/detail?app_id=${appId}&release_id=${releaseId}`)
-  }
-
-  function skip(){
-    const timer = setInterval(() => {
-      setSkipTime(t => {
-        if(t === 1){
-          clearInterval(timer);
-          goDashboard();
-        }
-        return t - 1;
-      });
-    }, 1000)
-    setSkipTimer(timer);
-  }
-
   return (
     <Layout pageHeader="Creating Application"
     >
       <div id="creatingTerminal" className={styles.wrapper}>
-        {/*<Alert severity="info">Start {Math.trunc(time / 60)}m {time % 60}s ago</Alert>*/}
+        <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s ago</Alert>
 
         <div id="terminal"
              className={styles.terminal}
@@ -157,9 +142,9 @@ const CreatingApplication = () => {
         </div>
         {/*{*/}
         {/*  status === ApplicationStatus.COMPLETED &&*/}
-        {/*  // true &&*/}
         {/*  <Alert severity="success">*/}
-        {/*    Success, auto go <span className={styles.goDashboard} onClick={goDashboard}>dashboard</span> after {skipTime}s*/}
+        {/*    Success, auto go <span className={styles.goDashboard}*/}
+        {/*                           onClick={goDashboard}>dashboard</span> after {skipTime}s*/}
         {/*  </Alert>*/}
         {/*}*/}
       </div>

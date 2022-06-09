@@ -55,11 +55,27 @@ export function formatDate(d: number) {
   // return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
 }
 
+export function getQuery(variable: string): string {
+  if (!isBrowser()) {
+    return "";
+  }
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+  return "";
+}
+
 const utils = {
   getOriginzationByUrl,
   isBrowser,
   judgeCurrentOri,
-  uuid
+  uuid,
+  getQuery
 }
 
 export default utils;

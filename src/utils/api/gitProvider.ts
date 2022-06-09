@@ -12,8 +12,10 @@ export interface GitProviderType {
   "updated_at": number
 }
 
+export type GitProviders = GitProviderType[];
 
-export const getProviderList = (): Promise<GitProviderType[]> => {
+
+export const getGitProviderList = (): Promise<GitProviderType[]> => {
   return http.get(`/orgs/${getOriginzationByUrl()}/git_tokens`);
 }
 

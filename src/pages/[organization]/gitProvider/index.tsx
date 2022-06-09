@@ -7,7 +7,7 @@ import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHu
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import styles from './index.module.scss';
-import {getProviderList, deleteProviderList, GitProviderType} from "@/utils/api/gitProvider";
+import {getGitProviderList, deleteProviderList, GitProviderType} from "@/utils/api/gitProvider";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -22,7 +22,7 @@ const Clusters = () => {
   }, [])
 
   function getProvider() {
-    getProviderList().then(res => {
+    getGitProviderList().then(res => {
       setProviderList(res);
     })
   }

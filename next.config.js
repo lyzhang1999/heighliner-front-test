@@ -29,15 +29,8 @@ const nextConfig = {
     });
 
     config.module.rules.push({
-      test: /\.ttf$/,
-      use: [
-        {
-          loader: 'ttf-loader',
-          options: {
-            name: './font/[hash].[ext]',
-          },
-        },
-      ]
+      test: /\.(woff|woff2|ttf)$/,
+      loader: 'url-loader'
     })
 
     return config

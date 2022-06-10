@@ -40,7 +40,7 @@ const Applications = () => {
             variant="outlined"
             onClick={() => {
               router.push(
-                `/${getOrganizationByUrl()}/applications/create`
+                `/${getOrganizationByUrl()}/applications/creation`
               );
             }}
           >

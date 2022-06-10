@@ -16,7 +16,7 @@ import theme from "@/utils/theme";
 import {AxiosResponse} from "axios";
 import {getOrgList} from "@/utils/api/org";
 
-const noCheckOriPage = ['/login/github'];
+const noCheckOriPage = ['/login/github', '/signup'];
 
 function App({Component, pageProps}: AppProps) {
   const [token, dispatchToken] = useTokenReducer();

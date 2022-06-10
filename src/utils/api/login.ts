@@ -26,3 +26,17 @@ export const login = (params: Req): Promise<Res> => {
   }
   return http.get(url)
 }
+
+interface SignUpReq {
+  check_password: string,
+  password: string,
+  username: string
+}
+
+interface SignUpRes{
+
+}
+
+export const signUpApi = (params: SignUpReq): Promise<SignUpRes> => {
+  return http.post("/register", params)
+}

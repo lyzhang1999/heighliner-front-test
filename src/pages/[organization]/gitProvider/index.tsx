@@ -11,7 +11,6 @@ import '@/utils/axios';
 
 import Layout from "@/components/Layout";
 import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHubToken";
-import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';

@@ -23,9 +23,9 @@ export interface CreateClusterReq {
   "provider": string
 }
 
-// export const createCluster = (req: CreateClusterReq): Promise<> => {
-//   http.post(`/orgs/${getOriginzationByUrl()}/clusters`, req)
-// }
+export const createCluster = (req: CreateClusterReq): Promise<null> => {
+  return http.post(`/orgs/${getOriginzationByUrl()}/clusters`, req)
+}
 
 
 

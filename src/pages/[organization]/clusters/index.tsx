@@ -13,7 +13,7 @@ const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [clusterList, setClusterList] = useState<ClusterItem[]>([]);
 
-  function successCb(params: any) {
+  function successCb() {
     getCluster();
   }
 

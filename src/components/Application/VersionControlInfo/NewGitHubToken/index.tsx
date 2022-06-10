@@ -1,16 +1,16 @@
 import {Box, Button, TextField, Drawer} from "@mui/material";
 import React, {useEffect, useState} from "react";
 
-import styles from "./index.module.scss";
-import "highlight.js/styles/a11y-dark.css";
-
 import {NoticeRef} from "@/components/Notice";
 import {addGitHubToken} from "@/utils/api/githubToken";
+import {trim} from "lodash-es";
+
+import styles from "./index.module.scss";
 
 interface Props {
   modalDisplay: boolean;
   setModalDisplay: (dispaly: any) => void;
-  successCb?: () => {};
+  successCb?: () => void;
 }
 
 const buttonStyles = {
@@ -40,14 +40,14 @@ export default function NewGitHubToken({
   }, [modalDisplay]);
 
   function handleConfirm() {
-    if (!gitHubOrgName) {
+    if (!trim(gitHubOrgName)) {
       NoticeRef.current?.open({
         message: "Please input GitHub organization name",
         type: "error",
       });
       return;
     }
-    if (!token) {
+    if (!trim(token)) {
       NoticeRef.current?.open({
         message: "Please input GitHub personal access token",
         type: "error",
@@ -56,9 +56,9 @@ export default function NewGitHubToken({
     }
 
     addGitHubToken({
-      git_org_name: gitHubOrgName,
+      git_org_name: trim(gitHubOrgName),
       provider: "github",
-      token: token,
+      token: trim(token),
     }).then((res) => {
       NoticeRef.current?.open({
         message: "Add GitHub personal access token successfully!",
@@ -118,7 +118,6 @@ export default function NewGitHubToken({
             </Button>
             <Button
               variant="contained"
-              // sx={buttonStyles}
               onClick={handleConfirm}
             >
               Confirm

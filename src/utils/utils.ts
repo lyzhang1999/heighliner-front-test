@@ -5,7 +5,7 @@ export function isBrowser() {
   return process.title === "browser";
 }
 
-export function getOriginzationByUrl() {
+export function getOrganizationByUrl() {
   if (isBrowser()) {
     let url = location.href;
     let list = url.split('/');
@@ -35,7 +35,7 @@ interface ResultType {
 }
 
 export function judgeCurrentOri(list: ResultType[]): Boolean {
-  let currentItem = find(list, {id: Number(getOriginzationByUrl())});
+  let currentItem = find(list, {id: Number(getOrganizationByUrl())});
   return Boolean(currentItem);
 }
 
@@ -71,7 +71,7 @@ export function getQuery(variable: string): string {
 }
 
 const utils = {
-  getOriginzationByUrl,
+  getOrganizationByUrl,
   isBrowser,
   judgeCurrentOri,
   uuid,

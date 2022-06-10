@@ -1,5 +1,5 @@
 import http from "../axios";
-import { getOriginzationByUrl } from "../utils";
+import { getOrganizationByUrl } from "../utils";
 
 export interface Token {
   git_org_name: string;
@@ -15,11 +15,11 @@ export interface Token {
 export type TokenList = Token[];
 
 export const getGitHubTokenList = (): Promise<Token[]> => {
-  return http.get(`/orgs/${getOriginzationByUrl()}/git_tokens`);
+  return http.get(`/orgs/${getOrganizationByUrl()}/git_tokens`);
 };
 
 export const addGitHubToken = (newToken: Token): Promise<never> => {
-  return http.post(`/orgs/${getOriginzationByUrl()}/git_tokens`, {
+  return http.post(`/orgs/${getOrganizationByUrl()}/git_tokens`, {
     git_org_name: newToken.git_org_name,
     provider: newToken.provider,
     token: newToken.token,

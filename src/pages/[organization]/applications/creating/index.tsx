@@ -5,7 +5,7 @@ import styles from "./index.module.scss";
 import "xterm/css/xterm.css"
 import * as React from "react";
 import {useRouter} from "next/router";
-import {getOriginzationByUrl, getQuery} from "@/utils/utils";
+import {getOrganizationByUrl, getQuery} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
@@ -93,7 +93,7 @@ const CreatingApplication = () => {
         fitAddon.fit();
       }
       window.addEventListener('resize', resizeCb);
-      const url = `${baseURL}orgs/${getOriginzationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
+      const url = `${baseURL}orgs/${getOrganizationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
       const token = cookie.getCookie('token');
       var test = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
       test.addEventListener("MESSAGE", function (e: LogRes) {
@@ -109,7 +109,7 @@ const CreatingApplication = () => {
   }
 
   function goDashboard() {
-    router.push(`/${getOriginzationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+    router.push(`/${getOrganizationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
   }
 
   function skip() {

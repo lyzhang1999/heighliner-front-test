@@ -14,7 +14,7 @@ import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHu
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';
-import {getProviderList, deleteProviderList, GitProviderType} from "@/utils/api/gitProvider";
+import {deleteProviderList, getGitProviderList, GitProviderType} from "@/utils/api/gitProvider";
 import {formatDate} from "@/utils/utils";
 
 const Clusters = () => {
@@ -34,7 +34,7 @@ const Clusters = () => {
   }, [])
 
   function getProvider() {
-    getProviderList().then(res => {
+    getGitProviderList().then(res => {
       setProviderList(res);
     })
   }

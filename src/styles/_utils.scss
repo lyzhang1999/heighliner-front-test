@@ -17,3 +17,8 @@
   padding-top: $val;
   padding-bottom: $val;
 }
+
+@mixin setEqualWidthHeight($val) {
+  width: $val;
+  height: $val;
+}

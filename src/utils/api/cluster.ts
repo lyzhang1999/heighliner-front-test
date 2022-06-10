@@ -1,5 +1,5 @@
 import http from '@/utils/axios';
-import {getOriginzationByUrl} from "@/utils/utils";
+import {getOrganizationByUrl} from "@/utils/utils";
 
 export interface ClusterItem {
   id: number;
@@ -14,7 +14,7 @@ export interface ClusterItem {
 export type Clusters = ClusterItem[];
 
 export const getClusterList = (): Promise<ClusterItem[]> => {
-  return http.get(`/orgs/${getOriginzationByUrl()}/clusters`);
+  return http.get(`/orgs/${getOrganizationByUrl()}/clusters`);
 }
 
 export interface CreateClusterReq {
@@ -24,7 +24,7 @@ export interface CreateClusterReq {
 }
 
 export const createCluster = (req: CreateClusterReq): Promise<null> => {
-  return http.post(`/orgs/${getOriginzationByUrl()}/clusters`, req)
+  return http.post(`/orgs/${getOrganizationByUrl()}/clusters`, req)
 }
 
 

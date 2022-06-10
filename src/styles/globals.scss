@@ -27,9 +27,12 @@ body {
 }
 
 .MuiButton-containedPrimary {
-  background-color: #6002ee;
-}
+  background-color: #5747eb;
 
+  &:hover {
+    background-color: #5747eb;
+  }
+}
 
 @font-face {
   font-family: 'Jost';
@@ -52,7 +55,7 @@ body {
 }
 
 
-:global(.Mui-focused){
+:global(.Mui-focused) {
 
 }
 

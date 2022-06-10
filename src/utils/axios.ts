@@ -2,8 +2,10 @@ import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axi
 import cookie from "@/utils/cookie";
 import {NoticeRef} from "@/components/Notice";
 
+export const baseURL = 'http://heighliner-cloud.heighliner.cloud/api/'
+
 export const http = axios.create({
-  baseURL: 'http://heighliner-cloud.heighliner.cloud/api/',
+  baseURL: baseURL,
   timeout: 10000,
 });
 

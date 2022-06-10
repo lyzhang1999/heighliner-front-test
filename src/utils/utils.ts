@@ -39,15 +39,43 @@ export function judgeCurrentOri(list: ResultType[]): Boolean {
   return Boolean(currentItem);
 }
 
-export function setLoginToken(value: string){
+export function setLoginToken(value: string) {
   cookie.setCookie('token', value, 1000 * 60 * 60 * 48); // 48h
+}
+
+export function formatDate(d: number) {
+  var now = new Date(d);
+  var year = now.getFullYear();
+  var month = now.getMonth() + 1;
+  var date = now.getDate();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  return year + "/" + month + "/" + date + " " + hour + ":" + minute;
+  // return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+}
+
+export function getQuery(variable: string): string {
+  if (!isBrowser()) {
+    return "";
+  }
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+  return "";
 }
 
 const utils = {
   getOrganizationByUrl,
   isBrowser,
   judgeCurrentOri,
-  uuid
+  uuid,
+  getQuery
 }
 
 export default utils;

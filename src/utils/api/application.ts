@@ -1,4 +1,4 @@
-import { AllFieldName, FormData } from "@/components/Application/formData";
+import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
 import { getOrganizationByUrl } from "../utils";
 
@@ -28,4 +28,23 @@ export function createApplication(
     `/orgs/${getOrganizationByUrl()}/applications`,
     createApplicationRequest
   );
+}
+
+interface GetStatusReq {
+  app_id: string,
+  release_id: string
+}
+
+export enum ApplicationStatus {
+  COMPLETED = "Completed",
+  PROCESSING = "Processing",
+  FAILED = "Failed"
+}
+
+interface GetStatusRes {
+  status: ApplicationStatus
+}
+
+export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
+  return http.get(`/orgs/${getOrganizationByUrl()}/applications/${req.app_id}/releases/${req.release_id}`)
 }

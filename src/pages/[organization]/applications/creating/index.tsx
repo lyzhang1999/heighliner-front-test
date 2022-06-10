@@ -5,53 +5,76 @@ import styles from "./index.module.scss";
 import "xterm/css/xterm.css"
 import * as React from "react";
 import {useRouter} from "next/router";
-import {getOrganizationByUrl} from "@/utils/utils";
-import http from '@/utils/axios';
-import {EventSourcePolyfill} from 'event-source-polyfill';
+import {getOrganizationByUrl, getQuery} from "@/utils/utils";
+import {baseURL} from '@/utils/axios';
+import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
+import {getApplicationStatus, ApplicationStatus} from "@/utils/api/application";
+import {Alert} from "@mui/material";
 
-
-export function getQueryVariable(variable: string) {
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split("=");
-    if (pair[0] == variable) {
-      return pair[1];
-    }
-  }
-  return (false);
+interface LogRes {
+  data: string
 }
-
-//  Completed
-//  Processing
-//  Failed
-
 
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
+  const [durationTime, setDurationTime] = useState<number>(0);
+  const [skipTime, setSkipTime] = useState<number>(5);
   const router = useRouter();
 
+  let app_id: string = getQuery('app_id');
+  let release_id: string = getQuery('release_id');
+
+  let durationTimeInterval: any = null;
+  let getStatusInterval: any = null;
+  let getlogTimeOut: any = null;
+  let resizeCb: any = null;
+  let skipTimer: any = null;
+
+  // close server render
+
   useEffect(() => {
-    let app_id = getQueryVariable('app_id');
-    let release_id = getQueryVariable('release_id');
-    console.warn(app_id, release_id)
-
-
-    let timer = setInterval(() => {
-      http.get(`/orgs/${getOrganizationByUrl()}/applications/${app_id}/releases/${release_id}`).then(res => {
-        let {status} = res;
-        if (status !== 'Processing') {
-          clearInterval(timer);
+    function getStatus(isFirst: boolean) {
+      getApplicationStatus({app_id, release_id}).then(({status}) => {
+        setStatus(status);
+        if (status !== ApplicationStatus.PROCESSING) {
+          if (isFirst) {
+            durationTimeInterval = setInterval(() => {
+              setDurationTime(t => t + 1)
+            }, 1000)
+          }
         }
-        if (status === 'Completed') {
-          // router.push(`/${getOrganizationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+        if (status === ApplicationStatus.COMPLETED) {
+          durationTimeInterval && clearInterval(durationTimeInterval)
+          durationTimeInterval = null;
+          goDashboard();
+          // if (isFirst) {
+          //   goDashboard();
+          // } else {
+          //   skip();
+          // }
         }
       })
-    }, 5000)
+    }
 
+    getStatus(true);
+    getStatusInterval = setInterval(getStatus, 5000);
+    getlog();
+    return () => {
+      getStatusInterval && clearInterval(getStatusInterval);
+      getStatusInterval = null;
+      durationTimeInterval && clearInterval(durationTimeInterval);
+      durationTimeInterval = null;
+      resizeCb && window.removeEventListener('resize', resizeCb);
+      skipTimer && clearInterval(skipTimer);
+      skipTimer = null;
+      getlogTimeOut && clearTimeout(getlogTimeOut);
+      getlogTimeOut = null;
+    }
+  }, [])
 
+  function getlog() {
     const initTerminal = async () => {
       const {Terminal} = await import('xterm')
       const {FitAddon} = await import('xterm-addon-fit');
@@ -63,37 +86,45 @@ const CreatingApplication = () => {
         scrollback: 99999,
       })
       term.loadAddon(fitAddon);
-
       // @ts-ignore
       term.open(document.getElementById('terminal'));
       fitAddon.fit();
-      window.onresize = function () {
+      resizeCb = function () {
         fitAddon.fit();
-        // term.scrollToBottom();
-      };
-
-      const url = `http://heighliner-cloud.heighliner.cloud/api/orgs/${getOrganizationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
+      }
+      window.addEventListener('resize', resizeCb);
+      const url = `${baseURL}orgs/${getOrganizationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
       const token = cookie.getCookie('token');
-
       var test = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
-      test.addEventListener("MESSAGE", function (e) {
-        console.warn(e.data)
+      test.addEventListener("MESSAGE", function (e: LogRes) {
         term.writeln(e.data);
       });
-      test.addEventListener("END", function (e) {
+      test.addEventListener("END", function (e: LogRes) {
         test.close();
       });
     }
-    setTimeout(() => {
+    getlogTimeOut = setTimeout(() => {
       initTerminal()
-    }, 100)
+    }, 1000);
+  }
 
-    return () => {
-      clearInterval(timer);
-    }
-  }, [])
+  function goDashboard() {
+    router.push(`/${getOrganizationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+  }
 
-  // close server render
+  function skip() {
+    skipTimer = setInterval(() => {
+      setSkipTime(t => {
+        console.warn(t)
+        if (t === 1) {
+          clearInterval(skipTimer);
+          // goDashboard();
+        }
+        return t - 1;
+      });
+    }, 1000)
+  }
+
   React.useEffect(() => {
     setHasMounted(true);
   }, []);
@@ -103,18 +134,31 @@ const CreatingApplication = () => {
     <Layout pageHeader="Creating Application"
     >
       <div id="creatingTerminal" className={styles.wrapper}>
+        <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s ago</Alert>
+
         <div id="terminal"
              className={styles.terminal}
         >
         </div>
+        {/*{*/}
+        {/*  status === ApplicationStatus.COMPLETED &&*/}
+        {/*  <Alert severity="success">*/}
+        {/*    Success, auto go <span className={styles.goDashboard}*/}
+        {/*                           onClick={goDashboard}>dashboard</span> after {skipTime}s*/}
+        {/*  </Alert>*/}
+        {/*}*/}
       </div>
+
+
     </Layout>
   )
 }
 
 export default CreatingApplication
-// http://localhost/2/applications/creating
 
+// http://localhost/8/applications/creating?app_id=24&release_id=24
+
+// http://localhost/2/applications/creating
 
 {/*<div className={styles.timeLine}>*/
 }

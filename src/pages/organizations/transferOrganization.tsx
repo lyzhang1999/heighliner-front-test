@@ -1,41 +1,37 @@
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import {Button, TextField} from "@mui/material";
-import DialogActions from "@mui/material/DialogActions";
+import {Button, TextField, Dialog, DialogTitle, DialogActions, DialogContent} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {NoticeRef} from "@/components/Notice";
 import {createOrg, deleteOri} from "@/utils/api/org";
 
 interface Props {
-  deleteModalVisible: boolean,
-  deleteSuccessCb: () => void,
-  setDeleteModalVisible: (val: boolean) => void,
-  deleteID: number
+  transferModalVisible: boolean,
+  transferSuccessCb: () => void,
+  setTransferModalVisible: (val: boolean) => void,
+  transferId: number
 }
 
-export const DeleteOrganization = (props: Props) => {
-  let {deleteModalVisible, deleteSuccessCb, setDeleteModalVisible, deleteID} = props;
+export const TransferOrganization = (props: Props) => {
+  let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
 
   const handleClose = () => {
-    setDeleteModalVisible(false);
+    setTransferModalVisible(false);
   };
 
   function deleteIt() {
+
     deleteOri({org_id: deleteID}).then(res => {
       NoticeRef.current?.open({
         message: "Delete Organization Success",
         type: "success",
       });
-      setDeleteModalVisible(false);
-      deleteSuccessCb();
+      setTransferModalVisible(false);
     })
   }
 
   return (
     <Dialog
-      open={deleteModalVisible}
+      open={transferModalVisible}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"

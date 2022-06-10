@@ -14,8 +14,7 @@ interface Props {
   successCb: () => void,
 }
 
-
-export const CreateOriganization = ({open, setOpen, successCb}: Props) => {
+export const CreateOrganization = ({open, setOpen, successCb}: Props) => {
   const [name, setName] = useState<string>('');
 
   const handleClose = () => {

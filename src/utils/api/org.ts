@@ -17,12 +17,13 @@ export interface OrgList {
   updated_at: number;
   name: string;
   member: List;
+  type: string
 }
 
 export const roleType = {
-  "1": "Owner",
-  "2": "Admin",
-  "3": "Number",
+  "Owner": "Owner",
+  "Admin": "Admin",
+  "Number": "Number",
 }
 
 export const getOrgList = (): Promise<OrgList[]> => {
@@ -41,7 +42,7 @@ export const leaveOriApi = ({org_id}: leaveOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}/mumber`);
 }
 
-interface deleteOriReq{
+interface deleteOriReq {
   org_id: number
 }
 

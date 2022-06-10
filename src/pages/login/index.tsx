@@ -66,7 +66,6 @@ const Login: NextPage = () => {
     }, 1000);
   };
 
-
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -96,6 +95,10 @@ const Login: NextPage = () => {
     })
   }
 
+  function goSignup() {
+    router.push('/signup')
+  }
+
   return (
     <div className={clsx("relative", styles.container)}>
       <div className={clsx("absolute flex gap-4", styles.logo)}>
@@ -107,8 +110,6 @@ const Login: NextPage = () => {
         />
         <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5}/>
       </div>
-
-
       <div className={styles.cardWrapper}>
         <div className={styles.title}>
           Sign in to Your Account
@@ -134,18 +135,15 @@ const Login: NextPage = () => {
         {/*  User*/}
         {/*  <input type="text"/>*/}
         {/*</div>*/}
-
         {/*<div className={styles.inputTitle}>*/}
         {/*  User*/}
         {/*</div>*/}
-
         <TextField id="standard-basic" label="User" variant="standard" sx={inputStyle}
                    value={username}
                    onChange={(e) => {
                      setUsername(e.target.value)
                    }}
         />
-
         <TextField id="standard-basic" label="Password" variant="standard"
                    type="password"
                    sx={inputStyle}
@@ -154,15 +152,14 @@ const Login: NextPage = () => {
                      setPassword(e.target.value)
                    }}
         />
-        {/*<div className={styles.action}>*/}
-        {/*  <div className={styles.btn}>*/}
-        {/*    Forgot your Password?*/}
-        {/*  </div>*/}
-        {/*  <div className={styles.btn}>*/}
-        {/*    Need an Account?*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-
+        <div className={styles.action}>
+          <div className={styles.btn}>
+            {/*Forgot Password*/}
+          </div>
+          <div className={styles.btn} onClick={goSignup}>
+            Sign up
+          </div>
+        </div>
         <div className={styles.signIn} onClick={passwordLogin}>
           Sign In {loginLoading && <LoadingPoint/>}
         </div>

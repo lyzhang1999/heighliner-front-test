@@ -17,7 +17,7 @@ import {AxiosResponse} from "axios";
 import {getOrgList} from "@/utils/api/org";
 import { CssBaseline } from "@mui/material";
 
-const noCheckOriPage = ['/login/github'];
+const noCheckOriPage = ['/login/github', '/signup'];
 
 function App({Component, pageProps}: AppProps) {
   const [token, dispatchToken] = useTokenReducer();

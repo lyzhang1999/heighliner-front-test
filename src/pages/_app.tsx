@@ -15,6 +15,7 @@ import {judgeCurrentOri} from "@/utils/utils";
 import theme from "@/utils/theme";
 import {AxiosResponse} from "axios";
 import {getOrgList} from "@/utils/api/org";
+import { CssBaseline } from "@mui/material";
 
 const noCheckOriPage = ['/login/github'];
 
@@ -56,6 +57,7 @@ function App({Component, pageProps}: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Context.Provider value={{state, dispatch}}>
           <Notice/>
           <Component {...pageProps} />

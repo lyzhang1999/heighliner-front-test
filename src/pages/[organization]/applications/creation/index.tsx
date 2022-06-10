@@ -22,6 +22,12 @@ import styles from "./index.module.scss";
 import { getGitProviderList, GitProviders } from "@/utils/api/gitProvider";
 import NewClusterModal from "@/components/NewClusterModal";
 import NewGitProvider from "@/components/Application/NewGitProvider";
+import {
+  createApplication,
+  CreateApplicationRequest,
+} from "@/utils/api/application";
+import { useRouter } from "next/router";
+import { getOrganizationByUrl } from "@/utils/utils";
 
 type FieldsDataType = typeof DefaultFieldsData;
 
@@ -69,12 +75,13 @@ const stacksMap: { [index: string]: string[] } = {
 
 export default function Index(): React.ReactElement {
   const [openAddClusterDrawer, setOpenAddClusterDrawer] = useState(false);
-  const [openAddGitProviderDrawer, setOpenAddGitProviderDrawer] =
-    useState(false);
+  const [openAddGitProviderDrawer, setOpenAddGitProviderDrawer] = useState(false);
 
   const [stacks, setStacks] = useState<Stacks>([]);
   const [clusters, setClusters] = useState<Clusters>([]);
   const [gitProviders, setGitProviders] = useState<GitProviders>([]);
+
+  const router = useRouter();
 
   // Fetch the stack list and cluster list
   useEffect(() => {
@@ -89,6 +96,18 @@ export default function Index(): React.ReactElement {
     });
   }, []);
 
+  // When open add cluster or git provider drawer, updating data.
+  useEffect(() => {
+    getClusterList().then((res) => {
+      setClusters(res);
+    });
+  }, [openAddClusterDrawer]);
+  useEffect(() => {
+    getGitProviderList().then((res) => {
+      setGitProviders(res);
+    });
+  }, [openAddGitProviderDrawer])
+
   // Get the form in need
   const {
     handleSubmit,
@@ -99,13 +118,33 @@ export default function Index(): React.ReactElement {
   });
 
   const onSubmit: SubmitHandler<FieldsDataType> = (data) => {
-    console.log(data);
-    console.error(errors);
-  };
+    // Get git_config's org_name, provider and token
+    const git_provider_id = +data[fieldsMap.gitProvider.name];
+    const git_config = gitProviders.find(
+      (gitProvider) => git_provider_id === gitProvider.id
+    );
 
-  const log = () => {
-    // console.log(data);
-    console.error(errors);
+    const createApplicationRequest: CreateApplicationRequest = {
+      cluster_id: +data[fieldsMap.cluster.name],
+      git_config: {
+        org_name: git_config!.git_org_name,
+        provider: git_config!.provider,
+        token: git_config!.token,
+      },
+      name: data[fieldsMap.applicationName.name],
+      networking: {
+        domain: data[fieldsMap.domain.name],
+      },
+      stack_id: +data[fieldsMap.stack.name],
+    };
+
+    createApplication(createApplicationRequest).then((res) => {
+      router.push(
+        `/${getOrganizationByUrl()}/applications/creating?app_id=${
+          res.app_id
+        }&release_id=${res.release_id}`
+      );
+    });
   };
 
   return (
@@ -201,7 +240,9 @@ export default function Index(): React.ReactElement {
                             />
                           )}
                         </div>
-                        <Typography align="center" className={styles.stackName}>{name}</Typography>
+                        <Typography align="center" className={styles.stackName}>
+                          {name}
+                        </Typography>
                       </li>
                     );
                   })}

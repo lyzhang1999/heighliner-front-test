@@ -1,5 +1,5 @@
 import http from '@/utils/axios';
-import {getOriginzationByUrl} from "@/utils/utils";
+import {getOrganizationByUrl} from "@/utils/utils";
 
 export interface GitProviderType {
   "created_at": number;
@@ -16,7 +16,7 @@ export type GitProviders = GitProviderType[];
 
 
 export const getGitProviderList = (): Promise<GitProviderType[]> => {
-  return http.get(`/orgs/${getOriginzationByUrl()}/git_tokens`);
+  return http.get(`/orgs/${getOrganizationByUrl()}/git_tokens`);
 }
 
 interface CreateProviderReq {
@@ -27,9 +27,9 @@ interface CreateProviderReq {
 }
 
 export const createProviderList = (req: CreateProviderReq): Promise<GitProviderType[]> => {
-  return http.post(`/orgs/${getOriginzationByUrl()}/git_tokens`);
+  return http.post(`/orgs/${getOrganizationByUrl()}/git_tokens`, req);
 }
 
 export const deleteProviderList = (id: number): Promise<GitProviderType[]> => {
-  return http.delete(`/orgs/${getOriginzationByUrl()}/git_tokens/${id}`);
+  return http.delete(`/orgs/${getOrganizationByUrl()}/git_tokens/${id}`);
 }

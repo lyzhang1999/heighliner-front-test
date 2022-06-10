@@ -6,6 +6,7 @@ import "highlight.js/styles/a11y-dark.css";
 
 import { NoticeRef } from "@/components/Notice";
 import { addGitHubToken } from "@/utils/api/githubToken";
+import { createProviderList } from "@/utils/api/gitProvider";
 
 interface Props {
   modalDisplay: boolean;
@@ -22,11 +23,11 @@ export default function NewGitProvider({
   setModalDisplay,
   successCb,
 }: Props) {
-  const [gitHubOrgName, setGitHubOrgName] = useState<string>("");
-  const changeGitHubOrgNameHandler = (
+  const [gitProviderOrgName, setGitProviderOrgName] = useState<string>("");
+  const changeGitProviderOrgNameHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setGitHubOrgName(event.target.value);
+    setGitProviderOrgName(event.target.value);
   };
 
   const [token, setToken] = useState<string>("");
@@ -35,12 +36,12 @@ export default function NewGitProvider({
   };
 
   useEffect(() => {
-    setGitHubOrgName("");
+    setGitProviderOrgName("");
     setToken("");
   }, [modalDisplay]);
 
   function handleConfirm() {
-    if (!gitHubOrgName) {
+    if (!gitProviderOrgName) {
       NoticeRef.current?.open({
         message: "Please input GitHub organization name",
         type: "error",
@@ -55,18 +56,18 @@ export default function NewGitProvider({
       return;
     }
 
-    // addGitHubToken({
-    //   git_org_name: gitHubOrgName,
-    //   provider: "github",
-    //   token: token,
-    // }).then((res) => {
-    //   NoticeRef.current?.open({
-    //     message: "Add GitHub personal access token successfully!",
-    //     type: "success",
-    //   });
-    //   setModalDisplay(false);
-    //   successCb && successCb();
-    // });
+    createProviderList({
+      git_org_name: gitProviderOrgName,
+      provider: "GITHUB",
+      token: token,
+    }).then((res) => {
+      NoticeRef.current?.open({
+        message: "Add Git provider personal access token successfully!",
+        type: "success",
+      });
+      setModalDisplay(false);
+      successCb && successCb();
+    });
   }
 
   return (
@@ -88,17 +89,17 @@ export default function NewGitProvider({
             >
               <div>
                 <TextField
-                  label="GitHub Organization Name"
+                  label="Git Provider Organization Name"
                   multiline
                   maxRows={4}
-                  value={gitHubOrgName}
-                  onChange={changeGitHubOrgNameHandler}
+                  value={gitProviderOrgName}
+                  onChange={changeGitProviderOrgNameHandler}
                   color="success"
                 />
               </div>
               <div>
                 <TextField
-                  label="GitHub Personal Access Token"
+                  label="Git Provider Personal Access Token"
                   multiline
                   rows={8}
                   value={token}

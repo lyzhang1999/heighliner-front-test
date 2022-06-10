@@ -9,7 +9,7 @@ import {Cloud} from "@mui/icons-material";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import clsx from "clsx";
 
-import {getOriginzationByUrl} from "@/utils/utils";
+import {getOrganizationByUrl} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import {useContext} from "react";
@@ -22,24 +22,24 @@ function getNavlist() {
   return [
     {
       icon: <Cloud fontSize="small"/>,
-      href: `/${getOriginzationByUrl()}/applications`,
+      href: `/${getOrganizationByUrl()}/applications`,
       name: "Applications"
     },
     {
       icon: <AccountTreeIcon fontSize="small"/>,
-      href: `/${getOriginzationByUrl()}/clusters`,
+      href: `/${getOrganizationByUrl()}/clusters`,
       name: "Clusters"
     },
     {
       icon: <AccountTreeIcon fontSize="small"/>,
-      href: `/${getOriginzationByUrl()}/gitProvider`,
+      href: `/${getOrganizationByUrl()}/gitProvider`,
       name: "Git Provider"
     }
   ]
 }
 
 const buttonLinks: { [index: string]: string } = {
-  createApplication: `/${getOriginzationByUrl()}/applications/create`
+  createApplication: `/${getOrganizationByUrl()}/applications/create`
 }
 
 function isActiveNav(currentPath: string) {
@@ -67,7 +67,7 @@ const Slider = () => {
   const handleChange = (event: SelectChangeEvent) => {
 
   };
-  const oriKey = getOriginzationByUrl();
+  const oriKey = getOrganizationByUrl();
 
   return (
     <div className={styles.slider}>

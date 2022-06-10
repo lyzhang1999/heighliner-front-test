@@ -1,6 +1,6 @@
 import { AllFieldName, FormData } from "@/components/Application/formData";
 import http from "../axios";
-import { getOriginzationByUrl } from "../utils";
+import { getOrganizationByUrl } from "../utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -25,7 +25,7 @@ export function createApplication(
   createApplicationRequest: CreateApplicationRequest
 ): Promise<CreateApplicationResponse> {
   return http.post(
-    `/orgs/${getOriginzationByUrl()}/applications`,
+    `/orgs/${getOrganizationByUrl()}/applications`,
     createApplicationRequest
   );
 }

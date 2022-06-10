@@ -5,7 +5,7 @@ import styles from "./index.module.scss";
 import "xterm/css/xterm.css"
 import * as React from "react";
 import {useRouter} from "next/router";
-import {getOriginzationByUrl} from "@/utils/utils";
+import {getOrganizationByUrl} from "@/utils/utils";
 import http from '@/utils/axios';
 import {EventSourcePolyfill} from 'event-source-polyfill';
 import cookie from "@/utils/cookie";
@@ -40,13 +40,13 @@ const CreatingApplication = () => {
 
 
     let timer = setInterval(() => {
-      http.get(`/orgs/${getOriginzationByUrl()}/applications/${app_id}/releases/${release_id}`).then(res => {
+      http.get(`/orgs/${getOrganizationByUrl()}/applications/${app_id}/releases/${release_id}`).then(res => {
         let {status} = res;
         if (status !== 'Processing') {
           clearInterval(timer);
         }
         if (status === 'Completed') {
-          // router.push(`/${getOriginzationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+          // router.push(`/${getOrganizationByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
         }
       })
     }, 5000)
@@ -72,7 +72,7 @@ const CreatingApplication = () => {
         // term.scrollToBottom();
       };
 
-      const url = `http://heighliner-cloud.heighliner.cloud/api/orgs/${getOriginzationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
+      const url = `http://heighliner-cloud.heighliner.cloud/api/orgs/${getOrganizationByUrl()}/applications/${app_id}/releases/${release_id}/logs`
       const token = cookie.getCookie('token');
 
       var test = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});

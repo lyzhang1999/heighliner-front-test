@@ -38,9 +38,9 @@ function App({Component, pageProps}: AppProps) {
           if (res.length && (["/", '/login'].includes(router.pathname))) {
             router.push(`${oriId}/applications`);
           } else {
-            if (!judgeCurrentOri(res)) {
-              location.pathname = `${oriId}/applications`;
-            }
+            // if (!judgeCurrentOri(res)) {
+            //   location.pathname = `${oriId}/applications`;
+            // }
           }
         })
       } else {

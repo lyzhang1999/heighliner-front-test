@@ -24,6 +24,10 @@ export default function MenuAppBar() {
     router.push('/login');
   };
 
+  const goOrganizations = () => {
+    router.push('/organizations');
+  }
+
   return (
     <div className={styles.header}>
       <div className={styles.headerWrapper}>
@@ -58,8 +62,8 @@ export default function MenuAppBar() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            {/*<MenuItem onClick={handleClose}>Profile</MenuItem>*/}
-            {/*<MenuItem onClick={handleClose}>Organizations</MenuItem>*/}
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={goOrganizations}>Organizations</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>

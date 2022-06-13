@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 
 import styles from "./index.module.scss";
 import http from "@/utils/axios";
-import { getOrganizationByUrl } from "@/utils/utils";
+import { getOriIdByContext } from "@/utils/utils";
 import { useRouter } from "next/router";
 
 const Applications = () => {
@@ -23,7 +23,7 @@ const Applications = () => {
   }, []);
 
   function getClusterList() {
-    // http.get(`/orgs/${getOrganizationByUrl()}/clusters`).then(res => {
+    // http.get(`/orgs/${getOriIdByContext()}/clusters`).then(res => {
     //   setClusterList(res)
     // })
   }
@@ -40,7 +40,7 @@ const Applications = () => {
             variant="outlined"
             onClick={() => {
               router.push(
-                `/${getOrganizationByUrl()}/applications/creation`
+                `/${getOriIdByContext()}/applications/creation`
               );
             }}
           >

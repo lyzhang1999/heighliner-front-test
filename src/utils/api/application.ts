@@ -1,6 +1,6 @@
 import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
-import { getOrganizationByUrl } from "../utils";
+import { getOriIdByContext } from "../utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -25,7 +25,7 @@ export function createApplication(
   createApplicationRequest: CreateApplicationRequest
 ): Promise<CreateApplicationResponse> {
   return http.post(
-    `/orgs/${getOrganizationByUrl()}/applications`,
+    `/orgs/${getOriIdByContext()}/applications`,
     createApplicationRequest
   );
 }
@@ -46,5 +46,5 @@ interface GetStatusRes {
 }
 
 export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
-  return http.get(`/orgs/${getOrganizationByUrl()}/applications/${req.app_id}/releases/${req.release_id}`)
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${req.release_id}`)
 }

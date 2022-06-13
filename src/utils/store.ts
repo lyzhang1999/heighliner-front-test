@@ -2,12 +2,23 @@ import React, {createContext} from 'react'
 
 export interface State {
   organizationList?: any[],
-  router?: any,
+  currentOiganization?: object | OrganizationType
+}
+
+interface OrganizationType {
+  created_at: string,
+  id: number,
+  member_type: number,
+  org_id: number,
+  updated_at: number,
+  user_id: number,
+  name: string,
+  type: string
 }
 
 export const initState: State = {
   organizationList: [],
-  router: undefined,
+  currentOiganization: {}
 }
 
 export const reducer = (state: State, params: State) => {

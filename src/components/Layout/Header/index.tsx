@@ -6,7 +6,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import cookie from "@/utils/cookie";
 
 import styles from './index.module.scss';
-import {getOrganizationByUrl} from "@/utils/utils";
+import {getOriIdByContext} from "@/utils/utils";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -30,7 +30,7 @@ export default function MenuAppBar() {
   }
 
   const goHomerPage = () => {
-    router.push(`/${getOrganizationByUrl()}/applications`)
+    router.push(`/${getOriIdByContext()}/applications`)
   }
 
   return (

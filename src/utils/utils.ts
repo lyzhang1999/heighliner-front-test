@@ -1,18 +1,36 @@
 import {find} from 'lodash-es';
 import cookie from "@/utils/cookie";
+import {GlobalContxtRef} from "@/components/GlobalContxt";
+import {reportTrigger} from "next/dist/build/output";
 
 export function isBrowser() {
   return process.title === "browser";
 }
 
-export function getOrganizationByUrl(): string {
+export function getOriIdByContext(): string {
+  if (isBrowser()) {
+    let result = GlobalContxtRef.current?.getState('currentOiganization');
+    if (result) {
+      let {org_id} = result;
+      return org_id;
+    } else {
+      return '';
+    }
+  } else {
+    return '';
+  }
+}
+
+export function getOrganizationNameByUrl(): string {
   if (isBrowser()) {
     let url = location.href;
     let list = url.split('/');
     return encodeURIComponent(list[3]);
+  } else {
+    return '';
   }
-  return '';
 }
+
 
 export function uuid() {
   var s = []
@@ -36,7 +54,7 @@ interface ResultType {
 }
 
 export function judgeCurrentOri(list: ResultType[]): Boolean {
-  let currentItem = find(list, {id: Number(getOrganizationByUrl())});
+  let currentItem = find(list, {id: Number(getOriIdByContext())});
   return Boolean(currentItem);
 }
 
@@ -81,7 +99,7 @@ export function fileToBase64(file: File) {
 }
 
 const utils = {
-  getOrganizationByUrl,
+  getOriIdByContext,
   isBrowser,
   judgeCurrentOri,
   uuid,

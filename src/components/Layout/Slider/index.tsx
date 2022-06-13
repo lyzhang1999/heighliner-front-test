@@ -9,7 +9,7 @@ import {Cloud} from "@mui/icons-material";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import clsx from "clsx";
 
-import {getOrganizationByUrl} from "@/utils/utils";
+import {getOriIdByContext, getOrganizationNameByUrl} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import {useContext, useState} from "react";
@@ -17,34 +17,35 @@ import {Context} from "@/utils/store";
 import utils from "@/utils/utils";
 import {useRouter} from "next/router";
 import {OrgList} from "@/utils/api/org";
+import {find} from "lodash-es";
 
 function getNavlist() {
   return [
     {
       icon: <Cloud fontSize="small"/>,
-      href: `/${getOrganizationByUrl()}/applications`,
+      href: `/${getOrganizationNameByUrl()}/applications`,
       name: "Applications"
     },
     {
       icon: <AccountTreeIcon fontSize="small"/>,
-      href: `/${getOrganizationByUrl()}/clusters`,
+      href: `/${getOrganizationNameByUrl()}/clusters`,
       name: "Clusters"
     },
     {
       icon: <AccountTreeIcon fontSize="small"/>,
-      href: `/${getOrganizationByUrl()}/gitProvider`,
+      href: `/${getOrganizationNameByUrl()}/gitProvider`,
       name: "Git Provider"
     },
     {
       icon: <AccountTreeIcon fontSize="small"/>,
-      href: `/${getOrganizationByUrl()}/teams`,
+      href: `/${getOrganizationNameByUrl()}/teams`,
       name: "Teams"
     }
   ]
 }
 
 const buttonLinks: { [index: string]: string } = {
-  createApplication: `/${getOrganizationByUrl()}/applications/create`
+  createApplication: `/${getOriIdByContext()}/applications/create`
 }
 
 function isActiveNav(currentPath: string) {
@@ -73,11 +74,17 @@ const Slider = ({setRenderContent}) => {
   const {organizationList} = state;
 
   const handleChange = (event: SelectChangeEvent) => {
-    if (getOrganizationByUrl() === Number(event.target.value)) {
-      return;
+    // if (getOriIdByContext() === Number(event.target.value)) {
+    //   return;
+    // }
+    let selectItem = find(organizationList, {id: event.target.value});
+    if (selectItem) {
+      let {name} = selectItem;
+      let path = location.pathname.split('/')[2];
+      location.pathname = `/${encodeURIComponent(name)}/${path}`;
     }
-    let path = location.pathname.split('/')[2];
-    location.pathname = `/${event.target.value}/${path}`;
+
+
     // setRenderContent(false);
     // router.push(`/${event.target.value}/${path}`);
     // setTimeout(() => {
@@ -86,7 +93,7 @@ const Slider = ({setRenderContent}) => {
   };
 
   if (!defaultVal) {
-    defaultVal = getOrganizationByUrl();
+    defaultVal = getOriIdByContext();
   }
 
   return (

@@ -20,7 +20,7 @@ import SubTitle from "../SubTitle";
 import NewGitHubToken from "./NewGitHubToken";
 import { ChangeEvent, useEffect, useState } from "react";
 import http from "@/utils/axios";
-import { getOrganizationByUrl } from "@/utils/utils";
+import { getOriIdByContext } from "@/utils/utils";
 import { getGitHubTokenList, TokenList } from "@/utils/api/githubToken";
 import { createApplication } from "@/utils/api/application";
 

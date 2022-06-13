@@ -22,7 +22,7 @@ import {
   CreateApplicationResponse,
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
-import { getOrganizationByUrl } from "@/utils/utils";
+import { getOriIdByContext } from "@/utils/utils";
 
 export interface StageIndicator {
   stages: Array<Status>;
@@ -99,7 +99,7 @@ export default function Create() {
 
     createApplication(createApplicationRequest).then((res) => {
       router.push(
-        `/${getOrganizationByUrl()}/applications/creating?app_id=${
+        `/${getOriIdByContext()}/applications/creating?app_id=${
           res.app_id
         }&release_id=${res.release_id}`
       );

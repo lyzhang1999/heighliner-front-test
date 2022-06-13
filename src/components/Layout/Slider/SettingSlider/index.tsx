@@ -4,7 +4,7 @@ import { Cloud } from "@mui/icons-material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import clsx from "clsx";
 
-import { getOrganizationByUrl } from "@/utils/utils";
+import { getOriIdByContext } from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import { useContext } from "react";
@@ -24,7 +24,7 @@ function getNavlist() {
 }
 
 const buttonLinks: { [index: string]: string } = {
-  createApplication: `/${getOrganizationByUrl()}/applications/create`,
+  createApplication: `/${getOriIdByContext()}/applications/create`,
 };
 
 function isActiveNav(currentPath: string) {
@@ -49,7 +49,7 @@ export default function SettingSlider() {
   const { organizationList } = state;
 
   const handleChange = (event: SelectChangeEvent) => {};
-  const oriKey = getOrganizationByUrl();
+  const oriKey = getOriIdByContext();
 
   return (
     <div className={styles.slider}>

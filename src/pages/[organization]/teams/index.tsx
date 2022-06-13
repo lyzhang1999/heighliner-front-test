@@ -11,9 +11,10 @@ import Paper from '@mui/material/Paper';
 import {TablePagination} from "@mui/material";
 import {isBrowser} from "@/utils/utils";
 import * as React from "react";
-import {useContext} from "react";
+import {useContext, useEffect} from "react";
 import {Context} from "@/utils/store";
 import {useRouter} from "next/router";
+import {GlobalContxtRef} from "@/components/GlobalContxt";
 
 
 function createData(
@@ -37,6 +38,18 @@ const rows = [
 const Teams = () => {
 
   const [hasMounted, setHasMounted] = React.useState(false);
+
+  useEffect(() => {
+  //   setTimeout(() => {
+
+      let result = GlobalContxtRef?.current?.getState('organizationList');
+      console.warn(result)
+    // }, 1000)
+
+  }, [])
+
+
+
   // close server render
   React.useEffect(() => {
     setHasMounted(true);
@@ -47,6 +60,8 @@ const Teams = () => {
     console.warn(params)
     console.warn(b)
   }
+
+
 
   return (
     <Layout pageHeader="Teams"

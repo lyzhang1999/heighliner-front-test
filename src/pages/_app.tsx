@@ -13,6 +13,8 @@ import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";
 import {getOrgList} from "@/utils/api/org";
 import {CssBaseline} from "@mui/material";
+import {find} from "lodash-es";
+import {getOrganizationNameByUrl} from "@/utils/utils";
 
 const noCheckOriPage = ['/login/github', '/signup'];
 
@@ -32,17 +34,29 @@ function App({Component, pageProps}: AppProps) {
         getOrgList().then(res => {
           dispatch({
             organizationList: res,
-            currentOiganization: {...res[0], ...res[0].member}
+            // currentOiganization: {...res[0], ...res[0].member}
           });
-          setGetOriSuccess(true)
-          let oriId = encodeURIComponent(res[0]?.name);
-          if ((["/", '/login'].includes(router.pathname))) {
-            router.push(`${oriId}/applications`);
+
+          let currentOri = find(res, {name: getOrganizationNameByUrl()});
+          if (currentOri) {
+            dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
+            setGetOriSuccess(true);
+            let oriName = encodeURIComponent(currentOri.name);
+            // router.push(`${oriName}/applications`);
           } else {
+            dispatch({currentOiganization: {...res[0], ...res[0].member}})
+            setGetOriSuccess(true);
+            let oriName = encodeURIComponent(res[0]?.name);
+            // router.push(`${oriName}/applications`);
+
+            // if ((["/", '/login'].includes(router.pathname))) {
+            // } else {
             // if (!judgeCurrentOri(res)) {
             //   location.pathname = `${oriId}/applications`;
             // }
+            // }
           }
+
         }).catch(err => {
           setGetOriSuccess(true)
         })

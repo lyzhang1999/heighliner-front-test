@@ -42,7 +42,7 @@ const formRule: ruleItem[] = [
       {[RuleKey.require]: true, msg: "username require"},
       {[RuleKey.max]: 20, msg: "the max length is 20"},
       {[RuleKey.min]: 5, msg: "the min length is 5"},
-      {[RuleKey.reg]: /^[-_a-zA-Z0-9]{4,16}$/, msg: "contains only letters and digits"},
+      {[RuleKey.reg]: /^[-_a-zA-Z0-9]{5, 20}$/, msg: "contains only letters and digits"},
     ]
   },
   {
@@ -53,7 +53,7 @@ const formRule: ruleItem[] = [
       {[RuleKey.min]: 8, msg: "the min length is 8"},
       {
         [RuleKey.reg]: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
-        msg: "contain only uppercase and lowercase and numbers"
+        msg: "must contain uppercase, lowercase, and numbers."
       },
     ]
   },

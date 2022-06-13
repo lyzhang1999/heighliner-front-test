@@ -50,3 +50,5 @@ export const deleteOri = ({org_id}: deleteOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}`);
 }
 
+// 离开，移除 删除组织还没更新
+

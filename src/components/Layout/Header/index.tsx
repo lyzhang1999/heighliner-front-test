@@ -6,7 +6,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import cookie from "@/utils/cookie";
 
 import styles from './index.module.scss';
-import { getOrganizationByUrl } from '@/utils/utils';
+import {getOrganizationByUrl} from "@/utils/utils";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -29,10 +29,14 @@ export default function MenuAppBar() {
     router.push('/organizations');
   }
 
+  const goHomerPage = () => {
+    router.push(`/${getOrganizationByUrl()}/applications`)
+  }
+
   return (
     <div className={styles.header}>
       <div className={styles.headerWrapper}>
-        <div className={styles.left}>
+        <div className={styles.left} onClick={goHomerPage}>
           <img src="/img/logo/header-logo.webp" alt="logo" className={styles.logo}/>
           <span className={styles.companyName}>Heighliner</span>
         </div>
@@ -63,10 +67,7 @@ export default function MenuAppBar() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            {/*<MenuItem onClick={handleClose}>Profile</MenuItem>*/}
-            {/*<MenuItem onClick={handleClose}>Organizations</MenuItem>*/}
             <MenuItem onClick={() => router.push(`/settings`)}>Settings</MenuItem>
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={goOrganizations}>Organizations</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>

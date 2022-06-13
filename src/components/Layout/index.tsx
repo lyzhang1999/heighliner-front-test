@@ -17,13 +17,11 @@ interface HomeProps {
   children?: react.ReactNode,
   hiddenContent?: boolean,
   pageHeader?: string,
-  titleContent?: ReactElement
+  titleContent?: ReactElement,
+  CustomSlider?: ReactElement,
 }
 
-const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps): react.ReactElement => {
-
-  const [renderContent, setRenderContent] = useState<boolean>(true);
-
+const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider}: HomeProps): react.ReactElement => {
   return (
     <div>
       <div className={styles.header}>
@@ -36,9 +34,7 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps):
           <div className={styles.contentWrappper}>
             <div className={styles.content}>
               <div className={styles.left}>
-                <Slider
-                  setRenderContent={setRenderContent}
-                />
+                {CustomSlider ?? <Slider/>}
                 {/*<SlinderNoSSR/>*/}
               </div>
               <div className={styles.center}>
@@ -51,7 +47,7 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps):
                     }
                   </div>
                 }
-                {renderContent && children}
+                {children}
               </div>
               <div className={styles.right}>
               </div>

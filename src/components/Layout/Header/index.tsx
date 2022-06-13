@@ -67,7 +67,7 @@ export default function MenuAppBar() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={() => router.push(`/settings`)}>Settings</MenuItem>
             <MenuItem onClick={goOrganizations}>Organizations</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>

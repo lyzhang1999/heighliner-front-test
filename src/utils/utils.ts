@@ -71,12 +71,22 @@ export function getQuery(variable: string): string {
   return "";
 }
 
+export function fileToBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
 const utils = {
   getOrganizationByUrl,
   isBrowser,
   judgeCurrentOri,
   uuid,
-  getQuery
+  getQuery,
+  fileToBase64
 }
 
 export default utils;

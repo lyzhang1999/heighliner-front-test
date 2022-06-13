@@ -1,11 +1,15 @@
 import Layout from "@/components/Layout";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-
+import {Button, TableRow, TableHead, TableCell, TableBody, Table} from "@mui/material";
+import {CreateOrganization} from "@/pages/organizations/createOrganization";
+import {DeleteOrganization} from "@/pages/organizations/deleteOrganization";
+import {TransferOrganization} from "@/pages/organizations/transferOrganization";
 import styles from './index.module.scss';
+import {useContext, useState} from "react";
+import * as React from "react";
+import {Context} from "@/utils/store";
+import {useRouter} from "next/router";
+import {getOrgList, leaveOriApi, OrgList, roleType} from "@/utils/api/org";
+import {formatDate} from "@/utils/utils";
 
 function createData(
   name: string,
@@ -14,18 +18,45 @@ function createData(
   carbs: number,
   protein: number,
 ) {
-  return { name, calories, fat, carbs, protein };
+  return {name, calories, fat, carbs, protein};
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 const Organizations = () => {
+
+  const {state, dispatch} = useContext(Context);
+  let {organizationList} = state;
+
+
+  const [open, setOpen] = React.useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
+  const [deleteID, setDeleteId] = useState<number>(0);
+  const [transferModalVisible, setTransferModalVisible] = useState<boolean>(false);
+  const [transferId, setTransferId] = useState<number>(0);
+
+
+  function successCb() {
+    updateOriList();
+  }
+
+  function deleteSuccessCb() {
+    updateOriList();
+  }
+
+  function transferSuccessCb() {
+    updateOriList();
+  }
+
+  function updateOriList() {
+    getOrgList().then(res => {
+      dispatch({organizationList: res})
+    })
+  }
+
+  function leaveOri(org_id: number) {
+    leaveOriApi({org_id}).then(res => {
+      updateOriList();
+    })
+  }
 
   return (
     <Layout hiddenContent>
@@ -36,43 +67,102 @@ const Organizations = () => {
               Hey Devloper!
             </div>
             <div className={styles.desc}>
-              Here’s a list of your organizations
+              Here’s the list of your organizations
             </div>
           </div>
-          <div className={styles.right}>
+          <div className={styles.right} onClick={() => {
+            setOpen(true)
+          }}>
             Create Organization
           </div>
         </div>
       </div>
       <div className={styles.tableWrapper}>
-        <Table sx={{  }} aria-label="simple table">
+        <Table sx={{}} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Created Time </TableCell>
+              <TableCell align="right">Role</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {(organizationList as OrgList[]).map((row) => (
               <TableRow
                 key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{'&:last-child td, &:last-child th': {border: 0}}}
               >
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="right">{formatDate(row.created_at)}</TableCell>
+                <TableCell align="right">{row.member.member_type}</TableCell>
+
+                <TableCell align="right">
+                  {
+                    [roleType.Owner].includes(row.member.member_type) && row.type !== 'Default' &&
+                    <div className={styles.actionWrapper}>
+                      <Button
+                        sx={{cursor: 'pointer'}}
+                        onClick={() => {
+                          setDeleteId(row.id);
+                          setDeleteModalVisible(true);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        sx={{cursor: 'pointer'}}
+                        onClick={() => {
+                          setTransferModalVisible(true);
+                          setTransferId(row.id)
+                        }}
+                      >
+                        Transfer
+                      </Button>
+                    </div>
+                  }
+                  {
+                    [roleType.Admin, roleType.Number].includes(row.member.member_type) &&
+                    <Button
+                      sx={{cursor: 'pointer'}}
+                      onClick={() => leaveOri(row.id, row.member.user_id)}
+                    >
+                      Leave
+                    </Button>
+                  }
+                </TableCell>
+
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+      <CreateOrganization
+        {...{
+          open,
+          setOpen,
+          successCb
+        }}
+      />
+      <DeleteOrganization
+        {...{
+          deleteModalVisible,
+          deleteSuccessCb,
+          setDeleteModalVisible,
+          deleteID
+        }}
+      />
+      <TransferOrganization
+        {...{
+          transferModalVisible,
+          setTransferModalVisible,
+          transferSuccessCb,
+          transferId
+        }}
+      />
+
     </Layout>
   )
 }

@@ -6,6 +6,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import cookie from "@/utils/cookie";
 
 import styles from './index.module.scss';
+import { getOrganizationByUrl } from '@/utils/utils';
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -60,6 +61,7 @@ export default function MenuAppBar() {
           >
             {/*<MenuItem onClick={handleClose}>Profile</MenuItem>*/}
             {/*<MenuItem onClick={handleClose}>Organizations</MenuItem>*/}
+            <MenuItem onClick={() => router.push(`/settings`)}>Settings</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>

@@ -58,7 +58,7 @@ function isActiveNav(currentPath: string) {
 
 let defaultVal: (null | string) = null;
 
-const Slider = ({setRenderContent}) => {
+const Slider = () => {
 
   const [hasMounted, setHasMounted] = React.useState(false);
   const {state} = useContext(Context);

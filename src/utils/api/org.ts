@@ -50,5 +50,32 @@ export const deleteOri = ({org_id}: deleteOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}`);
 }
 
-// 离开，移除 删除组织还没更新
+interface OriMumberReq {
+  org_id: number,
+  page: number,
+  page_size: number,
+}
+
+export interface getOriRes {
+  id: number;
+  created_at: number;
+  updated_at: number;
+  org_id: number;
+  user_id: number;
+  member_type: string;
+  username: string;
+}
+
+export const getOriMumbers = ({org_id, page, page_size}: OriMumberReq): Promise<getOriRes[]> => {
+  return http.get(`/orgs/${org_id}/members?page=${page}&page_size=${page_size}`);
+}
+
+interface transferOriReq {
+  org_id: number,
+  new_owner_id: number,
+}
+
+export const transferOri = ({org_id, new_owner_id}: transferOriReq): Promise<any> => {
+  return http.post(`/orgs/${org_id}/transfer`, {new_owner_id})
+}
 

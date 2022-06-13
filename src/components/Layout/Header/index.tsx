@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useRouter} from "next/router";
+import {Context} from "@/utils/store";
 
 import {MenuItem, Button, Menu} from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
@@ -7,8 +8,12 @@ import cookie from "@/utils/cookie";
 
 import styles from './index.module.scss';
 import {getOriIdByContext} from "@/utils/utils";
+import {OrganizationType} from "@/utils/store";
+import {get} from "lodash-es";
+
 
 export default function MenuAppBar() {
+  const {state} = React.useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
@@ -30,7 +35,7 @@ export default function MenuAppBar() {
   }
 
   const goHomerPage = () => {
-    router.push(`/${getOriIdByContext()}/applications`)
+    router.push(`/${get(state, ['currentOiganization', 'name'], '')}/applications`)
   }
 
   return (

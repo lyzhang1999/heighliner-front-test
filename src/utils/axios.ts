@@ -1,6 +1,7 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axios';
 import cookie from "@/utils/cookie";
 import {NoticeRef} from "@/components/Notice";
+import {get} from "lodash-es";
 
 export const baseURL = 'http://heighliner-cloud.heighliner.cloud/api/'
 
@@ -21,14 +22,23 @@ http.interceptors.request.use((config: AxiosRequestConfig) => {
 
 http.interceptors.response.use((res: AxiosResponse) => {
   let {data} = res;
-  return data
+  let pageTotal = get(res, ['headers', 'X-Page-Total'], '');
+  let pageCount = get(res, ['headers', 'X-Total-Count'], '');
+  if ((pageCount !== "") && (pageTotal !== "")) {
+    return {
+      data,
+      pageTotal,
+      pageCount
+    }
+  }
+  return data;
 }, (err) => {
   let {status, data} = err.response;
   if (status === 401 && (location.pathname !== '/login')) {
     location.pathname = '/login';
     return;
   }
-  let errMsg = data?.err_msg || data;
+  let errMsg = data?.msg || data?.err_msg || data;
   errMsg && NoticeRef.current?.open({
     message: errMsg,
     type: "error",

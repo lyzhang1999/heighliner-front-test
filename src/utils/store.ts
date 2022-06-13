@@ -5,7 +5,7 @@ export interface State {
   currentOiganization?: object | OrganizationType
 }
 
-interface OrganizationType {
+export interface OrganizationType {
   created_at: string,
   id: number,
   member_type: number,

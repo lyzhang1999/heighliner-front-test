@@ -10,11 +10,13 @@ export function updatePassword(data: PasswordReq) {
   return http.patch(`/user/password`, data);
 }
 
-export interface BasicProfileReq {
+interface _BasicProfileReq {
   avatar: string;
-  email?: string;
+  email: string;
   username: string;
 }
+
+export type BasicProfileReq = Partial<_BasicProfileReq>;
 
 export interface BasicProfileRes {
   avatar: string;

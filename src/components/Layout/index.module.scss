@@ -17,10 +17,11 @@
   margin: 0 auto;
   flex-grow: 1;
   width: 100%;
-
+  
   .left {
-    width: 237px;
+    width: 284px;
     display: flex;
+    justify-content: flex-end;
     background-color: #fff;
   }
 

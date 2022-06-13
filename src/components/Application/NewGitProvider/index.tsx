@@ -11,7 +11,7 @@ import { createProviderList } from "@/utils/api/gitProvider";
 interface Props {
   modalDisplay: boolean;
   setModalDisplay: (dispaly: any) => void;
-  successCb?: () => {};
+  successCb?: () => void;
 }
 
 const buttonStyles = {

@@ -57,10 +57,9 @@ function isActiveNav(currentPath: string) {
 
 let defaultVal: (null | string) = null;
 
-const Slider = ({setRenderContent}) => {
+const Slider = () => {
 
   const [hasMounted, setHasMounted] = React.useState(false);
-  // const [currentOri, ]
   const {state} = useContext(Context);
   const router = useRouter();
 
@@ -73,16 +72,11 @@ const Slider = ({setRenderContent}) => {
   const {organizationList} = state;
 
   const handleChange = (event: SelectChangeEvent) => {
-    if (getOrganizationByUrl() === Number(event.target.value)) {
+    if (getOrganizationByUrl() === event.target.value) {
       return;
     }
     let path = location.pathname.split('/')[2];
     location.pathname = `/${event.target.value}/${path}`;
-    // setRenderContent(false);
-    // router.push(`/${event.target.value}/${path}`);
-    // setTimeout(() => {
-    //   setRenderContent(true);
-    // }, 100)
   };
 
   if (!defaultVal) {
@@ -109,18 +103,6 @@ const Slider = ({setRenderContent}) => {
           })
         }
       </Select>
-      {/*<Button*/}
-      {/*  variant="contained"*/}
-      {/*  sx={buttonOneStyle}*/}
-      {/*>*/}
-      {/*  Create Application*/}
-      {/*</Button>*/}
-      {/*<Button*/}
-      {/*  variant="outlined"*/}
-      {/*  sx={buttonSecondStyle}*/}
-      {/*>*/}
-      {/*  Create Organization*/}
-      {/*</Button>*/}
       <div className={styles.navTitle}>
         Menu
       </div>
@@ -130,7 +112,7 @@ const Slider = ({setRenderContent}) => {
             let {href, name} = item;
             return (
               <div
-                className={clsx(styles.memuItem, isActiveNav(href) && styles.activeMenu)}
+                className={clsx(styles.menuItem, isActiveNav(href) && styles.activeMenu)}
                 key={item.name}
                 onClick={(() => router.push(href))}
               >

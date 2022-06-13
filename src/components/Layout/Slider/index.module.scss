@@ -3,7 +3,7 @@
 .slider {
   height: 100%;
   padding: 20px 0px 20px 0;
-  width: 213px;
+  // width: 213px;
 
   .navTitle {
     color: #647284;
@@ -16,35 +16,41 @@
   .menuList {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    // align-items: center;
+    color: black;
+    font-weight: 500;
+    text-transform: uppercase;
 
-    .memuItem {
-      width: 177px;
+
+    .menuItem {
+      width: 229px;
       font-size: 15px;
       line-height: 33px;
       padding: 0px 22px;
       background: #fff;
       margin: 5px 0;
-      border: solid 1px #ba77ff;
-      border-radius: 4px;
-      text-align: center;
+      // border: solid 1px #ba77ff;
+      // border-radius: 4px;
+      // text-align: center;
       cursor: pointer;
-      color: #ba77ff;
+      // color: #ba77ff;
 
       &:hover {
         background: #efe5fd;
-        border-color: #efe5fd;
+        // border-color: #efe5fd;
       }
     }
 
     .activeMenu {
-      background: #ba77ff;
-      color: #fff;
-      border-color: #ba77ff;
+      background: #e8e2f3;
+      // color: #fff;
+      // border-color: #ba77ff;
+      border-left: solid 4.1px #6002ee;
 
       &:hover {
         background: #ba77ff;
-        border-color: #ba77ff;
+        // border-color: #ba77ff;
       }
     }
   }

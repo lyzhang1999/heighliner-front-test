@@ -12,7 +12,7 @@ import clsx from "clsx";
 import {getOrganizationByUrl} from "@/utils/utils";
 
 import styles from "./index.module.scss";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {Context} from "@/utils/store";
 import utils from "@/utils/utils";
 import {useRouter} from "next/router";
@@ -34,6 +34,11 @@ function getNavlist() {
       icon: <AccountTreeIcon fontSize="small"/>,
       href: `/${getOrganizationByUrl()}/gitProvider`,
       name: "Git Provider"
+    },
+    {
+      icon: <AccountTreeIcon fontSize="small"/>,
+      href: `/${getOrganizationByUrl()}/teams`,
+      name: "Teams"
     }
   ]
 }
@@ -50,9 +55,12 @@ function isActiveNav(currentPath: string) {
   }
 }
 
-const Slider = () => {
+let defaultVal: (null | string) = null;
+
+const Slider = ({setRenderContent}) => {
 
   const [hasMounted, setHasMounted] = React.useState(false);
+  // const [currentOri, ]
   const {state} = useContext(Context);
   const router = useRouter();
 
@@ -65,9 +73,21 @@ const Slider = () => {
   const {organizationList} = state;
 
   const handleChange = (event: SelectChangeEvent) => {
-
+    if (getOrganizationByUrl() === Number(event.target.value)) {
+      return;
+    }
+    let path = location.pathname.split('/')[2];
+    location.pathname = `/${event.target.value}/${path}`;
+    // setRenderContent(false);
+    // router.push(`/${event.target.value}/${path}`);
+    // setTimeout(() => {
+    //   setRenderContent(true);
+    // }, 100)
   };
-  const oriKey = getOrganizationByUrl();
+
+  if (!defaultVal) {
+    defaultVal = getOrganizationByUrl();
+  }
 
   return (
     <div className={styles.slider}>
@@ -77,7 +97,7 @@ const Slider = () => {
       <Select
         onChange={handleChange}
         sx={{width: "100%", height: '40px', fontSize: '14px', color: "#121226", fontWeight: '300'}}
-        defaultValue={oriKey}
+        defaultValue={defaultVal}
       >
         {
           (organizationList as OrgList[]).map((item) => {

@@ -1,4 +1,4 @@
-import react, {ReactElement} from 'react';
+import react, {ReactElement, useState} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
 
 import Header from './Header'
@@ -21,6 +21,9 @@ interface HomeProps {
 }
 
 const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps): react.ReactElement => {
+
+  const [renderContent, setRenderContent] = useState<boolean>(true);
+
   return (
     <div>
       <div className={styles.header}>
@@ -33,7 +36,9 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps):
           <div className={styles.contentWrappper}>
             <div className={styles.content}>
               <div className={styles.left}>
-                <Slider/>
+                <Slider
+                  setRenderContent={setRenderContent}
+                />
                 {/*<SlinderNoSSR/>*/}
               </div>
               <div className={styles.center}>
@@ -46,7 +51,7 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent}: HomeProps):
                     }
                   </div>
                 }
-                {children}
+                {renderContent && children}
               </div>
               <div className={styles.right}>
               </div>

@@ -5,12 +5,13 @@ export function isBrowser() {
   return process.title === "browser";
 }
 
-export function getOrganizationByUrl() {
+export function getOrganizationByUrl(): string {
   if (isBrowser()) {
     let url = location.href;
     let list = url.split('/');
     return encodeURIComponent(list[3]);
   }
+  return '';
 }
 
 export function uuid() {

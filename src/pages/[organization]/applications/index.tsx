@@ -6,11 +6,10 @@ import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
 import {Context} from "@/utils/store";
-import {get} from "lodash-es";
+import {getOrganizationNameByUrl} from "@/utils/utils";
 
 const Applications = () => {
   const router = useRouter();
-  let {state} = useContext(Context);
 
   return (
     <Layout pageHeader="APPLICATIONS">
@@ -21,7 +20,7 @@ const Applications = () => {
             variant="outlined"
             onClick={() => {
               router.push(
-                `/${get(state, ['currentOiganization', 'name'], '')}/applications/creation`
+                `/${encodeURIComponent(getOrganizationNameByUrl())}/applications/creation`
               );
             }}
           >

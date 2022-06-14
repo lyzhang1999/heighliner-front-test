@@ -29,32 +29,33 @@ function App({Component, pageProps}: AppProps) {
   }, []);
 
   function loginCheck() {
-    const token = cookie.getCookie('token');
     if (!noCheckOriPage.includes(router.pathname)) {
-      if (token) {
+      if (cookie.getCookie('token')) {
         getOrgList().then(res => {
           let list = res.data;
           dispatch({
             organizationList: list,
           });
-          let oriName = encodeURIComponent(list[0]?.name);
+          let defaultOriName = encodeURIComponent(list[0]?.name);
           if ((["/", '/login', '/signup'].includes(router.pathname))) {
-            location.pathname = `${oriName}/applications`;
+            location.pathname = `${defaultOriName}/applications`;
+            return;
+          }
+          if (noCheckPathPage.includes(location.pathname)) {
+            dispatch({currentOiganization: {...list[0], ...list[0].member}})
+            setGetOriSuccess(true);
+            return;
           }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
             setGetOriSuccess(true);
-          } else {
-            if(noCheckPathPage.includes(location.pathname)){
-              dispatch({currentOiganization: {...list[0], ...list[0].member}})
-              setGetOriSuccess(true);
-            }else{
-              location.pathname = `${oriName}/applications`;
-            }
+            return;
           }
+          location.pathname = `${defaultOriName}/applications`;
         }).catch(err => {
-          setGetOriSuccess(true)
+          router.push("/login");
+          setGetOriSuccess(true);
         })
       } else {
         setGetOriSuccess(true)

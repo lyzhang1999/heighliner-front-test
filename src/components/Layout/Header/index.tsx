@@ -30,10 +30,6 @@ export default function MenuAppBar() {
     router.push('/login');
   };
 
-  const goOrganizations = () => {
-    router.push('/organizations');
-  }
-
   const goHomerPage = () => {
     router.push(`/${get(state, ['currentOiganization', 'name'], '')}/applications`)
   }
@@ -73,7 +69,7 @@ export default function MenuAppBar() {
             }}
           >
             <MenuItem onClick={() => router.push(`/settings`)}>Settings</MenuItem>
-            <MenuItem onClick={goOrganizations}>Organizations</MenuItem>
+            <MenuItem onClick={() => router.push(`/organizations`)}>Organizations</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>

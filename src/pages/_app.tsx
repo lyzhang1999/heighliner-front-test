@@ -35,29 +35,24 @@ function App({Component, pageProps}: AppProps) {
           let list = res.data;
           dispatch({
             organizationList: list,
-            // currentOiganization: {...res[0], ...res[0].member}
           });
 
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
             setGetOriSuccess(true);
-            let oriName = encodeURIComponent(currentOri.name);
-            // router.push(`${oriName}/applications`);
           } else {
             dispatch({currentOiganization: {...list[0], ...list[0].member}})
             setGetOriSuccess(true);
             let oriName = encodeURIComponent(list[0]?.name);
-            // router.push(`${oriName}/applications`);
-
-            // if ((["/", '/login'].includes(router.pathname))) {
-            // } else {
-            // if (!judgeCurrentOri(res)) {
-            //   location.pathname = `${oriId}/applications`;
-            // }
-            // }
+            if ((["/", '/login', '/signup'].includes(router.pathname))) {
+              location.pathname = `${oriName}/applications`;
+            } else {
+              // if (!judgeCurrentOri(res)) {
+              //   location.pathname = `${oriName}/applications`;
+              // }
+            }
           }
-
         }).catch(err => {
           setGetOriSuccess(true)
         })

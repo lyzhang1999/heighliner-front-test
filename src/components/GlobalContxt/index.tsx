@@ -20,7 +20,7 @@ const GlobalContxt = (): ReactElement => {
   const {state, dispatch} = useContext(Context);
 
   const getState: any = useCallback((name: string): any => {
-    return get(state, 'name');
+    return get(state, name);
   }, [state])
 
   useImperativeHandle(GlobalContxtRef, () => ({getState, dispatch}), [state]);

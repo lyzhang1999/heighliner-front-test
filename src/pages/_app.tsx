@@ -36,7 +36,6 @@ function App({Component, pageProps}: AppProps) {
           dispatch({
             organizationList: list,
           });
-
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOiganization: {...currentOri, ...currentOri.member}})

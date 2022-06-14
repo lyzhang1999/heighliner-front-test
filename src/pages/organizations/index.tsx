@@ -107,6 +107,7 @@ const Organizations = () => {
                       <div className={styles.actionWrapper}>
                         <Button
                           sx={{cursor: 'pointer'}}
+                          color="error"
                           onClick={() => {
                             setDeleteId(row.id);
                             setDeleteModalVisible(true);

@@ -1,28 +1,24 @@
-// function setCookie(name: string, value: string, time: string) {
-//   var msec = getMsec(time); //获取毫秒
-//   var exp = new Date();
-//   exp.setTime(exp.getTime() + msec * 1);
-//   document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ';path=/ ';
-// }
-
 function setCookie(name: string, value: string, exTime: number | undefined) {
   var d = new Date();
-  d.setTime(d.getTime() + (exTime | getMsec('1d')));
-  var expires = "expires=" + d.toGMTString();
+  if (exTime) {
+    d.setTime(d.getTime() + (exTime | getMsec('1d')));
+  }
+  var expires = "expires=" + d.toUTCString();
   document.cookie = name + "=" + value + "; " + expires + ';path=/';
 }
 
-//将字符串时间转换为毫秒,1秒=1000毫秒
-function getMsec(str: string) {
-  var timeNum = str.substring(0, str.length - 1) * 1; //时间数量
-  var timeStr = str.substring(str.length - 1, str.length); //时间单位前缀，如h表示小时
+function getMsec(str: string): number {
+  var timeNum: number = Number(str.substring(0, str.length - 1)) * 1;
+  var timeStr = str.substring(str.length - 1, str.length);
 
-  if (timeStr == "s") { //20s表示20秒
+  if (timeStr == "s") {
     return timeNum * 1000;
-  } else if (timeStr == "h") { //12h表示12小时
+  } else if (timeStr == "h") {
     return timeNum * 60 * 60 * 1000;
   } else if (timeStr == "d") {
-    return timeNum * 24 * 60 * 60 * 1000; //30d表示30天
+    return timeNum * 24 * 60 * 60 * 1000;
+  } else {
+    return 0;
   }
 }
 

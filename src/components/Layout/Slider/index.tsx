@@ -79,6 +79,7 @@ const menuList: MenuList = [
 // }
 
 let defaultVal: null | string = null;
+const Slider = () => {
 
 const Slider = () => {
   const [hasMounted, setHasMounted] = React.useState(false);

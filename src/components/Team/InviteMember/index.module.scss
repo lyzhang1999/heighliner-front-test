@@ -1,0 +1,9 @@
+@import "/src/styles/utils";
+
+.row {
+  @include setHorizontalMargin(20px);
+}
+
+.searchBar {
+  width: 400px;
+}

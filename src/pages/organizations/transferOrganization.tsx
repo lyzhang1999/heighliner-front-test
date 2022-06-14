@@ -12,7 +12,7 @@ import {
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {NoticeRef} from "@/components/Notice";
-import {createOrg, deleteOri, getOriMumbers, getOriRes, transferOri} from "@/utils/api/org";
+import {createOrg, deleteOri, getOrgMembers, GetOrgMembersRes, transferOri} from "@/utils/api/org";
 import styles from './index.module.scss';
 
 interface Props {
@@ -25,11 +25,11 @@ interface Props {
 
 export const TransferOrganization = (props: Props) => {
   let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
-  const [userList, setUserList] = useState<getOriRes[]>([]);
+  const [userList, setUserList] = useState<GetOrgMembersRes>([]);
 
   useEffect(() => {
     if (transferModalVisible) {
-      getOriMumbers({org_id: transferId, page: 1, page_size: 10}).then(res => {
+      getOrgMembers({org_id: transferId, page: 1, page_size: 10}).then(res => {
         setUserList(res);
       })
     }

@@ -1,8 +1,8 @@
 import Layout from "@/components/Layout";
 import {Button, TableRow, TableHead, TableCell, TableBody, Table} from "@mui/material";
-import {CreateOrganization} from "@/pages/organizations/createOrganization";
-import {DeleteOrganization} from "@/pages/organizations/deleteOrganization";
-import {TransferOrganization} from "@/pages/organizations/transferOrganization";
+import CreateOrganization from "@/pages/organizations/createOrganization";
+import DeleteOrganization from "@/pages/organizations/deleteOrganization";
+import TransferOrganization from "@/pages/organizations/transferOrganization";
 import styles from './index.module.scss';
 import {useContext, useState} from "react";
 import * as React from "react";
@@ -10,6 +10,7 @@ import {Context} from "@/utils/store";
 import {useRouter} from "next/router";
 import {getOrgList, leaveOriApi, OrgList, roleType} from "@/utils/api/org";
 import {formatDate} from "@/utils/utils";
+import {get} from "lodash-es";
 
 function createData(
   name: string,

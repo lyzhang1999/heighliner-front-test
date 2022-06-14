@@ -15,7 +15,7 @@ interface Props {
   deleteID: number
 }
 
-export const DeleteOrganization = (props: Props) => {
+const DeleteOrganization = (props: Props) => {
   let {deleteModalVisible, deleteSuccessCb, setDeleteModalVisible, deleteID} = props;
 
   const handleClose = () => {
@@ -54,3 +54,5 @@ export const DeleteOrganization = (props: Props) => {
     </Dialog>
   )
 }
+
+export default DeleteOrganization;

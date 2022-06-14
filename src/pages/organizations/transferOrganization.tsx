@@ -7,7 +7,7 @@ import {
   TableHead,
   TableCell,
   TableBody,
-  TableRow
+  TableRow, TablePagination
 } from "@mui/material";
 import * as React from "react";
 import {useEffect, useState} from "react";
@@ -22,15 +22,17 @@ interface Props {
   transferId: number
 }
 
-
-export const TransferOrganization = (props: Props) => {
+const TransferOrganization = (props: Props) => {
   let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
   const [userList, setUserList] = useState<getOriRes[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(1)
 
   useEffect(() => {
     if (transferModalVisible) {
       getOriMumbers({org_id: transferId, page: 1, page_size: 10}).then(res => {
         setUserList(res);
+        console.warn(res)
       })
     }
 
@@ -49,6 +51,10 @@ export const TransferOrganization = (props: Props) => {
       setTransferModalVisible(false);
       transferSuccessCb();
     })
+  }
+
+  function pageChange(e, params: any){
+    console.warn(params)
   }
 
   return (
@@ -92,6 +98,18 @@ export const TransferOrganization = (props: Props) => {
           </TableBody>
         </Table>
       </DialogContent>
+      <TablePagination
+        rowsPerPageOptions={[10]}
+        count={16}
+        onPageChange={pageChange}
+        page={0}
+        rowsPerPage={4}
+        // rowsPerPageOptions={}
+        // labelDisplayedRows={(a) => {
+        //   console.warn(a)
+        //
+        // }}
+      />
       {/*<DialogActions>*/}
       {/*  <Button onClick={handleClose}>Cancel</Button>*/}
       {/*  <Button onClick={deleteIt} variant="contained"*/}
@@ -103,3 +121,5 @@ export const TransferOrganization = (props: Props) => {
     </Dialog>
   )
 }
+
+export default TransferOrganization;

@@ -59,6 +59,11 @@ const menuList: MenuList = [
       },
     ],
   },
+  {
+    icon: <AccountTreeIcon fontSize="small" />,
+    to: `/${getOrganizationNameByUrl()}/teams`,
+    title: "Teams",
+  },
 ];
 
 // const buttonLinks: { [index: string]: string } = {

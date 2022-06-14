@@ -1,5 +1,5 @@
 import http from '@/utils/axios';
-import {string} from "prop-types";
+import {Page} from '@/utils/api/type';
 
 interface List {
   id: number;
@@ -16,8 +16,21 @@ export interface OrgList {
   created_at: number;
   updated_at: number;
   name: string;
-  member: List;
+  member: {
+    id: number;
+    created_at: number;
+    updated_at: number;
+    org_id: number;
+    user_id: number;
+    member_type: string;
+    status: number;
+  };
   type: string
+}
+
+interface Org {
+  data: OrgList[],
+  pagination: Page
 }
 
 export const roleType = {
@@ -26,7 +39,7 @@ export const roleType = {
   "Number": "Number",
 }
 
-export const getOrgList = (): Promise<OrgList[]> => {
+export const getOrgList = (): Promise<Org> => {
   return http.get("orgs");
 }
 
@@ -66,7 +79,12 @@ export interface getOriRes {
   username: string;
 }
 
-export const getOriMumbers = ({org_id, page, page_size}: OriMumberReq): Promise<getOriRes[]> => {
+interface getOri {
+  data: getOriRes[],
+  pagination: Page
+}
+
+export const getOriMumbers = ({org_id, page, page_size}: OriMumberReq): Promise<getOri> => {
   return http.get(`/orgs/${org_id}/members?page=${page}&page_size=${page_size}`);
 }
 

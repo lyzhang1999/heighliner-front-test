@@ -7,7 +7,6 @@ import styles from './index.module.scss';
 import {useContext, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
-import {useRouter} from "next/router";
 import {getOrgList, leaveOriApi, OrgList, roleType} from "@/utils/api/org";
 import {formatDate} from "@/utils/utils";
 import {get} from "lodash-es";
@@ -89,54 +88,57 @@ const Organizations = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(organizationList as OrgList[]).map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{formatDate(row.created_at)}</TableCell>
-                <TableCell align="right">{row.member.member_type}</TableCell>
+            {(organizationList as OrgList[]).map((row) => {
+              let member_type = get(row, ['member', 'member_type']);
+              return (
+                <TableRow
+                  key={row.name}
+                  sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{formatDate(row.created_at)}</TableCell>
+                  <TableCell align="right">{member_type}</TableCell>
 
-                <TableCell align="right">
-                  {
-                    [roleType.Owner].includes(row.member.member_type) && row.type !== 'Default' &&
-                    <div className={styles.actionWrapper}>
+                  <TableCell align="right">
+                    {
+                      [roleType.Owner].includes(member_type) && row.type !== 'Default' &&
+                      <div className={styles.actionWrapper}>
+                        <Button
+                          sx={{cursor: 'pointer'}}
+                          onClick={() => {
+                            setDeleteId(row.id);
+                            setDeleteModalVisible(true);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          sx={{cursor: 'pointer'}}
+                          onClick={() => {
+                            setTransferModalVisible(true);
+                            setTransferId(row.id)
+                          }}
+                        >
+                          Transfer
+                        </Button>
+                      </div>
+                    }
+                    {
+                      [roleType.Admin, roleType.Number].includes(member_type) &&
                       <Button
                         sx={{cursor: 'pointer'}}
-                        onClick={() => {
-                          setDeleteId(row.id);
-                          setDeleteModalVisible(true);
-                        }}
+                        onClick={() => leaveOri(row.id)}
                       >
-                        Delete
+                        Leave
                       </Button>
-                      <Button
-                        sx={{cursor: 'pointer'}}
-                        onClick={() => {
-                          setTransferModalVisible(true);
-                          setTransferId(row.id)
-                        }}
-                      >
-                        Transfer
-                      </Button>
-                    </div>
-                  }
-                  {
-                    [roleType.Admin, roleType.Number].includes(row.member.member_type) &&
-                    <Button
-                      sx={{cursor: 'pointer'}}
-                      onClick={() => leaveOri(row.id, row.member.user_id)}
-                    >
-                      Leave
-                    </Button>
-                  }
-                </TableCell>
+                    }
+                  </TableCell>
 
-              </TableRow>
-            ))}
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </div>

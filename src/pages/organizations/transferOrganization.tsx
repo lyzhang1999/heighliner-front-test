@@ -4,16 +4,17 @@ import {
   DialogTitle,
   DialogContent,
   Table,
-  TableHead,
   TableCell,
   TableBody,
   TableRow, TablePagination
 } from "@mui/material";
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {NoticeRef} from "@/components/Notice";
-import {createOrg, deleteOri, getOriMumbers, getOriRes, transferOri} from "@/utils/api/org";
+import {getOriMumbers, getOriRes, transferOri} from "@/utils/api/org";
 import styles from './index.module.scss';
+import {Context} from "@/utils/store";
+import {get} from "lodash-es";
 
 interface Props {
   transferModalVisible: boolean,
@@ -24,19 +25,27 @@ interface Props {
 
 const TransferOrganization = (props: Props) => {
   let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
+  const {state} = useContext(Context);
+  const user_id = get(state, 'currentOiganization.user_id', "");
   const [userList, setUserList] = useState<getOriRes[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(1);
+  const [count, setCount] = useState<number>(0)
 
   useEffect(() => {
     if (transferModalVisible) {
-      getOriMumbers({org_id: transferId, page: 1, page_size: 10}).then(res => {
-        setUserList(res);
-        console.warn(res)
-      })
+      getList();
     }
-
   }, [transferModalVisible])
+
+  function getList() {
+    getOriMumbers({org_id: transferId, page: page, page_size: 10}).then(res => {
+      setUserList(res.data);
+      let {total, pageCount} = res.pagination;
+      setTotal(total);
+      setCount(pageCount);
+    })
+  }
 
   const handleClose = () => {
     setTransferModalVisible(false);
@@ -53,8 +62,9 @@ const TransferOrganization = (props: Props) => {
     })
   }
 
-  function pageChange(e, params: any){
-    console.warn(params)
+  function pageChange(e: any, params: number) {
+    setPage(params + 1);
+    getList();
   }
 
   return (
@@ -69,15 +79,6 @@ const TransferOrganization = (props: Props) => {
       </DialogTitle>
       <DialogContent id="alert-dialog-title" className={styles.transferTable}>
         <Table aria-label="simple table">
-          {/*<TableHead>*/}
-          {/*  <TableRow>*/}
-          {/*    <TableCell>Dessert (100g serving)</TableCell>*/}
-          {/*    <TableCell align="right">Calories</TableCell>*/}
-          {/*    <TableCell align="right">Fat&nbsp;(g)</TableCell>*/}
-          {/*    <TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
-          {/*    <TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
-          {/*  </TableRow>*/}
-          {/*</TableHead>*/}
           <TableBody>
             {userList.map((row) => (
               <TableRow
@@ -88,36 +89,26 @@ const TransferOrganization = (props: Props) => {
                   {row.username}
                 </TableCell>
                 <TableCell align="right">
-                  <Button onClick={() => transferIt(row.user_id)}>
+                  <Button onClick={() => transferIt(row.user_id)}
+                          disabled={user_id === row.user_id}
+                  >
                     Transfer
                   </Button>
-                  {/*{row.calories}*/}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </DialogContent>
-      <TablePagination
-        rowsPerPageOptions={[10]}
-        count={16}
-        onPageChange={pageChange}
-        page={0}
-        rowsPerPage={4}
-        // rowsPerPageOptions={}
-        // labelDisplayedRows={(a) => {
-        //   console.warn(a)
-        //
-        // }}
-      />
-      {/*<DialogActions>*/}
-      {/*  <Button onClick={handleClose}>Cancel</Button>*/}
-      {/*  <Button onClick={deleteIt} variant="contained"*/}
-      {/*          color="error"*/}
-      {/*  >*/}
-      {/*    Delete*/}
-      {/*  </Button>*/}
-      {/*</DialogActions>*/}
+      {
+        count === 1 && <TablePagination
+          rowsPerPageOptions={[10]}
+          count={total}
+          onPageChange={pageChange}
+          page={page - 1}
+          rowsPerPage={10}
+        />
+      }
     </Dialog>
   )
 }

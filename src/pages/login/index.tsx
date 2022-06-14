@@ -32,11 +32,12 @@ const Login: NextPage = () => {
 
   function oriList() {
     getOrgList().then(res => {
+      let list = res.data;
       dispatch({
-        organizationList: res,
-        currentOiganization: {...res[0], ...res[0].member}
+        organizationList: list,
+        currentOiganization: {...list[0], ...list[0].member}
       });
-      let oriName = encodeURIComponent(res[0]?.name);
+      let oriName = encodeURIComponent(list[0]?.name);
       router.push(`${oriName}/applications`);
     })
   }

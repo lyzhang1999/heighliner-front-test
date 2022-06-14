@@ -32,21 +32,22 @@ function App({Component, pageProps}: AppProps) {
     if (!noCheckOriPage.includes(router.pathname)) {
       if (token) {
         getOrgList().then(res => {
+          let list = res.data;
           dispatch({
-            organizationList: res,
+            organizationList: list,
             // currentOiganization: {...res[0], ...res[0].member}
           });
 
-          let currentOri = find(res, {name: getOrganizationNameByUrl()});
+          let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
             setGetOriSuccess(true);
             let oriName = encodeURIComponent(currentOri.name);
             // router.push(`${oriName}/applications`);
           } else {
-            dispatch({currentOiganization: {...res[0], ...res[0].member}})
+            dispatch({currentOiganization: {...list[0], ...list[0].member}})
             setGetOriSuccess(true);
-            let oriName = encodeURIComponent(res[0]?.name);
+            let oriName = encodeURIComponent(list[0]?.name);
             // router.push(`${oriName}/applications`);
 
             // if ((["/", '/login'].includes(router.pathname))) {

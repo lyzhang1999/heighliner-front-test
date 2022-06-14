@@ -40,7 +40,7 @@ export const roleType = {
 }
 
 export const getOrgList = (): Promise<Org> => {
-  return http.get("orgs");
+  return http.get("/orgs?page=1&page_size=999");
 }
 
 export const createOrg = (name: string): Promise<any> => {

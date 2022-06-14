@@ -1,46 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@mui/material";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import React, {useState, useEffect, useContext} from "react";
+import {Button} from "@mui/material";
 
 import Layout from "@/components/Layout";
 
 import styles from "./index.module.scss";
-import http from "@/utils/axios";
-import { getOriIdByContext } from "@/utils/utils";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
+import {Context} from "@/utils/store";
+import {get} from "lodash-es";
 
 const Applications = () => {
   const router = useRouter();
-
-  // const [clusterList, setClusterList] = useState([]);
-  //
-  // function successCb(params: any) {
-  //   console.warn(params)
-  // }
-
-  useEffect(() => {
-    getClusterList();
-  }, []);
-
-  function getClusterList() {
-    // http.get(`/orgs/${getOriIdByContext()}/clusters`).then(res => {
-    //   setClusterList(res)
-    // })
-  }
+  let {state} = useContext(Context);
 
   return (
     <Layout pageHeader="APPLICATIONS">
       <div className={styles.wrapper}>
-        <div className={styles.card} onClick={() => {}}>
-          {/*<AddCircleOutlineOutlinedIcon*/}
-          {/*  sx={{marginBottom: '20px'}}*/}
-          {/*  fontSize="large"*/}
-          {/*/>*/}
+        <div className={styles.card} onClick={() => {
+        }}>
           <Button
             variant="outlined"
             onClick={() => {
               router.push(
-                `/${getOriIdByContext()}/applications/creation`
+                `/${get(state, ['currentOiganization', 'name'], '')}/applications/creation`
               );
             }}
           >

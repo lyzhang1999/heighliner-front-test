@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
-  Button,
   FormControl,
   FormHelperText,
   Input,
@@ -27,7 +26,8 @@ import {
   CreateApplicationRequest,
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
-import { getOriIdByContext } from "@/utils/utils";
+import {Context} from "@/utils/store";
+import {get} from "lodash-es";
 
 type FieldsDataType = typeof DefaultFieldsData;
 
@@ -76,6 +76,7 @@ const stacksMap: { [index: string]: string[] } = {
 export default function Index(): React.ReactElement {
   const [openAddClusterDrawer, setOpenAddClusterDrawer] = useState(false);
   const [openAddGitProviderDrawer, setOpenAddGitProviderDrawer] = useState(false);
+  let {state} = useContext(Context);
 
   const [stacks, setStacks] = useState<Stacks>([]);
   const [clusters, setClusters] = useState<Clusters>([]);
@@ -140,7 +141,7 @@ export default function Index(): React.ReactElement {
 
     createApplication(createApplicationRequest).then((res) => {
       router.push(
-        `/${getOriIdByContext()}/applications/creating?app_id=${
+        `/${get(state, ['currentOiganization', 'name'], '')}/applications/creating?app_id=${
           res.app_id
         }&release_id=${res.release_id}`
       );

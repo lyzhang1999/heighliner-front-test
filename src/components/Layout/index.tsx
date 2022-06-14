@@ -40,8 +40,8 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider
                 }
                 {children}
               </div>
-              <div className={styles.right}>
-              </div>
+              {/*<div className={styles.right}>*/}
+              {/*</div>*/}
             </div>
           </div>
       }

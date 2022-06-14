@@ -3,6 +3,7 @@ import {Button, TableRow, TableHead, TableCell, TableBody, Table} from "@mui/mat
 import CreateOrganization from "@/pages/organizations/createOrganization";
 import DeleteOrganization from "@/pages/organizations/deleteOrganization";
 import TransferOrganization from "@/pages/organizations/transferOrganization";
+import LeaveOrganization from "@/pages/organizations/leaveOrganization";
 import styles from './index.module.scss';
 import {useContext, useState} from "react";
 import * as React from "react";
@@ -32,6 +33,8 @@ const Organizations = () => {
   const [deleteID, setDeleteId] = useState<number>(0);
   const [transferModalVisible, setTransferModalVisible] = useState<boolean>(false);
   const [transferId, setTransferId] = useState<number>(0);
+  const [leaveModalVisible, setLeaveModalVisible] = useState<boolean>(false);
+  const [leaveId, setLeaveId] = useState<number>(0);
 
 
   function successCb() {
@@ -46,15 +49,13 @@ const Organizations = () => {
     updateOriList();
   }
 
+  function leaveModalCb(){
+    updateOriList()
+  }
+
   function updateOriList() {
     getOrgList().then(res => {
       dispatch({organizationList: res.data})
-    })
-  }
-
-  function leaveOri(org_id: number) {
-    leaveOriApi({org_id}).then(res => {
-      updateOriList();
     })
   }
 
@@ -127,10 +128,13 @@ const Organizations = () => {
                       </div>
                     }
                     {
-                      [roleType.Admin, roleType.Number].includes(member_type) &&
+                      [roleType.Admin, roleType.Member].includes(member_type) &&
                       <Button
                         sx={{cursor: 'pointer'}}
-                        onClick={() => leaveOri(row.id)}
+                        onClick={() => {
+                          setLeaveModalVisible(true);
+                          setLeaveId(row.id);
+                        }}
                       >
                         Leave
                       </Button>
@@ -166,7 +170,14 @@ const Organizations = () => {
           transferId
         }}
       />
-
+      <LeaveOrganization
+        {...{
+          leaveModalVisible,
+          leaveModalCb,
+          setLeaveModalVisible,
+          leaveId
+        }}
+      />
     </Layout>
   )
 }

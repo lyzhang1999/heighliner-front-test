@@ -22,7 +22,6 @@ import {
 } from "@/utils/api/org";
 import InviteMember from "@/components/Team/InviteMember";
 
-
 const Teams = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);

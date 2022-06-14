@@ -1,7 +1,8 @@
 import React, {createContext} from 'react'
+import {OrgList} from "@/utils/api/org";
 
 export interface State {
-  organizationList?: any[],
+  organizationList?: OrgList[],
   currentOrganization?: object | OrganizationType
 }
 

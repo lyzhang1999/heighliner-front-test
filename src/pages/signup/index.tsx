@@ -42,7 +42,7 @@ const formRule: ruleItem[] = [
       {[RuleKey.require]: true, msg: "username require"},
       {[RuleKey.max]: 20, msg: "the max length is 20"},
       {[RuleKey.min]: 5, msg: "the min length is 5"},
-      {[RuleKey.reg]: /^[a-zA-Z0-9_-]{5,20}$/, msg: `contains only "_", "-", uppercase, lowercase and numbers` },
+      {[RuleKey.reg]: /^[a-zA-Z0-9_-]{5,20}$/, msg: `contains only "_", "-", uppercase, lowercase and numbers`},
     ]
   },
   {
@@ -197,7 +197,22 @@ const Login: NextPage = () => {
                    }}
                    error={Boolean(inputValue[Key.CHECK_PASSWORD] && checkInput(Key.CHECK_PASSWORD, inputValue, formRule))}
                    helperText={checkInput(Key.CHECK_PASSWORD, inputValue, formRule)}
+                   onKeyPress={(e) => {
+                     if (e.charCode === 13) {
+                       signUp();
+                     }
+                   }}
         />
+        <div className={styles.action}>
+          <div className={styles.btn}>
+            {/*Forgot Password*/}
+          </div>
+          <div className={styles.btn} onClick={() => {
+            router.push('/login')
+          }}>
+            Has Accout, Go login
+          </div>
+        </div>
         <div className={styles.signIn} onClick={signUp}>
           Sign up
         </div>

@@ -43,7 +43,7 @@ const DeleteOrganization = (props: Props) => {
       </DialogTitle>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={deleteIt} variant="contained"
+        <Button onClick={deleteIt}
                 color="error"
         >
           Delete

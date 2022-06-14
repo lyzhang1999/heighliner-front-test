@@ -11,7 +11,6 @@ import '@/utils/axios';
 
 import Layout from "@/components/Layout";
 import NewGitProvider from '@/components/Application/NewGitProvider';
-// import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHubToken";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';
@@ -48,9 +47,8 @@ const Clusters = () => {
     })
   }
 
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
-    setAnchorEl(e.currentTarget);
+  const handleClick = (e: any, id: number) => {
+    setAnchorEl(e?.currentTarget);
     setDeleteItemID(id);
   };
 
@@ -115,7 +113,7 @@ const Clusters = () => {
             return (
               <div className={styles.card} key={item.git_org_name}>
                 <div className={styles.moreIcon}
-                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e, item.id)}>
+                     onClick={(e) => handleClick(e, item.id)}>
                   <MoreVertIcon/>
                 </div>
                 <div className={styles.logo}>

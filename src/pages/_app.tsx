@@ -17,6 +17,7 @@ import {find} from "lodash-es";
 import {getOrganizationNameByUrl} from "@/utils/utils";
 
 const noCheckOriPage = ['/login/github', '/signup'];
+const noCheckPathPage = ['/organizations', '/settings'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -36,20 +37,20 @@ function App({Component, pageProps}: AppProps) {
           dispatch({
             organizationList: list,
           });
+          let oriName = encodeURIComponent(list[0]?.name);
+          if ((["/", '/login', '/signup'].includes(router.pathname))) {
+            location.pathname = `${oriName}/applications`;
+          }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
             setGetOriSuccess(true);
           } else {
-            dispatch({currentOiganization: {...list[0], ...list[0].member}})
-            setGetOriSuccess(true);
-            let oriName = encodeURIComponent(list[0]?.name);
-            if ((["/", '/login', '/signup'].includes(router.pathname))) {
+            if(noCheckPathPage.includes(location.pathname)){
+              dispatch({currentOiganization: {...list[0], ...list[0].member}})
+              setGetOriSuccess(true);
+            }else{
               location.pathname = `${oriName}/applications`;
-            } else {
-              // if (!judgeCurrentOri(res)) {
-              //   location.pathname = `${oriName}/applications`;
-              // }
             }
           }
         }).catch(err => {

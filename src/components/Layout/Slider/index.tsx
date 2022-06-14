@@ -94,21 +94,12 @@ const Slider = () => {
   const {organizationList} = state;
 
   const handleChange = (event: SelectChangeEvent) => {
-    // if (getOriIdByContext() === Number(event.target.value)) {
-    //   return;
-    // }
     let selectItem = find(organizationList, {id: event.target.value});
     if (selectItem) {
       let {name} = selectItem;
       let path = location.pathname.split("/")[2];
       location.pathname = `/${encodeURIComponent(name)}/${path}`;
     }
-
-    // setRenderContent(false);
-    // router.push(`/${event.target.value}/${path}`);
-    // setTimeout(() => {
-    //   setRenderContent(true);
-    // }, 100)
   };
 
   if (!defaultVal) {

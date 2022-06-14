@@ -3,7 +3,6 @@
 .slider {
   height: 100%;
   padding: 20px 0px 20px 0;
-  // width: 213px;
 
   .navTitle {
     color: #647284;
@@ -30,27 +29,19 @@
       padding: 0px 22px;
       background: #fff;
       margin: 5px 0;
-      // border: solid 1px #ba77ff;
-      // border-radius: 4px;
-      // text-align: center;
       cursor: pointer;
-      // color: #ba77ff;
 
       &:hover {
         background: #efe5fd;
-        // border-color: #efe5fd;
       }
     }
 
     .activeMenu {
       background: #e8e2f3;
-      // color: #fff;
-      // border-color: #ba77ff;
       border-left: solid 4.1px #6002ee;
 
       &:hover {
         background: #ba77ff;
-        // border-color: #ba77ff;
       }
     }
   }

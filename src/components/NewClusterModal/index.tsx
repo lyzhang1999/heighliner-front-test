@@ -4,14 +4,11 @@ import {
   TextField,
   Drawer,
 } from '@mui/material';
-
 import React, {useEffect, useState} from "react";
-import styles from './index.module.scss';
-// import 'highlight.js/styles/a11y-dark.css';
-
 import {NoticeRef} from "@/components/Notice";
 import {createCluster} from "@/utils/api/cluster";
 import {trim} from "lodash-es";
+import styles from './index.module.scss';
 
 interface Props {
   modalDisplay: boolean

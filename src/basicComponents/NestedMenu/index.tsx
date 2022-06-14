@@ -2,7 +2,7 @@
  * Menu has nested menu item.
  */
 
-import React, { ReactElement } from "react";
+import React, {ReactElement} from "react";
 import {
   Collapse,
   ListItemButton,
@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import clsx from "clsx";
 
-import utils from "@/utils/utils";
+import {isBrowser} from "@/utils/utils";
 import styles from "./index.module.scss";
 
 export interface Menu {
@@ -31,14 +31,14 @@ interface Props {
 }
 
 function isActiveNav(currentPath: string) {
-  if (utils.isBrowser()) {
+  if (isBrowser()) {
     return (location.href as string).includes(currentPath);
   } else {
     return false;
   }
 }
 
-export default function NestedMenu({ menuList }: Props): React.ReactElement {
+export default function NestedMenu({menuList}: Props): React.ReactElement {
   const [open, setOpen] = React.useState(false);
 
   const router = useRouter();
@@ -55,12 +55,12 @@ export default function NestedMenu({ menuList }: Props): React.ReactElement {
           return (
             <>
               <ListItemButton onClick={expandSubmenu}>
-                <ListItemText primary={menu.title} />
-                {open ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText primary={menu.title}/>
+                {open ? <ExpandLess/> : <ExpandMore/>}
               </ListItemButton>
               <Collapse in={open} timeout="auto" unmountOnExit>
                 <div className={styles.nestedMenu}>
-                  <NestedMenu menuList={menu.items} />
+                  <NestedMenu menuList={menu.items}/>
                 </div>
               </Collapse>
             </>
@@ -75,7 +75,7 @@ export default function NestedMenu({ menuList }: Props): React.ReactElement {
               className={clsx(isActiveNav(menu.to!) && styles.activeMenu)
               }
             >
-              <ListItemText primary={menu.title} />
+              <ListItemText primary={menu.title}/>
             </ListItemButton>
           );
         }

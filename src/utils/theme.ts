@@ -3,7 +3,6 @@ import JostLight from "../styles/fonts/Jost-Light.ttf";
 import JostRegular from "../styles/fonts/Jost-Regular.ttf";
 import JostMedium from "../styles/fonts/Jost-Medium.ttf";
 
-
 const theme = createTheme({
   palette: {
     primary: {

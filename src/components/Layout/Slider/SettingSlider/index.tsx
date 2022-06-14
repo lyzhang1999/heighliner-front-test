@@ -9,7 +9,7 @@ import { getOriIdByContext } from "@/utils/utils";
 import styles from "./index.module.scss";
 import { useContext } from "react";
 import { Context } from "@/utils/store";
-import utils from "@/utils/utils";
+import {isBrowser} from "@/utils/utils";
 import { useRouter } from "next/router";
 import { OrgList } from "@/utils/api/org";
 
@@ -28,7 +28,7 @@ const buttonLinks: { [index: string]: string } = {
 };
 
 function isActiveNav(currentPath: string) {
-  if (utils.isBrowser()) {
+  if (isBrowser()) {
     return (location.href as string).includes(currentPath);
   } else {
     return false;

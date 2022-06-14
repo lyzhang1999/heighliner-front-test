@@ -26,7 +26,7 @@ interface Props {
 const TransferOrganization = (props: Props) => {
   let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
   const {state} = useContext(Context);
-  const user_id = get(state, 'currentOiganization.user_id', "");
+  const user_id = get(state, 'currentOrganization.user_id', "");
   const [userList, setUserList] = useState<getOriRes[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);

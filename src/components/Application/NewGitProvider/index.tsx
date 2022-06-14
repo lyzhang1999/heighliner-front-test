@@ -1,11 +1,9 @@
 import { Box, Button, TextField, Drawer } from "@mui/material";
 import React, { useEffect, useState } from "react";
-
 import styles from "./index.module.scss";
 import "highlight.js/styles/a11y-dark.css";
 
 import { NoticeRef } from "@/components/Notice";
-import { addGitHubToken } from "@/utils/api/githubToken";
 import { createProviderList } from "@/utils/api/gitProvider";
 
 interface Props {
@@ -119,7 +117,6 @@ export default function NewGitProvider({
             </Button>
             <Button
               variant="contained"
-              // sx={buttonStyles}
               onClick={handleConfirm}
             >
               Confirm

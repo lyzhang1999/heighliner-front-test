@@ -1,7 +1,5 @@
-import {find} from 'lodash-es';
 import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
-import {reportTrigger} from "next/dist/build/output";
 
 export function isBrowser() {
   return process.title === "browser";
@@ -9,7 +7,7 @@ export function isBrowser() {
 
 export function getOriIdByContext(): string {
   if (isBrowser()) {
-    let result = GlobalContxtRef.current?.getState('currentOiganization');
+    let result = GlobalContxtRef.current?.getState('currentOrganization');
     if (result) {
       let {org_id} = result;
       return org_id;
@@ -31,7 +29,6 @@ export function getOrganizationNameByUrl(): string {
   }
 }
 
-
 export function uuid() {
   var s = []
   var hexDigits = '0123456789abcdef'
@@ -43,19 +40,6 @@ export function uuid() {
   s[8] = s[13] = s[18] = s[23] = '-'
   var uuid = s.join('')
   return uuid
-}
-
-interface ResultType {
-  created_at: number,
-  id: number,
-  member: any[],
-  name: string,
-  updated_at: number
-}
-
-export function judgeCurrentOri(list: ResultType[]): Boolean {
-  let currentItem = find(list, {id: Number(getOriIdByContext())});
-  return Boolean(currentItem);
 }
 
 export function setLoginToken(value: string) {
@@ -98,13 +82,3 @@ export function fileToBase64(file: File) {
   });
 }
 
-const utils = {
-  getOriIdByContext,
-  isBrowser,
-  judgeCurrentOri,
-  uuid,
-  getQuery,
-  fileToBase64
-}
-
-export default utils;

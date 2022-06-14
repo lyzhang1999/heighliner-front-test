@@ -42,13 +42,13 @@ function App({Component, pageProps}: AppProps) {
             return;
           }
           if (noCheckPathPage.includes(location.pathname)) {
-            dispatch({currentOiganization: {...list[0], ...list[0].member}})
+            dispatch({currentOrganization: {...list[0], ...list[0].member}})
             setGetOriSuccess(true);
             return;
           }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
-            dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
+            dispatch({currentOrganization: {...currentOri, ...currentOri.member}})
             setGetOriSuccess(true);
             return;
           }

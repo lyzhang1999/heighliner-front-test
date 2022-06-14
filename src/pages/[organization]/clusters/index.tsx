@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {Button} from '@mui/material';
 import '@/utils/axios';
-
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
-
-import styles from './index.module.scss';
 import {ClusterItem} from "@/utils/api/cluster";
 import {getClusterList} from "@/utils/api/cluster";
+import styles from './index.module.scss';
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);

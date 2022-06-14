@@ -5,12 +5,9 @@ import {Context} from "@/utils/store";
 import {MenuItem, Button, Menu} from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 import cookie from "@/utils/cookie";
-
-import styles from './index.module.scss';
-import {getOriIdByContext} from "@/utils/utils";
-import {OrganizationType} from "@/utils/store";
 import {get} from "lodash-es";
 
+import styles from './index.module.scss';
 
 export default function MenuAppBar() {
   const {state} = React.useContext(Context);
@@ -31,7 +28,7 @@ export default function MenuAppBar() {
   };
 
   const goHomerPage = () => {
-    router.push(`/${get(state, ['currentOiganization', 'name'], '')}/applications`)
+    router.push(`/${get(state, ['currentOrganization', 'name'], '')}/applications`)
   }
 
   return (

@@ -35,7 +35,7 @@ const Login: NextPage = () => {
       let list = res.data;
       dispatch({
         organizationList: list,
-        currentOiganization: {...list[0], ...list[0].member}
+        currentOrganization: {...list[0], ...list[0].member}
       });
       let oriName = encodeURIComponent(list[0]?.name);
       router.push(`${oriName}/applications`);

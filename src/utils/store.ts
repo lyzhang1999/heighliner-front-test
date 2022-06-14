@@ -2,7 +2,7 @@ import React, {createContext} from 'react'
 
 export interface State {
   organizationList?: any[],
-  currentOiganization?: object | OrganizationType
+  currentOrganization?: object | OrganizationType
 }
 
 export interface OrganizationType {
@@ -18,7 +18,7 @@ export interface OrganizationType {
 
 export const initState: State = {
   organizationList: [],
-  currentOiganization: {}
+  currentOrganization: {}
 }
 
 export const reducer = (state: State, params: State) => {

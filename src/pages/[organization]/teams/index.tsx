@@ -26,7 +26,7 @@ import InviteMember from "@/components/Team/InviteMember";
 const Teams = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
-  const [orgMembers, setOrgMembers] = useState<GetOrgMembersRes>([]);
+  const [orgMembers, setOrgMembers] = useState<GetOrgMembersRes>();
 
   const flushTeams = () => {
     // Fetch the team members
@@ -78,7 +78,7 @@ const Teams = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orgMembers.map(({ user_id, username, member_type }) => (
+            {orgMembers?.data.map(({ user_id, username, member_type }) => (
               <TableRow
                 key={user_id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

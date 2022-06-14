@@ -40,21 +40,6 @@ interface Props {
   inviteMemberSuccessCb?: Function;
 }
 
-// interface Film {
-//   title: string;
-//   year: number;
-// }
-
-// enum FormDataMap {
-//   Invitee = "Invitee",
-//   MemberType = "MemberType",
-// }
-
-// interface FormDataType {
-//   value: InviteeSuggestionsRes[number] | null;
-//   memberType: MemberType | "";
-// }
-
 export default function InviteMember({
   open,
   setOpen,
@@ -70,20 +55,8 @@ export default function InviteMember({
     MemberTypeEnum.Member
   );
 
-  // const {
-  //   handleSubmit,
-  //   control,
-  //   formState: { errors },
-  //   setValue,
-  // } = useForm<FormDataType>({
-  //   defaultValues: {
-  //     value: null,
-  //     memberType: "",
-  //   },
-  // });
-
   useEffect(() => {
-    // Didn't fetch invitee suggestion list
+    // Can't fetch invitee suggestion list
     if (inputValue.trim().length <= 0) {
       setOptions([]);
       return;
@@ -98,7 +71,6 @@ export default function InviteMember({
   }, [inputValue]);
 
   const invitation = () => {
-    console.log(value);
     switch (true) {
       case value === null:
         NoticeRef.current?.open({
@@ -121,6 +93,7 @@ export default function InviteMember({
         member_type: memberType,
       },
     };
+
     invitations(req).then(() => {
       NoticeRef.current?.open({
         type: "success",
@@ -144,34 +117,6 @@ export default function InviteMember({
         </DialogContentText>
       </DialogContent>
       <Stack direction="row" gap={1} className={styles.row}>
-        {/* <Controller
-          control={control}
-          name={FormDataMap.Invitee}
-          render={({ field }) => (
-            <Autocomplete
-              id="combo-box-demo"
-              getOptionLabel={(option) => option.username}
-              options={options}
-              filterOptions={(x) => x}
-              isOptionEqualToValue={(option, value) =>
-                option.user_id === value.user_id
-              }
-              className={styles.searchBar}
-              value={field.value}
-              onChange={(event, newValue) => {
-                field.onChange(newValue);
-              }}
-              inputValue={inputValue}
-              onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
-              }}
-              noOptionsText="No suggestion."
-              renderInput={(params) => (
-                <TextField {...params} label="Invitee" />
-              )}
-            />
-          )}
-        /> */}
         <Autocomplete
           id="combo-box-demo"
           getOptionLabel={(option) => option.username}

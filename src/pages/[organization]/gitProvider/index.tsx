@@ -10,7 +10,8 @@ import {
 import '@/utils/axios';
 
 import Layout from "@/components/Layout";
-import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHubToken";
+import NewGitProvider from '@/components/Application/NewGitProvider';
+// import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHubToken";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';
@@ -129,7 +130,7 @@ const Clusters = () => {
           })
         }
       </div>
-      <NewGitHubToken
+      <NewGitProvider
         {...{
           setModalDisplay,
           modalDisplay,

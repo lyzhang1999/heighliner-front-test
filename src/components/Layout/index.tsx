@@ -1,17 +1,9 @@
 import react, {ReactElement, useState} from 'react';
-import {ThemeProvider} from '@mui/material/styles';
 
 import Header from './Header'
 import Slider from './Slider'
 
-import theme from '../../utils/theme.js';
 import styles from './index.module.scss';
-import dynamic from 'next/dynamic'
-
-const SlinderNoSSR = dynamic(
-  () => import('./Slider/index'),
-  {ssr: false}
-)
 
 interface HomeProps {
   children?: react.ReactNode,
@@ -35,7 +27,6 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider
             <div className={styles.content}>
               <div className={styles.left}>
                 {CustomSlider ?? <Slider/>}
-                {/*<SlinderNoSSR/>*/}
               </div>
               <div className={styles.center}>
                 {

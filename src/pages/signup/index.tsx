@@ -42,7 +42,7 @@ const formRule: ruleItem[] = [
       {[RuleKey.require]: true, msg: "username require"},
       {[RuleKey.max]: 20, msg: "the max length is 20"},
       {[RuleKey.min]: 5, msg: "the min length is 5"},
-      {[RuleKey.reg]: /^[a-zA-Z0-9_-]{5,20}$/, msg: "contains only letters and digits"},
+      {[RuleKey.reg]: /^[a-zA-Z0-9_-]{5,20}$/, msg: `contains only "_", "-", uppercase, lowercase and numbers` },
     ]
   },
   {
@@ -53,14 +53,14 @@ const formRule: ruleItem[] = [
       {[RuleKey.min]: 8, msg: "the min length is 8"},
       {
         [RuleKey.reg]: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
-        msg: "must contain uppercase, lowercase, and numbers."
+        msg: "must contain uppercase, lowercase, and numbers"
       },
     ]
   },
   {
     key: Key.CHECK_PASSWORD,
     rule: [
-      {[RuleKey.require]: true, msg: "confirm password twice require"},
+      {[RuleKey.require]: true, msg: "confirm password require"},
       {[RuleKey.sameOther]: Key.PASSWORD, msg: 'the second same to first password'}
     ]
   }

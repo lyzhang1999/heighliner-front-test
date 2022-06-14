@@ -72,6 +72,8 @@ const stacksMap: { [index: string]: string[] } = {
   ["gin-vue"]: [GinIcon, VueIcon],
   ["remix"]: [RemixIcon],
   ["gin"]: [GinIcon],
+  ['dotnet-react-dapr']: [GinIcon],
+  ['sample']: [GinIcon]
 };
 
 export default function Index(): React.ReactElement {
@@ -222,14 +224,17 @@ export default function Index(): React.ReactElement {
                         )}
                       >
                         <div className={styles.icons}>
-                          <Image
-                            src={icons[0]}
-                            alt="Without Heighliner"
-                            width={35}
-                            height={35}
-                            loader={({src}) => src}
-                            // layout="fill"
-                          />
+                          {
+                            icons[0] &&
+                            <Image
+                              src={icons[0]}
+                              alt="Without Heighliner"
+                              width={35}
+                              height={35}
+                              loader={({src}) => src}
+                              // layout="fill"
+                            />
+                          }
                           {icons[1] && (
                             <Image
                               src={icons[1]}

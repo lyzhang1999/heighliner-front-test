@@ -11,7 +11,7 @@ import {
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {NoticeRef} from "@/components/Notice";
-import {getOriMumbers, getOriRes, transferOri} from "@/utils/api/org";
+import {getOrgMembers, GetOrgMembersRes, transferOri} from "@/utils/api/org";
 import styles from './index.module.scss';
 import {Context} from "@/utils/store";
 import {get} from "lodash-es";
@@ -27,7 +27,7 @@ const TransferOrganization = (props: Props) => {
   let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
   const {state} = useContext(Context);
   const user_id = get(state, 'currentOrganization.user_id', "");
-  const [userList, setUserList] = useState<getOriRes[]>([]);
+  const [userList, setUserList] = useState<GetOrgMembersRes["data"]>([]);
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [count, setCount] = useState<number>(0)
@@ -39,7 +39,7 @@ const TransferOrganization = (props: Props) => {
   }, [transferModalVisible])
 
   function getList() {
-    getOriMumbers({org_id: transferId, page: page, page_size: 10}).then(res => {
+    getOrgMembers({org_id: transferId, page: page, page_size: 10}).then(res => {
       setUserList(res.data);
       let {total, pageCount} = res.pagination;
       setTotal(total);

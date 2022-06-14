@@ -48,7 +48,7 @@ const Organizations = () => {
 
   function updateOriList() {
     getOrgList().then(res => {
-      dispatch({organizationList: res})
+      dispatch({organizationList: res.data})
     })
   }
 

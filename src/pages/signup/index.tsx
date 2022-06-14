@@ -1,12 +1,12 @@
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {NextPage} from "next";
 import clsx from "clsx";
-import {Box, Divider, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import {useRouter} from "next/router";
 
 import {find} from "lodash-es";
 
-import styles from "./index.module.scss";
+import styles from "../login/index.module.scss";
 import Image from "next/image";
 import {NoticeRef} from "@/components/Notice";
 import {signUpApi} from "@/utils/api/login";

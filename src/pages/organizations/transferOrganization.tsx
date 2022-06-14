@@ -4,16 +4,17 @@ import {
   DialogTitle,
   DialogContent,
   Table,
-  TableHead,
   TableCell,
   TableBody,
-  TableRow
+  TableRow, TablePagination
 } from "@mui/material";
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {NoticeRef} from "@/components/Notice";
-import {createOrg, deleteOri, getOrgMembers, GetOrgMembersRes, transferOri} from "@/utils/api/org";
+import {getOrgMembers, GetOrgMembersRes, transferOri} from "@/utils/api/org";
 import styles from './index.module.scss';
+import {Context} from "@/utils/store";
+import {get} from "lodash-es";
 
 interface Props {
   transferModalVisible: boolean,
@@ -22,19 +23,29 @@ interface Props {
   transferId: number
 }
 
-
-export const TransferOrganization = (props: Props) => {
+const TransferOrganization = (props: Props) => {
   let {transferModalVisible, transferSuccessCb, setTransferModalVisible, transferId} = props;
-  const [userList, setUserList] = useState<GetOrgMembersRes>([]);
+  const {state} = useContext(Context);
+  const user_id = get(state, 'currentOiganization.user_id', "");
+  const [userList, setUserList] = useState<GetOrgMembersRes["data"]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const [count, setCount] = useState<number>(0)
 
   useEffect(() => {
     if (transferModalVisible) {
-      getOrgMembers({org_id: transferId, page: 1, page_size: 10}).then(res => {
-        setUserList(res);
-      })
+      getList();
     }
-
   }, [transferModalVisible])
+
+  function getList() {
+    getOrgMembers({org_id: transferId, page: page, page_size: 10}).then(res => {
+      setUserList(res.data);
+      let {total, pageCount} = res.pagination;
+      setTotal(total);
+      setCount(pageCount);
+    })
+  }
 
   const handleClose = () => {
     setTransferModalVisible(false);
@@ -51,6 +62,11 @@ export const TransferOrganization = (props: Props) => {
     })
   }
 
+  function pageChange(e: any, params: number) {
+    setPage(params + 1);
+    getList();
+  }
+
   return (
     <Dialog
       open={transferModalVisible}
@@ -63,15 +79,6 @@ export const TransferOrganization = (props: Props) => {
       </DialogTitle>
       <DialogContent id="alert-dialog-title" className={styles.transferTable}>
         <Table aria-label="simple table">
-          {/*<TableHead>*/}
-          {/*  <TableRow>*/}
-          {/*    <TableCell>Dessert (100g serving)</TableCell>*/}
-          {/*    <TableCell align="right">Calories</TableCell>*/}
-          {/*    <TableCell align="right">Fat&nbsp;(g)</TableCell>*/}
-          {/*    <TableCell align="right">Carbs&nbsp;(g)</TableCell>*/}
-          {/*    <TableCell align="right">Protein&nbsp;(g)</TableCell>*/}
-          {/*  </TableRow>*/}
-          {/*</TableHead>*/}
           <TableBody>
             {userList.map((row) => (
               <TableRow
@@ -82,24 +89,28 @@ export const TransferOrganization = (props: Props) => {
                   {row.username}
                 </TableCell>
                 <TableCell align="right">
-                  <Button onClick={() => transferIt(row.user_id)}>
+                  <Button onClick={() => transferIt(row.user_id)}
+                          disabled={user_id === row.user_id}
+                  >
                     Transfer
                   </Button>
-                  {/*{row.calories}*/}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </DialogContent>
-      {/*<DialogActions>*/}
-      {/*  <Button onClick={handleClose}>Cancel</Button>*/}
-      {/*  <Button onClick={deleteIt} variant="contained"*/}
-      {/*          color="error"*/}
-      {/*  >*/}
-      {/*    Delete*/}
-      {/*  </Button>*/}
-      {/*</DialogActions>*/}
+      {
+        count === 1 && <TablePagination
+          rowsPerPageOptions={[10]}
+          count={total}
+          onPageChange={pageChange}
+          page={page - 1}
+          rowsPerPage={10}
+        />
+      }
     </Dialog>
   )
 }
+
+export default TransferOrganization;

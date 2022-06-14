@@ -14,7 +14,7 @@ interface Props {
   successCb: () => void,
 }
 
-export const CreateOrganization = ({open, setOpen, successCb}: Props) => {
+const CreateOrganization = ({open, setOpen, successCb}: Props) => {
   const [name, setName] = useState<string>('');
 
   const handleClose = () => {
@@ -89,3 +89,5 @@ export const CreateOrganization = ({open, setOpen, successCb}: Props) => {
     </Dialog>
   )
 }
+
+export default CreateOrganization;

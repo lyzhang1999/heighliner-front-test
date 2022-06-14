@@ -23,7 +23,7 @@ const Clusters = () => {
 
   function getCluster() {
     getClusterList().then(res => {
-      setClusterList(res);
+      setClusterList(res.data);
     })
   }
 

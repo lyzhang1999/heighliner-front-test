@@ -1,12 +1,10 @@
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import {Button, TextField} from "@mui/material";
+import {Button} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
-import {useState} from "react";
 import {NoticeRef} from "@/components/Notice";
-import {createOrg, deleteOri} from "@/utils/api/org";
+import {deleteOri} from "@/utils/api/org";
 
 interface Props {
   deleteModalVisible: boolean,
@@ -15,7 +13,7 @@ interface Props {
   deleteID: number
 }
 
-export const DeleteOrganization = (props: Props) => {
+const DeleteOrganization = (props: Props) => {
   let {deleteModalVisible, deleteSuccessCb, setDeleteModalVisible, deleteID} = props;
 
   const handleClose = () => {
@@ -45,7 +43,7 @@ export const DeleteOrganization = (props: Props) => {
       </DialogTitle>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={deleteIt} variant="contained"
+        <Button onClick={deleteIt}
                 color="error"
         >
           Delete
@@ -54,3 +52,5 @@ export const DeleteOrganization = (props: Props) => {
     </Dialog>
   )
 }
+
+export default DeleteOrganization;

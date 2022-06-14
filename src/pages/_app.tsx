@@ -17,6 +17,7 @@ import {find} from "lodash-es";
 import {getOrganizationNameByUrl} from "@/utils/utils";
 
 const noCheckOriPage = ['/login/github', '/signup'];
+const noCheckPathPage = ['/organizations', '/settings'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -28,37 +29,33 @@ function App({Component, pageProps}: AppProps) {
   }, []);
 
   function loginCheck() {
-    const token = cookie.getCookie('token');
     if (!noCheckOriPage.includes(router.pathname)) {
-      if (token) {
+      if (cookie.getCookie('token')) {
         getOrgList().then(res => {
+          let list = res.data;
           dispatch({
-            organizationList: res,
-            // currentOiganization: {...res[0], ...res[0].member}
+            organizationList: list,
           });
-
-          let currentOri = find(res, {name: getOrganizationNameByUrl()});
+          let defaultOriName = encodeURIComponent(list[0]?.name);
+          if ((["/", '/login', '/signup'].includes(router.pathname))) {
+            location.pathname = `${defaultOriName}/applications`;
+            return;
+          }
+          if (noCheckPathPage.includes(location.pathname)) {
+            dispatch({currentOiganization: {...list[0], ...list[0].member}})
+            setGetOriSuccess(true);
+            return;
+          }
+          let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOiganization: {...currentOri, ...currentOri.member}})
             setGetOriSuccess(true);
-            let oriName = encodeURIComponent(currentOri.name);
-            // router.push(`${oriName}/applications`);
-          } else {
-            dispatch({currentOiganization: {...res[0], ...res[0].member}})
-            setGetOriSuccess(true);
-            let oriName = encodeURIComponent(res[0]?.name);
-            // router.push(`${oriName}/applications`);
-
-            // if ((["/", '/login'].includes(router.pathname))) {
-            // } else {
-            // if (!judgeCurrentOri(res)) {
-            //   location.pathname = `${oriId}/applications`;
-            // }
-            // }
+            return;
           }
-
+          location.pathname = `${defaultOriName}/applications`;
         }).catch(err => {
-          setGetOriSuccess(true)
+          router.push("/login");
+          setGetOriSuccess(true);
         })
       } else {
         setGetOriSuccess(true)

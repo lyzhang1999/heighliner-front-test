@@ -11,7 +11,6 @@ import '@/utils/axios';
 
 import Layout from "@/components/Layout";
 import NewGitProvider from '@/components/Application/NewGitProvider';
-// import NewGitHubToken from "@/components/Application/VersionControlInfo/NewGitHubToken";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import styles from './index.module.scss';
@@ -24,7 +23,6 @@ const Clusters = () => {
   const [dialogVisible, setDialogVisible] = useState<boolean>(false)
   const [deleteItemID, setDeleteItemID] = useState<number>(0);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-
 
   function successCb() {
     getProvider();
@@ -49,9 +47,8 @@ const Clusters = () => {
     })
   }
 
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e: any, id: number) => {
+    setAnchorEl(e?.currentTarget);
     setDeleteItemID(id);
   };
 
@@ -115,7 +112,8 @@ const Clusters = () => {
           prividerList.map(item => {
             return (
               <div className={styles.card} key={item.git_org_name}>
-                <div className={styles.moreIcon} onClick={(e) => handleClick(e, item.id)}>
+                <div className={styles.moreIcon}
+                     onClick={(e) => handleClick(e, item.id)}>
                   <MoreVertIcon/>
                 </div>
                 <div className={styles.logo}>

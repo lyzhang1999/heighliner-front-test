@@ -1,5 +1,6 @@
 import http from '@/utils/axios';
 import {getOriIdByContext} from "@/utils/utils";
+import {Page} from "@/utils/api/type";
 
 export interface ClusterItem {
   id: number;
@@ -13,7 +14,12 @@ export interface ClusterItem {
 
 export type Clusters = ClusterItem[];
 
-export const getClusterList = (): Promise<ClusterItem[]> => {
+interface Cluser{
+  data: ClusterItem[],
+  pagination: Page
+}
+
+export const getClusterList = (): Promise<Cluser> => {
   return http.get(`/orgs/${getOriIdByContext()}/clusters`);
 }
 

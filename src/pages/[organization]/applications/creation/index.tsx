@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Image from "next/image";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {
-  Button,
   FormControl,
   FormHelperText,
   Input,
@@ -15,19 +14,21 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import clsx from "clsx";
 
 import Layout from "@/components/Layout";
-import { Clusters, getClusterList } from "@/utils/api/cluster";
-import { getStacks, Stacks } from "@/utils/api/stack";
+import {Clusters, getClusterList} from "@/utils/api/cluster";
+import {getStacks, Stacks} from "@/utils/api/stack";
 
 import styles from "./index.module.scss";
-import { getGitProviderList, GitProviders } from "@/utils/api/gitProvider";
+import {getGitProviderList, GitProviders} from "@/utils/api/gitProvider";
 import NewClusterModal from "@/components/NewClusterModal";
 import NewGitProvider from "@/components/Application/NewGitProvider";
 import {
   createApplication,
   CreateApplicationRequest,
 } from "@/utils/api/application";
-import { useRouter } from "next/router";
-import { getOriIdByContext } from "@/utils/utils";
+import {useRouter} from "next/router";
+import {Context} from "@/utils/store";
+import {get} from "lodash-es";
+import {getOrganizationNameByUrl} from "@/utils/utils";
 
 type FieldsDataType = typeof DefaultFieldsData;
 
@@ -71,6 +72,8 @@ const stacksMap: { [index: string]: string[] } = {
   ["gin-vue"]: [GinIcon, VueIcon],
   ["remix"]: [RemixIcon],
   ["gin"]: [GinIcon],
+  ['dotnet-react-dapr']: [GinIcon],
+  ['sample']: [GinIcon]
 };
 
 export default function Index(): React.ReactElement {
@@ -89,7 +92,7 @@ export default function Index(): React.ReactElement {
       setStacks(res);
     });
     getClusterList().then((res) => {
-      setClusters(res);
+      setClusters(res.data);
     });
     getGitProviderList().then((res) => {
       setGitProviders(res);
@@ -99,7 +102,7 @@ export default function Index(): React.ReactElement {
   // When open add cluster or git provider drawer, updating data.
   useEffect(() => {
     getClusterList().then((res) => {
-      setClusters(res);
+      setClusters(res.data);
     });
   }, [openAddClusterDrawer]);
   useEffect(() => {
@@ -112,7 +115,7 @@ export default function Index(): React.ReactElement {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: {errors},
   } = useForm<FieldsDataType>({
     defaultValues: DefaultFieldsData,
   });
@@ -140,7 +143,7 @@ export default function Index(): React.ReactElement {
 
     createApplication(createApplicationRequest).then((res) => {
       router.push(
-        `/${getOriIdByContext()}/applications/creating?app_id=${
+        `/${encodeURIComponent(getOrganizationNameByUrl())}/applications/creating?app_id=${
           res.app_id
         }&release_id=${res.release_id}`
       );
@@ -154,7 +157,7 @@ export default function Index(): React.ReactElement {
           <Controller
             name={fieldsMap.applicationName.name}
             control={control}
-            render={({ field, fieldState }) => (
+            render={({field, fieldState}) => (
               <FormControl
                 error={errors[fieldsMap.applicationName.name] ? true : false}
               >
@@ -204,11 +207,11 @@ export default function Index(): React.ReactElement {
           <Controller
             name={fieldsMap.stack.name}
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <FormControl error={errors[fieldsMap.stack.name] ? true : false}>
                 <h1>{fieldsMap.stack.name}</h1>
                 <ul className={styles.stacks}>
-                  {stacks.map(({ name, id }) => {
+                  {stacks.map(({name, id}) => {
                     const icons = stacksMap[name];
                     return (
                       <li
@@ -221,19 +224,22 @@ export default function Index(): React.ReactElement {
                         )}
                       >
                         <div className={styles.icons}>
-                          <Image
-                            src={icons[0]}
-                            alt="Without Heighliner"
-                            width={35}
-                            height={35}
-                            loader={({ src }) => src}
-                            // layout="fill"
-                          />
+                          {
+                            icons[0] &&
+                            <Image
+                              src={icons[0]}
+                              alt="Without Heighliner"
+                              width={35}
+                              height={35}
+                              loader={({src}) => src}
+                              // layout="fill"
+                            />
+                          }
                           {icons[1] && (
                             <Image
                               src={icons[1]}
                               alt="Without Heighliner"
-                              loader={({ src }) => src}
+                              loader={({src}) => src}
                               width={35}
                               height={35}
                               // layout="fill"
@@ -260,7 +266,7 @@ export default function Index(): React.ReactElement {
           <Controller
             name={fieldsMap.cluster.name}
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <FormControl
                 error={errors[fieldsMap.cluster.name] ? true : false}
               >
@@ -275,18 +281,18 @@ export default function Index(): React.ReactElement {
                     }
                   }}
                   displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
+                  inputProps={{"aria-label": "Without label"}}
                   // name={AllFieldName.Cluster}
                   // style={{ minWidth: 195 }}
                   className={clsx(styles.conformity)}
                 >
-                  {clusters.map(({ id, name }) => (
+                  {clusters.map(({id, name}) => (
                     <MenuItem key={id} value={id}>
                       {name}
                     </MenuItem>
                   ))}
                   <MenuItem value={"new"}>
-                    <AddCircleOutlineIcon />
+                    <AddCircleOutlineIcon/>
                     &nbsp; Add
                   </MenuItem>
                 </Select>
@@ -304,7 +310,7 @@ export default function Index(): React.ReactElement {
           <Controller
             name={fieldsMap.gitProvider.name}
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <FormControl
                 error={errors[fieldsMap.gitProvider.name] ? true : false}
               >
@@ -318,17 +324,17 @@ export default function Index(): React.ReactElement {
                     }
                   }}
                   displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
+                  inputProps={{"aria-label": "Without label"}}
                   // style={{ minWidth: 195 }}
                   className={clsx(styles.conformity)}
                 >
-                  {gitProviders.map(({ id, git_org_name }) => (
+                  {gitProviders.map(({id, git_org_name}) => (
                     <MenuItem key={id} value={id}>
                       {git_org_name}
                     </MenuItem>
                   ))}
                   <MenuItem value={"new"}>
-                    <AddCircleOutlineIcon />
+                    <AddCircleOutlineIcon/>
                     &nbsp; Add
                   </MenuItem>
                 </Select>
@@ -346,7 +352,7 @@ export default function Index(): React.ReactElement {
           <Controller
             name={fieldsMap.domain.name}
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <FormControl error={errors[fieldsMap.domain.name] ? true : false}>
                 <TextField
                   onChange={field.onChange}
@@ -364,7 +370,7 @@ export default function Index(): React.ReactElement {
             }}
           />
           <div className={styles.submitWrap}>
-            <Input type="submit" className={styles.submit} value="CREATE" />
+            <Input type="submit" className={styles.submit} value="CREATE"/>
           </div>
         </form>
       </div>

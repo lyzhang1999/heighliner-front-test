@@ -29,8 +29,8 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
     if (name.length < 5) {
       return "the min length is 5";
     }
-    if (!/^[-_a-zA-Z0-9]{5,20}$/.test(name)) {
-      return "contains only letters and digits"
+    if (!/^[a-zA-Z0-9_-]{5,20}$/.test(name)) {
+      return `contains only "_", "-", uppercase, lowercase and numbers`
     }
     return '';
   }
@@ -78,6 +78,11 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
                    }}
                    error={Boolean(name && checkName())}
                    helperText={name && checkName()}
+                   onKeyPress={(e) => {
+                     if (e.charCode === 13) {
+                       creat();
+                     }
+                   }}
         />
       </DialogContent>
       <DialogActions>

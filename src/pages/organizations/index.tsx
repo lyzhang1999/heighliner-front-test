@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 import {useContext, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
-import {getOrgList, leaveOriApi, OrgList, roleType} from "@/utils/api/org";
+import {getOrgList, OrgList, roleType} from "@/utils/api/org";
 import {formatDate} from "@/utils/utils";
 import {get} from "lodash-es";
 

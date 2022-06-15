@@ -77,7 +77,7 @@ export type GetOrgMembersRes = {
     updated_at: number;
     org_id: number;
     user_id: number;
-    member_type: string;
+    member_type: MemberType;
     username: string;
   }>;
   pagination: Page;
@@ -141,6 +141,7 @@ export interface InvitationsReq {
 }
 
 export enum MemberTypeEnum {
+  Owner = "Owner",
   Admin = "Admin",
   Member = "Member",
 }
@@ -148,4 +149,13 @@ export type MemberType = keyof typeof MemberTypeEnum;
 
 export const invitations = (req: InvitationsReq) => {
   return http.post(`/orgs/${req.org_id}/invitations`, req.body);
+};
+
+export interface DeleteMember {
+  org_id: number;
+  user_id: number;
+}
+
+export const deleteMember = (req: DeleteMember) => {
+  return http.delete(`/orgs/${req.org_id}/members/${req.user_id}`);
 };

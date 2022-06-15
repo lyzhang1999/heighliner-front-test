@@ -1,14 +1,15 @@
 import React, {createContext} from 'react'
+import { MemberType } from './api/org'
 
 export interface State {
   organizationList?: any[],
-  currentOrganization?: object | OrganizationType
+  currentOrganization?: OrganizationType | null
 }
 
 export interface OrganizationType {
   created_at: string,
   id: number,
-  member_type: number,
+  member_type: MemberType,
   org_id: number,
   updated_at: number,
   user_id: number,
@@ -18,7 +19,7 @@ export interface OrganizationType {
 
 export const initState: State = {
   organizationList: [],
-  currentOrganization: {}
+  currentOrganization: null
 }
 
 export const reducer = (state: State, params: State) => {

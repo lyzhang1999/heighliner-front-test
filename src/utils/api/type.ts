@@ -1,4 +1,4 @@
 export interface Page {
-  total: number,
-  pageCount: number
+  total: number;
+  pageCount: number;
 }

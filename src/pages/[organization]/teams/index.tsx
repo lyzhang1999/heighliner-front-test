@@ -1,7 +1,5 @@
 import {
   Button,
-  MenuItem,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -36,6 +34,8 @@ enum Action {
 }
 
 type ActionSet = Array<keyof typeof Action>;
+
+const pageSize = 10;
 
 function getActionSet(
   currentMemberType: MemberType,
@@ -107,7 +107,7 @@ const Teams = () => {
     const getOrgMembersReq: GetOrgMembersReq = {
       org_id: +getOriIdByContext(),
       page: currentPage + 1,
-      page_size: 2,
+      page_size: pageSize,
     };
 
     getOrgMembers(getOrgMembersReq).then((res) => {
@@ -134,7 +134,6 @@ const Teams = () => {
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) {
-    
     setCurrentPage(newPage);
   }
 
@@ -180,7 +179,15 @@ const Teams = () => {
                     (action) => {
                       switch (action) {
                         case Action.ShiftRole:
-                          return <ShiftRole />;
+                          return (
+                            <ShiftRole
+                              currentMemberType={member_type}
+                              username={username}
+                              userId={user_id}
+                              orgId={+getOriIdByContext()}
+                              successCallback={flushTeams}
+                            />
+                          );
                         case Action.Delete:
                           return (
                             <DeleteMember
@@ -200,11 +207,15 @@ const Teams = () => {
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[2]}
-                count={orgMembers?.pagination.total || -1}
+                rowsPerPageOptions={[pageSize]}
+                count={
+                  orgMembers && orgMembers?.pagination.total > 0
+                    ? +orgMembers?.pagination.total
+                    : -1
+                }
                 onPageChange={onPageChange}
                 page={currentPage}
-                rowsPerPage={4}
+                rowsPerPage={pageSize}
               />
             </TableRow>
           </TableFooter>

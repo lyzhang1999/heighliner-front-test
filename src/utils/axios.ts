@@ -22,8 +22,10 @@ http.interceptors.request.use((config: AxiosRequestConfig) => {
 
 http.interceptors.response.use((res: AxiosResponse) => {
   let {data} = res;
-  let total = get(res, ['headers', 'x-page-total'], '');
-  let pageCount = get(res, ['headers', 'x-total-count'], '');
+  // All page count
+  let pageCount = get(res, ['headers', 'x-page-total'], '');
+  // All item count 
+  let total = get(res, ['headers', 'x-total-count'], '');
   if ((total !== "") && (pageCount !== "")) {
     return {
       data,

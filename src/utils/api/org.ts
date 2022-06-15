@@ -148,3 +148,15 @@ export interface DeleteMember {
 export const deleteMember = (req: DeleteMember) => {
   return http.delete(`/orgs/${req.org_id}/members/${req.user_id}`);
 };
+
+export interface ShiftRoleReq {
+  org_id: number;
+  user_id: number;
+  body: {
+    member_type: MemberType;
+  };
+}
+
+export const shiftRole = (req: ShiftRoleReq) => {
+  return http.put(`/orgs/${req.org_id}/members/${req.user_id}/role`, req.body);
+};

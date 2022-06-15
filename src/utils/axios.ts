@@ -3,7 +3,7 @@ import cookie from "@/utils/cookie";
 import {NoticeRef} from "@/components/Notice";
 import {get} from "lodash-es";
 
-export const baseURL = 'http://heighliner-cloud.heighliner.cloud/api/'
+export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
 
 export const http = axios.create({
   baseURL: baseURL,

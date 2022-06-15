@@ -1,16 +1,17 @@
+import * as React from "react";
 import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
 import {Terminal} from 'xterm';
-import styles from "./index.module.scss";
-import "xterm/css/xterm.css"
-import * as React from "react";
 import {useRouter} from "next/router";
-import {getOriIdByContext, getQuery} from "@/utils/utils";
+import {getOrganizationNameByUrl, getOriIdByContext, getQuery} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/utils/api/application";
 import {Alert} from "@mui/material";
+
+import styles from "./index.module.scss";
+import "xterm/css/xterm.css";
 
 interface LogRes {
   data: string
@@ -32,7 +33,6 @@ const CreatingApplication = () => {
   let resizeCb: any = null;
   let skipTimer: any = null;
 
-  // close server render
 
   useEffect(() => {
     function getStatus(isFirst: boolean) {
@@ -95,12 +95,14 @@ const CreatingApplication = () => {
       window.addEventListener('resize', resizeCb);
       const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
       const token = cookie.getCookie('token');
-      var test = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
-      test.addEventListener("MESSAGE", function (e: LogRes) {
+      var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
+      // @ts-ignore
+      eventSource.addEventListener("MESSAGE", function (e: LogRes) {
         term.writeln(e.data);
       });
-      test.addEventListener("END", function (e: LogRes) {
-        test.close();
+      // @ts-ignore
+      eventSource.addEventListener("END", function (e: LogRes) {
+        eventSource.close();
       });
     }
     getlogTimeOut = setTimeout(() => {
@@ -109,7 +111,7 @@ const CreatingApplication = () => {
   }
 
   function goDashboard() {
-    router.push(`/${getOriIdByContext()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+    router.push(`/${getOrganizationNameByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
   }
 
   function skip() {
@@ -125,6 +127,7 @@ const CreatingApplication = () => {
     }, 1000)
   }
 
+  // close server render
   React.useEffect(() => {
     setHasMounted(true);
   }, []);

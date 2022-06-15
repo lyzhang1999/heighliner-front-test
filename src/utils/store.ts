@@ -1,5 +1,5 @@
 import React, {createContext} from 'react'
-import { MemberType } from './api/org'
+import { MemberType, OrgList } from './api/org'
 
 export interface State {
   organizationList?: any[],
@@ -16,6 +16,11 @@ export interface OrganizationType {
   name: string,
   type: string
 }
+
+// export interface State {
+//   organizationList?: OrgList[],
+//   currentOrganization?: object | OrganizationType
+// }
 
 export const initState: State = {
   organizationList: [],

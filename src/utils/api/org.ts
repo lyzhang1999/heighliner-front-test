@@ -1,16 +1,5 @@
 import http from "@/utils/axios";
-import { string } from "prop-types";
 import { Page } from "./type";
-
-interface List {
-  id: number;
-  created_at: number;
-  updated_at: number;
-  org_id: number;
-  user_id: number;
-  member_type: number;
-  status: number;
-}
 
 export interface OrgList {
   id: number;
@@ -37,7 +26,7 @@ interface Org {
 export const roleType = {
   Owner: "Owner",
   Admin: "Admin",
-  Number: "Number",
+  Member: "Member",
 };
 
 export const getOrgList = (): Promise<Org> => {
@@ -53,7 +42,7 @@ interface leaveOriReq {
 }
 
 export const leaveOriApi = ({ org_id }: leaveOriReq): Promise<any> => {
-  return http.delete(`/orgs/${org_id}/mumber`);
+  return http.delete(`/orgs/${org_id}/members`);
 };
 
 interface deleteOriReq {

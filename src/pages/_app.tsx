@@ -13,7 +13,7 @@ import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";
 import {getOrgList} from "@/utils/api/org";
 import {CssBaseline} from "@mui/material";
-import {find} from "lodash-es";
+import {find, omit} from "lodash-es";
 import {getOrganizationNameByUrl} from "@/utils/utils";
 
 const noCheckOriPage = ['/login/github', '/signup'];
@@ -42,13 +42,13 @@ function App({Component, pageProps}: AppProps) {
             return;
           }
           if (noCheckPathPage.includes(location.pathname)) {
-            dispatch({currentOrganization: {...list[0], ...list[0].member}})
+            dispatch({currentOrganization: omit({...list[0], ...list[0].member}, 'member') })
             setGetOriSuccess(true);
             return;
           }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
-            dispatch({currentOrganization: {...currentOri, ...currentOri.member}})
+            dispatch({currentOrganization: omit({...currentOri, ...currentOri.member}, 'member')})
             setGetOriSuccess(true);
             return;
           }

@@ -7,7 +7,7 @@ import {Box, Divider, TextField} from "@mui/material";
 import {useRouter} from "next/router";
 
 import {getPopUpsWindowFeatures} from "@/utils/window";
-import {trim} from "lodash-es";
+import {omit, trim} from "lodash-es";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
@@ -35,7 +35,7 @@ const Login: NextPage = () => {
       let list = res.data;
       dispatch({
         organizationList: list,
-        currentOrganization: {...list[0], ...list[0].member}
+        currentOrganization: omit({ ...list[0], ...list[0].member}, 'member')
       });
       let oriName = encodeURIComponent(list[0]?.name);
       router.push(`${oriName}/applications`);
@@ -152,6 +152,11 @@ const Login: NextPage = () => {
                    value={password}
                    onChange={(e) => {
                      setPassword(e.target.value)
+                   }}
+                   onKeyPress={(e) => {
+                     if (e.charCode === 13) {
+                       passwordLogin();
+                     }
                    }}
         />
         <div className={styles.action}>

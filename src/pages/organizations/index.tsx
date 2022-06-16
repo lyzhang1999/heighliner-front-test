@@ -60,7 +60,7 @@ const Organizations = () => {
   }
 
   return (
-    <Layout hiddenContent>
+    <Layout>
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.left}>

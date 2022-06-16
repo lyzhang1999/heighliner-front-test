@@ -8,7 +8,7 @@ import Password from "@/components/setting/profile/Password";
 
 export default function Setting(): React.ReactElement {
   return (
-    <Layout CustomSlider={<SettingSlider />}>
+    <Layout>
       <Container>
         <Stack spacing={2}>
           <BasicProfile />

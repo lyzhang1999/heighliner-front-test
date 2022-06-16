@@ -6,13 +6,9 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     loader: 'akamai',
-    path: '/',
+    path: '',
     domains: ['assets-1309519128.cos.ap-hongkong.myqcloud.com']
   },
-  // images: {
-  //   loader: 'akamai',
-  //   path: '/',
-  // },
   compress: true,
   typescript: {
     ignoreBuildErrors: true,
@@ -24,9 +20,10 @@ const nextConfig = {
     config.resolve.alias['@'] = path.resolve(__dirname, './src');
 
     config.module.rules.push({
-      test: /\.svg$/,
-      use: ["@svgr/webpack"]
-    });
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
+    })
 
     config.module.rules.push({
       test: /\.(woff|woff2|ttf)$/,

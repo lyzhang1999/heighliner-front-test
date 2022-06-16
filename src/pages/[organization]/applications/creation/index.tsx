@@ -29,6 +29,7 @@ import {useRouter} from "next/router";
 import {Context} from "@/utils/store";
 import {get} from "lodash-es";
 import {getOrganizationNameByUrl} from "@/utils/utils";
+import { GinIcon, NextIcon, RemixIcon, SpringIcon, VueIcon } from "@/utils/CDN";
 
 type FieldsDataType = typeof DefaultFieldsData;
 
@@ -57,14 +58,6 @@ const DefaultFieldsData = {
   [fieldsMap.gitProvider.name]: "",
   [fieldsMap.domain.name]: "",
 };
-
-const [GinIcon, NextIcon, SpringIcon, VueIcon, RemixIcon] = [
-  "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/Gin%403x.webp",
-  "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/Nextjs%403x.webp",
-  "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/Spring%403x.webp",
-  "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/Vue%403x.webp",
-  "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/Remix%403x.webp",
-];
 
 const stacksMap: { [index: string]: string[] } = {
   ["gin-next"]: [GinIcon, NextIcon],
@@ -231,7 +224,7 @@ export default function Index(): React.ReactElement {
                               alt="Without Heighliner"
                               width={35}
                               height={35}
-                              loader={({src}) => src}
+                              // loader={({src}) => src}
                               // layout="fill"
                             />
                           }
@@ -239,7 +232,7 @@ export default function Index(): React.ReactElement {
                             <Image
                               src={icons[1]}
                               alt="Without Heighliner"
-                              loader={({src}) => src}
+                              // loader={({src}) => src}
                               width={35}
                               height={35}
                               // layout="fill"

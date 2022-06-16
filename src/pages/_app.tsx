@@ -3,7 +3,7 @@ import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {useRouter} from "next/router";
 
-import {initState, Context, reducer} from "@/utils/store";
+import {initState, Context, reducer, OrganizationType} from "@/utils/store";
 import {ThemeProvider} from '@mui/material/styles';
 
 import '@/styles/globals.scss';

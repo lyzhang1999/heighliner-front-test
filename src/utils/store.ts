@@ -18,15 +18,10 @@ export interface OrganizationType {
   type: string
 }
 
-// export interface State {
-//   organizationList?: OrgList[],
-//   currentOrganization?: object | OrganizationType
-// }
-
 export const initState: State = {
   organizationList: [],
   currentOrganization: null,
-  menuSpread: false,
+  menuSpread: true,
 }
 
 export const reducer = (state: State, params: State) => {

@@ -11,6 +11,7 @@ import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import Image from "next/image";
 import { GinIcon, SpringIcon, VueIcon } from "@/utils/CDN";
+import RepoList from "@/components/RepoList";
 
 enum TabItemLabels {
   Code = "Code",
@@ -81,6 +82,8 @@ export default function Panel(): React.ReactElement {
           ))}
         </Stack>
       </Stack>
+
+      <RepoList/>
     </Layout>
   );
 }

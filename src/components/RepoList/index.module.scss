@@ -1,0 +1,30 @@
+
+.repoListWrapper {
+  display: flex;
+  width: 100%;
+
+  .repoItem {
+    background-color: #fff;
+    margin: 0 12px;
+    box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
+    border-radius: 25px;
+    width: 305px;
+
+    .header {
+      margin: 19px 17px 0 17px;
+      display: flex;
+      justify-content: space-between;
+
+      .name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #000;
+      }
+      .icon{
+        width: 15px;
+        height: 15px;
+
+      }
+    }
+  }
+}

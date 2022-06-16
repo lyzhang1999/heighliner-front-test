@@ -4,6 +4,7 @@ import React, {useContext} from "react";
 import {Context} from "@/utils/store";
 import {useRouter} from "next/router";
 import {isBrowser} from "@/utils/utils";
+import cookie from "@/utils/cookie";
 
 function isActiveNav(currentPath: string) {
   if (isBrowser()) {
@@ -18,6 +19,7 @@ interface MenuProps {
   icon: string,
   href: string,
   name: string,
+  isLogout?: boolean
 }
 
 export default function MenuItem({list}: { list: MenuProps[] }) {
@@ -27,6 +29,17 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
 
   function setSpread() {
     dispatch({menuSpread: !menuSpread})
+  }
+
+  function handleClick(isLogout: boolean | undefined, href: string, isPop: boolean | undefined) {
+    if (isLogout) {
+      if (isPop) {
+        cookie.delCookie('token');
+        router.push('/login');
+      }
+    } else {
+      router.push(href)
+    }
   }
 
   return (
@@ -41,22 +54,24 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
               menuSpread && styles.spreadMenuItem
             )}
                  key={item.name}
-                 onClick={() => router.push(item.href)}
+                 onClick={() => handleClick(item.isLogout, item.href, false)}
             >
               <div className={styles.iconWrapper}>
                 <img src={isActive ? item.activeIcon : item.icon} alt="" className={styles.menuIcon}/>
                 {
-                  menuSpread &&
+                  menuSpread && !item.isLogout &&
                   <div className={styles.spreadName}>
                     {item.name}
                   </div>
                 }
               </div>
               {
-                !menuSpread &&
+                (!menuSpread || item.isLogout) &&
                 <div className={styles.nameWrapper}>
                   <div className={styles.nameList}>
-                    <div className={styles.nameItem} onClick={() => router.push(item.href)}>
+                    <div className={styles.nameItem}
+                         onClick={() => handleClick(item.isLogout, item.href, true)}
+                    >
                       {item.name}
                     </div>
                   </div>

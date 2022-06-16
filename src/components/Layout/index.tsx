@@ -1,7 +1,8 @@
 import react, {ReactElement, useState} from 'react';
 
-import Header from './Header'
-import Slider from './Slider'
+import Header from './Header';
+import Slider from './Slider';
+import Menu from './Menu';
 
 import styles from './index.module.scss';
 
@@ -16,9 +17,9 @@ interface HomeProps {
 const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider}: HomeProps): react.ReactElement => {
   return (
     <div>
-      <div className={styles.header}>
-        <Header/>
-      </div>
+      {/*<div className={styles.header}>*/}
+      {/*  <Header/>*/}
+      {/*</div>*/}
       {
         hiddenContent ?
           children
@@ -26,7 +27,8 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider
           <div className={styles.contentWrappper}>
             <div className={styles.content}>
               <div className={styles.left}>
-                {CustomSlider ?? <Slider/>}
+                {/*{CustomSlider ?? <Slider/>}*/}
+                <Menu/>
               </div>
               <div className={styles.center}>
                 {
@@ -40,8 +42,6 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider
                 }
                 {children}
               </div>
-              {/*<div className={styles.right}>*/}
-              {/*</div>*/}
             </div>
           </div>
       }

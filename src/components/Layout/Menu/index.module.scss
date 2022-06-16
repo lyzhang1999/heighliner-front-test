@@ -1,0 +1,134 @@
+
+.menu {
+  width: 80px;
+  transition: all .3s linear;
+
+
+  .logWrapper {
+    width: 34px;
+    height: 34px;
+    //margin: 28px auto 0 auto;
+    margin-top: 28px;
+    margin-left: 22px;
+    border: solid 1px #e9e9ea;
+
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .logo {
+      width: 34px;
+      border-radius: 4px;
+    }
+  }
+
+
+  .menuList {
+    height: calc(100% - 100px);
+
+    .activeMenu {
+      border-right: 2px solid #16111e;
+
+      .iconWrapper {
+        background-color: #000;
+      }
+    }
+
+    .menuItem {
+      margin: 10px 0;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .iconWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 7px;
+
+        .menuIcon {
+          width: 19px;
+          height: 17px;
+        }
+      }
+
+      &:hover {
+        .nameWrapper {
+          display: block;
+        }
+      }
+
+      .nameWrapper {
+        display: none;
+        left: 80px;
+        top: -4px;
+        position: absolute;
+
+        .nameList {
+          margin-left: 6px;
+          background-color: #fff;
+          cursor: pointer;
+
+          .nameItem {
+            padding: 10px;
+            white-space: nowrap;
+          }
+
+          &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translate(0%, -50%);
+            border-left: 0;
+            border-bottom: 6px solid transparent;
+            border-top: 6px solid transparent;
+            border-right: 6px solid #fff;
+          }
+        }
+      }
+    }
+
+    .spreadMenu {
+      width: 100%;
+      justify-content: flex-start;
+      padding-left: 22px;
+
+      .iconWrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 24px;
+
+        .spreadName {
+          margin-left: 27px;
+          color: #959595;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .spreadMenu.activeMenu {
+      .iconWrapper {
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+
+        .spreadName {
+          color: #fff;
+          word-break: keep-all;
+        }
+      }
+    }
+  }
+}
+
+.spreadMenu {
+  width: 250px;
+}

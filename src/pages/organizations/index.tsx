@@ -99,7 +99,7 @@ const Organizations = () => {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">{formatDate(row.created_at)}</TableCell>
+                  <TableCell align="right">{formatDate(row.created_at * 1000)}</TableCell>
                   <TableCell align="right">{member_type}</TableCell>
 
                   <TableCell align="right">

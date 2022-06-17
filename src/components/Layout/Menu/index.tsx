@@ -8,6 +8,9 @@ import MenuItem from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import {OrgList} from "@/utils/api/org";
 import {find} from "lodash-es";
+import cookie from "@/utils/cookie";
+import {useRouter} from "next/router";
+
 
 const menuList = [
   // {
@@ -50,24 +53,24 @@ const bottomList = [
   //   name: "Help",
   // },
   {
-    activeIcon: "/img/slider/homeActive.svg",
-    icon: "/img/slider/home.svg",
+    activeIcon: "/img/slider/icon10Active.svg",
+    icon: "/img/slider/icon10.svg",
     href: `/organizations`,
     name: "Organizations",
   },
   {
-    activeIcon: "/img/slider/icon5Active.svg",
-    icon: "/img/slider/icon5.svg",
+    activeIcon: "/img/slider/icon11Active.svg",
+    icon: "/img/slider/icon11.svg",
     href: `/settings`,
     name: "Profile",
   },
-  {
-    activeIcon: "/img/slider/icon9.svg",
-    icon: "/img/slider/icon9.svg",
-    href: `/logout`,
-    name: "Logout",
-    isLogout: true,
-  },
+  // {
+  //   activeIcon: "/img/slider/icon9.svg",
+  //   icon: "/img/slider/icon9.svg",
+  //   href: `/logout`,
+  //   name: "Logout",
+  //   isLogout: true,
+  // },
 ];
 
 function isActiveNav(currentPath: string) {
@@ -85,6 +88,7 @@ const Menu = () => {
   const [currentOrg, setCurrentOrg] = useState<number>(-1);
   const {state, dispatch} = useContext(Context);
   const {organizationList, menuSpread, currentOrganization} = state;
+  const router = useRouter();
 
   useEffect(() => {
     let current = find(organizationList, {name: getOrganizationNameByUrl()})
@@ -106,6 +110,11 @@ const Menu = () => {
       location.pathname = `/${encodeURIComponent(name)}/${path}`;
     }
   };
+
+  function logout() {
+    cookie.delCookie('token');
+    router.push('/login');
+  }
 
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
@@ -129,7 +138,7 @@ const Menu = () => {
               }}
               // variant="standard"
               // defaultValue={defaultVal}
-              value={currentOrganization?.org_id}
+              value={Number(currentOrganization?.org_id)}
             >
               {(organizationList as OrgList[]).map((item) => {
                 return (
@@ -154,32 +163,24 @@ const Menu = () => {
           list={bottomList}
         />
       </div>
-      {/*{*/}
-      {/*  !menuSpread && <div className={styles.spreadAction}>*/}
-      {/*    <img src="/img/slider/icon2.svg" alt="" onClick={setSpread}/>*/}
-      {/*  </div>*/}
-      {/*}*/}
-
-      {/*<div className={styles.userInfo}>*/}
-      {/*  <div className={styles.left}>*/}
-      {/*    <img src="/img/slider/icon9.svg" alt=""/>*/}
-      {/*  </div>*/}
-      {/*  {*/}
-      {/*    menuSpread && <div className={styles.right}>*/}
-      {/*      <img src="/img/slider/spreadRight.svg" alt=""/>*/}
-      {/*    </div>*/}
-      {/*  }*/}
-      {/*</div>*/}
-
-      {
-
-        <div className={clsx(styles.spreadAction, menuSpread && styles.remote)}>
-          {/*<img src={!menuSpread ? "/img/slider/spreadLeft.svg" : "/img/slider/spreadRight.svg"} alt=""*/}
-          {/*     onClick={setSpread}/>*/}
-          <img src={"/img/slider/spreadLeft.svg"} alt=""
-               onClick={setSpread}/>
+      <div className={styles.userInfo}>
+        <div className={styles.left}>
+          <img src="/img/slider/icon9.svg" alt=""/>
+          <div className={styles.nameWrapper}>
+            <div className={styles.nameList}>
+              <div className={styles.nameItem}
+                   onClick={() => logout}
+              >
+                Logout
+              </div>
+            </div>
+          </div>
         </div>
-      }
+      </div>
+      <div className={clsx(styles.spreadAction)} onClick={setSpread}>
+        <img src={!menuSpread ? "/img/slider/spreadLeft.svg" : "/img/slider/spreadRight.svg"} alt=""
+        />
+      </div>
     </div>
   )
 }

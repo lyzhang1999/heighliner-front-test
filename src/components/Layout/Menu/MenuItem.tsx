@@ -22,6 +22,13 @@ interface MenuProps {
   isLogout?: boolean
 }
 
+
+// export function Pop(str){
+//   return (
+//
+//   )
+// }
+
 export default function MenuItem({list}: { list: MenuProps[] }) {
 
   const {state: {menuSpread}, dispatch} = useContext(Context);
@@ -56,7 +63,7 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
                  key={item.name}
                  onClick={() => handleClick(item.isLogout, item.href, false)}
             >
-              <div className={styles.iconWrapper}>
+              <div className={clsx(styles.iconWrapper, item.isLogout, )}>
                 <img src={isActive ? item.activeIcon : item.icon} alt="" className={styles.menuIcon}/>
                 {
                   menuSpread && !item.isLogout &&

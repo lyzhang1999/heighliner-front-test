@@ -165,7 +165,7 @@ const Menu = () => {
           <div className={styles.nameWrapper}>
             <div className={styles.nameList}>
               <div className={styles.nameItem}
-                   onClick={() => logout}
+                   onClick={logout}
               >
                 Logout
               </div>

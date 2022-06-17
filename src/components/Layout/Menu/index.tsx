@@ -111,7 +111,7 @@ const Menu = () => {
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
       <div className={styles.logoWrapper}>
         <div className={styles.logo}>
-          <img src="/img/logo/sliderlogo.png" alt="logo" onClick={setSpread}/>
+          <img src="/img/logo/sliderlogo.png" alt="logo"/>
         </div>
         {
           menuSpread &&
@@ -146,28 +146,6 @@ const Menu = () => {
           </div>
         }
       </div>
-
-      {/*<div className={styles.org}>*/}
-      {/*  <div className={styles.imgWrapper}>*/}
-      {/*    <img src="https://ui-avatars.com/api/?name=fewfewqfew&background=random"/>*/}
-      {/*    {*/}
-      {/*      !menuSpread &&*/}
-      {/*      <div className={styles.nameWrapper}>*/}
-      {/*        <div className={styles.nameList}>*/}
-      {/*          <div className={styles.nameItem}*/}
-      {/*               // onClick={() => handleClick(item.isLogout, item.href, true)}*/}
-      {/*          >*/}
-      {/*            test*/}
-
-      {/*            /!*{item.name}*!/*/}
-      {/*          </div>*/}
-      {/*        </div>*/}
-      {/*      </div>*/}
-      {/*    }*/}
-      {/*  </div>*/}
-
-      {/*</div>*/}
-      {/*<img src="https://ui-avatars.com/api/?name=John+Doe">*/}
       <div className={styles.menuList}>
         <MenuItem
           list={menuList}
@@ -176,6 +154,32 @@ const Menu = () => {
           list={bottomList}
         />
       </div>
+      {/*{*/}
+      {/*  !menuSpread && <div className={styles.spreadAction}>*/}
+      {/*    <img src="/img/slider/icon2.svg" alt="" onClick={setSpread}/>*/}
+      {/*  </div>*/}
+      {/*}*/}
+
+      {/*<div className={styles.userInfo}>*/}
+      {/*  <div className={styles.left}>*/}
+      {/*    <img src="/img/slider/icon9.svg" alt=""/>*/}
+      {/*  </div>*/}
+      {/*  {*/}
+      {/*    menuSpread && <div className={styles.right}>*/}
+      {/*      <img src="/img/slider/spreadRight.svg" alt=""/>*/}
+      {/*    </div>*/}
+      {/*  }*/}
+      {/*</div>*/}
+
+      {
+
+        <div className={clsx(styles.spreadAction, menuSpread && styles.remote)}>
+          {/*<img src={!menuSpread ? "/img/slider/spreadLeft.svg" : "/img/slider/spreadRight.svg"} alt=""*/}
+          {/*     onClick={setSpread}/>*/}
+          <img src={"/img/slider/spreadLeft.svg"} alt=""
+               onClick={setSpread}/>
+        </div>
+      }
     </div>
   )
 }

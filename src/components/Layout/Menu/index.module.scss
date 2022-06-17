@@ -7,11 +7,10 @@
   background-color: #fff;
 
   .logoWrapper {
-
-    padding-top: 28px;
+    padding-top: 20px;
     padding-left: 22px;
-    padding-bottom: 28px;
-    height: 115px;
+    padding-bottom: 20px;
+    height: 80px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -57,21 +56,7 @@
   width: 250px;
 }
 
-//.org{
-//  .imgWrapper{
-//    img{
-//      width: 34px;
-//      height: 34px;
-//      //margin-top: 28px;
-//      //margin-left: 22px;
-//    }
-//  }
-//}
-
-
-.menuItem,
-  //.org
-{
+.menuItem {
   margin: 10px 0;
   cursor: pointer;
   position: relative;
@@ -109,7 +94,7 @@
       margin-left: 6px;
       background-color: #fff;
       cursor: pointer;
-      box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
+      box-shadow: 0 1px 4px 0 rgba(145, 157, 174, 0.5);
 
       .nameItem {
         padding: 10px;
@@ -149,6 +134,12 @@
       white-space: nowrap;
     }
   }
+
+  .logoutWrapper {
+    .iconWrapper {
+      width: 50px;
+    }
+  }
 }
 
 .spreadMenuItem.activeMenu {
@@ -162,3 +153,26 @@
     }
   }
 }
+
+.userInfo {
+  padding-left: 31px;
+  transform: rotate(-180deg);
+}
+
+.spreadAction {
+  //padding-left: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .3s linear;
+  width: 80px;
+}
+
+.remote {
+  transform: rotate(-180deg);
+}
+
+
+
+

@@ -7,43 +7,16 @@ import {Context} from "@/utils/store";
 import MenuItem from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import {OrgList} from "@/utils/api/org";
-import {find} from "lodash-es";
+import {find, omit} from "lodash-es";
 import cookie from "@/utils/cookie";
 import {useRouter} from "next/router";
 
 
-const menuList = [
-  // {
-  //   activeIcon: "/img/slider/homeActive.svg",
-  //   icon: "/img/slider/home.svg",
-  //   href: `/${getOrganizationNameByUrl()}/home`,
-  //   name: "Home",
-  // },
-  {
-    activeIcon: "/img/slider/icon2Active.svg",
-    icon: "/img/slider/icon2.svg",
-    href: `/${getOrganizationNameByUrl()}/applications`,
-    name: "Applications",
-  },
-  {
-    activeIcon: "/img/slider/icon3Active.svg",
-    icon: "/img/slider/icon3.svg",
-    href: `/${getOrganizationNameByUrl()}/clusters`,
-    name: "Clusters",
-  },
-  {
-    activeIcon: "/img/slider/icon6Active.svg",
-    icon: "/img/slider/icon6.svg",
-    href: `/${getOrganizationNameByUrl()}/gitProvider`,
-    name: "Git Provider",
-  },
-  {
-    activeIcon: "/img/slider/icon7Active.svg",
-    icon: "/img/slider/icon7.svg",
-    href: `/${getOrganizationNameByUrl()}/teams`,
-    name: "Teams",
-  },
-];
+
+
+// function getMenulist(str: {
+//
+// })
 
 const bottomList = [
   // {
@@ -90,6 +63,7 @@ const Menu = () => {
 
   const {state, dispatch} = useContext(Context);
   const {organizationList, menuSpread, currentOrganization} = state;
+  let {name} = currentOrganization;
   const router = useRouter();
   //
   // useEffect(() => {
@@ -115,8 +89,8 @@ const Menu = () => {
     let selectItem = find(organizationList, {id: event.target.value});
     if (selectItem) {
       let {name} = selectItem;
-      let path = location.pathname.split("/")[2];
-      location.pathname = `/${encodeURIComponent(name)}/${path}`;
+      dispatch({currentOrganization: omit({...selectItem, ...selectItem.member}, 'member')})
+      router.push(`/${encodeURIComponent(name)}/applications`)
     }
   };
 
@@ -124,6 +98,67 @@ const Menu = () => {
     cookie.delCookie('token');
     router.push('/login');
   }
+
+  const menuList = [
+    // {
+    //   activeIcon: "/img/slider/homeActive.svg",
+    //   icon: "/img/slider/home.svg",
+    //   href: `/${getOrganizationNameByUrl()}/home`,
+    //   name: "Home",
+    // },
+    {
+      activeIcon: "/img/slider/icon2Active.svg",
+      icon: "/img/slider/icon2.svg",
+      href: `/${name}/applications`,
+      name: "Applications",
+    },
+    {
+      activeIcon: "/img/slider/icon3Active.svg",
+      icon: "/img/slider/icon3.svg",
+      href: `/${name}/clusters`,
+      name: "Clusters",
+    },
+    {
+      activeIcon: "/img/slider/icon6Active.svg",
+      icon: "/img/slider/icon6.svg",
+      href: `/${name}/gitProvider`,
+      name: "Git Provider",
+    },
+    {
+      activeIcon: "/img/slider/icon7Active.svg",
+      icon: "/img/slider/icon7.svg",
+      href: `/${name}/teams`,
+      name: "Teams",
+    },
+  ];
+
+  const bottomList = [
+    // {
+    //   activeIcon: "/img/slider/icon7Active.svg",
+    //   icon: "/img/slider/icon7.svg",
+    //   href: `/organizations`,
+    //   name: "Help",
+    // },
+    {
+      activeIcon: "/img/slider/icon10Active.svg",
+      icon: "/img/slider/icon10.svg",
+      href: `/organizations`,
+      name: "Organizations",
+    },
+    {
+      activeIcon: "/img/slider/icon11Active.svg",
+      icon: "/img/slider/icon11.svg",
+      href: `/settings`,
+      name: "Profile",
+    },
+    // {
+    //   activeIcon: "/img/slider/icon9.svg",
+    //   icon: "/img/slider/icon9.svg",
+    //   href: `/logout`,
+    //   name: "Logout",
+    //   isLogout: true,
+    // },
+  ];
 
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>

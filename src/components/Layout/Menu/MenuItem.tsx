@@ -1,6 +1,6 @@
 import styles from './index.module.scss';
 import clsx from "clsx";
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "@/utils/store";
 import {useRouter} from "next/router";
 import {isBrowser} from "@/utils/utils";
@@ -22,21 +22,10 @@ interface MenuProps {
   isLogout?: boolean
 }
 
-
-// export function Pop(str){
-//   return (
-//
-//   )
-// }
-
 export default function MenuItem({list}: { list: MenuProps[] }) {
 
   const {state: {menuSpread}, dispatch} = useContext(Context);
   const router = useRouter();
-
-  function setSpread() {
-    dispatch({menuSpread: !menuSpread})
-  }
 
   function handleClick(isLogout: boolean | undefined, href: string, isPop: boolean | undefined) {
     if (isLogout) {
@@ -53,7 +42,7 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
     <div>
       {
         list.map((item, index) => {
-          let isActive = (isActiveNav(item.href));
+          let isActive = isActiveNav(item.href);
           return (
             <div className={clsx(
               styles.menuItem,
@@ -63,7 +52,7 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
                  key={item.name}
                  onClick={() => handleClick(item.isLogout, item.href, false)}
             >
-              <div className={clsx(styles.iconWrapper, item.isLogout, )}>
+              <div className={clsx(styles.iconWrapper, item.isLogout,)}>
                 <img src={isActive ? item.activeIcon : item.icon} alt="" className={styles.menuIcon}/>
                 {
                   menuSpread && !item.isLogout &&

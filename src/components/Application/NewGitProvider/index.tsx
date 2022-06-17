@@ -92,7 +92,6 @@ export default function NewGitProvider({
                   maxRows={4}
                   value={gitProviderOrgName}
                   onChange={changeGitProviderOrgNameHandler}
-                  color="success"
                 />
               </div>
               <div>
@@ -101,7 +100,6 @@ export default function NewGitProvider({
                   multiline
                   rows={8}
                   value={token}
-                  color="success"
                   onChange={changeTokenHandler}
                 />
               </div>

@@ -19,6 +19,20 @@ export function getOriIdByContext(): string {
   }
 }
 
+export function getOriIdNameByContext(): string {
+  if (isBrowser()) {
+    let result = GlobalContxtRef.current?.getState('currentOrganization');
+    if (result) {
+      let {name} = result;
+      return name;
+    } else {
+      return '';
+    }
+  } else {
+    return '';
+  }
+}
+
 export function getOrganizationNameByUrl(): string {
   if (isBrowser()) {
     let url = location.href;

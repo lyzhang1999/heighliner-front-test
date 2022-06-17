@@ -3,7 +3,8 @@ import { MemberType, OrgList } from './api/org'
 
 export interface State {
   organizationList?: any[],
-  currentOrganization?: OrganizationType | null
+  currentOrganization?: OrganizationType | null,
+  menuSpread?: boolean
 }
 
 export interface OrganizationType {
@@ -17,14 +18,10 @@ export interface OrganizationType {
   type: string
 }
 
-// export interface State {
-//   organizationList?: OrgList[],
-//   currentOrganization?: object | OrganizationType
-// }
-
 export const initState: State = {
   organizationList: [],
-  currentOrganization: null
+  currentOrganization: null,
+  menuSpread: true,
 }
 
 export const reducer = (state: State, params: State) => {

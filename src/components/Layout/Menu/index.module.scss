@@ -1,0 +1,256 @@
+@mixin fadeIn {
+  animation: fade-in ease 1s;
+  animation-fill-mode: forwards;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.selectIcon {
+  position: absolute;
+  background-color: #fff;
+  top: 12px;
+  left: 210px;
+  cursor: pointer;
+
+  img {
+    width: 13px;
+    height: 8px;
+  }
+}
+
+
+.rotate {
+  transform: rotate(-180deg);
+}
+
+.menu {
+  width: 80px;
+  transition: all .3s linear;
+  border-bottom-right-radius: 14px;
+  border-top-right-radius: 14px;
+  background-color: #fff;
+
+  .logoWrapper {
+    padding-left: 22px;
+    margin-top: 20px;
+    height: 50px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    input, fieldset {
+      border: 0px !important;
+    }
+
+    svg {
+      display: none;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: solid 1px #e9e9ea;
+
+      img {
+        width: 34px;
+      }
+    }
+  }
+
+  .menuList {
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.spreadMenu {
+  width: 250px;
+}
+
+.menuItem {
+  margin: 10px 0;
+  cursor: pointer;
+  position: relative;
+  padding-left: 22px;
+  width: 100%;
+
+  .iconWrapper {
+    display: flex;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    padding-left: 8px;
+    border-radius: 7px;
+
+    .menuIcon {
+      width: 19px;
+      height: 17px;
+      min-width: 19px;
+    }
+  }
+
+  &:hover {
+    .iconWrapper {
+      border-radius: 7px;
+      border: solid 2px #e3e6ff;
+      padding-left: 6px;
+      background-color: rgba(242, 244, 255, 0.8);
+    }
+
+    .nameWrapper {
+      display: block;
+    }
+  }
+
+}
+
+.nameWrapper {
+  display: none;
+  left: 80px;
+  top: 0px;
+  position: absolute;
+
+  .nameList {
+    margin-left: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 4px 0 rgba(145, 157, 174, 0.5);
+
+    .nameItem {
+      padding: 8px;
+      white-space: nowrap;
+      color: #212d40;
+      font-size: 14px;
+    }
+
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(0%, -50%);
+      border-left: 0;
+      border-bottom: 6px solid transparent;
+      border-top: 6px solid transparent;
+      border-right: 6px solid #fff;
+    }
+  }
+}
+
+.activeMenu.menuItem {
+  border-right: 2px solid #16111e;
+
+  .iconWrapper {
+    border-width: 0px;
+    background-color: #000;
+    padding-left: 8px;
+  }
+}
+
+.spreadMenuItem {
+  justify-content: flex-start;
+
+  .iconWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 8px;
+
+    .spreadName {
+      margin-left: 27px;
+      color: #959595;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+  }
+
+  .logoutWrapper {
+    .iconWrapper {
+      width: 50px;
+    }
+  }
+}
+
+.spreadMenuItem.activeMenu {
+  .iconWrapper {
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+
+    .spreadName {
+      color: #fff;
+      word-break: keep-all;
+    }
+  }
+}
+
+
+.userInfo {
+  padding-left: 22px;
+  position: relative;
+
+  &:hover {
+    .nameWrapper {
+      display: block;
+    }
+  }
+
+  .left {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    img {
+      width: 19px;
+      height: 19px;
+    }
+
+    &:hover {
+      border-radius: 7px;
+      border: solid 2px #e3e6ff;
+      background-color: rgba(242, 244, 255, 0.8);
+    }
+  }
+}
+
+
+.spreadAction {
+  margin: 10px 0 10px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+
+  &:hover {
+    border-radius: 7px;
+    border: solid 2px #e3e6ff;
+    background-color: rgba(242, 244, 255, 0.8);
+  }
+}
+
+
+
+
+

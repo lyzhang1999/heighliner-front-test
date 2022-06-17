@@ -60,12 +60,12 @@ const Organizations = () => {
   }
 
   return (
-    <Layout hiddenContent>
+    <Layout>
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.left}>
             <div className={styles.title}>
-              Hey Devloper!
+              Hey Developer!
             </div>
             <div className={styles.desc}>
               Here’s the list of your organizations

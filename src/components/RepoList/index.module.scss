@@ -1,0 +1,87 @@
+$margin: 17px;
+
+.repoListWrapper {
+  display: flex;
+  width: 100%;
+
+  .repoItem {
+    background-color: #fff;
+    margin: 0 12px;
+    box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
+    border-radius: 25px;
+    width: 305px;
+
+    .header {
+      margin: 19px $margin 0 $margin;
+      display: flex;
+      justify-content: space-between;
+
+      .name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #000;
+      }
+
+      .icon {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+      }
+    }
+
+    .tags {
+      font-size: 12px;
+      margin: 10px $margin;
+
+      .github {
+        width: 15px;
+        height: 15px;
+      }
+
+      .line {
+        color: #d9d9d9;
+        margin-left: 4px;
+        margin-right: 7px;
+      }
+
+      .tag {
+        color: #202d40;
+      }
+    }
+
+    .lineCenter {
+      height: 2px;
+      background-color: #eeeff2;
+    }
+
+    .prs {
+      margin: 6px $margin;
+      display: flex;
+
+      .left {
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.17px;
+        text-align: left;
+        color: #7368db;
+        width: 70px;
+      }
+
+      .right {
+        flex-grow: 1;
+        flex-shrink: 1;
+
+        .prsItem {
+          color: #202d40;
+          font-size: 11px;
+          margin-bottom: 10px;
+
+          .commitMessage {
+            color: #919DAE;
+          }
+        }
+      }
+    }
+  }
+}

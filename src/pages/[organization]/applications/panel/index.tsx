@@ -13,6 +13,7 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 import { GinIcon, SpringIcon, VueIcon } from "@/utils/CDN";
 import DevEnvironment from "@/components/Application/Panel/DevEnvironment";
+import RepoList from "@/components/RepoList";
 
 enum TabItemLabels {
   Code = "Code",
@@ -94,6 +95,7 @@ export default function Panel(): React.ReactElement {
           <DevEnvironment />
         </Stack>
         <p className={styles.title}>Repositories</p>
+        <RepoList />
       </div>
     </Layout>
   );

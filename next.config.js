@@ -5,8 +5,8 @@ const path = require('path')
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    loader: 'akamai',
-    path: '',
+    // loader: 'akamai',
+    // path: '',
     domains: ['assets-1309519128.cos.ap-hongkong.myqcloud.com']
   },
   compress: true,

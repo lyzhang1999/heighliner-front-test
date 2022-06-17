@@ -1,0 +1,73 @@
+.box {
+  width: 126px;
+  height: 125px;
+  box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
+  border: solid 2px #edf0f3;
+  background-color: #fff;
+  border-radius: 25px;
+
+  .lines {
+    margin-top: 11px;
+    margin-right: 17px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 2px;
+
+    .line {
+      width: 9px;
+      height: 3px;
+      border-radius: 1px;
+      background-color: #9eea91;
+    }
+  }
+
+  .appName {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    gap: 4px;
+    margin-top: 7px;
+
+    svg {
+      margin-top: 2px;
+    }
+
+    .name {
+      width: 49px;
+      line-height: 1.2;
+    }
+  }
+
+  .debug {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+    
+    .name {
+      border: solid 1px #edf0f3;
+      border-radius: 5px;
+      height: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #6c727b;
+      line-height: 1.8;
+      padding-left: -10px;
+    }
+  }
+
+  .operateGroup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 18px;
+
+    svg {
+      box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.8);
+      background-color: #fff;
+    }
+  }
+}

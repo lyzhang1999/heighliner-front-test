@@ -1,0 +1,61 @@
+@import "/src/styles/utils";
+
+.wrap {
+  border-radius: 25px;
+  box-shadow: 0 4px 8px 0 rgba(32, 45, 64, 0.25);
+  background-color: #fff;
+  @include setHorizontalPadding(2vw);
+  @include setVerticalPadding(1vw);
+  position: relative;
+
+  .appStatus {
+    color: #38c17d;
+  }
+
+  .appStatusIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include setEqualWidthHeight(19px);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 50%;
+  }
+
+  .infoEntries {
+    margin-left: 30px;
+
+    .title {
+      color: #aaa;
+    }
+
+    .item {
+      color: #326ce5;
+    }
+  }
+
+  .apps {
+    margin-top: 32px;
+  }
+
+  .operator {
+    position: absolute;
+    right: 15px;
+
+  }
+
+}
+
+.operationInMenu {
+  display: none !important; // Menu is under main page
+}
+
+@media screen and (max-width: 1340px) {
+  .operationInRow {
+    display: none;
+  }
+
+  .operationInMenu {
+    display: flex !important; 
+  }
+}

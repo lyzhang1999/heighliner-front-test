@@ -1,16 +1,18 @@
 import DitchTab, { TabItems } from "@/basicComponents/DitchTab";
 import React, { useState } from "react";
-import { Avatar, Box, Stack } from "@mui/material";
+import { Avatar, Box, Container, Stack, Typography } from "@mui/material";
 import clsx from "clsx";
 
 import CodeSVG from "/public/img/application/panel/code.svg";
 import InfiniteSVG from "/public/img/application/panel/infinite.svg";
 import CloudSVG from "/public/img/application/panel/cloud.svg";
+import Running from "/public/img/application/panel/running.svg";
 import Layout from "@/components/Layout";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
 import { GinIcon, SpringIcon, VueIcon } from "@/utils/CDN";
+import DevEnvironment from "@/components/Application/Panel/DevEnvironment";
 
 enum TabItemLabels {
   Code = "Code",
@@ -53,34 +55,46 @@ export default function Panel(): React.ReactElement {
         />
       </Stack>
       <Box className={styles.separator}></Box>
-      <Stack direction="row" justifyContent="space-between">
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          className={styles.appInfo}
-        >
-          <div className={styles.appAvatar}></div>
-          <div className={styles.appName}>My Shop</div>
-          <div className={styles.appStatus}>Running</div>
-        </Stack>
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          className={styles.appInfo}
-        >
-          {techSet.map((tech, index) => (
-            <div className={styles.techIcon} key={index}>
+      <div className={styles.container}>
+        <Stack direction="row" justifyContent="space-between">
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            className={styles.stackInfo}
+          >
+            <div className={styles.stackAvatar}>
               <Image
-                src={tech}
+                src={"/img/application/panel/orgAvatar.svg"}
+                width={24}
+                height={24}
                 alt=""
-                width={25}
-                height={25}
-                // loader={({ src }) => src}
               />
             </div>
-          ))}
+            <div className={styles.stackName}>My Shop</div>
+            <div className={styles.stackStatus}>
+              <Running /> Running
+            </div>
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            gap={"7.3px"}
+            className={styles.stackInfo}
+          >
+            {techSet.map((tech, index) => (
+              <div className={styles.techIcon} key={index}>
+                <Image src={tech} alt="" width={25} height={25} />
+              </div>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>
+        <p className={styles.title}>Dev Environments</p>
+        <Stack gap="36px">
+          <DevEnvironment />
+          <DevEnvironment />
+        </Stack>
+        <p className={styles.title}>Repositories</p>
+      </div>
     </Layout>
   );
 }

@@ -25,16 +25,12 @@ $margin: 17px;
       .icon {
         width: 15px;
         height: 15px;
-
+        cursor: pointer;
       }
     }
 
     .tags {
-      //margin-right: $margin;
-      //margin-left: $margin;
-      //margin-top: 10px;
       font-size: 12px;
-      //margin-bottom: 10px;
       margin: 10px $margin;
 
       .github {
@@ -55,7 +51,6 @@ $margin: 17px;
 
     .lineCenter {
       height: 2px;
-      //margin: 92.5px 29px 158.5px 29px;
       background-color: #eeeff2;
     }
 

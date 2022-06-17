@@ -1,3 +1,19 @@
+.selectIcon {
+  position: absolute;
+  background-color: #fff;
+  top: 12px;
+  right: 40px;
+  cursor: pointer;
+
+  img {
+    width: 13px;
+    height: 8px;
+  }
+}
+
+.rotate {
+  transform: rotate(-180deg);
+}
 
 .menu {
   width: 80px;
@@ -13,6 +29,7 @@
     overflow: hidden;
     display: flex;
     align-items: center;
+    position: relative;
 
     input, fieldset {
       border: 0px !important;

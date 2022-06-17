@@ -85,22 +85,31 @@ let defaultVal: null | string = null;
 
 
 const Menu = () => {
-  const [currentOrg, setCurrentOrg] = useState<number>(-1);
+  // const [currentOrg, setCurrentOrg] = useState<number>(-1);
+  const [open, setOpen] = useState(false);
+
   const {state, dispatch} = useContext(Context);
   const {organizationList, menuSpread, currentOrganization} = state;
   const router = useRouter();
-
-  useEffect(() => {
-    let current = find(organizationList, {name: getOrganizationNameByUrl()})
-    if (current) {
-      setCurrentOrg(current.id);
-    }
-  }, [currentOrganization, organizationList])
-
+  //
+  // useEffect(() => {
+  //   let current = find(organizationList, {name: getOrganizationNameByUrl()})
+  //   if (current) {
+  //     setCurrentOrg(current.id);
+  //   }
+  // }, [currentOrganization, organizationList])
 
   function setSpread() {
     dispatch({menuSpread: !menuSpread})
   }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleChange = (event: SelectChangeEvent) => {
     let selectItem = find(organizationList, {id: event.target.value});
@@ -116,6 +125,8 @@ const Menu = () => {
     router.push('/login');
   }
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
       <div className={styles.logoWrapper}>
@@ -125,21 +136,22 @@ const Menu = () => {
         {
           menuSpread &&
           <div className={styles.changeOrg}>
+
             <Select
               onChange={handleChange}
+              open={open}
+              onClose={handleClose}
+              onOpen={handleOpen}
               sx={{
                 width: "160px",
                 height: "40px",
-                // fontSize: "14px",
+                fontSize: "14px",
                 color: "#212d40",
-                // fontWeight: "300",
-                // lineHight: "40px",
                 marginLeft: "6px"
               }}
-              // variant="standard"
-              // defaultValue={defaultVal}
               value={Number(currentOrganization?.org_id)}
             >
+
               {(organizationList as OrgList[]).map((item) => {
                 return (
                   <SelectMenuItem
@@ -152,6 +164,9 @@ const Menu = () => {
                 );
               })}
             </Select>
+            <div className={clsx(styles.selectIcon)} onClick={handleOpen}>
+              <img src="/img/slider/selcetIcon.webp" alt="" className={open && styles.rotate}/>
+            </div>
           </div>
         }
       </div>

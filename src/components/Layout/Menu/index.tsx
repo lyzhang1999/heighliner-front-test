@@ -1,8 +1,7 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import clsx from 'clsx';
 
 import styles from './index.module.scss';
-import {getOrganizationNameByUrl, getOriIdByContext, isBrowser} from "@/utils/utils";
 import {Context} from "@/utils/store";
 import MenuItem from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
@@ -10,68 +9,13 @@ import {OrgList} from "@/utils/api/org";
 import {find, omit} from "lodash-es";
 import cookie from "@/utils/cookie";
 import {useRouter} from "next/router";
-
-
-
-
-// function getMenulist(str: {
-//
-// })
-
-const bottomList = [
-  // {
-  //   activeIcon: "/img/slider/icon7Active.svg",
-  //   icon: "/img/slider/icon7.svg",
-  //   href: `/organizations`,
-  //   name: "Help",
-  // },
-  {
-    activeIcon: "/img/slider/icon10Active.svg",
-    icon: "/img/slider/icon10.svg",
-    href: `/organizations`,
-    name: "Organizations",
-  },
-  {
-    activeIcon: "/img/slider/icon11Active.svg",
-    icon: "/img/slider/icon11.svg",
-    href: `/settings`,
-    name: "Profile",
-  },
-  // {
-  //   activeIcon: "/img/slider/icon9.svg",
-  //   icon: "/img/slider/icon9.svg",
-  //   href: `/logout`,
-  //   name: "Logout",
-  //   isLogout: true,
-  // },
-];
-
-function isActiveNav(currentPath: string) {
-  if (isBrowser()) {
-    return (location.href as string).includes(currentPath);
-  } else {
-    return false;
-  }
-}
-
-let defaultVal: null | string = null;
-
+import {get} from 'lodash-es';
 
 const Menu = () => {
-  // const [currentOrg, setCurrentOrg] = useState<number>(-1);
   const [open, setOpen] = useState(false);
-
   const {state, dispatch} = useContext(Context);
   const {organizationList, menuSpread, currentOrganization} = state;
-  let {name} = currentOrganization;
   const router = useRouter();
-  //
-  // useEffect(() => {
-  //   let current = find(organizationList, {name: getOrganizationNameByUrl()})
-  //   if (current) {
-  //     setCurrentOrg(current.id);
-  //   }
-  // }, [currentOrganization, organizationList])
 
   function setSpread() {
     dispatch({menuSpread: !menuSpread})
@@ -98,6 +42,8 @@ const Menu = () => {
     cookie.delCookie('token');
     router.push('/login');
   }
+
+  let name = get(currentOrganization, 'name', '');
 
   const menuList = [
     // {
@@ -160,6 +106,7 @@ const Menu = () => {
     // },
   ];
 
+  // @ts-ignore
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
       <div className={styles.logoWrapper}>
@@ -182,6 +129,7 @@ const Menu = () => {
                 color: "#212d40",
                 marginLeft: "6px"
               }}
+              // @ts-ignore
               value={Number(currentOrganization?.org_id)}
             >
 

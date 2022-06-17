@@ -112,7 +112,6 @@ const Teams = () => {
 
     getOrgMembers(getOrgMembersReq).then((res) => {
       setOrgMembers(res);
-      console.log(res);
     });
   };
 

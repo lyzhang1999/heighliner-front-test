@@ -10,23 +10,11 @@ import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, roleType} from "@/utils/api/org";
 import {formatDate} from "@/utils/utils";
-import {get} from "lodash-es";
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return {name, calories, fat, carbs, protein};
-}
+import {find, get, omit} from "lodash-es";
 
 const Organizations = () => {
-
   const {state, dispatch} = useContext(Context);
-  let {organizationList} = state;
-
+  let {organizationList, currentOrganization} = state;
 
   const [open, setOpen] = React.useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
@@ -37,20 +25,32 @@ const Organizations = () => {
   const [leaveId, setLeaveId] = useState<number>(0);
 
 
-  function successCb() {
+  function createSuccessCb() {
     updateOriList();
   }
 
   function deleteSuccessCb() {
     updateOriList();
+    checkOrg(deleteID);
   }
 
   function transferSuccessCb() {
     updateOriList();
   }
 
-  function leaveModalCb(){
-    updateOriList()
+  function leaveModalCb() {
+    updateOriList();
+    checkOrg(leaveId);
+  }
+
+  // judage is current organiztion, change to default organization
+  function checkOrg(id: number) {
+    if (get(currentOrganization, 'org_id') === id) {
+      let defaultItem = find(organizationList, {type: "Default"});
+      if (defaultItem) {
+        dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})
+      }
+    }
   }
 
   function updateOriList() {
@@ -151,7 +151,7 @@ const Organizations = () => {
         {...{
           open,
           setOpen,
-          successCb
+          successCb: createSuccessCb
         }}
       />
       <DeleteOrganization

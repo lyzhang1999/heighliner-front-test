@@ -51,9 +51,9 @@ export default function RepoList() {
                 <span className={styles.line}>|</span>
                 <span className={styles.tag}>tags</span>
                 {
-                  item.tags.map(i => {
+                  item.tags.map((i, index) => {
                     return (
-                      <span>
+                      <span key={index}>
                           <span className={styles.line}>|</span>
                           <span className={styles.tag}>{i}</span>
                       </span>

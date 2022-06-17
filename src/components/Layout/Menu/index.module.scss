@@ -1,15 +1,33 @@
+@mixin fadeIn {
+  animation: fade-in ease 1s;
+  animation-fill-mode: forwards;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
 .selectIcon {
   position: absolute;
   background-color: #fff;
   top: 12px;
   right: 40px;
   cursor: pointer;
+  @include fadeIn;
 
   img {
     width: 13px;
     height: 8px;
   }
 }
+
 
 .rotate {
   transform: rotate(-180deg);
@@ -33,6 +51,10 @@
 
     input, fieldset {
       border: 0px !important;
+    }
+
+    svg {
+      display: none;
     }
 
     .logo {

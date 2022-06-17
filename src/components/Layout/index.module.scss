@@ -10,7 +10,7 @@
 }
 
 .content {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   margin: 0 auto;
   width: 100%;
@@ -19,15 +19,13 @@
   .left {
     display: flex;
     justify-content: flex-start;
-
   }
 
-  .center {
-    //background-color: #f4f5fe;
-    //border-left: 1px solid rgb(225, 228, 239);
+  .right {
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
+    overflow-y: scroll;
 
     .pageHeader {
       padding: 24px 24px 16px 24px;

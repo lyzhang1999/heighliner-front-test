@@ -17,20 +17,16 @@ interface HomeProps {
 const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider}: HomeProps): react.ReactElement => {
   return (
     <div>
-      {/*<div className={styles.header}>*/}
-      {/*  <Header/>*/}
-      {/*</div>*/}
-      {
-        hiddenContent ?
-          children
-          :
+      {/*{*/}
+      {/*  hiddenContent ?*/}
+      {/*    children*/}
+      {/*    :*/}
           <div className={styles.contentWrappper}>
             <div className={styles.content}>
               <div className={styles.left}>
-                {/*{CustomSlider ?? <Slider/>}*/}
                 <Menu/>
               </div>
-              <div className={styles.center}>
+              <div className={styles.right}>
                 {
                   pageHeader &&
                   <div className={styles.pageHeader}>
@@ -44,7 +40,7 @@ const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider
               </div>
             </div>
           </div>
-      }
+      {/*}*/}
     </div>
   )
 }

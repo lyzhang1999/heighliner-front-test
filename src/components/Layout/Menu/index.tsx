@@ -125,8 +125,6 @@ const Menu = () => {
     router.push('/login');
   }
 
-  // @ts-ignore
-  // @ts-ignore
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
       <div className={styles.logoWrapper}>
@@ -136,7 +134,7 @@ const Menu = () => {
         {
           menuSpread &&
           <div className={styles.changeOrg}>
-
+            {/* @ts-ignore */}
             <Select
               onChange={handleChange}
               open={open}
@@ -165,7 +163,7 @@ const Menu = () => {
               })}
             </Select>
             <div className={clsx(styles.selectIcon)} onClick={handleOpen}>
-              <img src="/img/slider/selcetIcon.webp" alt="" className={open && styles.rotate}/>
+              <img src="/img/slider/selcetIcon.webp" alt="" className={open ? styles.rotate : ''}/>
             </div>
           </div>
         }

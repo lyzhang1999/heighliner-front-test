@@ -60,24 +60,34 @@ const Organizations = () => {
   }
 
   return (
-    <Layout>
-      <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.left}>
-            <div className={styles.title}>
-              Hey Developer!
-            </div>
-            <div className={styles.desc}>
-              Here’s the list of your organizations
-            </div>
-          </div>
-          <div className={styles.right} onClick={() => {
-            setOpen(true)
-          }}>
-            Create Organization
-          </div>
-        </div>
-      </div>
+    <Layout
+      pageHeader="ORGANIZATIONS"
+      titleContent={(
+        <Button
+          variant="contained"
+          onClick={() => setOpen(true)}
+        >
+          Create a Cluster
+        </Button>
+      )}
+    >
+      {/*<div className={styles.header}>*/}
+      {/*  <div className={styles.headerContent}>*/}
+      {/*    <div className={styles.left}>*/}
+      {/*      <div className={styles.title}>*/}
+      {/*        Hey Developer!*/}
+      {/*      </div>*/}
+      {/*      <div className={styles.desc}>*/}
+      {/*        Here’s the list of your organizations*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*    <div className={styles.right} onClick={() => {*/}
+      {/*      setOpen(true)*/}
+      {/*    }}>*/}
+      {/*      Create Organization*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
       <div className={styles.tableWrapper}>
         <Table sx={{}} aria-label="simple table">
           <TableHead>

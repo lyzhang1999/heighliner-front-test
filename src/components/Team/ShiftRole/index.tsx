@@ -88,6 +88,7 @@ export default function ShiftRole({
               onChange={(event) => {
                 setNewMemberType(event.target.value as MemberType);
               }}
+              size="small"
             >
               <MenuItem value={MemberTypeEnum.Admin}>Admin</MenuItem>
               <MenuItem value={MemberTypeEnum.Member}>Member</MenuItem>

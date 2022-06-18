@@ -149,6 +149,7 @@ export default function BasicProfile(): React.ReactElement {
                     label="Username"
                     value={field.value}
                     onChange={field.onChange}
+                    size="small"
                   ></TextField>
                   <FormHelperText>
                     {errors[BasicProfileFieldMap["username"]] &&

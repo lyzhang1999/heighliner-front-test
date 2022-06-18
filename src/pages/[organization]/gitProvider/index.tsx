@@ -120,7 +120,7 @@ const Clusters = () => {
                   <img src="/img/gitprovider/github.webp" alt="github"/>
                 </div>
                 <div className={styles.content}>
-                  <div className={styles.organiztion}>Organization: {item.git_org_name}</div>
+                  <div className={styles.organiztion}>GitOrganization: {item.git_org_name}</div>
                   <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at * 1000)}</div>
                 </div>
               </div>

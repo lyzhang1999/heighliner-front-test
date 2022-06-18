@@ -89,7 +89,7 @@ export default function NewGitProvider({
                 <TextField
                   label="Git Provider Organization Name"
                   multiline
-                  maxRows={4}
+                  // maxRows={4}
                   value={gitProviderOrgName}
                   onChange={changeGitProviderOrgNameHandler}
                 />
@@ -98,7 +98,7 @@ export default function NewGitProvider({
                 <TextField
                   label="Git Provider Personal Access Token"
                   multiline
-                  rows={8}
+                  // rows={8}
                   value={token}
                   onChange={changeTokenHandler}
                 />

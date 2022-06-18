@@ -75,7 +75,7 @@ const TransferOrganization = (props: Props) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Select a User to Transfer Owner to he/she.
+        Select a user to transfer owner until he or she.
       </DialogTitle>
       <DialogContent id="alert-dialog-title" className={styles.transferTable}>
         <Table aria-label="simple table">

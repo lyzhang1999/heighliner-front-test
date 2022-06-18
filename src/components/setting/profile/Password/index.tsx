@@ -111,6 +111,7 @@ export default function Passwords(): React.ReactElement {
                     type="password"
                     value={field.value}
                     onChange={field.onChange}
+                    size="small"
                   ></TextField>
                   <FormHelperText>
                     {errors[FieldsMap.CurrentPassword] &&
@@ -136,6 +137,7 @@ export default function Passwords(): React.ReactElement {
                     type="password"
                     value={field.value}
                     onChange={field.onChange}
+                    size="small"
                   ></TextField>
                   <FormHelperText>
                     {errors[FieldsMap.NewPassword] &&
@@ -163,6 +165,7 @@ export default function Passwords(): React.ReactElement {
                     type="password"
                     value={field.value}
                     onChange={field.onChange}
+                    size="small"
                   ></TextField>
                   <FormHelperText>
                     {errors[FieldsMap.NewPasswordConfirmation] &&

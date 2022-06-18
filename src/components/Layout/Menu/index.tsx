@@ -10,6 +10,7 @@ import {find, omit} from "lodash-es";
 import cookie from "@/utils/cookie";
 import {useRouter} from "next/router";
 import {get} from 'lodash-es';
+import {getOriNameByContext} from "@/utils/utils";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -45,6 +46,10 @@ const Menu = () => {
   }
 
   let name = get(currentOrganization, 'name', '');
+
+  function goHome() {
+    router.push(`/${getOriNameByContext()}/applications`)
+  }
 
   const menuList = [
     // {
@@ -110,7 +115,7 @@ const Menu = () => {
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
       <div className={styles.logoWrapper}>
-        <div className={styles.logo}>
+        <div className={styles.logo} onClick={goHome}>
           <img src="/img/logo/sliderlogo.png" alt="logo"/>
         </div>
         {

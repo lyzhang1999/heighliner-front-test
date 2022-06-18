@@ -3,8 +3,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import {Button} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
-import {NoticeRef} from "@/components/Notice";
 import {leaveOriApi} from "@/utils/api/org";
+import {Message} from "@/utils/utils";
 
 interface Props {
   leaveModalVisible: boolean,
@@ -22,10 +22,7 @@ const LeavePrganization = (props: Props) => {
 
   function deleteIt() {
     leaveOriApi({org_id: leaveId}).then(res => {
-      NoticeRef.current?.open({
-        message: "Leave Success",
-        type: "success",
-      });
+      Message.success('Leave Success');
       setLeaveModalVisible(false);
       leaveModalCb();
     })

@@ -45,7 +45,7 @@ const Applications = () => {
             <TableRow>
               <TableCell>Name</TableCell>
               {/*<TableCell align="right">Created Time </TableCell>*/}
-              {/*<TableCell align="right">Role</TableCell>*/}
+              <TableCell align="right">Status</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -59,6 +59,10 @@ const Applications = () => {
                 >
                   <TableCell component="th" scope="row">
                     {row.app_name}
+                    {/**/}
+                  </TableCell>
+                  <TableCell align="right">
+                    {get(row, 'last_release.status', '')}
                   </TableCell>
                   <TableCell align="right">
                     <Button

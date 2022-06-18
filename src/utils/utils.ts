@@ -1,33 +1,26 @@
 import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
+import {NoticeRef} from "@/components/Notice";
 
 export function isBrowser() {
   return process.title === "browser";
 }
 
 export function getOriIdByContext(): string {
-  if (isBrowser()) {
-    let result = GlobalContxtRef.current?.getState('currentOrganization');
-    if (result) {
-      let {org_id} = result;
-      return org_id;
-    } else {
-      return '';
-    }
+  let result = GlobalContxtRef.current?.getState('currentOrganization');
+  if (isBrowser() && result) {
+    let {org_id} = result;
+    return org_id;
   } else {
     return '';
   }
 }
 
-export function getOriIdNameByContext(): string {
-  if (isBrowser()) {
-    let result = GlobalContxtRef.current?.getState('currentOrganization');
-    if (result) {
-      let {name} = result;
-      return name;
-    } else {
-      return '';
-    }
+export function getOriNameByContext(): string {
+  let result = GlobalContxtRef.current?.getState('currentOrganization');
+  if (isBrowser() && result) {
+    let {name} = result;
+    return name;
   } else {
     return '';
   }
@@ -94,5 +87,32 @@ export function fileToBase64(file: File) {
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
+}
+
+export const Message = {
+  success: function(str: string){
+    NoticeRef.current?.open({
+      message: str,
+      type: "success",
+    });
+  },
+  error: function(str: string){
+    NoticeRef.current?.open({
+      message: str,
+      type: "error",
+    });
+  },
+  info: function(str: string){
+    NoticeRef.current?.open({
+      message: str,
+      type: "info",
+    });
+  },
+  warning: function(str: string){
+    NoticeRef.current?.open({
+      message: str,
+      type: "warning",
+    });
+  }
 }
 

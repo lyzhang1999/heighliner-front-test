@@ -1,4 +1,4 @@
-import { NoticeRef } from "@/components/Notice";
+import {Message} from "@/utils/utils";
 import {
   MemberType,
   MemberTypeEnum,
@@ -43,10 +43,7 @@ export default function ShiftRole({
   const onShiftRole = () => {
     console.log(newMemberType === currentMemberType);
     if (newMemberType === currentMemberType) {
-      NoticeRef.current?.open({
-        type: "warning",
-        message: `${username} already is ${currentMemberType}`,
-      });
+      Message.warning(`${username} already is ${currentMemberType}`)
       return;
     }
 
@@ -59,10 +56,7 @@ export default function ShiftRole({
     };
 
     shiftRole(shiftRoleReq).then(() => {
-      NoticeRef.current?.open({
-        type: "success",
-        message: `${username}'s role change to ${newMemberType}`,
-      });
+      Message.success(`${username}'s role change to ${newMemberType}`)
       successCallback && successCallback();
       setOpen(false);
     });

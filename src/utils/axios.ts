@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axios';
 import cookie from "@/utils/cookie";
-import {NoticeRef} from "@/components/Notice";
+import {Message} from "@/utils/utils";
 import {get} from "lodash-es";
 
 export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
@@ -46,10 +46,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
     return;
   }
   let errMsg = data?.msg || data?.err_msg || data;
-  errMsg && NoticeRef.current?.open({
-    message: errMsg,
-    type: "error",
-  });
+  errMsg && Message.error(errMsg);
   return Promise.reject(err);
 })
 

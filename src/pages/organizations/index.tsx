@@ -48,7 +48,8 @@ const Organizations = () => {
     if (get(currentOrganization, 'org_id') === id) {
       let defaultItem = find(organizationList, {type: "Default"});
       if (defaultItem) {
-        dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})
+        location.pathname = `/${encodeURIComponent(defaultItem.name)}/applications`;
+        // dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})
       }
     }
   }

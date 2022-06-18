@@ -3,8 +3,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import {Button} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
-import {NoticeRef} from "@/components/Notice";
 import {deleteOri} from "@/utils/api/org";
+import {Message} from "@/utils/utils";
 
 interface Props {
   deleteModalVisible: boolean,
@@ -22,10 +22,7 @@ const DeleteOrganization = (props: Props) => {
 
   function deleteIt() {
     deleteOri({org_id: deleteID}).then(res => {
-      NoticeRef.current?.open({
-        message: "Delete Organization Success",
-        type: "success",
-      });
+      Message.success("Delete Organization Success");
       setDeleteModalVisible(false);
       deleteSuccessCb();
     })

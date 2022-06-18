@@ -10,11 +10,11 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
-import {NoticeRef} from "@/components/Notice";
 import {getOrgMembers, GetOrgMembersRes, transferOri} from "@/utils/api/org";
 import styles from './index.module.scss';
 import {Context} from "@/utils/store";
 import {get} from "lodash-es";
+import {Message} from "@/utils/utils";
 
 interface Props {
   transferModalVisible: boolean,
@@ -53,10 +53,7 @@ const TransferOrganization = (props: Props) => {
 
   function transferIt(id: number) {
     transferOri({org_id: transferId, new_owner_id: id}).then(res => {
-      NoticeRef.current?.open({
-        message: "Transfer Success",
-        type: "success",
-      });
+      Message.success("Transfer Success")
       setTransferModalVisible(false);
       transferSuccessCb();
     })

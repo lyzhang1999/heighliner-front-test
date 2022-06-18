@@ -17,7 +17,7 @@ import {
 } from "react-hook-form";
 
 import { PasswordReq, updatePassword } from "@/utils/api/profile";
-import { NoticeRef } from "@/components/Notice";
+import {Message} from "@/utils/utils";
 
 enum FieldsMap {
   CurrentPassword = "CurrentPassword",
@@ -70,10 +70,7 @@ export default function Passwords(): React.ReactElement {
     };
     updatePassword(req)
       .then(() => {
-        NoticeRef.current?.open({
-          message: "Update successfully.",
-          type: "success",
-        });
+        Message.success('Update successfully.')
         reset();
       })
       .catch((err) => {
@@ -84,10 +81,7 @@ export default function Passwords(): React.ReactElement {
             message: "Incorrect current password",
           });
         } else {
-          NoticeRef.current?.open({
-            message: err_msg,
-            type: "error",
-          });
+          Message.error(err_msg);
         }
       });
   };

@@ -13,8 +13,7 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 import {Context} from "@/utils/store";
 import http from "@/utils/axios";
-import {setLoginToken, uuid} from "@/utils/utils";
-import {NoticeRef} from "@/components/Notice";
+import {Message, setLoginToken, uuid} from "@/utils/utils";
 import {login, LoginType, Res} from "@/utils/api/login";
 import {getOrgList} from "@/utils/api/org";
 import LoadingPoint from "@/pages/login/loadingBtn";
@@ -75,17 +74,11 @@ const Login: NextPage = () => {
     let user = trim(username);
     let pass = trim(password);
     if (!user) {
-      NoticeRef.current?.open({
-        message: "Please input User Name",
-        type: "error",
-      });
+      Message.error("Please input User Name");
       return;
     }
     if (!pass) {
-      NoticeRef.current?.open({
-        message: "Please input password",
-        type: "error",
-      });
+      Message.error("Please input password");
       return;
     }
     setLoginLoading(true);

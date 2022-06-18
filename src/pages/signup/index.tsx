@@ -8,8 +8,8 @@ import {find} from "lodash-es";
 
 import styles from "../login/index.module.scss";
 import Image from "next/image";
-import {NoticeRef} from "@/components/Notice";
 import {signUpApi} from "@/utils/api/login";
+import {Message} from "@/utils/utils";
 
 const inputStyle = {
   marginTop: "6px",
@@ -138,17 +138,11 @@ const Login: NextPage = () => {
   function signUp() {
     let errMsg = checkAllParams(inputValue, formRule);
     if (errMsg) {
-      NoticeRef.current?.open({
-        message: errMsg,
-        type: "error",
-      });
+      Message.error('errMsg')
       return;
     }
     signUpApi(inputValue).then(res => {
-      NoticeRef.current?.open({
-        message: "Sign Up Success",
-        type: "success",
-      });
+      Message.success('Sign Up Success');
       gologin();
     })
   }

@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
 import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext, getQuery} from "@/utils/utils";
+import {getOrganizationNameByUrl, getOriIdByContext, getQuery, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
@@ -32,7 +32,7 @@ const CreatingApplication = () => {
   let getlogTimeOut: any = null;
   let resizeCb: any = null;
   let skipTimer: any = null;
-
+  let term: any = null;
 
   useEffect(() => {
     function getStatus(isFirst: boolean) {
@@ -40,25 +40,21 @@ const CreatingApplication = () => {
         setStatus(status);
         if (status !== ApplicationStatus.PROCESSING) {
           if (isFirst) {
-            durationTimeInterval = setInterval(() => {
-              setDurationTime(t => t + 1)
-            }, 1000)
+            // durationTimeInterval = setInterval(() => {
+            //   setDurationTime(t => t + 1)
+            // }, 1000)
           }
         }
         if (status === ApplicationStatus.COMPLETED) {
           durationTimeInterval && clearInterval(durationTimeInterval)
           durationTimeInterval = null;
           goDashboard();
-          // if (isFirst) {
-          //   goDashboard();
-          // } else {
-          //   skip();
-          // }
         }
       })
     }
 
     getStatus(true);
+
     getStatusInterval = setInterval(getStatus, 5000);
     getlog();
     return () => {
@@ -79,7 +75,7 @@ const CreatingApplication = () => {
       const {Terminal} = await import('xterm')
       const {FitAddon} = await import('xterm-addon-fit');
       const fitAddon = new FitAddon();
-      const term = new Terminal({
+      term = new Terminal({
         fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
         fontSize: 12,
         lineHeight: 0.2,
@@ -93,39 +89,61 @@ const CreatingApplication = () => {
         fitAddon.fit();
       }
       window.addEventListener('resize', resizeCb);
-      const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
-      const token = cookie.getCookie('token');
-      var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
-      // @ts-ignore
-      eventSource.addEventListener("MESSAGE", function (e: LogRes) {
-        term.writeln(e.data);
-      });
-      // @ts-ignore
-      eventSource.addEventListener("END", function (e: LogRes) {
-        eventSource.close();
-      });
+      getLog();
     }
     getlogTimeOut = setTimeout(() => {
       initTerminal()
     }, 1000);
   }
 
-  function goDashboard() {
-    router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
+  function getLog(){
+    console.warn('getLog')
+    const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
+    const token = cookie.getCookie('token');
+    var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
+    console.warn(eventSource)
+    eventSource.onerror = function(){
+      eventSource.close();
+      setTimeout(() => {
+        getLog();
+      }, 1000)
+    }
+    // @ts-ignore
+    eventSource.addEventListener("MESSAGE", function (e: LogRes) {
+      term.writeln(e.data);
+    });
+    // @ts-ignore
+    eventSource.addEventListener("END", function (e: LogRes) {
+      console.warn('END')
+      eventSource.close();
+      setTimeout(() => {
+        if(status === ApplicationStatus.PROCESSING){
+          getLog();
+        }
+      }, 5000);
+
+    });
   }
 
-  function skip() {
-    skipTimer = setInterval(() => {
-      setSkipTime(t => {
-        console.warn(t)
-        if (t === 1) {
-          clearInterval(skipTimer);
-          // goDashboard();
-        }
-        return t - 1;
-      });
-    }, 1000)
+  function goDashboard() {
+    Message.success('Creat Success');
+    setTimeout(() => {
+      router.replace(`/${getOrganizationNameByUrl()}/applications/panel?appId=${app_id}`)
+    }, 2000)
   }
+
+  // function skip() {
+  //   skipTimer = setInterval(() => {
+  //     setSkipTime(t => {
+  //       console.warn(t)
+  //       if (t === 1) {
+  //         clearInterval(skipTimer);
+  //         // goDashboard();
+  //       }
+  //       return t - 1;
+  //     });
+  //   }, 1000)
+  // }
 
   // close server render
   React.useEffect(() => {
@@ -137,8 +155,7 @@ const CreatingApplication = () => {
     <Layout pageHeader="Creating Application"
     >
       <div id="creatingTerminal" className={styles.wrapper}>
-        <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s ago</Alert>
-
+        {/*<Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s ago</Alert>*/}
         <div id="terminal"
              className={styles.terminal}
         >
@@ -151,8 +168,6 @@ const CreatingApplication = () => {
         {/*  </Alert>*/}
         {/*}*/}
       </div>
-
-
     </Layout>
   )
 }
@@ -160,57 +175,4 @@ const CreatingApplication = () => {
 export default CreatingApplication
 
 // http://localhost/8/applications/creating?app_id=24&release_id=24
-
-// http://localhost/2/applications/creating
-
-{/*<div className={styles.timeLine}>*/
-}
-{/*  {*/
-}
-{/*    list.map((item, index) => {*/
-}
-{/*      return (*/
-}
-{/*        <div key={index} className={styles.lineItem}>*/
-}
-{/*          <div className={clsx(styles.line)}>*/
-}
-{/*            {*/
-}
-{/*              (number >= index) &&*/
-}
-{/*              <div className={styles.activeLine}></div>*/
-}
-{/*            }*/
-}
-{/*          </div>*/
-}
-{/*          <div className={styles.circleWrapper}>*/
-}
-{/*            <div className={clsx(styles.circlePoint, (number >= index) && styles.circlePointDone)}></div>*/
-}
-{/*            <div*/
-}
-{/*              className={clsx(styles.circle, (number === index) && styles.circleDoing, (number > index) && styles.circleDone)}>*/
-}
-{/*            </div>*/
-}
-{/*            <div className={styles.desc}>*/
-}
-{/*              <div>{item.desc}...</div>*/
-}
-{/*            </div>*/
-}
-{/*          </div>*/
-}
-{/*        </div>*/
-}
-{/*      )*/
-}
-{/*    })*/
-}
-{/*  }*/
-}
-{/*</div>*/
-}
-
+// http://localhost/zhangze/applications/creating?app_id=8&release_id=8

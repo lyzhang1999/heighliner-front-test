@@ -12,8 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { ErrorCode, useDropzone } from "react-dropzone";
 
-import { fileToBase64 } from "@/utils/utils";
-import { NoticeRef } from "@/components/Notice";
+import {fileToBase64, Message} from "@/utils/utils";
 import {
   Controller,
   FieldValues,
@@ -60,10 +59,7 @@ export default function BasicProfile(): React.ReactElement {
           setValue(BasicProfileFieldMap.avatar, base64 as string);
         })
         .catch((err) => {
-          NoticeRef.current?.open({
-            message: "Avatar image compile error.",
-            type: "error",
-          });
+          Message.error("Avatar image compile error.");
         });
     }
   }, [acceptedFiles]);
@@ -75,16 +71,10 @@ export default function BasicProfile(): React.ReactElement {
         errors.map((error) => {
           switch (error.code) {
             case ErrorCode.FileTooLarge:
-              NoticeRef.current?.open({
-                type: "error",
-                message: "File is larger than acceptable size (1MB).",
-              });
+              Message.error("File is larger than acceptable size (1MB).")
               break;
             default:
-              NoticeRef.current?.open({
-                type: "error",
-                message: error.message,
-              });
+              Message.error(error.message)
           }
         });
       });
@@ -102,18 +92,12 @@ export default function BasicProfile(): React.ReactElement {
     }
 
     if (Object.keys(req).length <= 0) {
-      NoticeRef.current?.open({
-        type: "warning",
-        message: "You change nothing.",
-      });
+      Message.warning('You change nothing.')
       return;
     }
 
     updateBasicProfile(req).then(() => {
-      NoticeRef.current?.open({
-        type: "success",
-        message: "Update basic profile successfully.",
-      });
+      Message.success("Update basic profile successfully.");
     });
   };
 

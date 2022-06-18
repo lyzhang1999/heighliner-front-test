@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import "highlight.js/styles/a11y-dark.css";
 
-import { NoticeRef } from "@/components/Notice";
 import { createProviderList } from "@/utils/api/gitProvider";
+import {Message} from '@/utils/utils';
 
 interface Props {
   modalDisplay: boolean;
@@ -40,17 +40,11 @@ export default function NewGitProvider({
 
   function handleConfirm() {
     if (!gitProviderOrgName) {
-      NoticeRef.current?.open({
-        message: "Please input GitHub organization name",
-        type: "error",
-      });
+      Message.error('Please input GitHub organization name');
       return;
     }
     if (!token) {
-      NoticeRef.current?.open({
-        message: "Please input GitHub personal access token",
-        type: "error",
-      });
+      Message.error('Please input GitHub personal access token');
       return;
     }
 
@@ -59,10 +53,7 @@ export default function NewGitProvider({
       provider: "GITHUB",
       token: token,
     }).then((res) => {
-      NoticeRef.current?.open({
-        message: "Add Git provider personal access token successfully!",
-        type: "success",
-      });
+      Message.success('Add Git provider personal access token successfully');
       setModalDisplay(false);
       successCb && successCb();
     });

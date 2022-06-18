@@ -5,10 +5,10 @@ import {
   Drawer,
 } from '@mui/material';
 import React, {useEffect, useState} from "react";
-import {NoticeRef} from "@/components/Notice";
 import {createCluster} from "@/utils/api/cluster";
 import {trim} from "lodash-es";
 import styles from './index.module.scss';
+import {Message} from "@/utils/utils";
 
 interface Props {
   modalDisplay: boolean
@@ -40,17 +40,11 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
   function handleConfirm() {
 
     if (!trim(configName)) {
-      NoticeRef.current?.open({
-        message: "Please input cluster name",
-        type: "error",
-      });
+      Message.error("Please input cluster name");
       return;
     }
     if (!trim(configValue)) {
-      NoticeRef.current?.open({
-        message: "Please input kube config",
-        type: "error",
-      });
+      Message.error("Please input kube config");
       return;
     }
     createCluster({

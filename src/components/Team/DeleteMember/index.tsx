@@ -1,4 +1,3 @@
-import { NoticeRef } from "@/components/Notice";
 import { deleteMember } from "@/utils/api/org";
 import {
   Button,
@@ -9,6 +8,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React, { useState } from "react";
+import {Message} from "@/utils/utils";
 
 interface Props {
   userId: number;
@@ -35,10 +35,7 @@ export default function Delete({
       org_id: orgId,
     })
       .then(() => {
-        NoticeRef.current?.open({
-          type: "success",
-          message: `Delete member ${username} success`,
-        });
+        Message.success(`Delete member ${username} success`)
         successCallback && successCallback();
       })
       .finally(() => {

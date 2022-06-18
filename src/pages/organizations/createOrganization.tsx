@@ -5,8 +5,8 @@ import {Button, TextField} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
 import {useState} from "react";
-import {NoticeRef} from "@/components/Notice";
 import {createOrg} from "@/utils/api/org";
+import {Message} from "@/utils/utils";
 
 interface Props {
   open: boolean,
@@ -38,16 +38,10 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
   function creat() {
     let errmsg = checkName();
     if (errmsg) {
-      NoticeRef.current?.open({
-        message: errmsg,
-        type: "error",
-      });
+      Message.error(errmsg)
     } else {
       createOrg(name).then(res => {
-        NoticeRef.current?.open({
-          message: "Creat Organization Success",
-          type: "success",
-        });
+        Message.success('Creat Organization Success');
         successCb();
         setName('');
         setOpen(false);

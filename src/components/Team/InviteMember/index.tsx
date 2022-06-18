@@ -1,4 +1,3 @@
-import { NoticeRef } from "@/components/Notice";
 import {
   invitations,
   InvitationsReq,
@@ -7,7 +6,7 @@ import {
   MemberType,
   MemberTypeEnum,
 } from "@/utils/api/org";
-import { getOriIdByContext } from "@/utils/utils";
+import {getOriIdByContext, Message} from "@/utils/utils";
 import {
   Autocomplete,
   Button,
@@ -73,16 +72,10 @@ export default function InviteMember({
   const invitation = () => {
     switch (true) {
       case value === null:
-        NoticeRef.current?.open({
-          type: "warning",
-          message: "You didn't choose an invitee.",
-        });
+        Message.warning("You didn't choose an invitee.");
         return;
       case value?.is_member:
-        NoticeRef.current?.open({
-          type: "warning",
-          message: `The user ${value?.username} has already in your team.`,
-        });
+        Message.warning(`The user ${value?.username} has already in your team.`);
         return;
     }
 
@@ -95,10 +88,7 @@ export default function InviteMember({
     };
 
     invitations(req).then(() => {
-      NoticeRef.current?.open({
-        type: "success",
-        message: `Invite the user ${value!.username} successfully!`,
-      });
+      Message.success(`Invite the user ${value!.username} successfully!`);
       inviteMemberSuccessCb && inviteMemberSuccessCb();
     });
   };

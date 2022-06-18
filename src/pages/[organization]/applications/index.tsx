@@ -20,7 +20,7 @@ const Applications = () => {
   }, []);
 
   function goPanel(id: number) {
-    router.push(`/${getOrganizationNameByUrl()}/applications/panel?appId=${id}`)
+    router.push(`/${getOrganizationNameByUrl()}/applications/${id}`)
   }
 
   return (

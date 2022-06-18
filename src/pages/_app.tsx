@@ -21,7 +21,7 @@ const noCheckPathPage = ['/organizations', '/settings'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
-  const [getOriSuccess, setOriSuccess] = useState<boolean>(false)
+  const [render, setRender] = useState<boolean>(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -43,32 +43,32 @@ function App({Component, pageProps}: AppProps) {
           }
           if (noCheckPathPage.includes(location.pathname)) {
             dispatch({currentOrganization: getCurrentOrg(list[0])})
-            setGetOriSuccess();
+            startRender();
             return;
           }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOrganization: getCurrentOrg(currentOri)})
-            setGetOriSuccess();
+            startRender();
             return;
           }
           location.pathname = `${defaultOriName}/applications`;
         }).catch(err => {
           router.push("/login");
-          setGetOriSuccess();
+          startRender();
         })
       } else {
-        setGetOriSuccess()
+        startRender()
         router.push("/login");
       }
     } else {
-      setGetOriSuccess()
+      startRender()
     }
   }
 
-  function setGetOriSuccess(){
+  function startRender(){
     setTimeout(() => {
-      setOriSuccess(true)
+      setRender(true)
     }, 0)
   }
 
@@ -84,7 +84,7 @@ function App({Component, pageProps}: AppProps) {
         <Context.Provider value={{state, dispatch}}>
           <Notice/>
           <GlobalContxt/>
-          {getOriSuccess && <Component {...pageProps} />}
+          {render && <Component {...pageProps} />}
         </Context.Provider>
       </ThemeProvider>
     </div>

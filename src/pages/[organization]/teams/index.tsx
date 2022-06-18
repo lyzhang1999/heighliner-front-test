@@ -175,11 +175,12 @@ const Teams = () => {
                 <TableCell align="right">{member_type}</TableCell>
                 <TableCell align="right">
                   {getActionSet(currentMemberType!, member_type).map(
-                    (action) => {
+                    (action, index) => {
                       switch (action) {
                         case Action.ShiftRole:
                           return (
                             <ShiftRole
+                              key={index}
                               currentMemberType={member_type}
                               username={username}
                               userId={user_id}
@@ -190,6 +191,7 @@ const Teams = () => {
                         case Action.Delete:
                           return (
                             <DeleteMember
+                              key={index}
                               userId={user_id}
                               orgId={+getOriIdByContext()}
                               username={username}

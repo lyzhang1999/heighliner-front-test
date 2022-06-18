@@ -1,6 +1,9 @@
 import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
 import {NoticeRef} from "@/components/Notice";
+import {OrgList} from "@/utils/api/org";
+import {find} from "lodash-es";
+import {OrganizationType} from "@/utils/store";
 
 export function isBrowser() {
   return process.title === "browser";
@@ -90,25 +93,25 @@ export function fileToBase64(file: File) {
 }
 
 export const Message = {
-  success: function(str: string){
+  success: function (str: string) {
     NoticeRef.current?.open({
       message: str,
       type: "success",
     });
   },
-  error: function(str: string){
+  error: function (str: string) {
     NoticeRef.current?.open({
       message: str,
       type: "error",
     });
   },
-  info: function(str: string){
+  info: function (str: string) {
     NoticeRef.current?.open({
       message: str,
       type: "info",
     });
   },
-  warning: function(str: string){
+  warning: function (str: string) {
     NoticeRef.current?.open({
       message: str,
       type: "warning",
@@ -116,3 +119,23 @@ export const Message = {
   }
 }
 
+export function getCurrentOrg(organization: OrgList): OrganizationType {
+  let {id, name, type} = organization;
+  let {org_id, member_type, updated_at, created_at, status, user_id} = organization.member;
+  return {
+    created_at,
+    id,
+    member_type,
+    org_id,
+    updated_at,
+    user_id,
+    name,
+    status,
+    type
+  };
+}
+
+export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
+  let defaultOrg = find(orgList, {type: "Default"});
+  return defaultOrg as OrgList;
+}

@@ -3,7 +3,7 @@ import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {useRouter} from "next/router";
 
-import {initState, Context, reducer, OrganizationType} from "@/utils/store";
+import {initState, Context, reducer} from "@/utils/store";
 import {ThemeProvider} from '@mui/material/styles';
 
 import '@/styles/globals.scss';
@@ -13,8 +13,8 @@ import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";
 import {getOrgList} from "@/utils/api/org";
 import {CssBaseline} from "@mui/material";
-import {find, omit} from "lodash-es";
-import {getOrganizationNameByUrl} from "@/utils/utils";
+import {find} from "lodash-es";
+import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl} from "@/utils/utils";
 
 const noCheckOriPage = ['/login/github', '/signup'];
 const noCheckPathPage = ['/organizations', '/settings'];
@@ -36,19 +36,23 @@ function App({Component, pageProps}: AppProps) {
           dispatch({
             organizationList: list,
           });
-          let defaultOriName = encodeURIComponent(list[0]?.name);
+          let defaultOriName = getDefaultOrg(list).name;
           if ((["/", '/login', '/signup'].includes(router.pathname))) {
             location.pathname = `${defaultOriName}/applications`;
             return;
           }
           if (noCheckPathPage.includes(location.pathname)) {
-            dispatch({currentOrganization: omit({...list[0], ...list[0].member}, 'member') })
+            dispatch({currentOrganization: getCurrentOrg(list[0])})
+            //getCurrentList
+            // dispatch({currentOrganization: omit({...list[0], ...list[0].member}, 'member') })
             setGetOriSuccess(true);
             return;
           }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
-            dispatch({currentOrganization: omit({...currentOri, ...currentOri.member}, 'member')})
+            dispatch({currentOrganization: getCurrentOrg(currentOri)})
+
+            // dispatch({currentOrganization: omit({...currentOri, ...currentOri.member}, 'member')})
             setGetOriSuccess(true);
             return;
           }

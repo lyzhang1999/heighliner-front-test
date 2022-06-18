@@ -48,3 +48,9 @@ interface GetStatusRes {
 export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${req.release_id}`)
 }
+
+
+
+export function getApplicationList(): Promise<GetStatusRes> {
+  return http.get(`/orgs/${getOriIdByContext()}/applications?page=1&page_size=999`)
+}

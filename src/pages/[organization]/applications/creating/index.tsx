@@ -111,7 +111,7 @@ const CreatingApplication = () => {
   }
 
   function goDashboard() {
-    router.push(`/${getOrganizationNameByUrl()}/applications/detail?app_id=${app_id}&release_id=${release_id}`)
+    router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
   function skip() {

@@ -121,7 +121,7 @@ const Clusters = () => {
                 </div>
                 <div className={styles.content}>
                   <div className={styles.organiztion}>Organization: {item.git_org_name}</div>
-                  <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at)}</div>
+                  <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at * 1000)}</div>
                 </div>
               </div>
             )

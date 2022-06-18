@@ -20,7 +20,7 @@ interface Cluser{
 }
 
 export const getClusterList = (): Promise<Cluser> => {
-  return http.get(`/orgs/${getOriIdByContext()}/clusters`);
+  return http.get(`/orgs/${getOriIdByContext()}/clusters?page=1&page_size=999`);
 }
 
 export interface CreateClusterReq {
@@ -32,6 +32,11 @@ export interface CreateClusterReq {
 export const createCluster = (req: CreateClusterReq): Promise<null> => {
   return http.post(`/orgs/${getOriIdByContext()}/clusters`, req)
 }
+
+export const deleteCluster = (id: number): Promise<null> => {
+  return http.delete(`/orgs/${getOriIdByContext()}/clusters/${id}`)
+}
+
 
 
 

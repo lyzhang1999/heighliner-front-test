@@ -7,10 +7,16 @@ import styles from "./index.module.scss";
 import {useRouter} from "next/router";
 import {Context} from "@/utils/store";
 import {getOrganizationNameByUrl} from "@/utils/utils";
+import {getApplicationList} from "@/utils/api/application";
 
 const Applications = () => {
 
   const router = useRouter();
+  useEffect(() => {
+    getApplicationList().then(res => {
+      // console.warn(res.data);
+    })
+  }, []);
 
   return (
     <Layout pageHeader="APPLICATIONS"

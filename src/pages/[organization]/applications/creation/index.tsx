@@ -205,7 +205,7 @@ export default function Index(): React.ReactElement {
                 <h1>{fieldsMap.stack.name}</h1>
                 <ul className={styles.stacks}>
                   {stacks.map(({name, id}) => {
-                    const icons = stacksMap[name];
+                    const icons = get(stacksMap, name, []);
                     return (
                       <li
                         key={name}

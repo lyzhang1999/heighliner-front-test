@@ -12,6 +12,7 @@ import {Alert} from "@mui/material";
 
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
+import {get} from "lodash-es";
 
 interface LogRes {
   data: string
@@ -96,28 +97,27 @@ const CreatingApplication = () => {
     }, 1000);
   }
 
-  function getLog(){
+  function getLog() {
     console.warn('getLog')
     const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
     const token = cookie.getCookie('token');
     var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
     console.warn(eventSource)
-    eventSource.onerror = function(){
+    eventSource.onerror = function () {
       eventSource.close();
+      console.warn('onerror')
       setTimeout(() => {
         getLog();
       }, 1000)
     }
-    // @ts-ignore
-    eventSource.addEventListener("MESSAGE", function (e: LogRes) {
-      term.writeln(e.data);
+    eventSource.addEventListener("MESSAGE", function (e) {
+      term.writeln(get(e, 'data'));
     });
-    // @ts-ignore
-    eventSource.addEventListener("END", function (e: LogRes) {
+    eventSource.addEventListener("END", function (e) {
       console.warn('END')
       eventSource.close();
       setTimeout(() => {
-        if(status === ApplicationStatus.PROCESSING){
+        if (status === ApplicationStatus.PROCESSING) {
           getLog();
         }
       }, 5000);
@@ -175,4 +175,4 @@ const CreatingApplication = () => {
 export default CreatingApplication
 
 // http://localhost/8/applications/creating?app_id=24&release_id=24
-// http://localhost/zhangze/applications/creating?app_id=8&release_id=8
+// http://localhost/zhangze/applications/creating?app_id=10&release_id=10

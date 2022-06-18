@@ -34,7 +34,8 @@ const Menu = () => {
     if (selectItem) {
       let {name} = selectItem;
       dispatch({currentOrganization: omit({...selectItem, ...selectItem.member}, 'member')})
-      router.push(`/${encodeURIComponent(name)}/applications`)
+      // router.push(`/${encodeURIComponent(name)}/applications`);
+      location.pathname = `/${encodeURIComponent(name)}/applications`;
     }
   };
 
@@ -106,7 +107,6 @@ const Menu = () => {
     // },
   ];
 
-  // @ts-ignore
   return (
     <div className={clsx(styles.menu, menuSpread && styles.spreadMenu)}>
       <div className={styles.logoWrapper}>

@@ -9,25 +9,39 @@ import {Context} from "@/utils/store";
 import {getOrganizationNameByUrl} from "@/utils/utils";
 
 const Applications = () => {
+
   const router = useRouter();
 
   return (
-    <Layout pageHeader="APPLICATIONS">
-      <div className={styles.wrapper}>
-        <div className={styles.card} onClick={() => {
-        }}>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              router.push(
-                `/${encodeURIComponent(getOrganizationNameByUrl())}/applications/creation`
-              );
-            }}
-          >
-            Create a Application
-          </Button>
-        </div>
-      </div>
+    <Layout pageHeader="APPLICATIONS"
+            titleContent={(
+              <Button
+                variant="contained"
+                onClick={() => {
+                  router.push(
+                    `/${encodeURIComponent(getOrganizationNameByUrl())}/applications/creation`
+                  );
+                }}
+              >
+                Create a Application
+              </Button>
+            )}
+    >
+      {/*<div className={styles.wrapper}>*/}
+      {/*  <div className={styles.card} onClick={() => {*/}
+      {/*  }}>*/}
+      {/*    <Button*/}
+      {/*      variant="outlined"*/}
+      {/*      onClick={() => {*/}
+      {/*        router.push(*/}
+      {/*          `/${encodeURIComponent(getOrganizationNameByUrl())}/applications/creation`*/}
+      {/*        );*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      Create a Application*/}
+      {/*    </Button>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </Layout>
   );
 };

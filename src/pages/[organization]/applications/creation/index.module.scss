@@ -2,14 +2,16 @@
 
 .panel {
   display: flex;
-  margin-left: 1vw;
+  margin-left: 10px;
   background-color: white;
   box-shadow: 0 0 10px 0 rgba(102, 151, 245, 0.25);
   position: relative;
-  width: 44.44vw;
+  max-width: 800px;
+  padding: 20px;
+  //width: 44.44vw;
   // margin-left: 0.6vw;
-  @include setHorizontalPadding(3vw);
-  @include setVerticalPadding(24px);
+  //@include setHorizontalPadding(20px);
+  //@include setVerticalPadding(24px);
 
   h1 {
     font-family: "Jost";

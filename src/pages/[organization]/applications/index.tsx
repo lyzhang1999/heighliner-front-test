@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import {Button, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
@@ -51,7 +51,6 @@ const Applications = () => {
           </TableHead>
           <TableBody>
             {(applist).map((row) => {
-              let member_type = get(row, ['member', 'member_type']);
               return (
                 <TableRow
                   key={row.app_name}
@@ -59,7 +58,6 @@ const Applications = () => {
                 >
                   <TableCell component="th" scope="row">
                     {row.app_name}
-                    {/**/}
                   </TableCell>
                   <TableCell align="right">
                     {get(row, 'last_release.status', '')}
@@ -86,4 +84,3 @@ const Applications = () => {
     ;
 };
 export default Applications;
-// http://localhost/xxx/clusters

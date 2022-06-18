@@ -21,7 +21,7 @@ const noCheckPathPage = ['/organizations', '/settings'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
-  const [getOriSuccess, setGetOriSuccess] = useState<boolean>(false)
+  const [getOriSuccess, setOriSuccess] = useState<boolean>(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -43,31 +43,33 @@ function App({Component, pageProps}: AppProps) {
           }
           if (noCheckPathPage.includes(location.pathname)) {
             dispatch({currentOrganization: getCurrentOrg(list[0])})
-            //getCurrentList
-            // dispatch({currentOrganization: omit({...list[0], ...list[0].member}, 'member') })
-            setGetOriSuccess(true);
+            setGetOriSuccess();
             return;
           }
           let currentOri = find(list, {name: getOrganizationNameByUrl()});
           if (currentOri) {
             dispatch({currentOrganization: getCurrentOrg(currentOri)})
-
-            // dispatch({currentOrganization: omit({...currentOri, ...currentOri.member}, 'member')})
-            setGetOriSuccess(true);
+            setGetOriSuccess();
             return;
           }
           location.pathname = `${defaultOriName}/applications`;
         }).catch(err => {
           router.push("/login");
-          setGetOriSuccess(true);
+          setGetOriSuccess();
         })
       } else {
-        setGetOriSuccess(true)
+        setGetOriSuccess()
         router.push("/login");
       }
     } else {
-      setGetOriSuccess(true)
+      setGetOriSuccess()
     }
+  }
+
+  function setGetOriSuccess(){
+    setTimeout(() => {
+      setOriSuccess(true)
+    }, 0)
   }
 
   return (

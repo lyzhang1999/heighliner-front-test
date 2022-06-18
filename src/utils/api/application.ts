@@ -1,6 +1,7 @@
 import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
 import { getOriIdByContext } from "../utils";
+import {Page} from "@/utils/api/type";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -50,7 +51,41 @@ export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
 }
 
 
+export interface Last_release {
+  id: number;
+  created_at: number;
+  updated_at: number;
+  application_id: number;
+  name: string;
+  namespace: string;
+  cluster_id: number;
+  job_namespace: string;
+  start_time: number;
+  completion_time: number;
+  status: string;
+}
 
-export function getApplicationList(): Promise<GetStatusRes> {
+export interface Stack {
+  id: number;
+  created_at: number;
+  updated_at: number;
+  name: string;
+  url: string;
+  version: string;
+}
+
+export interface ApplicationObject {
+  app_id: number;
+  app_name: string;
+  last_release: Last_release;
+  stack: Stack;
+}
+
+export interface GetApplicationRes{
+  data: ApplicationObject[],
+  pagination: Page
+}
+
+export function getApplicationList(): Promise<GetApplicationRes> {
   return http.get(`/orgs/${getOriIdByContext()}/applications?page=1&page_size=999`)
 }

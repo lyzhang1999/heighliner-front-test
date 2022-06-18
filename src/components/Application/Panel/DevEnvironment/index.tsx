@@ -12,7 +12,7 @@ import Reset from "/public/img/application/panel/reset.svg";
 import styles from "./index.module.scss";
 import DebugBox from "../DebugBox";
 import { useRouter } from "next/router";
-import { getOriIdByContext } from "@/utils/utils";
+import { getOrganizationNameByUrl, getOriIdByContext } from "@/utils/utils";
 import {
   getAppEnvironments,
   GetAppEnvironmentsRes,
@@ -32,45 +32,16 @@ export default function DevEnvironment(): React.ReactElement {
 
   const [deploy, setDeploy] = useState(false);
 
-  const [appEnvironments, setAppEnvironments] = useState<GetAppEnvironmentsRes>(
-    [
-      {
-        cluster: {
-          created_at: 0,
-          id: 0,
-          in_cluster: true,
-          kubeconfig: "kubeconfig",
-          name: "cluster-name",
-          org_id: 0,
-          provider: "provider",
-          updated_at: 0,
-        },
-        name: "app",
-        namespace: "namespace",
-        resources: [
-          {
-            name: "resources-name",
-            namespace: "resources-namespace",
-            type: "type",
-          },
-        ],
-        status: "running",
-      },
-    ]
-  );
+  const [appEnvironments, setAppEnvironments] =
+    useState<GetAppEnvironmentsRes>();
 
   const router = useRouter();
-  // Get the app_id in URL and org_id
-  const appId = +(router.query.application as string);
-  const orgId = +getOriIdByContext();
-  
-  console.group('>>>>><<<<<<');
-  console.log(appId);
-  console.log(orgId);
-  console.groupEnd();
-  
-
   useEffect(() => {
+    // Get the app_id in URL and org_id
+    const orgId = +getOriIdByContext();
+    const appId = +(router.query.application as string);
+    console.log(orgId);
+
     if (
       appId === undefined ||
       appId <= 0 ||
@@ -85,152 +56,159 @@ export default function DevEnvironment(): React.ReactElement {
       app_id: appId,
     }).then((res) => {
       console.log(res);
-      // setAppEnvironments(res);
+      setAppEnvironments(res);
     });
   }, []);
 
   return (
     <>
-      {appEnvironments.map((appEnvironment, index) => (
-        <Stack className={styles.wrap} key={index}>
-          <Stack direction="row">
-            <Stack className={styles.appStatus} direction="row" gap="8px">
-              <div className={styles.appStatusIcon}>
-                <Running />
-              </div>
-              Running
-            </Stack>
-            <Stack direction="row" gap={"2vw"} className={styles.infoEntries}>
-              <div>
-                <div className={styles.title}>Owner:</div>
-                <div>zhenwei</div>
-              </div>
-              <div>
-                <div className={styles.title}>Cluster:</div>
-                <div>AWS-Dev-1</div>
-              </div>
-              <div>
-                <div className={styles.title}>Namespace:</div>
-                <div>nh4xidf</div>
-              </div>
-              <div>
-                <div className={styles.title}>Chart Version</div>
-                <div>v1.0.2</div>
-              </div>
-              <div className={styles.operationInRow}>
-                <div className={styles.title}>Chart Values</div>
-                <div className={styles.item}>
-                  <Edit2 fill="#326ce5" />
-                  &nbsp;Edit
+      {appEnvironments &&
+        appEnvironments.map((appEnvironment, index) => (
+          <Stack className={styles.wrap} key={index}>
+            <Stack direction="row">
+              <Stack className={styles.appStatus} direction="row" gap="8px">
+                <div className={styles.appStatusIcon}>
+                  <Running />
                 </div>
-              </div>
-              <div className={styles.operationInRow}>
-                <div className={styles.title}>Preview URL:</div>
-                <div className={styles.item}>
-                  <Link fill="#326ce5" />
-                  &nbsp;Click me
+                Running
+              </Stack>
+              <Stack direction="row" gap={"2vw"} className={styles.infoEntries}>
+                <div>
+                  <div className={styles.title}>Owner:</div>
+                  <div>{getOrganizationNameByUrl()}</div>
                 </div>
-              </div>
-              <div className={styles.operationInRow}>
-                <div className={styles.title}>Kubeconfig</div>
-                <div className={styles.item}>
-                  <DownloadTextInClient
-                    filename={"kubeconfig.yaml"}
-                    content={appEnvironment.cluster.kubeconfig}
-                    className={styles.download}
+                <div>
+                  <div className={styles.title}>Cluster:</div>
+                  <div>{appEnvironment.cluster.name}</div>
+                </div>
+                <div>
+                  <div className={styles.title}>Namespace:</div>
+                  <div>{appEnvironment.namespace}</div>
+                </div>
+                <div>
+                  <div className={styles.title}>Chart Version</div>
+                  <div>{appEnvironment.space.chart.version}</div>
+                </div>
+                <div className={styles.operationInRow}>
+                  <div className={styles.title}>Chart Values</div>
+                  <div className={styles.item}>
+                    <Edit2 fill="#326ce5" />
+                    &nbsp;Edit
+                  </div>
+                </div>
+                <div className={styles.operationInRow}>
+                  <div className={styles.title}>Preview URL:</div>
+                  <a
+                    className={styles.item}
+                    href={appEnvironment.space.access.previewURL}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    <Download fill="#326ce5" />
-                    &nbsp;Download
-                  </DownloadTextInClient>
+                    <Link fill="#326ce5" />
+                    &nbsp;Click me
+                  </a>
                 </div>
-              </div>
+                <div className={styles.operationInRow}>
+                  <div className={styles.title}>Kubeconfig</div>
+                  <div className={styles.item}>
+                    <DownloadTextInClient
+                      filename={"kubeconfig.yaml"}
+                      content={appEnvironment.cluster.kubeconfig}
+                      className={styles.download}
+                    >
+                      <Download fill="#326ce5" />
+                      &nbsp;Download
+                    </DownloadTextInClient>
+                  </div>
+                </div>
+              </Stack>
             </Stack>
-          </Stack>
-          <Stack direction="row" gap="21px" className={styles.apps}>
-            <DebugBox />
-            <DebugBox />
-          </Stack>
-          <Stack direction="row" className={styles.operator}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              style={{ display: deploy ? "none" : "flex" }}
-              onClick={() => {
-                setDeploy(true);
-              }}
-            >
-              <Play />
-              <span>Deploy</span>
+            <Stack direction="row" gap="21px" className={styles.apps}>
+              {appEnvironment.resources.map((resource, index) => (
+                <DebugBox key={index} resource={resource} />
+              ))}
             </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              style={{ display: deploy ? "flex" : "none" }}
-              onClick={() => {
-                setDeploy(false);
-              }}
-            >
-              <Stop />
-              <span>Stop</span>
-            </Stack>
-            <div>
-              <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              >
-                ...
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
+            <Stack direction="row" className={styles.operator}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                style={{ display: deploy ? "none" : "flex" }}
+                onClick={() => {
+                  setDeploy(true);
                 }}
               >
-                <MenuItem
-                  onClick={handleClose}
-                  className={styles.operationInMenu}
+                <Play />
+                <span>Deploy</span>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                style={{ display: deploy ? "flex" : "none" }}
+                onClick={() => {
+                  setDeploy(false);
+                }}
+              >
+                <Stop />
+                <span>Stop</span>
+              </Stack>
+              <div>
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClick}
                 >
-                  <Edit2 />
-                  &nbsp;Edit
-                </MenuItem>
-                <MenuItem
-                  onClick={handleClose}
-                  className={styles.operationInMenu}
+                  ...
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
                 >
-                  <Link />
-                  &nbsp;click me
-                </MenuItem>
-                <MenuItem
-                  onClick={handleClose}
-                  className={styles.operationInMenu}
-                >
-                  {/* <Download />
-                  &nbsp;download */}
-                  <DownloadTextInClient
-                    filename={"kubeconfig.yaml"}
-                    content={appEnvironment.cluster.kubeconfig}
-                    className={styles.download}
-                    style={{color: "#000"}}
+                  <MenuItem
+                    onClick={handleClose}
+                    className={styles.operationInMenu}
                   >
-                    <Download />
-                    &nbsp;Download
-                  </DownloadTextInClient>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Reset />
-                  &nbsp;Reset
-                </MenuItem>
-              </Menu>
-            </div>
+                    <Edit2 />
+                    &nbsp;Edit
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    className={styles.operationInMenu}
+                  >
+                    <Link />
+                    &nbsp;click me
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    className={styles.operationInMenu}
+                  >
+                    {/* <Download />
+                  &nbsp;download */}
+                    <DownloadTextInClient
+                      filename={"kubeconfig.yaml"}
+                      content={appEnvironment.cluster.kubeconfig}
+                      className={styles.download}
+                      style={{ color: "#000" }}
+                    >
+                      <Download />
+                      &nbsp;Download
+                    </DownloadTextInClient>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Reset />
+                    &nbsp;Reset
+                  </MenuItem>
+                </Menu>
+              </div>
+            </Stack>
           </Stack>
-        </Stack>
-      ))}
+        ))}
     </>
   );
 }

@@ -104,8 +104,8 @@ export type GetAppEnvironmentsRes = Array<{
   cluster: {
     created_at: number;
     id: number;
-    in_cluster: true;
-    kubeconfig: string;
+    in_cluster: boolean;
+    kubeconfig: "kubeconfig";
     name: string;
     org_id: number;
     provider: string;
@@ -113,12 +113,31 @@ export type GetAppEnvironmentsRes = Array<{
   };
   name: string;
   namespace: string;
-  resources: Array<{
+  resources: Array<
+    {
+      name: string;
+      namespace: string;
+      ready_total: number;
+      total: number;
+      type: string;
+    }
+  >;
+  space: {
+    access: {
+      previewURL: string;
+    };
+    chart: {
+      defaultBranch: string;
+      path: string;
+      type: string;
+      url: string;
+      valuesFile: string;
+      version: string;
+    };
     name: string;
     namespace: string;
-    type: string;
-  }>;
-  status: string;
+  };
+  status: "Active";
 }>;
 
 export function getAppEnvironments(

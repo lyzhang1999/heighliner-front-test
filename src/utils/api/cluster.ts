@@ -10,11 +10,18 @@ export interface ClusterItem {
   org_id: number;
   provider: string;
   kubeconfig: string;
+  status: ClusterStatus,
+}
+
+enum ClusterStatus {
+  "Active" = "Active",
+  "Initializing" = "Initializing",
+  "Inactive" = "Inactive",
 }
 
 export type Clusters = ClusterItem[];
 
-interface Cluser{
+interface Cluser {
   data: ClusterItem[],
   pagination: Page
 }

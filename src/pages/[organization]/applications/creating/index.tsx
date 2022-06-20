@@ -105,9 +105,11 @@ const CreatingApplication = () => {
     console.warn(eventSource)
     eventSource.onerror = function () {
       eventSource.close();
-      console.warn('onerror')
+      console.warn('onerror', status)
       setTimeout(() => {
-        getLog();
+        if(status === ApplicationStatus.PROCESSING){
+          getLog();
+        }
       }, 1000)
     }
     eventSource.addEventListener("MESSAGE", function (e) {

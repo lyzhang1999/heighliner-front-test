@@ -43,7 +43,6 @@ export default function RepoList() {
   useEffect(() => {
     const appId = (router.query.app_id as string);
     getRepoList(appId).then(res => {
-      console.warn(res);
       setRepoList(res);
     })
   }, [])

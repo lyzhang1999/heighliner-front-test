@@ -8,6 +8,7 @@
   border-radius: 11px;
   background-color: #fff;
   padding: 6px;
+  position: relative;
 
   .tab {
     display: flex;
@@ -22,10 +23,18 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
+    position: relative;
+    transition: color 200ms;
+  }
+
+  .slider {
+    background-color: black;
+    position: absolute;
+    transition: left 200ms ease-in-out;
   }
 
   .selectedItem {
-    background-color: black;
+    // background-color: black;
     color: white;
   }
 }

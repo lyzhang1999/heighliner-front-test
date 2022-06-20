@@ -55,39 +55,43 @@ export default function Panel(): React.ReactElement {
         />
       </Stack>
       <Box className={styles.separator}></Box>
-      <div className={styles.container}>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            className={styles.stackInfo}
-          >
-            <div className={styles.stackAvatar}>
-              <Image
-                src={"/img/application/panel/orgAvatar.svg"}
-                width={24}
-                height={24}
-                alt=""
-              />
-            </div>
-            <div className={styles.stackName}>My Shop</div>
-            <div className={styles.stackStatus}>
-              <Running /> Running
-            </div>
-          </Stack>
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            gap={"7.3px"}
-            className={styles.stackInfo}
-          >
-            {techSet.map((tech, index) => (
-              <div className={styles.techIcon} key={index}>
-                <Image src={tech} alt="" width={25} height={25} />
-              </div>
-            ))}
-          </Stack>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        className={styles.appInfoWrap}
+      >
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          className={styles.stackInfo}
+        >
+          <div className={styles.stackAvatar}>
+            <Image
+              src={"/img/application/panel/orgAvatar.svg"}
+              width={24}
+              height={24}
+              alt=""
+            />
+          </div>
+          <div className={styles.stackName}>My Shop</div>
+          <div className={styles.stackStatus}>
+            <Running /> Running
+          </div>
         </Stack>
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          gap={"7.3px"}
+          className={styles.stackInfo}
+        >
+          {techSet.map((tech, index) => (
+            <div className={styles.techIcon} key={index}>
+              <Image src={tech} alt="" width={25} height={25} />
+            </div>
+          ))}
+        </Stack>
+      </Stack>
+      <div className={styles.container}>
         <p className={styles.title}>Dev Environments</p>
         <Stack gap="36px">
           <DevEnvironment />

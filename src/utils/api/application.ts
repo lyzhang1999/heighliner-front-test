@@ -105,7 +105,7 @@ export type GetAppEnvironmentsRes = Array<{
     created_at: number;
     id: number;
     in_cluster: boolean;
-    kubeconfig: "kubeconfig";
+    kubeconfig: string;
     name: string;
     org_id: number;
     provider: string;

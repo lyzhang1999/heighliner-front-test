@@ -31,7 +31,7 @@ const Menu = () => {
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    if("NEWORGANIZATION" === event.target.value){
+    if ("NEWORGANIZATION" === event.target.value) {
       router.push('/organizations?new=true')
       return;
     }

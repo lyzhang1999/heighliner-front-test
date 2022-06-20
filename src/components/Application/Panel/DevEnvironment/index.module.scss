@@ -32,6 +32,7 @@
     .item {
       color: #326ce5;
     }
+
   }
 
   .apps {
@@ -48,6 +49,11 @@
 
 .operationInMenu {
   display: none !important; // Menu is under main page
+}
+
+.download {
+  color: #326ce5;
+  text-decoration: none;
 }
 
 @media screen and (max-width: 1340px) {

@@ -1,7 +1,7 @@
-import {AllFieldName, FormData} from "@/components/Application/formData";
+import { AllFieldName, FormData } from "@/components/Application/formData";
 import http from "../axios";
 import { getOriIdByContext } from "../utils";
-import {Page} from "@/utils/api/type";
+import { Page } from "@/utils/api/type";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -32,24 +32,27 @@ export function createApplication(
 }
 
 interface GetStatusReq {
-  app_id: string,
-  release_id: string
+  app_id: string;
+  release_id: string;
 }
 
 export enum ApplicationStatus {
   COMPLETED = "Completed",
   PROCESSING = "Processing",
-  FAILED = "Failed"
+  FAILED = "Failed",
 }
 
 interface GetStatusRes {
-  status: ApplicationStatus
+  status: ApplicationStatus;
 }
 
 export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
-  return http.get(`/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${req.release_id}`)
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${
+      req.release_id
+    }`
+  );
 }
-
 
 export interface Last_release {
   id: number;
@@ -81,11 +84,66 @@ export interface ApplicationObject {
   stack: Stack;
 }
 
-export interface GetApplicationRes{
-  data: ApplicationObject[],
-  pagination: Page
+export interface GetApplicationRes {
+  data: ApplicationObject[];
+  pagination: Page;
 }
 
 export function getApplicationList(): Promise<GetApplicationRes> {
-  return http.get(`/orgs/${getOriIdByContext()}/applications?page=1&page_size=999`)
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications?page=1&page_size=999`
+  );
+}
+
+export interface GetAppEnvironmentsReq {
+  org_id: number;
+  app_id: number;
+}
+
+export type GetAppEnvironmentsRes = Array<{
+  cluster: {
+    created_at: number;
+    id: number;
+    in_cluster: boolean;
+    kubeconfig: "kubeconfig";
+    name: string;
+    org_id: number;
+    provider: string;
+    updated_at: number;
+  };
+  name: string;
+  namespace: string;
+  resources: Array<
+    {
+      name: string;
+      namespace: string;
+      ready_total: number;
+      total: number;
+      type: string;
+    }
+  >;
+  space: {
+    access: {
+      previewURL: string;
+    };
+    chart: {
+      defaultBranch: string;
+      path: string;
+      type: string;
+      url: string;
+      valuesFile: string;
+      version: string;
+    };
+    name: string;
+    namespace: string;
+  };
+  status: "Active";
+}>;
+
+export function getAppEnvironments(
+  req: GetAppEnvironmentsReq
+): Promise<GetAppEnvironmentsRes> {
+  return http.get(
+    `/orgs/${req.org_id}/applications/${req.app_id}/environments`
+  );
 }

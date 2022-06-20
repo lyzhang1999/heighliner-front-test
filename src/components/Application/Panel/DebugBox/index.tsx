@@ -9,36 +9,67 @@ import Edit from "/public/img/application/panel/edit.svg";
 import Stats from "/public/img/application/panel/stats.svg";
 import WWW from "/public/img/application/panel/www.svg";
 import Set from "/public/img/application/panel/set.svg";
-import { GetAppEnvironmentsRes } from "@/utils/api/application";
+import { GetAppEnvironmentsRes, WorkloadType } from "@/utils/api/application";
 
 import styles from "./index.module.scss";
 
 interface Props {
+  appEnvironment: GetAppEnvironmentsRes[number];
   resource: GetAppEnvironmentsRes[number]["resources"][number];
 }
 
-export default function DebugBox({ resource }: Props): React.ReactElement {
+interface OpenVSCode {
+  [index: string]: string;
+  kubeconfig: string;
+  namespace: string;
+  application: string;
+  workload: string;
+  workload_type: WorkloadType;
+}
+
+export default function DebugBox({
+  appEnvironment,
+  resource,
+}: Props): React.ReactElement {
+  const openVSCode = () => {
+    const parameters: OpenVSCode = {
+      kubeconfig: appEnvironment.cluster.kubeconfig,
+      namespace: resource.namespace,
+
+      application: "helghliner-cloud",
+      workload: resource.name,
+      workload_type: resource.type,
+    };
+
+    const queryString = new URLSearchParams(parameters);
+    window.open(`vscode://nocalhost.nocalhost?${queryString.toString()}`);
+  };
+
   return (
     <Stack justifyContent="center">
       <Box className={styles.box}>
         <Indicators total={resource.total} readyTotal={resource.ready_total} />
-        {/* <div className={styles.lines}>
-          <div className={styles.line}></div>
-          <div className={styles.line}></div>
-          <div className={styles.line}></div>
-        </div> */}
         <div className={styles.appName}>
           <MultiShape />
           <div className={styles.name}>{resource.name}</div>
         </div>
         <div className={styles.debug}>
-          <Image
-            src="/img/application/panel/vscode@3x.png"
-            alt=""
-            width={18.6}
-            height={20}
-          />
-          <div className={styles.name}>Debug</div>
+          <div
+            className={styles.name}
+            onClick={() => {
+              openVSCode();
+            }}
+          >
+            <div className={styles.icon}>
+              <Image
+                src="/img/application/panel/vscode@3x.png"
+                alt=""
+                width={18.6}
+                height={20}
+              />
+            </div>
+            Debug
+          </div>
         </div>
         <div className={styles.operateGroup}>
           <Search />

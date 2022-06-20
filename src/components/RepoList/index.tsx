@@ -1,4 +1,7 @@
 import styles from './index.module.scss';
+import {useEffect, useState} from "react";
+import {useRouter} from "next/router";
+import {getRepoList, GetRepoListRes} from "@/utils/api/application";
 
 const list = [
   {
@@ -34,27 +37,38 @@ const list = [
 ]
 
 export default function RepoList() {
+  const [repoList, setRepoList] = useState<GetRepoListRes>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const appId = (router.query.app_id as string);
+    getRepoList(appId).then(res => {
+      console.warn(res);
+      setRepoList(res);
+    })
+  }, [])
+
   return (
     <div className={styles.repoListWrapper}>
       {
-        list.map((item, index) => {
+        repoList.map((item, index) => {
           return (
             <div className={styles.repoItem} key={index}>
               <div className={styles.header}>
                 <span className={styles.name}>
-                  {item.repoName}
+                  {item.repo_name}
                 </span>
-                <img src="/img/application/panel/goRepo.svg" alt="" className={styles.icon}/>
+                <img src="/img/application/panel/goRepo.svg" alt="" className={styles.icon} onClick={() => window.open(item.repo_url)}/>
               </div>
               <div className={styles.tags}>
                 <img src="/img/gitprovider/github.webp" alt="github" className={styles.github}/>
                 <span className={styles.line}>|</span>
-                <span className={styles.tag}>tags</span>
+                {/*<span className={styles.tag}>tags</span>*/}
                 {
-                  item.tags.map((i, index) => {
+                  [item.git_organization].map((i, index) => {
                     return (
                       <span key={index}>
-                          <span className={styles.line}>|</span>
+                          {/*<span className={styles.line}>|</span>*/}
                           <span className={styles.tag}>{i}</span>
                       </span>
                     )
@@ -65,23 +79,24 @@ export default function RepoList() {
 
               <div className={styles.prs}>
                 <div className={styles.left}>
-                  PRS:
+                  Provider:
                 </div>
                 <div className={styles.right}>
-                  {item.prs.map((i, index) => {
+                  {[item.provider].map((i, index) => {
                     return (<div className={styles.prsItem} key={index}>{i}</div>)
                   })}
                 </div>
               </div>
               <div className={styles.prs}>
                 <div className={styles.left}>
-                  Commits:
+                  RepoType:
                 </div>
                 <div className={styles.right}>
-                  {item.commits.map((i, index) => {
+                  {[item.repo_type].map((i, index) => {
                     return (
                       <div className={styles.prsItem} key={index}>
-                        <span>{i.commitID}</span> <span className={styles.commitMessage}>({i.commitMessage})</span>
+                        <span>{i}</span>
+                        {/*<span>{i.commitID}</span> <span className={styles.commitMessage}>({i.commitMessage})</span>*/}
                       </div>)
                   })}
                 </div>

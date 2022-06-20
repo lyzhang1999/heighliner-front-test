@@ -3,13 +3,17 @@ $margin: 17px;
 .repoListWrapper {
   display: flex;
   width: 100%;
+  flex-wrap: wrap;
 
   .repoItem {
     background-color: #fff;
-    margin: 0 12px;
+    margin: 12px;
     box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
     border-radius: 25px;
-    width: 305px;
+    max-width: 360px;
+    min-width: 300px;
+    flex-shrink: 1;
+    flex-grow: 1;
 
     .header {
       margin: 19px $margin 0 $margin;
@@ -37,6 +41,7 @@ $margin: 17px;
       .github {
         width: 15px;
         height: 15px;
+        margin-bottom: -3px;
       }
 
       .line {
@@ -76,7 +81,7 @@ $margin: 17px;
         .prsItem {
           color: #202d40;
           font-size: 11px;
-          margin-bottom: 10px;
+          margin-bottom: 4px;
 
           .commitMessage {
             color: #919DAE;

@@ -39,17 +39,8 @@ export default function DevEnvironment(): React.ReactElement {
   useEffect(() => {
     // Get the app_id in URL and org_id
     const orgId = +getOriIdByContext();
-    const appId = +(router.query.application as string);
-    console.log(orgId);
-
-    if (
-      appId === undefined ||
-      appId <= 0 ||
-      orgId === undefined ||
-      orgId <= 0
-    ) {
-      return;
-    }
+    const appId = +(router.query.app_id as string);
+    const releaseId = +(router.query.release_id as string);
 
     getAppEnvironments({
       org_id: orgId,
@@ -125,7 +116,11 @@ export default function DevEnvironment(): React.ReactElement {
             </Stack>
             <Stack direction="row" gap="21px" className={styles.apps}>
               {appEnvironment.resources.map((resource, index) => (
-                <DebugBox key={index} resource={resource} />
+                <DebugBox
+                  key={index}
+                  resource={resource}
+                  appEnvironment={appEnvironment}
+                />
               ))}
             </Stack>
             <Stack direction="row" className={styles.operator}>

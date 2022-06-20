@@ -58,7 +58,9 @@ export interface GetStatusRes {
 
 export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
   return http.get(
-    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${req.release_id}`
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${
+      req.release_id
+    }`
   );
 }
 
@@ -108,12 +110,20 @@ export interface GetAppEnvironmentsReq {
   app_id: number;
 }
 
+export type workloadType =
+  | "Deployment"
+  | "StatefuleSet"
+  | "DaemonSet"
+  | "Job"
+  | "CronJob"
+  | "Pod";
+
 export type GetAppEnvironmentsRes = Array<{
   cluster: {
     created_at: number;
     id: number;
     in_cluster: boolean;
-    kubeconfig: "kubeconfig";
+    kubeconfig: string;
     name: string;
     org_id: number;
     provider: string;
@@ -126,7 +136,7 @@ export type GetAppEnvironmentsRes = Array<{
     namespace: string;
     ready_total: number;
     total: number;
-    type: string;
+    type: workloadType;
   }>;
   space: {
     access: {
@@ -162,7 +172,7 @@ export type GetRepoListRes = Array<{
   "repo_url": string
 }>
 
-export function getRepoList(appId: number): Promise<GetRepoListRes> {
+export function getRepoList(appId: string): Promise<GetRepoListRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${appId}/repositorys`
   );

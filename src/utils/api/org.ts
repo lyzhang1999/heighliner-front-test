@@ -12,7 +12,7 @@ export interface OrgList {
     updated_at: number;
     org_id: number;
     user_id: number;
-    member_type: string;
+    member_type: MemberType;
     status: number;
   };
   type: string;

@@ -1,21 +1,22 @@
 import React, {createContext} from 'react'
-import { MemberType, OrgList } from './api/org'
+import {MemberType, OrgList} from './api/org'
 
 export interface State {
-  organizationList?: any[],
+  organizationList?: OrgList[],
   currentOrganization?: OrganizationType | null,
   menuSpread?: boolean
 }
 
 export interface OrganizationType {
-  created_at: string,
+  created_at: number,
   id: number,
   member_type: MemberType,
   org_id: number,
   updated_at: number,
   user_id: number,
   name: string,
-  type: string
+  type: string,
+  status: number,
 }
 
 export const initState: State = {

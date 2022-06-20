@@ -9,7 +9,7 @@ import {useContext, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, roleType} from "@/utils/api/org";
-import {formatDate} from "@/utils/utils";
+import {formatDate, getDefaultOrg} from "@/utils/utils";
 import {find, get, omit} from "lodash-es";
 
 const Organizations = () => {
@@ -46,7 +46,7 @@ const Organizations = () => {
   // judage is current organiztion, change to default organization
   function checkOrg(id: number) {
     if (get(currentOrganization, 'org_id') === id) {
-      let defaultItem = find(organizationList, {type: "Default"});
+      let defaultItem = getDefaultOrg(organizationList);
       if (defaultItem) {
         location.pathname = `/${encodeURIComponent(defaultItem.name)}/applications`;
         // dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})

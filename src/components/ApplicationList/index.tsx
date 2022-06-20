@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 import {ApplicationObject} from "@/utils/api/application";
-import {getOrganizationNameByUrl} from "@/utils/utils";
+import {formatDate, getOrganizationNameByUrl} from "@/utils/utils";
 import {useRouter} from "next/router";
 import {GinIcon} from "@/utils/CDN";
 import {get} from "lodash-es";
@@ -28,6 +28,9 @@ export default function ApplicationList({list}: { list: ApplicationObject[] }) {
                   {item.app_name}
                   <div className={styles.status}>
                     Status： {item.last_release.status}
+                  </div>
+                  <div className={styles.status}>
+                    CreatTime： {formatDate(get(item, ['last_release','created_at']) * 1000)}
                   </div>
                 </div>
                 {

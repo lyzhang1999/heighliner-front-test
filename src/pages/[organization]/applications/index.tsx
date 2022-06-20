@@ -21,7 +21,7 @@ const Applications = () => {
 
   useEffect(() => {
     getApplicationList().then((res) => {
-      setApplist(res.data);
+      setApplist(res.data.reverse());
     });
   }, []);
 

@@ -133,12 +133,9 @@ export default function Panel(): React.ReactElement {
           <Stack gap="36px">
             <DevEnvironment />
           </Stack>
-          {/* <p className={styles.title}>Repositories</p>
-          <RepoList /> */}
           <div className={styles.titleRepo}>Repositories</div>
           <RepoList />
         </div>
-        {/* </div> */}
       </ApplicationInfoContext.Provider>
     </Layout>
   );

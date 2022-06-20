@@ -19,6 +19,11 @@ interface Props {
   resource: GetAppEnvironmentsRes[number]["resources"][number];
 }
 
+enum Action {
+  Run = "run",
+  Debug = "debug",
+}
+
 interface OpenVSCode {
   [index: string]: string;
   kubeconfig: string;
@@ -26,7 +31,7 @@ interface OpenVSCode {
   application: string;
   workload: string;
   workload_type: WorkloadType;
-  action: "debug" | "run";
+  action: Action;
 }
 
 export default function DebugBox({
@@ -35,12 +40,7 @@ export default function DebugBox({
 }: Props): React.ReactElement {
   const applicationInfo = useContext(ApplicationInfoContext);
 
-  console.group(">>>>><<<<<<");
-  console.log(applicationInfo);
-  console.log();
-  console.groupEnd();
-
-  const openVSCode = () => {
+  const openVSCode = (action: Action) => {
     const parameters: OpenVSCode = {
       kubeconfig: appEnvironment.cluster.kubeconfig,
       namespace: resource.namespace,
@@ -48,7 +48,7 @@ export default function DebugBox({
       application: applicationInfo.name,
       workload: resource.name,
       workload_type: resource.type,
-      action: "run",
+      action: action,
     };
 
     // console.log(parameters)
@@ -69,7 +69,7 @@ export default function DebugBox({
           <div
             className={styles.name}
             onClick={() => {
-              openVSCode();
+              openVSCode(Action.Debug);
             }}
           >
             <div className={styles.icon}>
@@ -81,6 +81,24 @@ export default function DebugBox({
               />
             </div>
             Debug
+          </div>
+        </div>
+        <div className={styles.debug}>
+          <div
+            className={styles.name}
+            onClick={() => {
+              openVSCode(Action.Run);
+            }}
+          >
+            <div className={styles.icon}>
+              <Image
+                src="/img/application/panel/vscode@3x.png"
+                alt=""
+                width={18.6}
+                height={20}
+              />
+            </div>
+            Run
           </div>
         </div>
         <div className={styles.operateGroup}>

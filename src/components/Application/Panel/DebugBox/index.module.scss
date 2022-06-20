@@ -1,6 +1,6 @@
 .box {
-  width: 115px;
-  height: 125px;
+  width: 180px;
+  height: 180px;
   box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
   border: solid 2px #edf0f3;
   background-color: #fff;
@@ -49,6 +49,7 @@
     align-items: center;
     justify-content: center;
     margin-top: 14px;
+    cursor: pointer;
     
     .name {
       border: solid 1px #edf0f3;

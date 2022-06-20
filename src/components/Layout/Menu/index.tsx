@@ -31,12 +31,16 @@ const Menu = () => {
   };
 
   const handleChange = (event: SelectChangeEvent) => {
+    if("NEWORGANIZATION" === event.target.value){
+      router.push('/organizations?new=true')
+      return;
+    }
     let selectItem = find(organizationList, {id: event.target.value});
     if (selectItem) {
-      let {name} = selectItem;
-      dispatch({currentOrganization: omit({...selectItem, ...selectItem.member}, 'member')})
+      let name = get(selectItem, 'name');
+      // dispatch({currentOrganization: omit({...selectItem, ...selectItem.member}, 'member')})
       // router.push(`/${encodeURIComponent(name)}/applications`);
-      location.pathname = `/${encodeURIComponent(name)}/applications`;
+      name && (location.pathname = `/${encodeURIComponent(name)}/applications`);
     }
   };
 
@@ -149,6 +153,13 @@ const Menu = () => {
                   </SelectMenuItem>
                 );
               })}
+              <SelectMenuItem
+                value="NEWORGANIZATION"
+                key='NEWORGANIZATION'
+                // sx={{fontSize: "14px", color: "#121226", fontWeight: "300"}}
+              >
+                Create A Organization
+              </SelectMenuItem>
             </Select>
             <div className={clsx(styles.selectIcon)} onClick={handleOpen}>
               <img src="/img/slider/selcetIcon.webp" alt="" className={open ? styles.rotate : ''}/>

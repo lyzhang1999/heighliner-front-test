@@ -30,10 +30,6 @@ const Clusters = () => {
     })
   }
 
-  useEffect(() => {
-    getCluster()
-  }, [])
-
   function deleteItem() {
     deleteCluster(deleteItemID).then(res => {
       getCluster();
@@ -72,7 +68,6 @@ const Clusters = () => {
               </Button>
             )}
     >
-
       <Dialog onClose={closeDialog} open={dialogVisible}>
         {/*<DialogTitle>Delete Git-provider</DialogTitle>*/}
         <DialogContent>
@@ -118,6 +113,7 @@ const Clusters = () => {
                 </div>
                 <div className={styles.content}>
                   <div className={styles.organiztion}>Cluster: {item.name}</div>
+                  <div>Status: {item.status}</div>
                   <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at * 1000)}</div>
                 </div>
               </div>

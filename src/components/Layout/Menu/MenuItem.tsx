@@ -1,6 +1,6 @@
 import styles from './index.module.scss';
 import clsx from "clsx";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext} from "react";
 import {Context} from "@/utils/store";
 import {useRouter} from "next/router";
 import {isBrowser} from "@/utils/utils";
@@ -24,7 +24,7 @@ interface MenuProps {
 
 export default function MenuItem({list}: { list: MenuProps[] }) {
 
-  const {state: {menuSpread}, dispatch} = useContext(Context);
+  const {state: {menuSpread}} = useContext(Context);
   const router = useRouter();
 
   function handleClick(isLogout: boolean | undefined, href: string, isPop: boolean | undefined) {

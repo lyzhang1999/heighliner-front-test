@@ -56,7 +56,7 @@
   }
 
   .menuList {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 170px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -150,6 +150,7 @@
 
 .spreadMenuItem {
   justify-content: flex-start;
+  overflow: hidden;
 
   .iconWrapper {
     width: 100%;

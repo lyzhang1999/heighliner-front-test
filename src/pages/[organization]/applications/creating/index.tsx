@@ -1,6 +1,6 @@
 import * as React from "react";
 import Layout from "@/components/Layout";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
 import {getOrganizationNameByUrl, getOriIdByContext, getQuery, Message} from "@/utils/utils";
@@ -21,6 +21,7 @@ interface LogRes {
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
+  let globalState = '';
   const [durationTime, setDurationTime] = useState<number>(0);
   const [skipTime, setSkipTime] = useState<number>(5);
   const router = useRouter();
@@ -35,27 +36,41 @@ const CreatingApplication = () => {
   let skipTimer: any = null;
   let term: any = null;
 
+  function getStatus(isFirst: boolean) {
+    getApplicationStatus({app_id, release_id}).then((res) => {
+      let {start_time, status, completion_time} = res;
+      setStatus(status);
+      globalState = status;
+      if (status === ApplicationStatus.PROCESSING) {
+        if (isFirst) {
+          let time = new Date().getTime() - start_time * 1000;
+          setDurationTime(Math.trunc(time / 1000));
+          durationTimeInterval = setInterval(() => {
+            setDurationTime(t => t + 1)
+          }, 1000)
+        }
+      }
+      if (status === ApplicationStatus.COMPLETED) {
+        getStatusInterval && clearInterval(getStatusInterval);
+        getStatusInterval = null;
+        durationTimeInterval && clearInterval(durationTimeInterval)
+        durationTimeInterval = null;
+        skip();
+      }
+      if (status === ApplicationStatus.FAILED) {
+        if (completion_time && start_time) {
+          setDurationTime(Math.trunc((completion_time - start_time)));
+        }
+        getStatusInterval && clearInterval(getStatusInterval);
+        getStatusInterval = null;
+        durationTimeInterval && clearInterval(durationTimeInterval)
+        durationTimeInterval = null;
+      }
+    })
+  }
+
   useEffect(() => {
-    function getStatus(isFirst: boolean) {
-      getApplicationStatus({app_id, release_id}).then(({status}) => {
-        setStatus(status);
-        if (status !== ApplicationStatus.PROCESSING) {
-          if (isFirst) {
-            // durationTimeInterval = setInterval(() => {
-            //   setDurationTime(t => t + 1)
-            // }, 1000)
-          }
-        }
-        if (status === ApplicationStatus.COMPLETED) {
-          durationTimeInterval && clearInterval(durationTimeInterval)
-          durationTimeInterval = null;
-          goDashboard();
-        }
-      })
-    }
-
     getStatus(true);
-
     getStatusInterval = setInterval(getStatus, 5000);
     getlog();
     return () => {
@@ -70,6 +85,7 @@ const CreatingApplication = () => {
       getlogTimeOut = null;
     }
   }, [])
+
 
   function getlog() {
     const initTerminal = async () => {
@@ -103,11 +119,14 @@ const CreatingApplication = () => {
     const token = cookie.getCookie('token');
     var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
     console.warn(eventSource)
+    console.warn()
     eventSource.onerror = function () {
-      eventSource.close();
-      console.warn('onerror')
+      console.warn('onerror', globalState)
       setTimeout(() => {
-        getLog();
+        console.warn('onerrorTimeout', globalState)
+        if (globalState === ApplicationStatus.PROCESSING) {
+          getLog();
+        }
       }, 1000)
     }
     eventSource.addEventListener("MESSAGE", function (e) {
@@ -117,7 +136,9 @@ const CreatingApplication = () => {
       console.warn('END')
       eventSource.close();
       setTimeout(() => {
-        if (status === ApplicationStatus.PROCESSING) {
+        console.warn(globalState)
+        console.warn( "end" + globalState)
+        if (globalState === ApplicationStatus.PROCESSING) {
           getLog();
         }
       }, 5000);
@@ -127,23 +148,22 @@ const CreatingApplication = () => {
 
   function goDashboard() {
     Message.success('Creat Success');
-    setTimeout(() => {
+    // setTimeout(() => {
       router.replace(`/${getOrganizationNameByUrl()}/applications/panel?appId=${app_id}`)
-    }, 2000)
+    // }, 2000)
   }
 
-  // function skip() {
-  //   skipTimer = setInterval(() => {
-  //     setSkipTime(t => {
-  //       console.warn(t)
-  //       if (t === 1) {
-  //         clearInterval(skipTimer);
-  //         // goDashboard();
-  //       }
-  //       return t - 1;
-  //     });
-  //   }, 1000)
-  // }
+  function skip() {
+    skipTimer = setInterval(() => {
+      setSkipTime(t => {
+        if (t === 1) {
+          clearInterval(skipTimer);
+          goDashboard();
+        }
+        return t - 1;
+      });
+    }, 1000)
+  }
 
   // close server render
   React.useEffect(() => {
@@ -155,18 +175,24 @@ const CreatingApplication = () => {
     <Layout pageHeader="Creating Application"
     >
       <div id="creatingTerminal" className={styles.wrapper}>
-        {/*<Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s ago</Alert>*/}
+        <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
         <div id="terminal"
              className={styles.terminal}
         >
         </div>
-        {/*{*/}
-        {/*  status === ApplicationStatus.COMPLETED &&*/}
-        {/*  <Alert severity="success">*/}
-        {/*    Success, auto go <span className={styles.goDashboard}*/}
-        {/*                           onClick={goDashboard}>dashboard</span> after {skipTime}s*/}
-        {/*  </Alert>*/}
-        {/*}*/}
+        {
+          status === ApplicationStatus.COMPLETED &&
+          <Alert severity="success">
+            Success, auto go <span className={styles.goDashboard}
+                                   onClick={goDashboard}>dashboard</span> after {skipTime}s
+          </Alert>
+        }
+        {
+          status === ApplicationStatus.FAILED &&
+          <Alert severity="error">
+            The Application Filed!
+          </Alert>
+        }
       </div>
     </Layout>
   )

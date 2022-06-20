@@ -5,18 +5,19 @@ import DeleteOrganization from "@/pages/organizations/deleteOrganization";
 import TransferOrganization from "@/pages/organizations/transferOrganization";
 import LeaveOrganization from "@/pages/organizations/leaveOrganization";
 import styles from './index.module.scss';
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, roleType} from "@/utils/api/org";
-import {formatDate, getDefaultOrg} from "@/utils/utils";
-import {find, get, omit} from "lodash-es";
+import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
+import {get} from "lodash-es";
+import {useRouter} from "next/router";
 
 const Organizations = () => {
   const {state, dispatch} = useContext(Context);
   let {organizationList, currentOrganization} = state;
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
   const [deleteID, setDeleteId] = useState<number>(0);
   const [transferModalVisible, setTransferModalVisible] = useState<boolean>(false);
@@ -24,6 +25,12 @@ const Organizations = () => {
   const [leaveModalVisible, setLeaveModalVisible] = useState<boolean>(false);
   const [leaveId, setLeaveId] = useState<number>(0);
 
+  const router = useRouter();
+  useEffect(() => {
+    if(getQuery('new')){
+      setOpen(true);
+    }
+  }, [router])
 
   function createSuccessCb() {
     updateOriList();
@@ -72,23 +79,6 @@ const Organizations = () => {
         </Button>
       )}
     >
-      {/*<div className={styles.header}>*/}
-      {/*  <div className={styles.headerContent}>*/}
-      {/*    <div className={styles.left}>*/}
-      {/*      <div className={styles.title}>*/}
-      {/*        Hey Developer!*/}
-      {/*      </div>*/}
-      {/*      <div className={styles.desc}>*/}
-      {/*        Here’s the list of your organizations*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*    <div className={styles.right} onClick={() => {*/}
-      {/*      setOpen(true)*/}
-      {/*    }}>*/}
-      {/*      Create Organization*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
       <div className={styles.tableWrapper}>
         <Table sx={{}} aria-label="simple table">
           <TableHead>

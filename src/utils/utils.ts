@@ -9,8 +9,17 @@ export function isBrowser() {
   return process.title === "browser";
 }
 
+export function getStateByContext(arr: string[]) {
+  let result = GlobalContxtRef.current?.getState(arr);
+  if (isBrowser()) {
+    return result;
+  } else {
+    return '';
+  }
+}
+
 export function getOriIdByContext(): string {
-  let result = GlobalContxtRef.current?.getState('currentOrganization');
+  let result = GlobalContxtRef.current?.getState(['currentOrganization']);
   if (isBrowser() && result) {
     let {org_id} = result;
     return org_id;
@@ -20,7 +29,7 @@ export function getOriIdByContext(): string {
 }
 
 export function getOriNameByContext(): string {
-  let result = GlobalContxtRef.current?.getState('currentOrganization');
+  let result = GlobalContxtRef.current?.getState(['currentOrganization']);
   if (isBrowser() && result) {
     let {name} = result;
     return name;

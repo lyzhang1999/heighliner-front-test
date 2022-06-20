@@ -14,10 +14,11 @@ import theme from "@/utils/theme";
 import {getOrgList} from "@/utils/api/org";
 import {CssBaseline} from "@mui/material";
 import {find} from "lodash-es";
-import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl} from "@/utils/utils";
+import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 
 const noCheckOriPage = ['/login/github', '/signup'];
 const noCheckPathPage = ['/organizations', '/settings'];
+const ifLoginRedirect = ["/", '/login', '/signup'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -26,7 +27,26 @@ function App({Component, pageProps}: AppProps) {
 
   useEffect(() => {
     loginCheck();
+    initSpread();
   }, []);
+
+  function initSpread() {
+    if (document.documentElement.clientWidth < 1200) {
+      dispatch({'menuSpread': false});
+    }
+    window.addEventListener('resize', () => {
+      let bool = getStateByContext(['menuSpread'])
+      if (document.documentElement.clientWidth > 1200) {
+        if (!bool) {
+          dispatch({'menuSpread': true});
+        }
+      } else {
+        if (bool) {
+          dispatch({'menuSpread': false});
+        }
+      }
+    })
+  }
 
   function loginCheck() {
     if (!noCheckOriPage.includes(router.pathname)) {
@@ -37,7 +57,7 @@ function App({Component, pageProps}: AppProps) {
             organizationList: list,
           });
           let defaultOriName = getDefaultOrg(list).name;
-          if ((["/", '/login', '/signup'].includes(router.pathname))) {
+          if ((ifLoginRedirect.includes(router.pathname))) {
             location.pathname = `${defaultOriName}/applications`;
             return;
           }
@@ -66,7 +86,7 @@ function App({Component, pageProps}: AppProps) {
     }
   }
 
-  function startRender(){
+  function startRender() {
     setTimeout(() => {
       setRender(true)
     }, 0)

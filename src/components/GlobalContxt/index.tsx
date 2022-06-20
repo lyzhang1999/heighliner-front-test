@@ -9,7 +9,7 @@ import {Context, State} from "@/utils/store";
 import {get} from "lodash-es";
 
 interface GetStateRef {
-  getState: (p: string) => void;
+  getState: (arr: string[]) => void;
   dispatch: (params: State) => void;
 }
 
@@ -19,8 +19,8 @@ const GlobalContxt = (): ReactElement => {
 
   const {state, dispatch} = useContext(Context);
 
-  const getState: any = useCallback((name: string): any => {
-    return get(state, name);
+  const getState: any = useCallback((arr: string[]): any => {
+    return get(state, arr);
   }, [state])
 
   useImperativeHandle(GlobalContxtRef, () => ({getState, dispatch}), [state]);

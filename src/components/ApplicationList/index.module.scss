@@ -9,20 +9,55 @@
     justify-content: flex-start;
     //flex-grow: 1;
     //flex-shrink: 1;
-    //width: 431px;
-    border-radius: 6px;
+    flex-basis: 30%;
+    width: 30%;
     min-width: 350px;
     max-width: 450px;
     height: 124px;
     padding: 11px 15.3px 11.9px 22px;
     box-shadow: 0 4px 8px 0 rgba(244, 243, 245, 0.25);
-    border-style: solid;
-    border-width: 1px;
+    //border-style: solid;
+    //border-width: 1px;
     border-image-source: linear-gradient(to bottom, #1d56bc 0%, #419ce2 100%);
-    border-image-slice: 1;
+    //border-image-slice: 1;
     background-color: #fefdff;
     cursor: pointer;
-    cursor: pointer;
-    flex: 1
+    border-radius: 6px;
+    border: 1px solid #1d56bc;
+
+
+    display: flex;
+    align-items: center;
+
+    .left {
+      img {
+        width: 22px;
+        height: 28px;
+        margin-right: 20px;
+      }
+    }
+
+    .right {
+      color: #16111e;
+      font-size: 15px;
+      font-weight: 500;
+
+      .status {
+        margin: 10px 0;
+        font-size: 12px;
+        color: #919dae;
+      }
+
+      .stack {
+        padding: 0 12px;
+        border: solid 1px #9e9d9e;
+        font-size: 10px;
+        border-radius: 6px;
+        height: 20px;
+        color: rgba(0, 0, 0, 0.87);
+        margin-top: 10px;
+        //background-color: #efedf0;
+      }
+    }
   }
 }

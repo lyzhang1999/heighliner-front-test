@@ -10,7 +10,7 @@ import Layout from "@/components/Layout";
 import DitchTab, { TabItems } from "@/basicComponents/DitchTab";
 import { GinIcon, SpringIcon, VueIcon } from "@/utils/CDN";
 import DevEnvironment from "@/components/Application/Panel/DevEnvironment";
-import RepoList from "@/components/RepoList";
+import RepoList from "@/components/Application/Panel/RepoList";
 
 import styles from "./index.module.scss";
 
@@ -96,7 +96,7 @@ export default function Panel(): React.ReactElement {
         <Stack gap="36px">
           <DevEnvironment />
         </Stack>
-        <p className={styles.title}>Repositories</p>
+        <div className={styles.titleRepo}>Repositories</div>
         <RepoList />
       </div>
     </Layout>

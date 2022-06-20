@@ -30,13 +30,14 @@
 
     .pageHeader {
       padding: 24px 24px 16px 24px;
-      font-size: 28px;
       font-weight: 500;
       line-height: 1.4;
-      color: #6002ee;
-      font-family: Jost;
       display: flex;
       justify-content: space-between;
+      font-size: 28px;
+      letter-spacing: normal;
+      text-align: left;
+      color: #7368db;
     }
   }
 }

@@ -42,15 +42,23 @@ export enum ApplicationStatus {
   FAILED = "Failed",
 }
 
-interface GetStatusRes {
+export interface GetStatusRes {
+  id: number;
+  created_at: number;
+  updated_at: number;
+  application_id: number;
+  name: string;
+  namespace: string;
+  cluster_id: number;
+  job_namespace: string;
+  start_time: number;
+  completion_time: number;
   status: ApplicationStatus;
 }
 
 export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
   return http.get(
-    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${
-      req.release_id
-    }`
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${req.release_id}`
   );
 }
 

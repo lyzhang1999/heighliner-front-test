@@ -37,19 +37,35 @@ const CreatingApplication = () => {
 
   useEffect(() => {
     function getStatus(isFirst: boolean) {
-      getApplicationStatus({app_id, release_id}).then(({status}) => {
+      getApplicationStatus({app_id, release_id}).then((res) => {
+        let {start_time, status, completion_time} = res;
         setStatus(status);
-        if (status !== ApplicationStatus.PROCESSING) {
+        if (status === ApplicationStatus.PROCESSING) {
           if (isFirst) {
-            // durationTimeInterval = setInterval(() => {
-            //   setDurationTime(t => t + 1)
-            // }, 1000)
+            let time = new Date().getTime() - start_time * 1000;
+            setDurationTime(Math.trunc(time / 1000));
+            durationTimeInterval = setInterval(() => {
+              setDurationTime(t => t + 1)
+            }, 1000)
           }
         }
         if (status === ApplicationStatus.COMPLETED) {
+          getStatusInterval && clearInterval(getStatusInterval);
+          getStatusInterval = null;
           durationTimeInterval && clearInterval(durationTimeInterval)
           durationTimeInterval = null;
-          goDashboard();
+          // goDashboard();
+          skip();
+        }
+        if (status === ApplicationStatus.FAILED) {
+          if (completion_time && start_time) {
+            setDurationTime(Math.trunc((completion_time - start_time)));
+          }
+          getStatusInterval && clearInterval(getStatusInterval);
+          getStatusInterval = null;
+          durationTimeInterval && clearInterval(durationTimeInterval)
+          durationTimeInterval = null;
+          // goDashboard();
         }
       })
     }
@@ -70,6 +86,7 @@ const CreatingApplication = () => {
       getlogTimeOut = null;
     }
   }, [])
+
 
   function getlog() {
     const initTerminal = async () => {
@@ -107,7 +124,8 @@ const CreatingApplication = () => {
       eventSource.close();
       console.warn('onerror', status)
       setTimeout(() => {
-        if(status === ApplicationStatus.PROCESSING){
+        console.warn('onerrorTimeout', status)
+        if (status === ApplicationStatus.PROCESSING) {
           getLog();
         }
       }, 1000)
@@ -119,6 +137,7 @@ const CreatingApplication = () => {
       console.warn('END')
       eventSource.close();
       setTimeout(() => {
+        console.warn(status)
         if (status === ApplicationStatus.PROCESSING) {
           getLog();
         }
@@ -134,18 +153,17 @@ const CreatingApplication = () => {
     }, 2000)
   }
 
-  // function skip() {
-  //   skipTimer = setInterval(() => {
-  //     setSkipTime(t => {
-  //       console.warn(t)
-  //       if (t === 1) {
-  //         clearInterval(skipTimer);
-  //         // goDashboard();
-  //       }
-  //       return t - 1;
-  //     });
-  //   }, 1000)
-  // }
+  function skip() {
+    skipTimer = setInterval(() => {
+      setSkipTime(t => {
+        if (t === 1) {
+          clearInterval(skipTimer);
+          goDashboard();
+        }
+        return t - 1;
+      });
+    }, 1000)
+  }
 
   // close server render
   React.useEffect(() => {
@@ -157,18 +175,24 @@ const CreatingApplication = () => {
     <Layout pageHeader="Creating Application"
     >
       <div id="creatingTerminal" className={styles.wrapper}>
-        {/*<Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s ago</Alert>*/}
+        <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
         <div id="terminal"
              className={styles.terminal}
         >
         </div>
-        {/*{*/}
-        {/*  status === ApplicationStatus.COMPLETED &&*/}
-        {/*  <Alert severity="success">*/}
-        {/*    Success, auto go <span className={styles.goDashboard}*/}
-        {/*                           onClick={goDashboard}>dashboard</span> after {skipTime}s*/}
-        {/*  </Alert>*/}
-        {/*}*/}
+        {
+          status === ApplicationStatus.COMPLETED &&
+          <Alert severity="success">
+            Success, auto go <span className={styles.goDashboard}
+                                   onClick={goDashboard}>dashboard</span> after {skipTime}s
+          </Alert>
+        }
+        {
+          status === ApplicationStatus.FAILED &&
+          <Alert severity="error">
+            The Application Filed!
+          </Alert>
+        }
       </div>
     </Layout>
   )

@@ -12,8 +12,8 @@ import {Context} from "@/utils/store";
 import {isBrowser} from "@/utils/utils";
 import {useRouter} from "next/router";
 import {OrgList} from "@/utils/api/org";
-import {find} from "lodash-es";
-import NestedMenu, {MenuList} from "@/basicComponents/NestedMenu";
+import {find, get} from "lodash-es";
+import {MenuList} from "@/basicComponents/NestedMenu";
 
 function getNavlist() {
   return [
@@ -98,7 +98,7 @@ const Slider = () => {
     if (selectItem) {
       let {name} = selectItem;
       let path = location.pathname.split("/")[2];
-      location.pathname = `/${encodeURIComponent(name)}/${path}`;
+      location.pathname = `/${encodeURIComponent(get(selectItem, 'name', ''))}/${path}`;
     }
   };
 
@@ -133,7 +133,6 @@ const Slider = () => {
         })}
       </Select>
       <div className={styles.navTitle}>Menu</div>
-      {/*<NestedMenu menuList={menuList} />*/}
       <div className={styles.menuList}>
         {getNavlist().map((item) => {
           let {href, name} = item;

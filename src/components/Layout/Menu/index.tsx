@@ -31,7 +31,7 @@ const Menu = () => {
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    if("NEWORGANIZATION" === event.target.value){
+    if ("NEWORGANIZATION" === event.target.value) {
       router.push('/organizations?new=true')
       return;
     }
@@ -56,12 +56,12 @@ const Menu = () => {
   }
 
   const menuList = [
-    // {
-    //   activeIcon: "/img/slider/homeActive.svg",
-    //   icon: "/img/slider/home.svg",
-    //   href: `/${getOrganizationNameByUrl()}/home`,
-    //   name: "Home",
-    // },
+    {
+      activeIcon: "/img/slider/homeActive.svg",
+      icon: "/img/slider/home.svg",
+      href: `/${name}/home`,
+      name: "Home",
+    },
     {
       activeIcon: "/img/slider/icon2Active.svg",
       icon: "/img/slider/icon2.svg",

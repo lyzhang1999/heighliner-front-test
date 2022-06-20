@@ -1,7 +1,7 @@
-import { AllFieldName, FormData } from "@/components/Application/formData";
+import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
-import { getOriIdByContext } from "../utils";
-import { Page } from "@/utils/api/type";
+import {getOriIdByContext} from "../utils";
+import {Page} from "@/utils/api/type";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -161,5 +161,19 @@ export function getAppEnvironments(
 ): Promise<GetAppEnvironmentsRes> {
   return http.get(
     `/orgs/${req.org_id}/applications/${req.app_id}/environments`
+  );
+}
+
+export type GetRepoListRes = Array<{
+  "git_organization": string,
+  "provider": string,
+  "repo_name": string,
+  "repo_type": string,
+  "repo_url": string
+}>
+
+export function getRepoList(appId: string): Promise<GetRepoListRes> {
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${appId}/repositorys`
   );
 }

@@ -149,7 +149,7 @@ const CreatingApplication = () => {
   function goDashboard() {
     Message.success('Creat Success');
     // setTimeout(() => {
-      router.replace(`/${getOrganizationNameByUrl()}/applications/panel?appId=${app_id}`)
+      router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
     // }, 2000)
   }
 

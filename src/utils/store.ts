@@ -4,7 +4,8 @@ import {MemberType, OrgList} from './api/org'
 export interface State {
   organizationList?: OrgList[],
   currentOrganization?: OrganizationType | null,
-  menuSpread?: boolean
+  menuSpread?: boolean,
+  setSpreadFlag?: boolean,
 }
 
 export interface OrganizationType {
@@ -23,6 +24,7 @@ export const initState: State = {
   organizationList: [],
   currentOrganization: null,
   menuSpread: true,
+  setSpreadFlag: false
 }
 
 export const reducer = (state: State, params: State) => {

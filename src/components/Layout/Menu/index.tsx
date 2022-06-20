@@ -19,7 +19,7 @@ const Menu = () => {
   const router = useRouter();
 
   function setSpread() {
-    dispatch({menuSpread: !menuSpread})
+    dispatch({menuSpread: !menuSpread, setSpreadFlag: true})
   }
 
   const handleClose = () => {

@@ -35,7 +35,11 @@ function App({Component, pageProps}: AppProps) {
       dispatch({'menuSpread': false});
     }
     window.addEventListener('resize', () => {
-      let bool = getStateByContext(['menuSpread'])
+      let bool = getStateByContext(['menuSpread']);
+      let flag = getStateByContext(['setSpreadFlag']);
+      if (flag) {
+        return;
+      }
       if (document.documentElement.clientWidth > 1200) {
         if (!bool) {
           dispatch({'menuSpread': true});

@@ -188,3 +188,17 @@ export function getApplicationInfo(
 ): Promise<GetApplicationInfoRes> {
   return http.get(`/orgs/${req.org_id}/applications/${req.app_id}`);
 }
+
+export type GetRepoListRes = Array<{
+  "git_organization": string,
+  "provider": string,
+  "repo_name": string,
+  "repo_type": string,
+  "repo_url": string
+}>
+
+export function getRepoList(appId: string): Promise<GetRepoListRes> {
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${appId}/repositorys`
+  );
+}

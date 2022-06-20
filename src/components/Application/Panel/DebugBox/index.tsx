@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -12,6 +12,7 @@ import Set from "/public/img/application/panel/set.svg";
 import { GetAppEnvironmentsRes, WorkloadType } from "@/utils/api/application";
 
 import styles from "./index.module.scss";
+import { ApplicationInfoContext } from "@/pages/[organization]/applications/panel";
 
 interface Props {
   appEnvironment: GetAppEnvironmentsRes[number];
@@ -25,21 +26,32 @@ interface OpenVSCode {
   application: string;
   workload: string;
   workload_type: WorkloadType;
+  action: "debug" | "run";
 }
 
 export default function DebugBox({
   appEnvironment,
   resource,
 }: Props): React.ReactElement {
+  const applicationInfo = useContext(ApplicationInfoContext);
+
+  console.group(">>>>><<<<<<");
+  console.log(applicationInfo);
+  console.log();
+  console.groupEnd();
+
   const openVSCode = () => {
     const parameters: OpenVSCode = {
       kubeconfig: appEnvironment.cluster.kubeconfig,
       namespace: resource.namespace,
 
-      application: "helghliner-cloud",
+      application: applicationInfo.name,
       workload: resource.name,
       workload_type: resource.type,
+      action: "run",
     };
+
+    // console.log(parameters)
 
     const queryString = new URLSearchParams(parameters);
     window.open(`vscode://nocalhost.nocalhost?${queryString.toString()}`);

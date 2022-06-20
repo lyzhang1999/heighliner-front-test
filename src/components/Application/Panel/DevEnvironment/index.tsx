@@ -17,7 +17,6 @@ import {
   getAppEnvironments,
   GetAppEnvironmentsRes,
 } from "@/utils/api/application";
-import { stringify } from "querystring";
 import { DownloadTextInClient } from "@/basicComponents/DownloadTextInClient";
 
 export default function DevEnvironment(): React.ReactElement {
@@ -37,7 +36,6 @@ export default function DevEnvironment(): React.ReactElement {
 
   const router = useRouter();
   useEffect(() => {
-    // Get the app_id in URL and org_id
     const orgId = +getOriIdByContext();
     const appId = +(router.query.app_id as string);
     const releaseId = +(router.query.release_id as string);

@@ -1,7 +1,7 @@
-import {AllFieldName, FormData} from "@/components/Application/formData";
+import { AllFieldName, FormData } from "@/components/Application/formData";
 import http from "../axios";
-import {getOriIdByContext} from "../utils";
-import {Page} from "@/utils/api/type";
+import { getOriIdByContext } from "../utils";
+import { Page } from "@/utils/api/type";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -31,7 +31,7 @@ export function createApplication(
   );
 }
 
-interface GetStatusReq {
+export interface GetStatusReq {
   app_id: string;
   release_id: string;
 }
@@ -110,7 +110,7 @@ export interface GetAppEnvironmentsReq {
   app_id: number;
 }
 
-export type workloadType =
+export type WorkloadType =
   | "Deployment"
   | "StatefuleSet"
   | "DaemonSet"
@@ -136,7 +136,7 @@ export type GetAppEnvironmentsRes = Array<{
     namespace: string;
     ready_total: number;
     total: number;
-    type: workloadType;
+    type: WorkloadType;
   }>;
   space: {
     access: {
@@ -164,16 +164,27 @@ export function getAppEnvironments(
   );
 }
 
-export type GetRepoListRes = Array<{
-  "git_organization": string,
-  "provider": string,
-  "repo_name": string,
-  "repo_type": string,
-  "repo_url": string
-}>
+export interface GetApplicationInfoReq {
+  org_id: number;
+  app_id: number;
+}
 
-export function getRepoList(appId: string): Promise<GetRepoListRes> {
-  return http.get(
-    `/orgs/${getOriIdByContext()}/applications/${appId}/repositorys`
-  );
+export interface GetApplicationInfoRes {
+  cluster_id: number;
+  created_at: number;
+  domain: string;
+  git_org_name: string;
+  git_provider: string;
+  git_token: string;
+  id: number;
+  name: string;
+  org_id: number;
+  stack_id: number;
+  updated_at: number;
+}
+
+export function getApplicationInfo(
+  req: GetApplicationInfoReq
+): Promise<GetApplicationInfoRes> {
+  return http.get(`/orgs/${req.org_id}/applications/${req.app_id}`);
 }

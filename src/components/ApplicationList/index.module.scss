@@ -1,0 +1,28 @@
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .item {
+    margin: 13px 50px;
+    justify-content: flex-start;
+    //flex-grow: 1;
+    //flex-shrink: 1;
+    //width: 431px;
+    border-radius: 6px;
+    min-width: 350px;
+    max-width: 450px;
+    height: 124px;
+    padding: 11px 15.3px 11.9px 22px;
+    box-shadow: 0 4px 8px 0 rgba(244, 243, 245, 0.25);
+    border-style: solid;
+    border-width: 1px;
+    border-image-source: linear-gradient(to bottom, #1d56bc 0%, #419ce2 100%);
+    border-image-slice: 1;
+    background-color: #fefdff;
+    cursor: pointer;
+    cursor: pointer;
+    flex: 1
+  }
+}

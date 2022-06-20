@@ -9,6 +9,10 @@
   max-width: 1486px;
 }
 
+.appInfoWrap {
+  @include setHorizontalPadding(41px);
+}
+
 .separator {
   height: 4px;
   background-color: #9eea91;

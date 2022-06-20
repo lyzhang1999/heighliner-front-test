@@ -1,44 +1,58 @@
-import React, {useState, useEffect} from "react";
-import {Button, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
-import {useRouter} from "next/router";
-import {getOrganizationNameByUrl} from "@/utils/utils";
-import {ApplicationObject, getApplicationList} from "@/utils/api/application";
-import {get} from "lodash-es";
+import { useRouter } from "next/router";
+import { getOrganizationNameByUrl } from "@/utils/utils";
+import { ApplicationObject, getApplicationList } from "@/utils/api/application";
+import { get } from "lodash-es";
 
 const Applications = () => {
-
   const [applist, setApplist] = useState<ApplicationObject[]>([]);
 
   const router = useRouter();
 
   useEffect(() => {
-    getApplicationList().then(res => {
+    getApplicationList().then((res) => {
       setApplist(res.data);
-    })
+    });
   }, []);
 
-  function goPanel(id: number) {
-    router.push(`/${getOrganizationNameByUrl()}/applications/${id}`)
+  function goPanel(appId: number, releaseId: number) {
+    const queryParameters = new URLSearchParams({
+      app_id: appId.toString(),
+      release_id: releaseId.toString(),
+    });
+    router.push(
+      `/${getOrganizationNameByUrl()}/applications/panel?${queryParameters.toString()}`
+    );
   }
 
   return (
-    <Layout pageHeader="APPLICATIONS"
-            titleContent={(
-              <Button
-                variant="contained"
-                onClick={() => {
-                  router.push(
-                    `/${encodeURIComponent(getOrganizationNameByUrl())}/applications/creation`
-                  );
-                }}
-              >
-                Create a Application
-              </Button>
-            )}
+    <Layout
+      pageHeader="APPLICATIONS"
+      titleContent={
+        <Button
+          variant="contained"
+          onClick={() => {
+            router.push(
+              `/${encodeURIComponent(
+                getOrganizationNameByUrl()
+              )}/applications/creation`
+            );
+          }}
+        >
+          Create a Application
+        </Button>
+      }
     >
-
       <div className={styles.tableWrapper}>
         <Table sx={{}} aria-label="simple table">
           <TableHead>
@@ -50,37 +64,36 @@ const Applications = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(applist).map((row) => {
+            {applist.map((row) => {
               return (
                 <TableRow
                   key={row.app_name}
-                  sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
                     {row.app_name}
                   </TableCell>
                   <TableCell align="right">
-                    {get(row, 'last_release.status', '')}
+                    {get(row, "last_release.status", "")}
                   </TableCell>
                   <TableCell align="right">
                     <Button
-                      sx={{cursor: 'pointer'}}
+                      sx={{ cursor: "pointer" }}
                       // color="error"
                       onClick={() => {
-                        goPanel(row.app_id)
+                        goPanel(row.app_id, row.last_release.id);
                       }}
                     >
                       GoPanel
                     </Button>
                   </TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </Table>
       </div>
     </Layout>
-  )
-    ;
+  );
 };
 export default Applications;

@@ -58,7 +58,9 @@ export interface GetStatusRes {
 
 export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
   return http.get(
-    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${req.release_id}`
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${
+      req.release_id
+    }`
   );
 }
 
@@ -108,6 +110,14 @@ export interface GetAppEnvironmentsReq {
   app_id: number;
 }
 
+export type workloadType =
+  | "Deployment"
+  | "StatefuleSet"
+  | "DaemonSet"
+  | "Job"
+  | "CronJob"
+  | "Pod";
+
 export type GetAppEnvironmentsRes = Array<{
   cluster: {
     created_at: number;
@@ -121,15 +131,13 @@ export type GetAppEnvironmentsRes = Array<{
   };
   name: string;
   namespace: string;
-  resources: Array<
-    {
-      name: string;
-      namespace: string;
-      ready_total: number;
-      total: number;
-      type: string;
-    }
-  >;
+  resources: Array<{
+    name: string;
+    namespace: string;
+    ready_total: number;
+    total: number;
+    type: workloadType;
+  }>;
   space: {
     access: {
       previewURL: string;

@@ -14,9 +14,8 @@ import RepoList from "@/components/RepoList";
 
 import styles from "./index.module.scss";
 import {
-  ApplicationStatus,
-  getApplicationStatus,
-  GetStatusRes,
+  getApplicationInfo,
+  GetApplicationInfoRes,
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
 import { getOriIdByContext } from "@/utils/utils";
@@ -47,23 +46,24 @@ const tabItems: TabItems<keyof typeof TabItemLabels> = [
 
 const techSet = [GinIcon, VueIcon, SpringIcon];
 
-export const AppStatusContext = createContext<GetStatusRes>({
-  id: 0,
-  created_at: 0,
-  updated_at: 0,
-  application_id: 0,
-  name: "",
-  namespace: "",
+export const ApplicationInfoContext = createContext<GetApplicationInfoRes>({
   cluster_id: 0,
-  job_namespace: "",
-  start_time: 0,
-  completion_time: 0,
-  status: ApplicationStatus.FAILED,
+  created_at: 0,
+  domain: "",
+  git_org_name: "",
+  git_provider: "",
+  git_token: "",
+  id: 0,
+  name: "",
+  org_id: 0,
+  stack_id: 0,
+  updated_at: 0,
 });
 
 export default function Panel(): React.ReactElement {
   const router = useRouter();
-  const [appStatus, setAppStatus] = useState<GetStatusRes>();
+  const [applicationInfo, setApplicationInfo] =
+    useState<GetApplicationInfoRes>();
   const [selectedItem, setSelectedItem] = useState<keyof typeof TabItemLabels>(
     TabItemLabels.Code
   );
@@ -73,17 +73,17 @@ export default function Panel(): React.ReactElement {
     const appId = router.query.app_id as string;
     const releaseId = router.query.release_id as string;
 
-    getApplicationStatus({
-      app_id: appId,
-      release_id: releaseId,
+    getApplicationInfo({
+      app_id: +appId,
+      org_id: +orgId,
     }).then((res) => {
-      setAppStatus(res);
+      setApplicationInfo(res);
     });
   }, []);
 
   return (
     <Layout>
-      <AppStatusContext.Provider value={appStatus!}>
+      <ApplicationInfoContext.Provider value={applicationInfo!}>
         <Stack alignItems="center" className={styles.tabs}>
           <DitchTab<keyof typeof TabItemLabels>
             selectedItem={selectedItem}
@@ -110,9 +110,9 @@ export default function Panel(): React.ReactElement {
                 alt=""
               />
             </div>
-            <div className={styles.stackName}>{appStatus?.name}</div>
+            <div className={styles.stackName}>{applicationInfo?.name}</div>
             <div className={styles.stackStatus}>
-              <Running /> {appStatus?.status}
+              {/* <Running /> {applicationInfo?} */}
             </div>
           </Stack>
           <Stack
@@ -136,7 +136,7 @@ export default function Panel(): React.ReactElement {
           <p className={styles.title}>Repositories</p>
           <RepoList />
         </div>
-      </AppStatusContext.Provider>
+      </ApplicationInfoContext.Provider>
     </Layout>
   );
 }

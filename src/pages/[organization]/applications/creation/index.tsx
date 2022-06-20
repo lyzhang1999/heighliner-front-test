@@ -144,7 +144,7 @@ export default function Index(): React.ReactElement {
   };
 
   return (
-    <Layout pageHeader="Create Application">
+    <Layout>
       <div className={styles.panel}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller

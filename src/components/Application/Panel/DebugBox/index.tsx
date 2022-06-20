@@ -12,7 +12,7 @@ import Set from "/public/img/application/panel/set.svg";
 import { GetAppEnvironmentsRes, WorkloadType } from "@/utils/api/application";
 
 import styles from "./index.module.scss";
-import { AppStatusContext } from "@/pages/[organization]/applications/panel";
+import { ApplicationInfoContext } from "@/pages/[organization]/applications/panel";
 
 interface Props {
   appEnvironment: GetAppEnvironmentsRes[number];
@@ -33,10 +33,10 @@ export default function DebugBox({
   appEnvironment,
   resource,
 }: Props): React.ReactElement {
-  const appStatus = useContext(AppStatusContext);
+  const applicationInfo = useContext(ApplicationInfoContext);
 
   console.group(">>>>><<<<<<");
-  console.log(appStatus);
+  console.log(applicationInfo);
   console.log();
   console.groupEnd();
 
@@ -45,7 +45,7 @@ export default function DebugBox({
       kubeconfig: appEnvironment.cluster.kubeconfig,
       namespace: resource.namespace,
 
-      application: "zhangzetest20",
+      application: applicationInfo.name,
       workload: resource.name,
       workload_type: resource.type,
       action: "run",

@@ -23,7 +23,6 @@ export default function ApplicationList({list, clusterList}: Props) {
         list.map(item => {
           let status = get(item, ['last_release', 'status']);
           let cluster: any = find(clusterList, {id: get(item, ['last_release', 'cluster_id'])});
-          console.warn(cluster)
           if (cluster) {
             cluster = get(cluster, 'name');
           }
@@ -45,7 +44,7 @@ export default function ApplicationList({list, clusterList}: Props) {
                   {
                     (status === ApplicationStatus.PROCESSING) &&
                     <span className={styles.statusIcon}>
-                      <img src="/img/application/creating.webp" alt=""/>
+                      <img src="/img/application/creating.webp" alt="" className={styles.rotate}/>
                       <span className={styles.creating}>Creating</span>
                     </span>
                   }

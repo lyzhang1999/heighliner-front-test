@@ -42,21 +42,30 @@ const Applications = () => {
 
   return (
     <Layout
-      pageHeader="APPLICATIONS"
-      titleContent={
-        <Button
-          variant="contained"
-          onClick={() => {
-            router.push(
-              `/${encodeURIComponent(
-                getOrganizationNameByUrl()
-              )}/applications/creation`
-            );
-          }}
-        >
-          Create a Application
-        </Button>
-      }
+      pageHeader="Applications"
+      // titleContent={
+      //   <Button
+      //     variant="contained"
+      //     onClick={() => {
+      //       router.push(
+      //         `/${encodeURIComponent(
+      //           getOrganizationNameByUrl()
+      //         )}/applications/creation`
+      //       );
+      //     }}
+      //     // xs={{backgrounColor: "#1b51b9"}}
+      //   >
+      //     Create a Application
+      //   </Button>
+      // }
+      rightBtnDesc="ADD APPLICATION"
+      rightBtnCb={() => {
+        router.push(
+          `/${encodeURIComponent(
+            getOrganizationNameByUrl()
+          )}/applications/creation`
+        );
+      }}
     >
       <ApplicationList
         list={applist}

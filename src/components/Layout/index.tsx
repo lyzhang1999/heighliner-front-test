@@ -12,35 +12,46 @@ interface HomeProps {
   pageHeader?: string,
   titleContent?: ReactElement,
   CustomSlider?: ReactElement,
+  rightBtnDesc?: string,
+  rightBtnCb?: () => void
 }
 
-const Layout = ({children, hiddenContent, pageHeader, titleContent, CustomSlider}: HomeProps): react.ReactElement => {
+const Layout = ({
+                  children,
+                  hiddenContent,
+                  pageHeader,
+                  titleContent,
+                  CustomSlider,
+                  rightBtnDesc,
+                  rightBtnCb
+                }: HomeProps): react.ReactElement => {
   return (
     <div>
-      {/*{*/}
-      {/*  hiddenContent ?*/}
-      {/*    children*/}
-      {/*    :*/}
-          <div className={styles.contentWrappper}>
-            <div className={styles.content}>
-              <div className={styles.left}>
-                <Menu/>
-              </div>
-              <div className={styles.right}>
+      <div className={styles.contentWrappper}>
+        <div className={styles.content}>
+          <div className={styles.left}>
+            <Menu/>
+          </div>
+          <div className={styles.right}>
+            {
+              pageHeader &&
+              <div className={styles.pageHeader}>
+                {pageHeader}
                 {
-                  pageHeader &&
-                  <div className={styles.pageHeader}>
-                    {pageHeader}
-                    {
-                      titleContent && titleContent
-                    }
+                  titleContent && titleContent
+                }
+                {
+                  rightBtnDesc &&
+                  <div className={styles.rightBtn} onClick={rightBtnCb}>
+                    {rightBtnDesc}
                   </div>
                 }
-                {children}
               </div>
-            </div>
+            }
+            {children}
           </div>
-      {/*}*/}
+        </div>
+      </div>
     </div>
   )
 }

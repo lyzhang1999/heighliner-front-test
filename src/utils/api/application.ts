@@ -64,6 +64,7 @@ export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
   );
 }
 
+
 export interface Last_release {
   id: number;
   created_at: number;
@@ -75,7 +76,7 @@ export interface Last_release {
   job_namespace: string;
   start_time: number;
   completion_time: number;
-  status: string;
+  status: ApplicationStatus;
 }
 
 export interface Stack {

@@ -109,7 +109,7 @@ const Clusters = () => {
                   <MoreVertIcon/>
                 </div>
                 <div className={styles.logo}>
-                  <img src="/img/cluster/aws.webp" alt="github"/>
+                  <img src="/img/cluster/cluster.webp" alt="github"/>
                 </div>
                 <div className={styles.content}>
                   <div className={styles.organiztion}>Cluster: {item.name}</div>

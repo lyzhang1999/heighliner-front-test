@@ -68,14 +68,8 @@ const Clusters = () => {
 
   return (
     <Layout pageHeader="GIT PROVIDER"
-            titleContent={(
-              <Button
-                variant="contained"
-                onClick={() => setModalDisplay(!modalDisplay)}
-              >
-                Add Provider
-              </Button>
-            )}
+            rightBtnDesc="ADD PROVIDER"
+            rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <div className={styles.wrapper}>
         <Dialog onClose={closeDialog} open={dialogVisible}>

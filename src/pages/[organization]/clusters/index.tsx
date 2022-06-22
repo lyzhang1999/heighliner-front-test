@@ -59,14 +59,8 @@ const Clusters = () => {
 
   return (
     <Layout pageHeader="CLUSTERS"
-            titleContent={(
-              <Button
-                variant="contained"
-                onClick={() => setModalDisplay(!modalDisplay)}
-              >
-                Create a Cluster
-              </Button>
-            )}
+            rightBtnDesc="ADD CLUSTER"
+            rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <Dialog onClose={closeDialog} open={dialogVisible}>
         {/*<DialogTitle>Delete Git-provider</DialogTitle>*/}

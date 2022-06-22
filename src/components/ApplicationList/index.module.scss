@@ -4,9 +4,10 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-gap: 26px 80px;
+  margin-top: 30px;
 
   .item {
-    margin: 13px 40px;
     justify-content: flex-start;
     height: 124px;
     padding: 11px 15.3px 11.9px 22px;

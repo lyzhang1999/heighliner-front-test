@@ -52,28 +52,13 @@ const Applications = () => {
     );
   }
 
-  function handleChange(){
+  function handleChange() {
 
   }
 
   return (
     <Layout
       pageHeader="Applications"
-      // titleContent={
-      //   <Button
-      //     variant="contained"
-      //     onClick={() => {
-      //       router.push(
-      //         `/${encodeURIComponent(
-      //           getOrganizationNameByUrl()
-      //         )}/applications/creation`
-      //       );
-      //     }}
-      //     // xs={{backgrounColor: "#1b51b9"}}
-      //   >
-      //     Create a Application
-      //   </Button>
-      // }
       rightBtnDesc="ADD APPLICATION"
       rightBtnCb={() => {
         router.push(
@@ -82,57 +67,60 @@ const Applications = () => {
           )}/applications/creation`
         );
       }}
+      notStandardLayout
     >
-      <div className={styles.selectWrapper}>
-        <Select
-          value={"All"}
-          onChange={handleChange}
-          label="Age"
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
-          <MenuItem value="All" key="All">All</MenuItem>
-          {
-            mumber.map(item => {
-              return <MenuItem value={item.username} key={item.username}>{item.username}</MenuItem>
-            })
-          }
-        </Select>
-        <Select
-          value={"All"}
-          onChange={handleChange}
-          label="Age"
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
-          <MenuItem value="All" key="All">All</MenuItem>
+      <div className={styles.pageWrapper}>
+        <div className={styles.selectWrapper}>
+          <Select
+            value={"All"}
+            onChange={handleChange}
+            label="Age"
+            variant="standard"
+            sx={{m: 1, minWidth: 120}}
+          >
+            <MenuItem value="All" key="All">All</MenuItem>
+            {
+              mumber.map(item => {
+                return <MenuItem value={item.username} key={item.username}>{item.username}</MenuItem>
+              })
+            }
+          </Select>
+          <Select
+            value={"All"}
+            onChange={handleChange}
+            label="Age"
+            variant="standard"
+            sx={{m: 1, minWidth: 120}}
+          >
+            <MenuItem value="All" key="All">All</MenuItem>
 
-          {
-            statckList.map(item => {
-              return <MenuItem value={item.name} key={item.name}>{item.name}</MenuItem>
-            })
-          }
-        </Select>
-        <Select
-          value={"All"}
-          onChange={handleChange}
-          label="Age"
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
-          <MenuItem value="All" key="All">All</MenuItem>
+            {
+              statckList.map(item => {
+                return <MenuItem value={item.name} key={item.name}>{item.name}</MenuItem>
+              })
+            }
+          </Select>
+          <Select
+            value={"All"}
+            onChange={handleChange}
+            label="Age"
+            variant="standard"
+            sx={{m: 1, minWidth: 120}}
+          >
+            <MenuItem value="All" key="All">All</MenuItem>
 
-          {
-            clusterList.map(item => {
-              return <MenuItem value={item.name} key={item.name}>{item.name}</MenuItem>
-            })
-          }
-        </Select>
+            {
+              clusterList.map(item => {
+                return <MenuItem value={item.name} key={item.name}>{item.name}</MenuItem>
+              })
+            }
+          </Select>
+        </div>
+        <ApplicationList
+          list={applist}
+          clusterList={clusterList}
+        />
       </div>
-      <ApplicationList
-        list={applist}
-        clusterList={clusterList}
-      />
     </Layout>
   );
 };

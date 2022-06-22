@@ -9,10 +9,10 @@ import {
   TableRow,
 } from "@mui/material";
 import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 
 import Layout from "@/components/Layout";
-import { getOriIdByContext } from "@/utils/utils";
+import {getOriIdByContext} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import {
@@ -23,7 +23,7 @@ import {
   MemberTypeEnum,
 } from "@/utils/api/org";
 import InviteMember from "@/components/Team/InviteMember";
-import { Context } from "@/utils/store";
+import {Context} from "@/utils/store";
 import ShiftRole from "@/components/Team/ShiftRole";
 import DeleteMember from "@/components/Team/DeleteMember";
 
@@ -98,7 +98,7 @@ const Teams = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const {
-    state: { currentOrganization },
+    state: {currentOrganization},
   } = useContext(Context);
   const currentMemberType = currentOrganization?.member_type;
 
@@ -139,23 +139,13 @@ const Teams = () => {
   return (
     <Layout
       pageHeader="Teams"
-      titleContent={
-        <>
-          {getActionSet(currentMemberType!).includes(Action.Invite) && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setInviteDialog(true);
-              }}
-            >
-              Invite User
-            </Button>
-          )}
-        </>
-      }
+      rightBtnDesc={getActionSet(currentMemberType!).includes(Action.Invite) ? "INVITE USER" : ''}
+      rightBtnCb={() => {
+        setInviteDialog(true);
+      }}
     >
       <div className={styles.teamsWrapper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{minWidth: 650}} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>UserName</TableCell>
@@ -164,10 +154,10 @@ const Teams = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orgMembers?.data.map(({ user_id, username, member_type }) => (
+            {orgMembers?.data.map(({user_id, username, member_type}) => (
               <TableRow
                 key={user_id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{"&:last-child td, &:last-child th": {border: 0}}}
               >
                 <TableCell component="th" scope="row">
                   {username}

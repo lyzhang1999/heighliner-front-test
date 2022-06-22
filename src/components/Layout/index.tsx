@@ -3,25 +3,30 @@ import react, {ReactElement, useState} from 'react';
 import Menu from './Menu';
 
 import styles from './index.module.scss';
+import clsx from "clsx";
+
+export enum Variant {
+  "standard" = "standard"
+}
 
 interface HomeProps {
   children?: react.ReactNode,
   hiddenContent?: boolean,
   pageHeader?: string,
-  titleContent?: ReactElement,
+  // titleContent?: ReactElement,
   CustomSlider?: ReactElement,
   rightBtnDesc?: string,
-  rightBtnCb?: () => void
+  rightBtnCb?: () => void,
+  notStandardLayout?: boolean
 }
 
 const Layout = ({
                   children,
                   hiddenContent,
                   pageHeader,
-                  titleContent,
-                  CustomSlider,
                   rightBtnDesc,
-                  rightBtnCb
+                  rightBtnCb,
+                  notStandardLayout
                 }: HomeProps): react.ReactElement => {
   return (
     <div>
@@ -30,14 +35,14 @@ const Layout = ({
           <div className={styles.left}>
             <Menu/>
           </div>
-          <div className={styles.right}>
+          <div className={clsx(
+            styles.right,
+            !notStandardLayout && styles.standard
+          )}>
             {
               pageHeader &&
               <div className={styles.pageHeader}>
                 {pageHeader}
-                {
-                  titleContent && titleContent
-                }
                 {
                   rightBtnDesc &&
                   <div className={styles.rightBtn} onClick={rightBtnCb}>

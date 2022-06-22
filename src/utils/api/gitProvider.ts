@@ -1,13 +1,17 @@
 import http from '@/utils/axios';
 import {getOriIdByContext} from "@/utils/utils";
 
+export enum GitHubProvider{
+  GITHUB = "GITHUB"
+}
+
 export interface GitProviderType {
   "created_at": number;
   "git_org_name": string;
   "id": number;
   "name": string;
   "org_id": number;
-  "provider": string;
+  "provider": GitHubProvider;
   "token": string;
   "updated_at": number
 }

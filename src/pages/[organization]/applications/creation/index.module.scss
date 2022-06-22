@@ -91,6 +91,10 @@ $panelWidth: 807px;
       box-sizing: border-box;
       padding: 7px 27px;
     }
+
+    fieldset {
+      border: solid 1px rgba(0, 0, 0, 0.23) !important;
+    }
   }
 
   .applicationNameWrap {
@@ -188,6 +192,10 @@ $panelWidth: 807px;
             color: #6c727b;
           }
         }
+
+      }
+      fieldset {
+        border: solid 1px rgba(0, 0, 0, 0.23);
       }
     }
   }

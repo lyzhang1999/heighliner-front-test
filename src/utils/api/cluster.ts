@@ -5,7 +5,7 @@ import { Page } from "@/utils/api/type";
 export enum ClusterProvider {
   Kubeconfig = "kubeconfig",
   AWS = "AWS",
-  Free = "Free"
+  Free = "Free",
 }
 
 export enum ClusterStatus {
@@ -27,12 +27,21 @@ export interface ClusterItem {
 
 export type Clusters = ClusterItem[];
 
-interface Cluser {
+interface ClusterList {
   data: ClusterItem[];
   pagination: Page;
 }
 
-export const getClusterList = (): Promise<Cluser> => {
+interface GetClusterReq {
+  // org_id: number;
+  cluster_id: number;
+}
+
+export const getCluster = (req: GetClusterReq): Promise<ClusterItem> => {
+  return http.get(`/orgs/${getOriIdByContext()}/clusters/${req.cluster_id}`);
+};
+
+export const getClusterList = (): Promise<ClusterList> => {
   return http.get(`/orgs/${getOriIdByContext()}/clusters?page=1&page_size=999`);
 };
 

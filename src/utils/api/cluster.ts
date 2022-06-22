@@ -27,13 +27,9 @@ export interface ClusterItem {
 
 export type Clusters = ClusterItem[];
 
-interface Cluser {
-  data: ClusterItem[];
-  pagination: Page;
-}
 
-export const getClusterList = (): Promise<Cluser> => {
-  return http.get(`/orgs/${getOriIdByContext()}/clusters?page=1&page_size=999`);
+export const getClusterList = (): Promise<ClusterItem[]> => {
+  return http.get(`/orgs/${getOriIdByContext()}/clusters`);
 };
 
 export interface CreateClusterReq {

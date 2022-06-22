@@ -26,7 +26,7 @@ const Clusters = () => {
 
   function getCluster() {
     getClusterList().then(res => {
-      setClusterList(res.data);
+      setClusterList(res);
     })
   }
 

@@ -1,7 +1,7 @@
-import { AllFieldName, FormData } from "@/components/Application/formData";
+import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
-import { getOriIdByContext } from "../utils";
-import { Page } from "@/utils/api/type";
+import {getOriIdByContext} from "../utils";
+import {Page} from "@/utils/api/type";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -95,14 +95,9 @@ export interface ApplicationObject {
   stack: Stack;
 }
 
-export interface GetApplicationRes {
-  data: ApplicationObject[];
-  pagination: Page;
-}
-
-export function getApplicationList(): Promise<GetApplicationRes> {
+export function getApplicationList(): Promise<ApplicationObject[]> {
   return http.get(
-    `/orgs/${getOriIdByContext()}/applications?page=1&page_size=999`
+    `/orgs/${getOriIdByContext()}/applications`
   );
 }
 

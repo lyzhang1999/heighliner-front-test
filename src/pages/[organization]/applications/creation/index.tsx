@@ -130,7 +130,7 @@ export default function Index(): React.ReactElement {
       setStacks(res);
     });
     getClusterList().then((res) => {
-      setClusters(res.data);
+      setClusters(res);
     });
     getGitProviderList().then((res) => {
       console.group(">>>>><<<<<<");
@@ -145,7 +145,7 @@ export default function Index(): React.ReactElement {
   // When open add cluster or git provider drawer, updating data.
   useEffect(() => {
     getClusterList().then((res) => {
-      setClusters(res.data);
+      setClusters(res);
     });
   }, [openAddClusterDrawer]);
   useEffect(() => {

@@ -29,10 +29,10 @@ const Applications = () => {
 
   useEffect(() => {
     getApplicationList().then((res) => {
-      setApplist(res.data.reverse());
+      setApplist(res.reverse());
     });
     getClusterList().then(res => {
-      setClusterList(res.data);
+      setClusterList(res);
     })
     getStacks().then(res => {
       setStatckList(res);

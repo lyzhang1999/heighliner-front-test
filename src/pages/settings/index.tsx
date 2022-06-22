@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Stack } from "@mui/material";
 
 import Layout from "@/components/Layout";
-import SettingSlider from "@/components/Layout/Slider/SettingSlider";
 import BasicProfile from "@/components/setting/profile/BasicProfile";
 import Password from "@/components/setting/profile/Password";
 

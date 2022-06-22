@@ -1,7 +1,5 @@
 import react, {ReactElement, useState} from 'react';
 
-import Header from './Header';
-import Slider from './Slider';
 import Menu from './Menu';
 
 import styles from './index.module.scss';

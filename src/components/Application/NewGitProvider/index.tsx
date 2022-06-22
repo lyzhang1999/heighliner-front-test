@@ -1,10 +1,11 @@
-import { Box, Button, TextField, Drawer } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import {TextField, Drawer} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import styles from "./index.module.scss";
-import "highlight.js/styles/a11y-dark.css";
 
-import { createProviderList } from "@/utils/api/gitProvider";
+import {createProviderList} from "@/utils/api/gitProvider";
 import {Message} from '@/utils/utils';
+import Btn, {BtnType} from "@/components/Btn";
+import {GetGitProviderUrl} from "@/utils/config";
 
 interface Props {
   modalDisplay: boolean;
@@ -12,15 +13,11 @@ interface Props {
   successCb?: () => void;
 }
 
-const buttonStyles = {
-  marginRight: "10px",
-};
-
 export default function NewGitProvider({
-  modalDisplay,
-  setModalDisplay,
-  successCb,
-}: Props) {
+                                         modalDisplay,
+                                         setModalDisplay,
+                                         successCb,
+                                       }: Props) {
   const [gitProviderOrgName, setGitProviderOrgName] = useState<string>("");
   const changeGitProviderOrgNameHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -60,56 +57,60 @@ export default function NewGitProvider({
   }
 
   return (
-    <div>
-      <Drawer anchor="right" open={modalDisplay}>
+    <div className={styles.drawer}>
+      <Drawer anchor="right" open={modalDisplay}
+              sx={{"root": {borderTopLeftRadius: '14px', border: "1px solid black"}}}
+      >
         <div className={styles.drawerWrap}>
           <div className={styles.header}>
-            Append a new GitHub Personal Access Token
+            Append a new github personal acess token
           </div>
           <div className={styles.content}>
-            <Box
-              component="form"
-              sx={{
-                width: "100%",
-                "& .MuiTextField-root": { marginTop: "20px", width: "100%" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <div>
-                <TextField
-                  label="Git Provider Organization Name"
-                  multiline
-                  // maxRows={4}
-                  value={gitProviderOrgName}
-                  onChange={changeGitProviderOrgNameHandler}
-                />
+            <div className={styles.formWrapper}>
+              <div className={styles.label}>
+                Name*
               </div>
-              <div>
-                <TextField
-                  label="Git Provider Personal Access Token"
-                  multiline
-                  // rows={8}
-                  value={token}
-                  onChange={changeTokenHandler}
-                />
+              <TextField
+                fullWidth
+                value={gitProviderOrgName}
+                onChange={changeGitProviderOrgNameHandler}
+                size='small'
+                placeholder="GIt provider organization name"
+              />
+            </div>
+            <div className={styles.formWrapper}>
+              <div className={styles.label}>
+                Access Token*
               </div>
-            </Box>
+              <TextField
+                fullWidth
+                value={token}
+                size='small'
+                onChange={changeTokenHandler}
+                placeholder="GIt provider personal access Token"
+              />
+            </div>
+            <div className={styles.help}>
+              <img src="/img/gitprovider/InfoOutlined.webp" alt=""/>
+              <span className={styles.desc}>
+                How to get Kubeconfig?
+              </span>
+              <span className={styles.link} onClick={() => window.open(GetGitProviderUrl)}>
+                click me
+              </span>
+            </div>
           </div>
           <div className={styles.bottom}>
-            <Button
-              variant="outlined"
-              sx={buttonStyles}
-              onClick={() => setModalDisplay(false)}
+            <Btn style={{marginRight: '87px'}}
+                 onClick={handleConfirm}
             >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleConfirm}
+              CREATE
+            </Btn>
+            <Btn type={BtnType.gray}
+                 onClick={() => setModalDisplay(false)}
             >
-              Confirm
-            </Button>
+              CREATE
+            </Btn>
           </div>
         </div>
       </Drawer>

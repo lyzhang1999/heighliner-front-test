@@ -1,0 +1,26 @@
+
+
+
+@mixin btnStyle {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.46px;
+  text-align: center;
+  line-height: 35px;
+  padding: 0 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+.btn {
+  @include btnStyle;
+  background-color: #1b51b9;
+  color: #fff;
+}
+
+.grayBtn{
+  @include btnStyle;
+  background-color: #919dae;
+  color: #fff;
+}

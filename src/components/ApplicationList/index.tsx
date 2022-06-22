@@ -1,11 +1,14 @@
 import styles from "./index.module.scss";
-import {ApplicationObject} from "@/utils/api/application";
-import {getOrganizationNameByUrl} from "@/utils/utils";
+import {ApplicationObject, ApplicationStatus} from "@/utils/api/application";
+import {formatDate, getOrganizationNameByUrl} from "@/utils/utils";
 import {useRouter} from "next/router";
 import {GinIcon} from "@/utils/CDN";
-import {get} from "lodash-es";
+import {find, get} from "lodash-es";
+import {ClusterItem} from "@/utils/api/cluster";
 
-export default function ApplicationList({list}: { list: ApplicationObject[] }) {
+type Props = { list: ApplicationObject[], clusterList: ClusterItem[] }
+
+export default function ApplicationList({list, clusterList}: Props) {
   const router = useRouter();
 
   function goPanel(appId: number, releaseId: number) {
@@ -18,6 +21,11 @@ export default function ApplicationList({list}: { list: ApplicationObject[] }) {
     <div className={styles.wrapper}>
       {
         list.map(item => {
+          let status = get(item, ['last_release', 'status']);
+          let cluster: any = find(clusterList, {id: get(item, ['last_release', 'cluster_id'])});
+          if (cluster) {
+            cluster = get(cluster, 'name');
+          }
           return (
             <div className={styles.item} onClick={() => goPanel(item.app_id, item.last_release.id)} key={item.app_id}>
               <div className={styles.left}>
@@ -25,10 +33,34 @@ export default function ApplicationList({list}: { list: ApplicationObject[] }) {
               </div>
               <div className={styles.right}>
                 <div className={styles.title}>
-                  {item.app_name}
-                  <div className={styles.status}>
-                    Status： {item.last_release.status}
-                  </div>
+                  <span>{item.app_name}</span>
+                  {
+                    (status === ApplicationStatus.COMPLETED) &&
+                    <span className={styles.statusIcon}>
+                      <img src="/img/application/create.webp" alt=""/>
+                      <span className={styles.running}>running</span>
+                    </span>
+                  }
+                  {
+                    (status === ApplicationStatus.PROCESSING) &&
+                    <span className={styles.statusIcon}>
+                      <img src="/img/application/creating.webp" alt="" className={styles.rotate}/>
+                      <span className={styles.creating}>Creating</span>
+                    </span>
+                  }
+                  {
+                    (status === ApplicationStatus.FAILED) &&
+                    <span className={styles.statusIcon}>
+                      <img src="/img/application/createfailed.webp" alt=""/>
+                      <span className={styles.failed}>Failed</span>
+                    </span>
+                  }
+                </div>
+                <div className={styles.status}>
+                  Cluster： {cluster && cluster}
+                </div>
+                <div className={styles.status}>
+                  CreatTime： {formatDate(get(item, ['last_release', 'created_at']) * 1000)}
                 </div>
                 {
                   get(item, ['stack', 'name']) &&

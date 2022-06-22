@@ -59,16 +59,19 @@ export interface GetOrgMembersReq {
   page_size: number;
 }
 
+
+export type Member = {
+  id: number;
+  created_at: number;
+  updated_at: number;
+  org_id: number;
+  user_id: number;
+  member_type: MemberType;
+  username: string;
+}
+
 export type GetOrgMembersRes = {
-  data: Array<{
-    id: number;
-    created_at: number;
-    updated_at: number;
-    org_id: number;
-    user_id: number;
-    member_type: MemberType;
-    username: string;
-  }>;
+  data: Array<Member>,
   pagination: Page;
 };
 

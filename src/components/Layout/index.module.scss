@@ -14,7 +14,8 @@
   display: flex;
   margin: 0 auto;
   width: 100%;
-  background-color: #f4f5fe;
+  background-color: #f4f6f8;
+
 
   .left {
     display: flex;
@@ -30,15 +31,24 @@
     overflow-y: scroll;
 
     .pageHeader {
-      padding: 24px 24px 16px 24px;
-      font-weight: 500;
-      line-height: 1.4;
+      padding: 50px 40px 10px 40px;
       display: flex;
       justify-content: space-between;
-      font-size: 28px;
+      font-size: 25px;
       letter-spacing: normal;
       text-align: left;
-      color: #7368db;
+      color: #000;
+
+      .rightBtn {
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        line-height: 44px;
+        padding: 0 16px;
+        background-color: #1b51b9;
+        border-radius: 4px;
+      }
+
     }
   }
 }

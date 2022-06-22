@@ -99,7 +99,7 @@ const Login: NextPage = () => {
       <div className={clsx("absolute flex gap-4", styles.logo)}>
         <Image
           src="/img/logo/header-logo.webp"
-          alt="Heighliner"
+          alt="ForkMain"
           width={51}
           height={33}
         />

@@ -36,7 +36,7 @@ export default function MenuAppBar() {
       <div className={styles.headerWrapper}>
         <div className={styles.left} onClick={goHomerPage}>
           <img src="/img/logo/header-logo.webp" alt="logo" className={styles.logo}/>
-          <span className={styles.companyName}>Heighliner</span>
+          <span className={styles.companyName}>ForkMain</span>
         </div>
         <div className={styles.right}>
           {/*<Button*/}

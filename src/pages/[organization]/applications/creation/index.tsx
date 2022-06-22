@@ -306,7 +306,7 @@ export default function Index(): React.ReactElement {
                         {icons[0] && (
                           <Image
                             src={icons[0]}
-                            alt="Without Heighliner"
+                            alt="Without ForkMain"
                             width={35}
                             height={35}
                           />
@@ -314,7 +314,7 @@ export default function Index(): React.ReactElement {
                         {icons[1] && (
                           <Image
                             src={icons[1]}
-                            alt="Without Heighliner"
+                            alt="Without ForkMain"
                             width={35}
                             height={35}
                           />

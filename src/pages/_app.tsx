@@ -99,8 +99,8 @@ function App({Component, pageProps}: AppProps) {
   return (
     <div>
       <Head>
-        <title>Heighliner Platform · Speed up Cloud Native Application Development</title>
-        <meta name="description" content="Heighliner Cloud · Speed up Cloud Native Application Development"/>
+        <title>ForkMain · Speed up Cloud Native Application Development</title>
+        <meta name="description" content="ForkMain · Speed up Cloud Native Application Development"/>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
       </Head>
       <ThemeProvider theme={theme}>

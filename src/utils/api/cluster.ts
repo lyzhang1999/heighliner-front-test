@@ -1,11 +1,11 @@
 import http from "@/utils/axios";
-import { getOriIdByContext } from "@/utils/utils";
-import { Page } from "@/utils/api/type";
+import {getOriIdByContext} from "@/utils/utils";
+import {Page} from "@/utils/api/type";
 
 export enum ClusterProvider {
   Kubeconfig = "kubeconfig",
   AWS = "AWS",
-  Free = "Free"
+  Free = "Free",
 }
 
 export enum ClusterStatus {
@@ -30,6 +30,14 @@ export type Clusters = ClusterItem[];
 
 export const getClusterList = (): Promise<ClusterItem[]> => {
   return http.get(`/orgs/${getOriIdByContext()}/clusters`);
+};
+
+interface GetClusterReq {
+  cluster_id: number;
+}
+
+export const getCluster = (req: GetClusterReq): Promise<ClusterItem> => {
+  return http.get(`/orgs/${getOriIdByContext()}/clusters/${req.cluster_id}`);
 };
 
 export interface CreateClusterReq {

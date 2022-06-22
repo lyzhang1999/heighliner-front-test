@@ -21,6 +21,7 @@ import {
   ClusterProvider,
   Clusters,
   ClusterStatus,
+  getCluster,
   getClusterList,
 } from "@/utils/api/cluster";
 import { getStacks, Stacks } from "@/utils/api/stack";
@@ -40,7 +41,7 @@ import {
 import { useRouter } from "next/router";
 import { Context } from "@/utils/store";
 import { get } from "lodash-es";
-import { formatDate, getOrganizationNameByUrl } from "@/utils/utils";
+import { formatDate, getOrganizationNameByUrl, Message } from "@/utils/utils";
 import {
   getClusterIcon,
   GinIcon,
@@ -133,11 +134,6 @@ export default function Index(): React.ReactElement {
       setClusters(res);
     });
     getGitProviderList().then((res) => {
-      console.group(">>>>><<<<<<");
-      console.log(res);
-      console.log();
-      console.groupEnd();
-
       setGitProviders(res);
     });
   }, []);
@@ -164,7 +160,23 @@ export default function Index(): React.ReactElement {
     defaultValues: DefaultFieldsData,
   });
 
-  const onSubmit: SubmitHandler<FieldsDataType> = (data) => {
+  const onSubmit: SubmitHandler<FieldsDataType> = async (data) => {
+    // Check the cluster status
+    const cluster_id = +data[fieldsMap.cluster.name];
+    const cluster = clusters.find((cluster) => cluster.id === cluster_id);
+    if (cluster!.status === ClusterStatus.Initializing) {
+      const res = await getCluster({
+        cluster_id: cluster_id,
+      });
+      // If the clsuter is initializing, forbid to create.
+      if (res.status === ClusterStatus.Initializing) {
+        Message.warning(
+          `The clsuter "${res.name}" is still initializing. Please wait for a moment.`
+        );
+        return;
+      }
+    }
+
     // Get git_config's org_name, provider and token
     const git_provider_id = +data[fieldsMap.gitProvider.name];
     const git_config = gitProviders.find(
@@ -533,7 +545,9 @@ export default function Index(): React.ReactElement {
           }}
         />
         <div className={styles.submitWrap}>
-          <Button type="submit" className={styles.submit} value="CREATE" >CREATE</Button>
+          <Button type="submit" className={styles.submit} value="CREATE">
+            CREATE
+          </Button>
         </div>
       </form>
       {/* </div> */}

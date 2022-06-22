@@ -7,8 +7,10 @@ import {
 import React, {useEffect, useState} from "react";
 import {createCluster} from "@/utils/api/cluster";
 import {trim} from "lodash-es";
-import styles from './index.module.scss';
+import styles from '@/components/Application/NewGitProvider/index.module.scss';
 import {Message} from "@/utils/utils";
+import Btn, {BtnType} from "@/components/Btn";
+import {GetGitProviderUrl} from "@/utils/config";
 
 interface Props {
   modalDisplay: boolean
@@ -68,51 +70,58 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
             Create a new cluster
           </div>
           <div className={styles.content}>
-            <Box
-              component="form"
-              sx={{
-                width: "100%",
-                '& .MuiTextField-root': {marginTop: "20px", width: '100%'},
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <div>
-                <TextField
-                  label="Name"
-                  multiline
-                  maxRows={4}
-                  value={configName}
-                  onChange={handleConfigName}
-                  // color="textColor"
-                />
+            <div className={styles.formWrapper}>
+              <div className={styles.label}>
+                Name*
               </div>
-              <div>
-                <TextField
-                  label="Kube Config"
-                  multiline
-                  rows={8}
-                  value={configValue}
-                  // color="textColor"
-                  onChange={handleConfigValue}
-                />
+              <TextField
+                fullWidth
+                value={configName}
+                onChange={handleConfigName}
+                size='small'
+                placeholder="please input cluster name"
+              />
+            </div>
+            <div className={styles.formWrapper}>
+              <div className={styles.label}>
+                Kube config*
               </div>
-            </Box>
+              <TextField
+                size='small'
+                fullWidth
+                multiline
+                rows={8}
+                value={configValue}
+                onChange={handleConfigValue}
+                placeholder="please input kube config"
+              />
+            </div>
+            <div className={styles.help}>
+              <img src="/img/gitprovider/InfoOutlined.webp" alt=""/>
+              <span className={styles.desc}>
+                How to get Kubeconfig?
+              </span>
+            </div>
+            <div className={styles.copyCode}>
+              <div className={styles.code}>
+                kubectl config use -- context dev -- cluster
+              </div>
+              <div className={styles.code}>
+                kubectl config view -- minify -- raw --flatten
+              </div>
+            </div>
           </div>
           <div className={styles.bottom}>
-            <Button
-              variant="outlined"
-              sx={buttonStyles}
-              onClick={() => setModalDisplay(false)}
+            <Btn style={{marginRight: '87px'}}
+                 onClick={handleConfirm}
             >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleConfirm}
+              CREATE
+            </Btn>
+            <Btn type={BtnType.gray}
+                 onClick={() => setModalDisplay(false)}
             >
-              Confirm
-            </Button>
+              CREATE
+            </Btn>
           </div>
         </div>
       </Drawer>

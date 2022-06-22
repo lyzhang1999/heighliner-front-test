@@ -1,4 +1,4 @@
-
+// global css
 .drawerWrap {
   width: 500px;
   margin: 10px 20px;
@@ -8,7 +8,7 @@
   .content {
     .formWrapper {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       margin-top: 20px;
 
       .label {
@@ -18,32 +18,7 @@
         font-size: 15px;
         font-weight: 500;
         word-break: keep-all;
-      }
-    }
-
-    .help {
-      margin-top: 40px;
-      display: flex;
-      align-items: center;
-
-      img {
-        width: 19px;
-        height: 19px;
-      }
-
-      .desc {
-        font-size: 16px;
-        font-weight: 500;
-        color: #013654;
-        margin-left: 14px;
-      }
-
-      .link {
-        font-size: 13px;
-        color: #326ce5;
-        margin-left: 14px;
-        cursor: pointer;
-        text-decoration: underline;
+        line-height: 40px;
       }
     }
   }
@@ -67,3 +42,48 @@
   align-items: center;
   justify-content: center;
 }
+
+.help {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 19px;
+    height: 19px;
+  }
+
+  .desc {
+    font-size: 16px;
+    font-weight: 500;
+    color: #013654;
+    margin-left: 14px;
+  }
+
+  .link {
+    font-size: 13px;
+    color: #326ce5;
+    margin-left: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+//cluster css
+.copyCode {
+  margin-top: 10px;
+  height: 62px;
+  flex-grow: 0;
+  padding: 13px 9px 2px 34px;
+  border-radius: 12px;
+  border: solid 1px #d8dbe1;
+  background-color: #1e1e1e;
+
+  .code {
+    color: #9dddfd;
+    font-size: 12px;
+    line-height: 1.4;
+    font-family: Menlo;
+  }
+}
+

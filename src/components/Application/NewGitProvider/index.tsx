@@ -93,7 +93,7 @@ export default function NewGitProvider({
             <div className={styles.help}>
               <img src="/img/gitprovider/InfoOutlined.webp" alt=""/>
               <span className={styles.desc}>
-                How to get Kubeconfig?
+                How to get access token?
               </span>
               <span className={styles.link} onClick={() => window.open(GetGitProviderUrl)}>
                 click me

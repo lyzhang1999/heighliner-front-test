@@ -109,7 +109,7 @@ export default function NewGitProvider({
             <Btn type={BtnType.gray}
                  onClick={() => setModalDisplay(false)}
             >
-              CREATE
+              CANCEL
             </Btn>
           </div>
         </div>

@@ -120,7 +120,7 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
             <Btn type={BtnType.gray}
                  onClick={() => setModalDisplay(false)}
             >
-              CREATE
+              CANEL
             </Btn>
           </div>
         </div>

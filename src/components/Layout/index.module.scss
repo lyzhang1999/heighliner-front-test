@@ -29,6 +29,8 @@
     flex-shrink: 1;
     flex-basis: auto;
     overflow-y: scroll;
+    max-width: 1200px;
+    min-width: calc(992px - 80px);
 
     .pageHeader {
       padding: 40px 40px 0px 40px;
@@ -38,26 +40,15 @@
       letter-spacing: normal;
       text-align: left;
       color: #000;
-
-      .rightBtn {
-        color: #fff;
-        font-size: 14px;
-        cursor: pointer;
-        line-height: 44px;
-        padding: 0 16px;
-        background-color: #1b51b9;
-        border-radius: 4px;
-      }
+      align-items: center;
     }
   }
 
   .standard {
-    min-width: calc(992px - 80px - 80px);
     padding: 0 40px 40px 40px;
-    max-width: 1200px;
 
     .pageHeader {
-      padding: 40px 0 30px 0;
+      padding: 40px 0 20px 0;
     }
   }
 }

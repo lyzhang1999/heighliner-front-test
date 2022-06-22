@@ -1,4 +1,4 @@
-import Layout, {Variant} from "@/components/Layout";
+import Layout from "@/components/Layout";
 import {Button, TableRow, TableHead, TableCell, TableBody, Table} from "@mui/material";
 import CreateOrganization from "@/pages/organizations/createOrganization";
 import DeleteOrganization from "@/pages/organizations/deleteOrganization";
@@ -9,7 +9,7 @@ import {useContext, useEffect, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, roleType} from "@/utils/api/org";
-import {formatDate, getDefaultOrg, getOrganizationNameByUrl, getQuery} from "@/utils/utils";
+import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
 import {get} from "lodash-es";
 import {useRouter} from "next/router";
 

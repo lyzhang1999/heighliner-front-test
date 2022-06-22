@@ -4,10 +4,7 @@ import Menu from './Menu';
 
 import styles from './index.module.scss';
 import clsx from "clsx";
-
-export enum Variant {
-  "standard" = "standard"
-}
+import Btn from "@/components/Btn";
 
 interface HomeProps {
   children?: react.ReactNode,
@@ -45,9 +42,9 @@ const Layout = ({
                 {pageHeader}
                 {
                   rightBtnDesc &&
-                  <div className={styles.rightBtn} onClick={rightBtnCb}>
+                  <Btn onClick={rightBtnCb}>
                     {rightBtnDesc}
-                  </div>
+                  </Btn>
                 }
               </div>
             }

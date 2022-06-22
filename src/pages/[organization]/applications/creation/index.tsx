@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+  Button,
   FormControl,
   FormHelperText,
   Input,
@@ -532,7 +533,7 @@ export default function Index(): React.ReactElement {
           }}
         />
         <div className={styles.submitWrap}>
-          <Input type="submit" className={styles.submit} value="CREATE" />
+          <Button type="submit" className={styles.submit} value="CREATE" >CREATE</Button>
         </div>
       </form>
       {/* </div> */}

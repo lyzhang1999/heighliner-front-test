@@ -211,7 +211,7 @@ $panelWidth: 807px;
     background-color: #f1f6ff;
     border-radius: 17px;
     left: 28px;
-    transition: top 200ms ease-in-out;
+    transition: top 400ms ease-in-out;
   }
 }
 
@@ -272,8 +272,9 @@ $panelWidth: 807px;
 
 .submitWrap {
   display: flex;
-
+  
   .submit {
+    cursor: pointer;
     display: flex;
     width: 101px;
     height: 42px;
@@ -283,7 +284,7 @@ $panelWidth: 807px;
     margin-top: 65px;
     border-radius: 4px;
     box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.12),
-      0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
     background-color: #1b51b9;
 
     &::after {
@@ -293,5 +294,9 @@ $panelWidth: 807px;
     &::before {
       display: none;
     }
+  }
+
+  .submit:hover {
+    background-color: #1b51b9;
   }
 }

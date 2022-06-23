@@ -33,9 +33,14 @@ const Layout = ({
           </div>
           <div className={clsx(
             styles.right,
-            !notStandardLayout && styles.standard
           )}>
-            <div className={styles.rightContent}>
+            <div className={
+              clsx(
+                styles.rightContent,
+                !notStandardLayout && styles.standard
+              )
+
+            }>
               {
                 pageHeader &&
                 <div className={styles.pageHeader}>

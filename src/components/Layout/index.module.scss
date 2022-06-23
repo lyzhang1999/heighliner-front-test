@@ -27,30 +27,30 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
-    overflow: scroll;
+    overflow-x: scroll;
 
     .rightContent {
       min-width: calc(992px - 80px);
+
+      .pageHeader {
+        padding: 40px 40px 0px 40px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 25px;
+        letter-spacing: normal;
+        text-align: left;
+        color: #000;
+        align-items: center;
+      }
     }
 
-    .pageHeader {
-      padding: 40px 40px 0px 40px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 25px;
-      letter-spacing: normal;
-      text-align: left;
-      color: #000;
-      align-items: center;
-    }
-  }
+    .standard {
+      padding: 0 40px 40px 40px;
+      max-width: 1200px;
 
-  .standard {
-    padding: 0 40px 40px 40px;
-    max-width: 1200px;
-
-    .pageHeader {
-      padding: 40px 0 20px 0;
+      .pageHeader {
+        padding: 40px 0 20px 0;
+      }
     }
   }
 }

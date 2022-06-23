@@ -18,8 +18,8 @@
     content: "";
     display: block;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -1px;
+    right: -1px;
   }
   &::before {
     width: 29px;
@@ -38,8 +38,8 @@
     border-bottom: solid 2px white;
     // background-color:transparent;
     position: absolute;
-    top: 3px;
-    right: 7px;
+    top: 2px;
+    right: 6px;
     transform: rotate(45deg);
   }
 }
@@ -123,6 +123,11 @@ $panelWidth: 807px;
 
   .stacksWrap, .clustersWrap {
     margin-top: 53px;
+  }
+
+  .star {
+    color: #f44336;
+    margin-left: 3px;
   }
 
   .clusters {

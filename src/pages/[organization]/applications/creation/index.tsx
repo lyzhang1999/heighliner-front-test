@@ -225,7 +225,7 @@ export default function Index(): React.ReactElement {
             >
               <h2 className={styles.applicationName}>
                 {fieldsMap.applicationName.name}
-                <span>*</span>
+                <span className={styles.star}>*</span>
               </h2>
               <div>
                 <TextField
@@ -282,7 +282,7 @@ export default function Index(): React.ReactElement {
             >
               <h2>
                 {fieldsMap.stack.name}
-                <span>*</span>
+                <span className={styles.star}>*</span>
               </h2>
               <ul
                 className={styles.stacks}
@@ -348,7 +348,7 @@ export default function Index(): React.ReactElement {
             >
               <h2>
                 {fieldsMap.cluster.name}
-                <span>*</span>
+                <span className={styles.star}>*</span>
               </h2>
               <ul
                 className={styles.clusters}
@@ -435,7 +435,7 @@ export default function Index(): React.ReactElement {
             >
               <h2>
                 {fieldsMap.gitProvider.name}
-                <span>*</span>
+                <span className={styles.star}>*</span>
               </h2>
               <div>
                 <Select
@@ -502,7 +502,7 @@ export default function Index(): React.ReactElement {
             >
               <h2>
                 {fieldsMap.domain.name}
-                <span>*</span>
+                <span className={styles.star}>*</span>
               </h2>
               <div>
                 <TextField

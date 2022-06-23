@@ -65,8 +65,9 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
                 (!menuSpread || item.isLogout) &&
                 <div className={styles.nameWrapper}>
                   <div className={styles.nameList}>
-                    <div className={styles.nameItem}
-                         onClick={() => handleClick(item.isLogout, item.href, true)}
+                    <div
+                      className={styles.nameItem}
+                      onClick={() => handleClick(item.isLogout, item.href, true)}
                     >
                       {item.name}
                     </div>

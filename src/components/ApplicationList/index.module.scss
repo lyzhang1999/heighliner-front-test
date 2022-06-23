@@ -22,10 +22,10 @@
     position: relative;
     overflow: hidden;
     transition: transform .2s linear;
+    border: 1px solid transparent;
 
     &:hover {
-      transform: translateY(-2px);
-      border: 1px solid #419ce2;
+      border-color: #419ce2;
     }
 
     &:after {

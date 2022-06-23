@@ -63,11 +63,6 @@
   }
 }
 
-.spreadMenu {
-  width: 250px;
-  font-family: 'Jost';
-}
-
 .menuItem {
   margin: 10px 0;
   cursor: pointer;
@@ -102,7 +97,21 @@
       display: block;
     }
   }
+}
 
+.spreadMenu {
+  width: 250px;
+  font-family: 'Jost';
+
+  .menuItem {
+    &:hover {
+      .iconWrapper {
+        border-right: 0;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+  }
 }
 
 .nameWrapper {

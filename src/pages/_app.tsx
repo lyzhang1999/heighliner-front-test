@@ -16,9 +16,9 @@ import {CssBaseline} from "@mui/material";
 import {find} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 
-const noCheckOriPage = ['/login/github', '/signup'];
-const noCheckPathPage = ['/organizations', '/settings'];
-const ifLoginRedirect = ["/", '/login', '/signup'];
+const noCheckLoginPage = ['/login/github', '/signup'];
+const noCheckOrgNamePage = ['/organizations', '/settings'];
+const ifLoginDisablePage = ["/", '/login', '/signup'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -53,7 +53,7 @@ function App({Component, pageProps}: AppProps) {
   }
 
   function loginCheck() {
-    if (!noCheckOriPage.includes(router.pathname)) {
+    if (!noCheckLoginPage.includes(router.pathname)) {
       if (cookie.getCookie('token')) {
         getOrgList().then(res => {
           let list = res.data;
@@ -61,11 +61,11 @@ function App({Component, pageProps}: AppProps) {
             organizationList: list,
           });
           let defaultOriName = getDefaultOrg(list).name;
-          if ((ifLoginRedirect.includes(router.pathname))) {
+          if ((ifLoginDisablePage.includes(router.pathname))) {
             location.pathname = `${defaultOriName}/applications`;
             return;
           }
-          if (noCheckPathPage.includes(location.pathname)) {
+          if (noCheckOrgNamePage.includes(location.pathname)) {
             dispatch({currentOrganization: getCurrentOrg(list[0])})
             startRender();
             return;

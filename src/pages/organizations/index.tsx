@@ -69,7 +69,7 @@ const Organizations = () => {
 
   return (
     <Layout
-gi      pageHeader="Organizations"
+      pageHeader="Organizations"
       rightBtnDesc="NEW ORGANIZATION"
       rightBtnCb={() => setOpen(true)}
     >

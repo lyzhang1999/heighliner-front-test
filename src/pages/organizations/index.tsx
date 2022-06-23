@@ -70,15 +70,15 @@ const Organizations = () => {
   return (
     <Layout
       pageHeader="ORGANIZATIONS"
-      rightBtnDesc="NEW ORGANIZATIONS"
+      rightBtnDesc="NEW ORGANIZATION"
       rightBtnCb={() => setOpen(true)}
     >
       <div className={styles.tableWrapper}>
         <Table sx={{}} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Created Time </TableCell>
+              <TableCell>Organization Name</TableCell>
+              <TableCell align="right">Created Time</TableCell>
               <TableCell align="right">Role</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>

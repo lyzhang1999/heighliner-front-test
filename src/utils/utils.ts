@@ -1,7 +1,7 @@
 import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
 import {NoticeRef} from "@/components/Notice";
-import {OrgList} from "@/utils/api/org";
+import {OrgList, roleType} from "@/utils/api/org";
 import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
 
@@ -145,6 +145,6 @@ export function getCurrentOrg(organization: OrgList): OrganizationType {
 }
 
 export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
-  let defaultOrg = find(orgList, {type: "Default"});
+  let defaultOrg = find(orgList, {type: "Default", member: {member_type: roleType.Owner}});
   return defaultOrg as OrgList;
 }

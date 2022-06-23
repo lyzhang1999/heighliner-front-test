@@ -1,5 +1,6 @@
 import http from "@/utils/axios";
-import { Page } from "./type";
+import {Page} from "./type";
+import {find, get, uniq, without} from "lodash-es";
 
 export interface OrgList {
   id: number;
@@ -30,18 +31,29 @@ export const roleType = {
 };
 
 export const getOrgList = (): Promise<Org> => {
-  return http.get("/orgs?page=1&page_size=999");
+  return new Promise((resolve, reject) => {
+    http.get("/orgs?page=1&page_size=999").then(res => {
+      let {data} = res;
+      let defaultOrg = find(data, {type: "Default", member: {member_type: roleType.Owner}});
+      data.unshift(defaultOrg);
+      data = uniq(data);
+      resolve({
+        data: data,
+        pagination: get(res, 'pagination')
+      })
+    }).catch(err => reject(err))
+  })
 };
 
 export const createOrg = (name: string): Promise<any> => {
-  return http.post("/orgs", { name });
+  return http.post("/orgs", {name});
 };
 
 interface leaveOriReq {
   org_id: number;
 }
 
-export const leaveOriApi = ({ org_id }: leaveOriReq): Promise<any> => {
+export const leaveOriApi = ({org_id}: leaveOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}/members`);
 };
 
@@ -49,7 +61,7 @@ interface deleteOriReq {
   org_id: number;
 }
 
-export const deleteOri = ({ org_id }: deleteOriReq): Promise<any> => {
+export const deleteOri = ({org_id}: deleteOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}`);
 };
 
@@ -76,10 +88,10 @@ export type GetOrgMembersRes = {
 };
 
 export const getOrgMembers = ({
-  org_id,
-  page,
-  page_size,
-}: GetOrgMembersReq): Promise<GetOrgMembersRes> => {
+                                org_id,
+                                page,
+                                page_size,
+                              }: GetOrgMembersReq): Promise<GetOrgMembersRes> => {
   return http.get(
     `/orgs/${org_id}/members?page=${page}&page_size=${page_size}`
   );
@@ -91,10 +103,10 @@ interface transferOriReq {
 }
 
 export const transferOri = ({
-  org_id,
-  new_owner_id,
-}: transferOriReq): Promise<any> => {
-  return http.post(`/orgs/${org_id}/transfer`, { new_owner_id });
+                              org_id,
+                              new_owner_id,
+                            }: transferOriReq): Promise<any> => {
+  return http.post(`/orgs/${org_id}/transfer`, {new_owner_id});
 };
 
 // interface getOri {
@@ -137,6 +149,7 @@ export enum MemberTypeEnum {
   Admin = "Admin",
   Member = "Member",
 }
+
 export type MemberType = keyof typeof MemberTypeEnum;
 
 export const invitations = (req: InvitationsReq) => {

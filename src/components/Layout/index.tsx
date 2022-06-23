@@ -1,16 +1,13 @@
-import react, {ReactElement, useState} from 'react';
-
+import react, {ReactElement} from 'react';
 import Menu from './Menu';
-
-import styles from './index.module.scss';
 import clsx from "clsx";
 import Btn from "@/components/Btn";
+import styles from './index.module.scss';
 
 interface HomeProps {
   children?: react.ReactNode,
   hiddenContent?: boolean,
   pageHeader?: string,
-  // titleContent?: ReactElement,
   CustomSlider?: ReactElement,
   rightBtnDesc?: string,
   rightBtnCb?: () => void,

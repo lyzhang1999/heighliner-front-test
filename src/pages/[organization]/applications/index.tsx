@@ -1,36 +1,32 @@
-import React, {useState, useEffect} from "react";
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Select,
-  MenuItem
-} from "@mui/material";
+import React, {useState, useEffect, ReactNode} from "react";
+import {Select, MenuItem} from "@mui/material";
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext} from "@/utils/utils";
-import {ApplicationObject, getApplicationList} from "@/utils/api/application";
+import {getOrganizationNameByUrl, getOriIdByContext, uuid} from "@/utils/utils";
+import {ApplicationObject, getApplicationList, getAppListReq} from "@/utils/api/application";
 import ApplicationList from "@/components/ApplicationList";
 import {ClusterItem, getClusterList} from "@/utils/api/cluster";
 import {getStacks, Stack} from "@/utils/api/stack";
-import {getOrgMembers, GetOrgMembersRes, Member} from "@/utils/api/org";
+import {getOrgMembers, Member} from "@/utils/api/org";
+import {get} from "lodash-es";
+
+const AllKey = "THEDEFAULTALLKEY" + uuid();
 
 const Applications = () => {
   const [applist, setApplist] = useState<ApplicationObject[]>([]);
   const [clusterList, setClusterList] = useState<ClusterItem[]>([]);
   const [statckList, setStatckList] = useState<Stack[]>([]);
   const [mumber, setMumber] = useState<Member[]>([]);
+  const [selectRule, setSelectRule] = useState<getAppListReq>({
+    cluster_ids: [],
+    owner_ids: [],
+    stack_ids: []
+  })
 
   const router = useRouter();
 
   useEffect(() => {
-    getApplicationList().then((res) => {
-      setApplist(res.reverse());
-    });
     getClusterList().then(res => {
       setClusterList(res);
     })
@@ -42,6 +38,12 @@ const Applications = () => {
     })
   }, []);
 
+  useEffect(() => {
+    getApplicationList(selectRule).then((res) => {
+      setApplist(res.reverse());
+    });
+  }, [selectRule])
+
   function goPanel(appId: number, releaseId: number) {
     const queryParameters = new URLSearchParams({
       app_id: appId.toString(),
@@ -52,8 +54,23 @@ const Applications = () => {
     );
   }
 
-  function handleChange() {
-
+  function handleChange(a: ReactNode, key: string) {
+    let val = get(a, 'props.value');
+    let currentVal = get(selectRule, [key, 0]);
+    if (currentVal === val) {
+      return;
+    }
+    if (val === AllKey) {
+      setSelectRule({
+        ...selectRule,
+        [key]: []
+      })
+    } else {
+      setSelectRule({
+        ...selectRule,
+        [key]: [val]
+      })
+    }
   }
 
   return (
@@ -72,46 +89,44 @@ const Applications = () => {
       <div className={styles.pageWrapper}>
         <div className={styles.selectWrapper}>
           <Select
-            value={"All"}
-            onChange={handleChange}
-            label="Age"
+            value={get(selectRule, 'owner_ids.0') || AllKey}
+            onChange={(e, v) => handleChange(v, 'owner_ids')}
+            label=""
             variant="standard"
             sx={{m: 1, minWidth: 120}}
           >
-            <MenuItem value="All" key="All">All</MenuItem>
+            <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
             {
               mumber.map(item => {
-                return <MenuItem value={item.username} key={item.username}>{item.username}</MenuItem>
+                return <MenuItem value={item.user_id} key={item.user_id}>{item.username}</MenuItem>
               })
             }
           </Select>
           <Select
-            value={"All"}
-            onChange={handleChange}
-            label="Age"
+            value={get(selectRule, 'stack_ids.0') || AllKey}
+            onChange={(e, v) => handleChange(v, 'stack_ids')}
+            label=""
             variant="standard"
             sx={{m: 1, minWidth: 120}}
           >
-            <MenuItem value="All" key="All">All</MenuItem>
-
+            <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
             {
               statckList.map(item => {
-                return <MenuItem value={item.name} key={item.name}>{item.name}</MenuItem>
+                return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
               })
             }
           </Select>
           <Select
-            value={"All"}
-            onChange={handleChange}
-            label="Age"
+            value={get(selectRule, 'cluster_ids.0') || AllKey}
+            onChange={(e, v) => handleChange(v, 'cluster_ids')}
+            label=''
             variant="standard"
             sx={{m: 1, minWidth: 120}}
           >
-            <MenuItem value="All" key="All">All</MenuItem>
-
+            <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
             {
               clusterList.map(item => {
-                return <MenuItem value={item.name} key={item.name}>{item.name}</MenuItem>
+                return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
               })
             }
           </Select>

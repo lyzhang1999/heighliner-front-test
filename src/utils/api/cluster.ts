@@ -1,6 +1,5 @@
 import http from "@/utils/axios";
 import {getOriIdByContext} from "@/utils/utils";
-import {Page} from "@/utils/api/type";
 
 export enum ClusterProvider {
   Kubeconfig = "kubeconfig",

@@ -11,10 +11,10 @@ const list = [
     commits: [{
       commitID: 'fdasdf',
       commitMessage: 'fix: fix ... '
-    },{
-        commitID: 'fdafdsasdf',
-        commitMessage: 'fix: .fewqwfq.. '
-      }]
+    }, {
+      commitID: 'fdafdsasdf',
+      commitMessage: 'fix: .fewqwfq.. '
+    }]
   },
   {
     repoName: 'my-shop-backend',
@@ -57,7 +57,8 @@ export default function RepoList() {
                 <span className={styles.name}>
                   {item.repo_name}
                 </span>
-                <img src="/img/application/panel/goRepo.svg" alt="" className={styles.icon} onClick={() => window.open(item.repo_url)}/>
+                <img src="/img/application/panel/goRepo.svg" alt="" className={styles.icon}
+                     onClick={() => window.open(item.repo_url)}/>
               </div>
               <div className={styles.tags}>
                 <img src="/img/gitprovider/github.webp" alt="github" className={styles.github}/>
@@ -68,7 +69,7 @@ export default function RepoList() {
                     return (
                       <span key={index}>
                           {/*<span className={styles.line}>|</span>*/}
-                          <span className={styles.tag}>{i}</span>
+                        <span className={styles.tag}>{i}</span>
                       </span>
                     )
                   })

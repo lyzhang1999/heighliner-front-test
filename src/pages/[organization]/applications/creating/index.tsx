@@ -9,10 +9,9 @@ import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/utils/api/application";
 import {Alert} from "@mui/material";
-
+import {get} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
-import {get} from "lodash-es";
 
 
 const CreatingApplication = () => {
@@ -175,9 +174,7 @@ const CreatingApplication = () => {
 
   function goDashboard() {
     Message.success('Creat Success');
-    // setTimeout(() => {
     router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
-    // }, 2000)
   }
 
   function skip() {

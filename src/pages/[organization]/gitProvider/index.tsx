@@ -133,4 +133,3 @@ const Clusters = () => {
   )
 }
 export default Clusters;
-// http://localhost/xxx/clusters

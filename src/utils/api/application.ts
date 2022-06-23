@@ -1,7 +1,6 @@
-import {AllFieldName, FormData} from "@/components/Application/formData";
 import http from "../axios";
 import {getOriIdByContext} from "../utils";
-import {Page} from "@/utils/api/type";
+import {isEmpty} from "lodash-es";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -95,10 +94,25 @@ export interface ApplicationObject {
   stack: Stack;
 }
 
-export function getApplicationList(): Promise<ApplicationObject[]> {
-  return http.get(
-    `/orgs/${getOriIdByContext()}/applications`
-  );
+export interface getAppListReq {
+  cluster_ids?: number[],
+  owner_ids?: number[],
+  stack_ids?: number[]
+}
+
+export function getApplicationList(params: getAppListReq = {}): Promise<ApplicationObject[]> {
+  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
+  let url = `/orgs/${getOriIdByContext()}/applications?`;
+  cluster_ids.forEach((item) => {
+    url += `cluster_ids=${item}&`
+  })
+  owner_ids.forEach((item) => {
+    url += `owner_ids=${item}&`
+  })
+  stack_ids.forEach((item) => {
+    url += `stack_ids=${item}&`
+  })
+  return http.get(url);
 }
 
 export interface GetAppEnvironmentsReq {

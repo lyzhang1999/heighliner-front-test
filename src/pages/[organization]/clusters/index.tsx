@@ -63,7 +63,6 @@ const Clusters = () => {
             rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <Dialog onClose={closeDialog} open={dialogVisible}>
-        {/*<DialogTitle>Delete Git-provider</DialogTitle>*/}
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure to delete the Cluster?
@@ -126,4 +125,3 @@ const Clusters = () => {
   )
 }
 export default Clusters;
-// http://localhost/xxx/clusters

@@ -1,6 +1,6 @@
 import http from "@/utils/axios";
 import {Page} from "./type";
-import {find, get, uniq, without} from "lodash-es";
+import {find, get, uniq} from "lodash-es";
 
 export interface OrgList {
   id: number;
@@ -109,14 +109,6 @@ export const transferOri = ({
   return http.post(`/orgs/${org_id}/transfer`, {new_owner_id});
 };
 
-// interface getOri {
-//   data: getOriRes[],
-//   pagination: Page
-// }
-
-// export const getOriMumbers = ({org_id, page, page_size}: OriMumberReq): Promise<getOri> => {
-//   return http.get(`/orgs/${org_id}/members?page=${page}&page_size=${page_size}`);
-// }
 export interface InviteeSuggestionsReq {
   org_id: number;
   username: string;

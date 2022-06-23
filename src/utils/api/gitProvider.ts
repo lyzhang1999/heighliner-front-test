@@ -1,7 +1,7 @@
 import http from '@/utils/axios';
 import {getOriIdByContext} from "@/utils/utils";
 
-export enum GitHubProvider{
+export enum GitHubProvider {
   GITHUB = "GITHUB"
 }
 
@@ -25,7 +25,6 @@ export const getGitProviderList = (): Promise<GitProviderType[]> => {
 
 interface CreateProviderReq {
   "git_org_name": string;
-  // "name": string;
   "provider": string;
   "token": string;
 }

@@ -1,5 +1,5 @@
 import http from "../axios";
-import { getOriIdByContext } from "../utils";
+import {getOriIdByContext} from "../utils";
 
 export interface Token {
   git_org_name: string;

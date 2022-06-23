@@ -33,7 +33,7 @@ interface SignUpReq {
   username: string
 }
 
-interface SignUpRes{
+interface SignUpRes {
 
 }
 

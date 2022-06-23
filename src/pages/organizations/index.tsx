@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import {Button, TableRow, TableHead, TableCell, TableBody, Table} from "@mui/material";
+import {Button, TableRow, TableHead, TableCell, TableBody, Table, Tooltip} from "@mui/material";
 import CreateOrganization from "@/pages/organizations/createOrganization";
 import DeleteOrganization from "@/pages/organizations/deleteOrganization";
 import TransferOrganization from "@/pages/organizations/transferOrganization";
@@ -100,7 +100,19 @@ const Organizations = () => {
                   <TableCell align="right">
                     {
                       [roleType.Owner].includes(member_type) && row.type === 'Default' &&
-                      <span className={styles.defaultText}>Init organization does not allow operations</span>
+                      <Tooltip
+                        title="Init organization does not allow operations"
+                        placement="left"
+                      >
+                        <span>
+                          <Button
+                            sx={{cursor: 'not-allowed'}}
+                            disabled
+                          >
+                            Transfer
+                          </Button>
+                        </span>
+                      </Tooltip>
                     }
                     {
                       [roleType.Owner].includes(member_type) && row.type !== 'Default' &&

@@ -38,7 +38,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
   return data;
 }, (err) => {
   let {status, data} = err.response;
-  if(status === 401){
+  if (status === 401) {
     cookie.delCookie('token');
   }
   if (status === 401 && (location.pathname !== '/login')) {

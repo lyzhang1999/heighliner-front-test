@@ -16,13 +16,8 @@ interface HomeProps {
   notStandardLayout?: boolean
 }
 
-const Layout = ({
-                  children,
-                  pageHeader,
-                  rightBtnDesc,
-                  rightBtnCb,
-                  notStandardLayout
-                }: HomeProps): react.ReactElement => {
+const Layout = (props: HomeProps): react.ReactElement => {
+  let {children, pageHeader, rightBtnDesc, rightBtnCb, notStandardLayout} = props;
   const {state, dispatch} = useContext(Context);
   let {hasRenderLayout} = state;
   useEffect(() => {

@@ -87,11 +87,7 @@ export type GetOrgMembersRes = {
   pagination: Page;
 };
 
-export const getOrgMembers = ({
-                                org_id,
-                                page,
-                                page_size,
-                              }: GetOrgMembersReq): Promise<GetOrgMembersRes> => {
+export const getOrgMembers = ({org_id, page, page_size}: GetOrgMembersReq): Promise<GetOrgMembersRes> => {
   return http.get(
     `/orgs/${org_id}/members?page=${page}&page_size=${page_size}`
   );
@@ -102,10 +98,7 @@ interface transferOriReq {
   new_owner_id: number;
 }
 
-export const transferOri = ({
-                              org_id,
-                              new_owner_id,
-                            }: transferOriReq): Promise<any> => {
+export const transferOri = ({org_id, new_owner_id}: transferOriReq): Promise<any> => {
   return http.post(`/orgs/${org_id}/transfer`, {new_owner_id});
 };
 

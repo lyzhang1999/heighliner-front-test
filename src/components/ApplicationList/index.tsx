@@ -29,6 +29,7 @@ export default function ApplicationList({list, clusterList}: Props) {
         list.map(item => {
           let status = get(item, ['last_release', 'status']);
           let cluster: any = find(clusterList, {id: get(item, ['last_release', 'cluster_id'])});
+          let statckIcon = get(item, ['stack', 'icon_urls'], '').split(',')[0];
           if (cluster) {
             cluster = get(cluster, 'name');
           }
@@ -36,7 +37,9 @@ export default function ApplicationList({list, clusterList}: Props) {
             <div className={styles.item} onClick={() => goPanel(item.app_id, item.last_release.id, status)}
                  key={item.app_id}>
               <div className={styles.left}>
-                <img src={GinIcon} alt=""/>
+                {
+                  statckIcon && <img src={statckIcon} alt=""/>
+                }
               </div>
               <div className={styles.right}>
                 <div className={styles.title}>

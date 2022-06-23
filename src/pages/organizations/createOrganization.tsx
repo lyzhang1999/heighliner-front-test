@@ -30,7 +30,7 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
       return "the min length is 5";
     }
     if (!/^[a-zA-Z0-9_-]{5,20}$/.test(name)) {
-      return `contains only "_", "-", uppercase, lowercase and numbers`
+      return `contains only "_", "-", uppercase, lowercase and numbers`;
     }
     return '';
   }
@@ -68,7 +68,6 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
                    sx={{
                      width: "100%",
                      margin: "20px 0"
-                     // '& .MuiTextField-root': {marginTop: "20px", width: '100%'},
                    }}
                    error={Boolean(name && checkName())}
                    helperText={name && checkName()}

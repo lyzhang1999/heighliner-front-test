@@ -34,12 +34,16 @@ const TransferOrganization = (props: Props) => {
 
   useEffect(() => {
     if (transferModalVisible) {
-      getList();
+      getList(1);
+      setTotal(0);
+      setUserList([]);
+      setPage(1);
+      setCount(0);
     }
   }, [transferModalVisible])
 
-  function getList() {
-    getOrgMembers({org_id: transferId, page: page, page_size: 10}).then(res => {
+  function getList(p: number) {
+    getOrgMembers({org_id: transferId, page: p, page_size: 10}).then(res => {
       setUserList(res.data);
       let {total, pageCount} = res.pagination;
       setTotal(total);
@@ -61,20 +65,18 @@ const TransferOrganization = (props: Props) => {
 
   function pageChange(e: any, params: number) {
     setPage(params + 1);
-    getList();
+    getList(params + 1);
   }
 
   return (
     <Dialog
       open={transferModalVisible}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
+      <DialogTitle>
         Select one user to transfer ownership to them.
       </DialogTitle>
-      <DialogContent id="alert-dialog-title" className={styles.transferTable}>
+      <DialogContent className={styles.transferTable}>
         <Table aria-label="simple table">
           <TableBody>
             {userList.map((row) => (
@@ -98,7 +100,7 @@ const TransferOrganization = (props: Props) => {
         </Table>
       </DialogContent>
       {
-        count === 1 && <TablePagination
+        (count > 10) && <TablePagination
           rowsPerPageOptions={[10]}
           count={total}
           onPageChange={pageChange}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, ReactNode} from "react";
-import {Select, MenuItem} from "@mui/material";
+import {Select, MenuItem, InputLabel} from "@mui/material";
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
@@ -91,7 +91,7 @@ const Applications = () => {
           <Select
             value={get(selectRule, 'owner_ids.0') || AllKey}
             onChange={(e, v) => handleChange(v, 'owner_ids')}
-            label=""
+            label="Owner"
             variant="standard"
             sx={{m: 1, minWidth: 120}}
           >

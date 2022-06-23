@@ -10,7 +10,7 @@ import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, roleType} from "@/utils/api/org";
 import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
-import {get} from "lodash-es";
+import {get, omit} from "lodash-es";
 import {useRouter} from "next/router";
 
 const Organizations = () => {
@@ -55,8 +55,8 @@ const Organizations = () => {
     if (get(currentOrganization, 'org_id') === id) {
       let defaultItem = getDefaultOrg(organizationList);
       if (defaultItem) {
-        location.pathname = `/${encodeURIComponent(defaultItem.name)}/applications`;
-        // dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})
+        // location.pathname = `/${encodeURIComponent(defaultItem.name)}/applications`;
+        dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})
       }
     }
   }

@@ -58,7 +58,7 @@ const Clusters = () => {
   }
 
   return (
-    <Layout pageHeader="CLUSTERS"
+    <Layout pageHeader="Clusters"
             rightBtnDesc="ADD CLUSTER"
             rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >

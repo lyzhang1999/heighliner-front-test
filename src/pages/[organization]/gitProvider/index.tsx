@@ -67,7 +67,7 @@ const Clusters = () => {
   }
 
   return (
-    <Layout pageHeader="GIT PROVIDER"
+    <Layout pageHeader="Git Provider"
             rightBtnDesc="ADD PROVIDER"
             rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >

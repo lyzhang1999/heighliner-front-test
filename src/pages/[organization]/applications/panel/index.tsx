@@ -82,7 +82,7 @@ export default function Panel(): React.ReactElement {
   }, []);
 
   return (
-    <Layout>
+    <Layout notStandardLayout>
       <ApplicationInfoContext.Provider value={applicationInfo!}>
         <Stack alignItems="center" className={styles.tabs}>
           <DitchTab<keyof typeof TabItemLabels>

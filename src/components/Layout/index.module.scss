@@ -16,7 +16,6 @@
   width: 100%;
   background-color: #f4f6f8;
 
-
   .left {
     display: flex;
     justify-content: flex-start;
@@ -28,8 +27,11 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
-    overflow-y: scroll;
-    min-width: calc(992px - 80px);
+    overflow: scroll;
+
+    .rightContent {
+      min-width: calc(992px - 80px);
+    }
 
     .pageHeader {
       padding: 40px 40px 0px 40px;

@@ -209,7 +209,7 @@ export default function Index(): React.ReactElement {
   };
 
   return (
-    <Layout>
+    <Layout notStandardLayout>
       {/* <div className={styles.panel}> */}
       <form onSubmit={handleSubmit(onSubmit)} className={styles.panel}>
         <Typography variant="h1">New Application</Typography>
@@ -456,7 +456,7 @@ export default function Index(): React.ReactElement {
                   }}
                 >
                   {gitProviders.map(
-                    ({ id, git_org_name, provider, updated_at }) => (
+                    ({ id, git_org_name, provider, created_at }) => (
                       <MenuItem
                         key={id}
                         value={id}
@@ -468,7 +468,7 @@ export default function Index(): React.ReactElement {
                             {git_org_name}
                           </div>
                           <div className={styles.gitProviderUpdate}>
-                            {formatDate(updated_at * 1000)}
+                            {formatDate(created_at * 1000)}
                           </div>
                         </Stack>
                       </MenuItem>

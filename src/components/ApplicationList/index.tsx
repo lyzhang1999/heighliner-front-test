@@ -11,10 +11,16 @@ type Props = { list: ApplicationObject[], clusterList: ClusterItem[] }
 export default function ApplicationList({list, clusterList}: Props) {
   const router = useRouter();
 
-  function goPanel(appId: number, releaseId: number) {
-    router.push(
-      `/${getOrganizationNameByUrl()}/applications/panel?app_id=${appId}&release_id=${releaseId}`
-    );
+  function goPanel(appId: number, releaseId: number, stauts: any) {
+    if (stauts === ApplicationStatus.COMPLETED) {
+      router.push(
+        `/${getOrganizationNameByUrl()}/applications/panel?app_id=${appId}&release_id=${releaseId}`
+      );
+    } else {
+      router.push(
+        `/${getOrganizationNameByUrl()}/applications/creating?app_id=${appId}&release_id=${releaseId}`
+      );
+    }
   }
 
   return (
@@ -27,7 +33,8 @@ export default function ApplicationList({list, clusterList}: Props) {
             cluster = get(cluster, 'name');
           }
           return (
-            <div className={styles.item} onClick={() => goPanel(item.app_id, item.last_release.id)} key={item.app_id}>
+            <div className={styles.item} onClick={() => goPanel(item.app_id, item.last_release.id, status)}
+                 key={item.app_id}>
               <div className={styles.left}>
                 <img src={GinIcon} alt=""/>
               </div>

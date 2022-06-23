@@ -19,7 +19,6 @@ interface HomeProps {
 
 const Layout = ({
                   children,
-                  hiddenContent,
                   pageHeader,
                   rightBtnDesc,
                   rightBtnCb,
@@ -36,19 +35,21 @@ const Layout = ({
             styles.right,
             !notStandardLayout && styles.standard
           )}>
-            {
-              pageHeader &&
-              <div className={styles.pageHeader}>
-                {pageHeader}
-                {
-                  rightBtnDesc &&
-                  <Btn onClick={rightBtnCb}>
-                    {rightBtnDesc}
-                  </Btn>
-                }
-              </div>
-            }
-            {children}
+            <div className={styles.rightContent}>
+              {
+                pageHeader &&
+                <div className={styles.pageHeader}>
+                  {pageHeader}
+                  {
+                    rightBtnDesc &&
+                    <Btn onClick={rightBtnCb}>
+                      {rightBtnDesc}
+                    </Btn>
+                  }
+                </div>
+              }
+              {children}
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import Layout from "@/components/Layout";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
 import {getOrganizationNameByUrl, getOriIdByContext, getQuery, Message} from "@/utils/utils";
@@ -14,9 +14,6 @@ import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
 import {get} from "lodash-es";
 
-interface LogRes {
-  data: string
-}
 
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
@@ -35,6 +32,8 @@ const CreatingApplication = () => {
   let resizeCb: any = null;
   let skipTimer: any = null;
   let term: any = null;
+  let leaveFlag: boolean = false;
+  let ro: any = null;
 
   function getStatus(isFirst: boolean) {
     getApplicationStatus({app_id, release_id}).then((res) => {
@@ -51,6 +50,9 @@ const CreatingApplication = () => {
         }
       }
       if (status === ApplicationStatus.COMPLETED) {
+        if (completion_time && start_time) {
+          setDurationTime(Math.trunc((completion_time - start_time)));
+        }
         getStatusInterval && clearInterval(getStatusInterval);
         getStatusInterval = null;
         durationTimeInterval && clearInterval(durationTimeInterval)
@@ -83,6 +85,12 @@ const CreatingApplication = () => {
       skipTimer = null;
       getlogTimeOut && clearTimeout(getlogTimeOut);
       getlogTimeOut = null;
+      leaveFlag = true;
+      try {
+        ro && ro.unobserve(document.getElementById('TERMIANLWRAPPER'));
+      } catch (e) {
+        console.warn('ro.unobserve error')
+      }
     }
   }, [])
 
@@ -95,16 +103,28 @@ const CreatingApplication = () => {
       term = new Terminal({
         fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
         fontSize: 12,
-        lineHeight: 0.2,
-        scrollback: 99999,
+        lineHeight: 1,
+        scrollback: 999999,
       })
       term.loadAddon(fitAddon);
       // @ts-ignore
       term.open(document.getElementById('terminal'));
       fitAddon.fit();
-      resizeCb = function () {
-        fitAddon.fit();
+
+      var target = document.getElementById('TERMIANLWRAPPER');
+
+      ro = new ResizeObserver(() => {
+        try {
+          fitAddon.fit();
+        } catch (e) {
+          console.warn('fitAddon.fit() err')
+        }
+      });
+
+      if (target) {
+        ro.observe(target);
       }
+
       window.addEventListener('resize', resizeCb);
       getLog();
     }
@@ -124,6 +144,9 @@ const CreatingApplication = () => {
       console.warn('onerror', globalState)
       setTimeout(() => {
         console.warn('onerrorTimeout', globalState)
+        if (leaveFlag) {
+          return;
+        }
         if (globalState === ApplicationStatus.PROCESSING) {
           getLog();
         }
@@ -135,9 +158,13 @@ const CreatingApplication = () => {
     eventSource.addEventListener("END", function (e) {
       console.warn('END')
       eventSource.close();
+
       setTimeout(() => {
         console.warn(globalState)
-        console.warn( "end" + globalState)
+        console.warn("end" + globalState)
+        if (leaveFlag) {
+          return;
+        }
         if (globalState === ApplicationStatus.PROCESSING) {
           getLog();
         }
@@ -149,7 +176,7 @@ const CreatingApplication = () => {
   function goDashboard() {
     Message.success('Creat Success');
     // setTimeout(() => {
-      router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
+    router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
     // }, 2000)
   }
 
@@ -173,32 +200,34 @@ const CreatingApplication = () => {
 
   return (
     <Layout pageHeader="Creating Application"
+            notStandardLayout
     >
-      <div id="creatingTerminal" className={styles.wrapper}>
-        <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
+      <div className={styles.wrapper} id="TERMIANLWRAPPER">
+        <div className={styles.infoWrapper}>
+          <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
+          {
+            status === ApplicationStatus.FAILED &&
+            <Alert severity="error">
+              The Application Filed!
+            </Alert>
+          }
+          {
+            status === ApplicationStatus.COMPLETED &&
+            <Alert severity="success">
+              Success, auto go panel page after {skipTime}s
+              {/*<span className={styles.goDashboard}*/}
+              {/*      onClick={goDashboard}>dashboard</span>*/}
+            </Alert>
+          }
+        </div>
         <div id="terminal"
              className={styles.terminal}
         >
         </div>
-        {
-          status === ApplicationStatus.COMPLETED &&
-          <Alert severity="success">
-            Success, auto go <span className={styles.goDashboard}
-                                   onClick={goDashboard}>dashboard</span> after {skipTime}s
-          </Alert>
-        }
-        {
-          status === ApplicationStatus.FAILED &&
-          <Alert severity="error">
-            The Application Filed!
-          </Alert>
-        }
       </div>
     </Layout>
   )
 }
 
 export default CreatingApplication
-
-// http://localhost/8/applications/creating?app_id=24&release_id=24
-// http://localhost/zhangze/applications/creating?app_id=10&release_id=10
+// http://localhost/zhangze/applications/creating?app_id=42&release_id=42

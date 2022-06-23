@@ -17,26 +17,14 @@ ul {
 }
 
 body {
-  min-width: $global-min-width;
+  min-width: 300px;
 
   .MuiButton-root {
     text-transform: none;
   }
 }
 
-// .MuiButton-containedPrimary {
-//   background-color: #5747eb;
-
-//   &:hover {
-//     background-color: #5747eb;
-//   }
-// }
-
-:global(.Mui-focused) {
-
-}
-
-.MuiPaper-root {
+.MuiDrawer-paper {
   border-top-left-radius: 14px;
   border-bottom-left-radius: 14px;
   box-shadow: -2px 4px 10px 0 rgba(226, 228, 245, 0.6);

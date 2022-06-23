@@ -3,35 +3,33 @@
 
 .wrapper {
   width: 100%;
+  padding: 20px 40px 0 40px;
 
   .terminal {
-    height: 400px;
-    //padding: 20px;
-    margin: 20px;
+    margin-top: 18px;
     border-radius: 4px;
-    //width: 800px;
-    //width: 100%;
+    height: calc(100vh - 190px);
+
+    :global(.xterm-viewport) {
+      width: 100% !important;
+    }
   }
 
-  //:global(#terminal .terminal.xterm){
-  //  height: 100%;
-  //  width: 100%;
-  //}
-  //
-  //:global(#terminal .xterm-viewport) {
-  //  height: 100% !important;
-  //  width: 100% !important;
-  //}
-  //
-  //:global(#terminal .xterm-screen) {
-  //  height: 100% !important;
-  //  width: 100% !important;
-  //}
   .goDashboard {
     color: #0070f3;
     cursor: pointer;
   }
+
+  .infoWrapper {
+    display: flex;
+    justify-content: space-between;
+
+    :global(.MuiPaper-root) {
+      width: 48%;
+    }
+  }
 }
+
 
 .timeLine {
   margin: 0 auto;

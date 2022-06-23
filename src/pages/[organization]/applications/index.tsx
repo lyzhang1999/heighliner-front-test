@@ -40,7 +40,7 @@ const Applications = () => {
 
   useEffect(() => {
     getApplicationList(selectRule).then((res) => {
-      setApplist(res.reverse());
+      setApplist(res);
     });
   }, [selectRule])
 

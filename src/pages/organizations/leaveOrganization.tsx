@@ -38,9 +38,14 @@ const LeavePrganization = (props: Props) => {
       <DialogTitle id="alert-dialog-title">
         Are yuo sure to leave the organization?
       </DialogTitle>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+      <DialogActions
+        sx={{padding: '16px 24px'}}
+      >
+        <Button onClick={handleClose}
+                variant="outlined"
+        >Cancel</Button>
         <Button onClick={deleteIt}
+                variant="contained"
         >
           Confirm
         </Button>

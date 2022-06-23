@@ -8,9 +8,9 @@ import RobotoMedium from "../styles/fonts/Roboto-Medium.ttf";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#6002ee",
-      light: "#6002ee",
-      dark: "#6002ee",
+      main: "#1B51B9",
+      light: "#1B51B9",
+      dark: "#1B51B9",
     },
     secondary: {
       main: "#11cb5f",

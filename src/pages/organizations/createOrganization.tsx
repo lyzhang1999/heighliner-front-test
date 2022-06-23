@@ -60,14 +60,14 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
         Please Input a Organization Name
       </DialogTitle>
       <DialogContent>
-        <TextField id="outlined-basic" label="Name" variant="outlined"
+        <TextField id="outlined-basic" label="Organization Name" variant="outlined"
                    value={name}
                    onChange={(e) => {
                      setName(e.target.value);
                    }}
                    sx={{
                      width: "100%",
-                     margin: "20px 0"
+                     marginTop: "10px"
                    }}
                    error={Boolean(name && checkName())}
                    helperText={name && checkName()}
@@ -78,9 +78,15 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
                    }}
         />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={creat} variant="contained">
+      <DialogActions
+        sx={{padding: '16px 24px'}}
+      >
+        <Button onClick={handleClose}
+                variant="outlined"
+        >Cancel</Button>
+        <Button onClick={creat}
+                variant="contained"
+        >
           Create
         </Button>
       </DialogActions>

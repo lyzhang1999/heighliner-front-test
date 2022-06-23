@@ -38,10 +38,15 @@ const DeleteOrganization = (props: Props) => {
       <DialogTitle id="alert-dialog-title">
         Are yuo sure to delete the Organization?
       </DialogTitle>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+      <DialogActions
+        sx={{padding: '16px 24px'}}
+      >
+        <Button onClick={handleClose}
+                variant="outlined"
+        >Cancel</Button>
         <Button onClick={deleteIt}
                 color="error"
+                variant="contained"
         >
           Delete
         </Button>

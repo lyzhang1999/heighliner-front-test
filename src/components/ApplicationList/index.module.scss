@@ -16,7 +16,6 @@
     background-color: #fefdff;
     cursor: pointer;
     border-radius: 6px;
-
     display: flex;
     align-items: center;
     position: relative;
@@ -33,7 +32,6 @@
       display: block;
       width: 0px;
       background: linear-gradient(to bottom, #194fb8 -4%, #47a8e9 107%);
-      position: absolute;
       transition: width .1s linear;
       position: absolute;
       left: 0px;

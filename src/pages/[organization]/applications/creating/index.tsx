@@ -129,7 +129,7 @@ const CreatingApplication = () => {
     }
     getlogTimeOut = setTimeout(() => {
       initTerminal()
-    }, 1000);
+    }, 0);
   }
 
   function getLog() {

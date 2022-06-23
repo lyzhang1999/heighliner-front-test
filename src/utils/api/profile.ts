@@ -35,3 +35,22 @@ export function updateBasicProfile(
 ): Promise<BasicProfileRes> {
   return http.patch(`/user`, data);
 }
+
+
+export interface UserInfo {
+  id: number;
+  created_at: number;
+  created_by: number;
+  updated_at: number;
+  updated_by: number;
+  username: string;
+  password: string;
+  email: string;
+  avatar: string;
+  status: number;
+  github_id: number;
+}
+
+export function getUserInfo(): Promise<UserInfo>{
+  return http.get('/user');
+}

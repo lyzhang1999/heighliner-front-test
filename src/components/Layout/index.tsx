@@ -1,8 +1,10 @@
-import react, {ReactElement} from 'react';
+import react, {ReactElement, useContext, useEffect} from 'react';
 import Menu from './Menu';
 import clsx from "clsx";
 import Btn from "@/components/Btn";
 import styles from './index.module.scss';
+import {getUserInfo} from "@/utils/api/profile";
+import {Context} from "@/utils/store";
 
 interface HomeProps {
   children?: react.ReactNode,
@@ -21,6 +23,19 @@ const Layout = ({
                   rightBtnCb,
                   notStandardLayout
                 }: HomeProps): react.ReactElement => {
+  const {state, dispatch} = useContext(Context);
+  let {hasRenderLayout} = state;
+  useEffect(() => {
+    if (!hasRenderLayout) {
+      // set render loyout flag
+      dispatch({hasRenderLayout: true});
+      // set userinfo to context
+      getUserInfo().then(res => {
+        dispatch({userInfo: res})
+      })
+    }
+  }, []);
+
   return (
     <div>
       <div className={styles.contentWrappper}>
@@ -36,7 +51,6 @@ const Layout = ({
                 styles.rightContent,
                 !notStandardLayout && styles.standard
               )
-
             }>
               {
                 pageHeader &&

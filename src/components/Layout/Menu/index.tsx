@@ -89,12 +89,6 @@ const Menu = () => {
   ];
 
   const bottomList = [
-    // {
-    //   activeIcon: "/img/slider/icon7Active.svg",
-    //   icon: "/img/slider/icon7.svg",
-    //   href: `/organizations`,
-    //   name: "Help",
-    // },
     {
       activeIcon: "/img/slider/icon10Active.svg",
       icon: "/img/slider/icon10.svg",
@@ -125,7 +119,6 @@ const Menu = () => {
         {
           menuSpread &&
           <div className={styles.changeOrg}>
-            {/* @ts-ignore */}
             <Select
               onChange={handleChange}
               open={open}
@@ -147,7 +140,6 @@ const Menu = () => {
                   <SelectMenuItem
                     value={item.id}
                     key={item.id}
-                    // sx={{fontSize: "14px", color: "#121226", fontWeight: "300"}}
                   >
                     {item.name}
                   </SelectMenuItem>
@@ -156,7 +148,6 @@ const Menu = () => {
               <SelectMenuItem
                 value="NEWORGANIZATION"
                 key='NEWORGANIZATION'
-                // sx={{fontSize: "14px", color: "#121226", fontWeight: "300"}}
               >
                 Create A Organization
               </SelectMenuItem>
@@ -178,6 +169,12 @@ const Menu = () => {
       <div className={styles.userInfo}>
         <div className={styles.left}>
           <img src="/img/slider/icon9.svg" alt=""/>
+          {
+            menuSpread &&
+            <div className={styles.spreadName}>
+              {get(state, 'userInfo.username', '')}
+            </div>
+          }
           <div className={styles.nameWrapper}>
             <div className={styles.nameList}>
               <div className={styles.nameItem}

@@ -1,11 +1,14 @@
 import React, {createContext} from 'react'
 import {MemberType, OrgList} from './api/org'
+import {UserInfo} from "@/utils/api/profile";
 
 export interface State {
   organizationList?: OrgList[],
   currentOrganization?: OrganizationType | null,
   menuSpread?: boolean,
   setSpreadFlag?: boolean,
+  hasRenderLayout?: boolean,
+  userInfo?: UserInfo | null,
 }
 
 export interface OrganizationType {
@@ -24,7 +27,9 @@ export const initState: State = {
   organizationList: [],
   currentOrganization: null,
   menuSpread: true,
-  setSpreadFlag: false
+  setSpreadFlag: false,
+  hasRenderLayout: false,
+  userInfo: null
 }
 
 export const reducer = (state: State, params: State) => {

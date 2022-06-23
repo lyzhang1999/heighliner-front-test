@@ -99,6 +99,10 @@ const Organizations = () => {
 
                   <TableCell align="right">
                     {
+                      [roleType.Owner].includes(member_type) && row.type === 'Default' &&
+                      <span className={styles.defaultText}>Init organization does not allow operations</span>
+                    }
+                    {
                       [roleType.Owner].includes(member_type) && row.type !== 'Default' &&
                       <div className={styles.actionWrapper}>
                         <Button

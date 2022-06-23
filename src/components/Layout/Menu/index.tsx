@@ -169,12 +169,12 @@ const Menu = () => {
       <div className={styles.userInfo}>
         <div className={styles.left}>
           <img src="/img/slider/icon9.svg" alt=""/>
-          {
-            menuSpread &&
-            <div className={styles.spreadName}>
-              {get(state, 'userInfo.username', '')}
-            </div>
-          }
+          {/*{*/}
+          {/*  menuSpread &&*/}
+          {/*  <div className={styles.spreadName}>*/}
+          {/*    {get(state, 'userInfo.username', '')}*/}
+          {/*  </div>*/}
+          {/*}*/}
           <div className={styles.nameWrapper}>
             <div className={styles.nameList}>
               <div className={styles.nameItem}

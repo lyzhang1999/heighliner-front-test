@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import {Context} from "@/utils/store";
 import MenuItem from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import {OrgList} from "@/utils/api/org";
 import {find} from "lodash-es";
 import cookie from "@/utils/cookie";
@@ -143,7 +144,8 @@ const Menu = () => {
                 value="NEWORGANIZATION"
                 key='NEWORGANIZATION'
               >
-                Create A Organization
+                <AddCircleOutlineOutlinedIcon/>
+                <span style={{marginLeft: "10px"}}>New Organization</span>
               </SelectMenuItem>
             </Select>
             <div className={clsx(styles.selectIcon)} onClick={handleOpen}>

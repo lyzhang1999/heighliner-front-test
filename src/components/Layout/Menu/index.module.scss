@@ -235,13 +235,16 @@
   }
 
   .right {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0px;
+    width: 0;
     margin-left: 19px;
     color: #959595;
     font-weight: 500;
     white-space: nowrap;
     position: relative;
     cursor: pointer;
-    overflow: hidden;
 
     &:hover {
       .nameWrapper {

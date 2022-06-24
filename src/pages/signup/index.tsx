@@ -30,12 +30,12 @@ enum RuleKey {
   "sameOther" = "sameOther",
 }
 
-interface ruleItem {
+interface RuleItem {
   key: Key,
   rule: any[]
 }
 
-const formRule: ruleItem[] = [
+const formRule: RuleItem[] = [
   {
     key: Key.USERNAME,
     rule: [

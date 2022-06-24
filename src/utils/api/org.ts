@@ -49,19 +49,19 @@ export const createOrg = (name: string): Promise<any> => {
   return http.post("/orgs", {name});
 };
 
-interface leaveOriReq {
+interface LeaveOriReq {
   org_id: number;
 }
 
-export const leaveOriApi = ({org_id}: leaveOriReq): Promise<any> => {
+export const leaveOriApi = ({org_id}: LeaveOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}/members`);
 };
 
-interface deleteOriReq {
+interface DeleteOriReq {
   org_id: number;
 }
 
-export const deleteOri = ({org_id}: deleteOriReq): Promise<any> => {
+export const deleteOri = ({org_id}: DeleteOriReq): Promise<any> => {
   return http.delete(`/orgs/${org_id}`);
 };
 
@@ -93,12 +93,12 @@ export const getOrgMembers = ({org_id, page, page_size}: GetOrgMembersReq): Prom
   );
 };
 
-interface transferOriReq {
+interface TransferOriReq {
   org_id: number;
   new_owner_id: number;
 }
 
-export const transferOri = ({org_id, new_owner_id}: transferOriReq): Promise<any> => {
+export const transferOri = ({org_id, new_owner_id}: TransferOriReq): Promise<any> => {
   return http.post(`/orgs/${org_id}/transfer`, {new_owner_id});
 };
 

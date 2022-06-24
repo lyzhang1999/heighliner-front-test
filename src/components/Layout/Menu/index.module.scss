@@ -241,6 +241,7 @@
     white-space: nowrap;
     position: relative;
     cursor: pointer;
+    overflow: hidden;
 
     &:hover {
       .nameWrapper {

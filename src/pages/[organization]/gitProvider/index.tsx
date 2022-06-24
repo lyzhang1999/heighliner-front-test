@@ -5,7 +5,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText
+  DialogContentText,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
 } from '@mui/material';
 import '@/utils/axios';
 
@@ -20,6 +25,7 @@ import {
 } from "@/utils/api/gitProvider";
 
 import styles from './index.module.scss';
+import {isEmpty} from "lodash-es";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -76,56 +82,74 @@ const Clusters = () => {
             rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <div className={styles.wrapper}>
-        <Dialog onClose={closeDialog} open={dialogVisible}>
-          {/*<DialogTitle>Delete Git-provider</DialogTitle>*/}
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure to delete the Git-Provider?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeDialog}>Cancel</Button>
-            <Button onClick={deleteProvider}>
-              Confirm
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <div className={styles.deleteIcon} onClick={openDeleteDialog}>
-            {/*<DeleteIcon/>*/}
-            <span>
-              Delete
-            </span>
-          </div>
-        </Popover>
         {
-          prividerList.map(item => {
-            return (
-              <div className={styles.card} key={item.git_org_name}>
-                <div className={styles.moreIcon}
-                     onClick={(e) => handleClick(e, item.id)}>
-                  <MoreVertIcon/>
-                </div>
-                <div className={styles.logo}>
-                  <img src="/img/gitprovider/github.webp" alt="github"/>
-                </div>
-                <div className={styles.content}>
-                  <div className={styles.organiztion}>GitOrganization: {item.git_org_name}</div>
-                  <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at * 1000)}</div>
-                </div>
-              </div>
-            )
-          })
+          !isEmpty(prividerList) &&
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>GitOrganization</TableCell>
+                <TableCell align="right">CreateTime</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {prividerList.map((item) => (
+                <TableRow
+                  key={item.id}
+                  sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                >
+                  <TableCell component="th" scope="item">
+                    <div className={styles.orgWrapper}>
+                      <img src="/img/gitprovider/github.webp" alt="github" className={styles.githubIcon}/>
+                      <span className={styles.orgName}>{item.git_org_name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="right">{formatDate(item.created_at * 1000)}</TableCell>
+                  <TableCell align="right">
+                    <div className={styles.moreIcon}>
+                      <div
+                        className={styles.icon}
+                        onClick={(e) => handleClick(e, item.id)}
+                      >
+                        <MoreVertIcon/>
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         }
+
       </div>
+      <Dialog onClose={closeDialog} open={dialogVisible}>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure to delete the Git-Provider?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button onClick={deleteProvider}>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <div className={styles.deleteIcon} onClick={openDeleteDialog}>
+          <span>
+              Delete
+          </span>
+        </div>
+      </Popover>
       <AddGitProvider
         {...{
           setModalDisplay,

@@ -10,12 +10,16 @@ import {
 import '@/utils/axios';
 
 import Layout from "@/components/Layout";
-import NewGitProvider from '@/components/Application/NewGitProvider';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {formatDate} from "@/utils/utils";
+import AddGitProvider from '@/components/AddGitProvider';
+import {
+  deleteProviderList,
+  getGitProviderList,
+  GitProviderType
+} from "@/utils/api/gitProvider";
 
 import styles from './index.module.scss';
-import {deleteProviderList, getGitProviderList, GitProviderType} from "@/utils/api/gitProvider";
-import {formatDate} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -122,7 +126,7 @@ const Clusters = () => {
           })
         }
       </div>
-      <NewGitProvider
+      <AddGitProvider
         {...{
           setModalDisplay,
           modalDisplay,

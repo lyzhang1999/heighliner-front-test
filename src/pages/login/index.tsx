@@ -1,9 +1,7 @@
 import {useContext, useState} from "react";
 import {NextPage} from "next";
 import clsx from "clsx";
-import {LoadingButton} from "@mui/lab";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import {Box, Divider, TextField} from "@mui/material";
+import { TextField} from "@mui/material";
 import {useRouter} from "next/router";
 
 import {getPopUpsWindowFeatures} from "@/utils/window";
@@ -12,7 +10,6 @@ import {omit, trim} from "lodash-es";
 import styles from "./index.module.scss";
 import Image from "next/image";
 import {Context} from "@/utils/store";
-import http from "@/utils/axios";
 import {Message, setLoginToken, uuid} from "@/utils/utils";
 import {login, LoginType, Res} from "@/utils/api/login";
 import {getOrgList} from "@/utils/api/org";
@@ -40,32 +37,6 @@ const Login: NextPage = () => {
       router.push(`${oriName}/applications`);
     })
   }
-
-  const handleGitHubLogin = () => {
-    const url = new URL(process.env.NEXT_PUBLIC_GITHUB_URL!);
-    // Using in url request to github to prevent from forgery attack
-    const state = uuid();
-    window.localStorage.setItem("state", state);
-    url.searchParams.set("state", state);
-    url.searchParams.set('redirect_uri', location.origin + "/login/github")
-
-    const GitHubLoginWindow = window.open(
-      url,
-      "GitHub Authorization",
-      getPopUpsWindowFeatures()
-    );
-
-    setLogining(true);
-    // Polling the window whether or not has closed
-    const timer = setInterval(function polling() {
-      if (GitHubLoginWindow!.closed) {
-        clearInterval(timer);
-        setLogining(false);
-        window.localStorage.removeItem("state");
-        oriList();
-      }
-    }, 1000);
-  };
 
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -109,30 +80,6 @@ const Login: NextPage = () => {
         <div className={styles.title}>
           Sign in to Your Account
         </div>
-        {/*<Box className="flex justify-center">*/}
-        {/*  <LoadingButton*/}
-        {/*    loading={logining}*/}
-        {/*    className={clsx("normal-case", styles.githubLoginBtn)}*/}
-        {/*    variant="outlined"*/}
-        {/*    startIcon={<GitHubIcon className="text-4xl m-1"/>}*/}
-        {/*    loadingPosition="start"*/}
-        {/*    size="large"*/}
-        {/*    onClick={handleGitHubLogin}*/}
-        {/*  >*/}
-        {/*    Log in with GitHub*/}
-        {/*  </LoadingButton>*/}
-        {/*</Box>*/}
-        {/*<div className={styles.divider}>*/}
-        {/*  <Divider>or</Divider>*/}
-        {/*</div>*/}
-
-        {/*<div className={styles.inputTitle}>*/}
-        {/*  User*/}
-        {/*  <input type="text"/>*/}
-        {/*</div>*/}
-        {/*<div className={styles.inputTitle}>*/}
-        {/*  User*/}
-        {/*</div>*/}
         <TextField id="standard-basic" label="User" variant="standard" sx={inputStyle}
                    value={username}
                    onChange={(e) => {
@@ -163,40 +110,7 @@ const Login: NextPage = () => {
         <div className={styles.signIn} onClick={passwordLogin}>
           Sign In {loginLoading && <LoadingPoint/>}
         </div>
-        {/*<div className={styles.centerLine}>*/}
-        {/*  /!*<div className={styles.line}></div>*!/*/}
-        {/*  or*/}
-        {/*</div>*/}
       </div>
-
-      {/*<Card*/}
-      {/*  className={clsx(*/}
-      {/*    "flex flex-col justify-center rounded-none absolute",*/}
-      {/*    styles.card*/}
-      {/*  )}*/}
-      {/*>*/}
-      {/*  <Box className="flex flex-col justify-center gap-4">*/}
-      {/*    <Typography*/}
-      {/*      variant="h4"*/}
-      {/*      className={clsx("flex justify-center", styles.title)}*/}
-      {/*    >*/}
-      {/*      Sign in to Your Account*/}
-      {/*    </Typography>*/}
-      {/*    <Box className="flex justify-center">*/}
-      {/*      <LoadingButton*/}
-      {/*        loading={logining}*/}
-      {/*        className={clsx("normal-case", styles.githubLoginBtn)}*/}
-      {/*        variant="outlined"*/}
-      {/*        startIcon={<GitHubIcon className="text-4xl m-1"/>}*/}
-      {/*        loadingPosition="start"*/}
-      {/*        size="large"*/}
-      {/*        onClick={handleGitHubLogin}*/}
-      {/*      >*/}
-      {/*        Log in with GitHub*/}
-      {/*      </LoadingButton>*/}
-      {/*    </Box>*/}
-      {/*  </Box>*/}
-      {/*</Card>*/}
     </div>
   );
 };

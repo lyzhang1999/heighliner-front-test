@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function CloseWindowCounter({ seconds }: Props) {
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(seconds);
   const refCount = useRef(count);
 
   useEffect(() => {

@@ -91,7 +91,6 @@ export default function Panel(): React.ReactElement {
             setSelectedItem={setSelectedItem}
           />
         </Stack>
-        <Box className={styles.separator}></Box>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -112,7 +111,7 @@ export default function Panel(): React.ReactElement {
             </div>
             <div className={styles.stackName}>{applicationInfo?.name}</div>
             <div className={styles.stackStatus}>
-              {/* <Running /> {applicationInfo?} */}
+              <Running /> Running
             </div>
           </Stack>
           <Stack

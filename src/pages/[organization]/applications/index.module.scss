@@ -3,5 +3,23 @@
 }
 
 .selectWrapper {
-  margin-left: -8px;
+  display: flex;
+
+  .selectItemBox {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    .lable {
+      color: #747d88;
+      font-size: 16px;
+      margin: 0 10px;
+    }
+
+    &:first-child {
+      .lable {
+        margin-left: 0px;
+      }
+    }
+  }
 }

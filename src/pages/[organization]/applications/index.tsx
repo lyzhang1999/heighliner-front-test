@@ -1,5 +1,5 @@
 import React, {useState, useEffect, ReactNode} from "react";
-import {Select, MenuItem, InputLabel} from "@mui/material";
+import {Select, MenuItem, InputLabel, FormControl, FormHelperText} from "@mui/material";
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
@@ -88,48 +88,57 @@ const Applications = () => {
     >
       <div className={styles.pageWrapper}>
         <div className={styles.selectWrapper}>
-          <Select
-            value={get(selectRule, 'owner_ids.0') || AllKey}
-            onChange={(e, v) => handleChange(v, 'owner_ids')}
-            label="Owner"
-            variant="standard"
-            sx={{m: 1, minWidth: 120}}
-          >
-            <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
-            {
-              mumber.map(item => {
-                return <MenuItem value={item.user_id} key={item.user_id}>{item.username}</MenuItem>
-              })
-            }
-          </Select>
-          <Select
-            value={get(selectRule, 'stack_ids.0') || AllKey}
-            onChange={(e, v) => handleChange(v, 'stack_ids')}
-            label=""
-            variant="standard"
-            sx={{m: 1, minWidth: 120}}
-          >
-            <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
-            {
-              statckList.map(item => {
-                return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
-              })
-            }
-          </Select>
-          <Select
-            value={get(selectRule, 'cluster_ids.0') || AllKey}
-            onChange={(e, v) => handleChange(v, 'cluster_ids')}
-            label=''
-            variant="standard"
-            sx={{m: 1, minWidth: 120}}
-          >
-            <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
-            {
-              clusterList.map(item => {
-                return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
-              })
-            }
-          </Select>
+          <div className={styles.selectItemBox}>
+            <div className={styles.lable}>Owner:</div>
+            <Select
+              value={get(selectRule, 'owner_ids.0') || AllKey}
+              onChange={(e, v) => handleChange(v, 'owner_ids')}
+              label="Owner"
+              variant="standard"
+              sx={{m: 1, minWidth: 120}}
+            >
+              <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
+              {
+                mumber.map(item => {
+                  return <MenuItem value={item.user_id} key={item.user_id}>{item.username}</MenuItem>
+                })
+              }
+            </Select>
+          </div>
+          <div className={styles.selectItemBox}>
+            <div className={styles.lable}>Stack:</div>
+            <Select
+              value={get(selectRule, 'stack_ids.0') || AllKey}
+              onChange={(e, v) => handleChange(v, 'stack_ids')}
+              label=""
+              variant="standard"
+              sx={{m: 1, minWidth: 120}}
+            >
+              <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
+              {
+                statckList.map(item => {
+                  return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
+                })
+              }
+            </Select>
+          </div>
+          <div className={styles.selectItemBox}>
+            <div className={styles.lable}>Cluster:</div>
+            <Select
+              value={get(selectRule, 'cluster_ids.0') || AllKey}
+              onChange={(e, v) => handleChange(v, 'cluster_ids')}
+              label=''
+              variant="standard"
+              sx={{m: 1, minWidth: 120}}
+            >
+              <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
+              {
+                clusterList.map(item => {
+                  return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
+                })
+              }
+            </Select>
+          </div>
         </div>
         <ApplicationList
           list={applist}

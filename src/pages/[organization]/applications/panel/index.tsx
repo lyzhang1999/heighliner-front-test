@@ -14,8 +14,10 @@ import RepoList from "@/components/Application/Panel/RepoList";
 
 import styles from "./index.module.scss";
 import {
+  ApplicationStatus,
   getApplicationInfo,
   GetApplicationInfoRes,
+  getApplicationStatus,
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
 import { getOriIdByContext } from "@/utils/utils";
@@ -64,6 +66,7 @@ export default function Panel(): React.ReactElement {
   const router = useRouter();
   const [applicationInfo, setApplicationInfo] =
     useState<GetApplicationInfoRes>();
+  const [status, setStatus] = useState<ApplicationStatus>();
   const [selectedItem, setSelectedItem] = useState<keyof typeof TabItemLabels>(
     TabItemLabels.Code
   );
@@ -78,6 +81,13 @@ export default function Panel(): React.ReactElement {
       org_id: +orgId,
     }).then((res) => {
       setApplicationInfo(res);
+    });
+
+    getApplicationStatus({
+      app_id: appId,
+      release_id: releaseId,
+    }).then((res) => {
+      setStatus(res.status);
     });
   }, []);
 
@@ -111,7 +121,15 @@ export default function Panel(): React.ReactElement {
             </div>
             <div className={styles.stackName}>{applicationInfo?.name}</div>
             <div className={styles.stackStatus}>
-              <Running /> Running
+              {status && status === ApplicationStatus.COMPLETED && (
+                <>
+                  <Running /> Running
+                </>
+              )}
+              {status && status === ApplicationStatus.FAILED && <>Failed</>}
+              {status && status === ApplicationStatus.PROCESSING && (
+                <>Creating</>
+              )}
             </div>
           </Stack>
           <Stack

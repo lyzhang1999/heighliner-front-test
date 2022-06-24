@@ -30,7 +30,7 @@ export function createApplication(
   );
 }
 
-export interface GetStatusReq {
+export interface GetApplicationReq {
   app_id: string;
   release_id: string;
 }
@@ -41,10 +41,12 @@ export enum ApplicationStatus {
   FAILED = "Failed",
 }
 
-export interface GetStatusRes {
+export interface GetApplicationStatusRes {
   id: number;
   created_at: number;
+  created_by: number;
   updated_at: number;
+  updated_by: number;
   application_id: number;
   name: string;
   namespace: string;
@@ -55,7 +57,7 @@ export interface GetStatusRes {
   status: ApplicationStatus;
 }
 
-export function getApplicationStatus(req: GetStatusReq): Promise<GetStatusRes> {
+export function getApplicationStatus(req: GetApplicationReq): Promise<GetApplicationStatusRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${
       req.release_id

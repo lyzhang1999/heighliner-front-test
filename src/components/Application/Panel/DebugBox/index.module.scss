@@ -1,13 +1,16 @@
+@import "/src/styles/utils";
+
 .box {
   width: 180px;
-  height: 180px;
+  // height: 180px;
   box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
   border: solid 2px #edf0f3;
   background-color: #fff;
   border-radius: 25px;
+  @include setVerticalPadding(11px);
 
   .lines {
-    margin-top: 11px;
+    // margin-top: 11px;
     margin-right: 17px;
     display: flex;
     justify-content: flex-end;
@@ -50,7 +53,7 @@
     justify-content: center;
     margin-top: 14px;
     cursor: pointer;
-    
+
     .name {
       border: solid 1px #edf0f3;
       border-radius: 5px;

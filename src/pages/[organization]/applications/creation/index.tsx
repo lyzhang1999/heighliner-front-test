@@ -405,8 +405,6 @@ export default function Index(): React.ReactElement {
                     <Image
                       src={PlusIcon}
                       alt=""
-                      // height="25px"
-                      // width="100%"
                       layout="fill"
                       objectFit="contain"
                     />
@@ -550,7 +548,6 @@ export default function Index(): React.ReactElement {
           </Button>
         </div>
       </form>
-      {/* </div> */}
       <NewClusterModal
         setModalDisplay={setOpenAddClusterDrawer}
         modalDisplay={openAddClusterDrawer}

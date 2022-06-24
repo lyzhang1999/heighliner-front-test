@@ -1,62 +1,38 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Drawer,
-} from '@mui/material';
-import React, {useEffect, useState} from "react";
-import {createCluster} from "@/utils/api/cluster";
-import {trim} from "lodash-es";
-import styles from '@/components/Application/NewGitProvider/index.module.scss';
-import {Message} from "@/utils/utils";
-import Btn, {BtnType} from "@/components/Btn";
-import {GetGitProviderUrl} from "@/utils/config";
+import React, {useState} from "react";
+import { Drawer, Tab } from '@mui/material';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import CloseIcon from '@mui/icons-material/Close';
+
+import { KubeconfigPanel } from "./Kubeconfig";
+import { FreeClusterPanel } from "./FreeCluster";
+import { CloudHostedPanel } from "./CloudHosted";
+
+import styles from './index.module.scss';
 
 interface Props {
-  modalDisplay: boolean
+  modalDisplay: boolean,
   setModalDisplay: (dispaly: any) => void,
   successCb?: () => void,
 }
 
-const buttonStyles = {
-  marginRight: "10px",
+enum ClusterTypeEnums {
+  FREE = "0",
+  CLOUD_HOSTED = "1",
+  KUBECONFIG = "2",
 }
 
 const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
+  const [clusterType, setClusterType] = useState<ClusterTypeEnums>(ClusterTypeEnums.FREE)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const [configName, setConfigName] = useState<string>('');
-  const handleConfigName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setConfigName(event.target.value);
-  };
+  function handleChangeClusterType(e: React.SyntheticEvent, n: ClusterTypeEnums) {
+    setClusterType(n)
+  }
 
-  const [configValue, setConfigValue] = useState<string>('');
-  const handleConfigValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setConfigValue(event.target.value);
-  };
-
-  useEffect(() => {
-    setConfigName("");
-    setConfigValue("")
-  }, [modalDisplay])
-
-  function handleConfirm() {
-
-    if (!trim(configName)) {
-      Message.error("Please input cluster name");
-      return;
-    }
-    if (!trim(configValue)) {
-      Message.error("Please input kube config");
-      return;
-    }
-    createCluster({
-      "kubeconfig": trim(configValue),
-      "name": trim(configName),
-      "provider": "kubeconfig"
-    }).then(res => {
-      setModalDisplay(false);
-      successCb && successCb();
-    })
+  function closeDialog() {
+    setModalDisplay(false)
   }
 
   return (
@@ -66,63 +42,28 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
         open={modalDisplay}
       >
         <div className={styles.drawerWrap}>
+          <div className={styles.closeIcon} title="Close">
+            <CloseIcon onClick={closeDialog} />
+          </div>
           <div className={styles.header}>
             Create a new cluster
           </div>
-          <div className={styles.content}>
-            <div className={styles.formWrapper}>
-              <div className={styles.label}>
-                Name*
-              </div>
-              <TextField
-                fullWidth
-                value={configName}
-                onChange={handleConfigName}
-                size='small'
-                placeholder="please input cluster name"
-              />
-            </div>
-            <div className={styles.formWrapper}>
-              <div className={styles.label}>
-                Kube config*
-              </div>
-              <TextField
-                size='small'
-                fullWidth
-                multiline
-                rows={8}
-                value={configValue}
-                onChange={handleConfigValue}
-                placeholder="please input kube config"
-              />
-            </div>
-            <div className={styles.help}>
-              <img src="/img/gitprovider/InfoOutlined.webp" alt=""/>
-              <span className={styles.desc}>
-                How to get Kubeconfig?
-              </span>
-            </div>
-            <div className={styles.copyCode}>
-              <div className={styles.code}>
-                kubectl config use -- context dev -- cluster
-              </div>
-              <div className={styles.code}>
-                kubectl config view -- minify -- raw --flatten
-              </div>
-            </div>
-          </div>
-          <div className={styles.bottom}>
-            <Btn style={{marginRight: '87px'}}
-                 onClick={handleConfirm}
-            >
-              CREATE
-            </Btn>
-            <Btn type={BtnType.gray}
-                 onClick={() => setModalDisplay(false)}
-            >
-              CANEL
-            </Btn>
-          </div>
+          <TabContext value={clusterType}>
+            <TabList onChange={handleChangeClusterType}>
+              <Tab disableRipple label="Free Cluster" value={ClusterTypeEnums.FREE} />
+              <Tab disableRipple label="Cloud Provider" value={ClusterTypeEnums.CLOUD_HOSTED} />
+              <Tab disableRipple label="Kubernetes" value={ClusterTypeEnums.KUBECONFIG} />
+            </TabList>
+            <TabPanel value={ClusterTypeEnums.FREE}>
+              <FreeClusterPanel {...{ modalDisplay, successCb, isAvailable: true }} />
+            </TabPanel>
+            <TabPanel value={ClusterTypeEnums.CLOUD_HOSTED}>
+              <CloudHostedPanel />
+            </TabPanel>
+            <TabPanel value={ClusterTypeEnums.KUBECONFIG}>
+              <KubeconfigPanel {...{ modalDisplay, successCb }} />
+            </TabPanel>
+          </TabContext>
         </div>
       </Drawer>
     </div>

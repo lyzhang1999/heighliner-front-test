@@ -1,38 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, Popover} from '@mui/material';
-import '@/utils/axios';
+import React, { useState, useEffect } from 'react';
+import {
+  Button, Dialog, DialogActions, DialogContent,
+  DialogContentText, Popover,
+} from '@mui/material';
+
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
-import {ClusterItem, deleteCluster} from "@/utils/api/cluster";
-import {getClusterList} from "@/utils/api/cluster";
+import {deleteCluster} from "@/utils/api/cluster";
 import styles from './index.module.scss';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {formatDate} from "@/utils/utils";
 
+import { useClusterList } from '@/hooks/cluster';
+
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
-  const [clusterList, setClusterList] = useState<ClusterItem[]>([]);
   const [dialogVisible, setDialogVisible] = useState<boolean>(false)
   const [deleteItemID, setDeleteItemID] = useState<number>(0);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [clusterList, getClusters] = useClusterList();
 
   function successCb() {
-    getCluster();
-  }
-
-  useEffect(() => {
-    getCluster()
-  }, [])
-
-  function getCluster() {
-    getClusterList().then(res => {
-      setClusterList(res);
-    })
+    getClusters();
+    setModalDisplay(false) // close cluster creation modal.
   }
 
   function deleteItem() {
     deleteCluster(deleteItemID).then(res => {
-      getCluster();
+      getClusters();
       setDeleteItemID(0);
       setDialogVisible(false);
       setAnchorEl(null);
@@ -59,7 +54,7 @@ const Clusters = () => {
 
   return (
     <Layout pageHeader="Clusters"
-            rightBtnDesc="ADD CLUSTER"
+            rightBtnDesc="Add Cluster"
             rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <Dialog onClose={closeDialog} open={dialogVisible}>
@@ -86,9 +81,7 @@ const Clusters = () => {
       >
         <div className={styles.deleteIcon} onClick={openDeleteDialog}>
           {/*<DeleteIcon/>*/}
-          <span>
-              Delete
-            </span>
+          <span>Delete</span>
         </div>
       </Popover>
 
@@ -102,7 +95,7 @@ const Clusters = () => {
                   <MoreVertIcon/>
                 </div>
                 <div className={styles.logo}>
-                  <img src="/img/cluster/cluster.webp" alt="github"/>
+                  <img src="/img/cluster/k8s-logo.webp" alt="github"/>
                 </div>
                 <div className={styles.content}>
                   <div className={styles.organiztion}>Cluster: {item.name}</div>

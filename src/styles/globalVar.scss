@@ -13,3 +13,9 @@ $theme-color: #6002ee;
   min-width: $global-min-width;
 }
 
+@mixin overflowEllipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

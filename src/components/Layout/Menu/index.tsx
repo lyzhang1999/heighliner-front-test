@@ -6,11 +6,12 @@ import {Context} from "@/utils/store";
 import MenuItem from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import {OrgList} from "@/utils/api/org";
-import {find, omit} from "lodash-es";
+import {find} from "lodash-es";
 import cookie from "@/utils/cookie";
 import {useRouter} from "next/router";
 import {get} from 'lodash-es';
 import {getOriNameByContext} from "@/utils/utils";
+import Pop from "@/components/Layout/Menu/Pop";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -101,13 +102,6 @@ const Menu = () => {
       href: `/settings`,
       name: "Profile",
     },
-    // {
-    //   activeIcon: "/img/slider/icon9.svg",
-    //   icon: "/img/slider/icon9.svg",
-    //   href: `/logout`,
-    //   name: "Logout",
-    //   isLogout: true,
-    // },
   ];
 
   return (
@@ -166,25 +160,27 @@ const Menu = () => {
           list={bottomList}
         />
       </div>
-      <div className={styles.userInfo}>
+      <div className={
+        clsx(
+          styles.userInfo,
+          !menuSpread && styles.userInfoHidden
+        )
+
+      }>
         <div className={styles.left}>
           <img src="/img/slider/icon9.svg" alt=""/>
-          {/*{*/}
-          {/*  menuSpread &&*/}
-          {/*  <div className={styles.spreadName}>*/}
-          {/*    {get(state, 'userInfo.username', '')}*/}
-          {/*  </div>*/}
-          {/*}*/}
-          <div className={styles.nameWrapper}>
-            <div className={styles.nameList}>
-              <div className={styles.nameItem}
-                   onClick={logout}
-              >
-                Logout
-              </div>
-            </div>
-          </div>
+          {
+            !menuSpread &&
+            <Pop cb={logout}>Logout</Pop>
+          }
         </div>
+        {
+          menuSpread &&
+          <div className={styles.right}>
+            {get(state, 'userInfo.username', '')}
+            <Pop cb={logout}>Logout</Pop>
+          </div>
+        }
       </div>
       <div className={clsx(styles.spreadAction)} onClick={setSpread}>
         <img src={!menuSpread ? "/img/slider/spreadLeft.svg" : "/img/slider/spreadRight.svg"} alt=""

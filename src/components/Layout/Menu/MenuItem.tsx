@@ -5,6 +5,7 @@ import {Context} from "@/utils/store";
 import {useRouter} from "next/router";
 import {isBrowser} from "@/utils/utils";
 import cookie from "@/utils/cookie";
+import Pop from "@/components/Layout/Menu/Pop";
 
 function isActiveNav(currentPath: string) {
   if (isBrowser()) {
@@ -63,16 +64,7 @@ export default function MenuItem({list}: { list: MenuProps[] }) {
               </div>
               {
                 (!menuSpread || item.isLogout) &&
-                <div className={styles.nameWrapper}>
-                  <div className={styles.nameList}>
-                    <div
-                      className={styles.nameItem}
-                      onClick={() => handleClick(item.isLogout, item.href, true)}
-                    >
-                      {item.name}
-                    </div>
-                  </div>
-                </div>
+                <Pop cb={() => handleClick(item.isLogout, item.href, true)}>{item.name}</Pop>
               }
             </div>
           )

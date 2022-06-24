@@ -11,9 +11,43 @@
   }
 }
 
-
 .rotate {
   transform: rotate(-180deg);
+}
+
+// the pop name
+.nameWrapper {
+  display: none;
+  left: 80px;
+  top: 0px;
+  position: absolute;
+
+  .nameList {
+    margin-left: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 4px 0 rgba(145, 157, 174, 0.5);
+
+    .nameItem {
+      padding: 8px;
+      white-space: nowrap;
+      color: #212d40;
+      font-size: 14px;
+    }
+
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(0%, -50%);
+      border-left: 0;
+      border-bottom: 6px solid transparent;
+      border-top: 6px solid transparent;
+      border-right: 6px solid #fff;
+    }
+  }
 }
 
 .menu {
@@ -113,40 +147,7 @@
     }
   }
 }
-// the pop name
-.nameWrapper {
-  display: none;
-  left: 80px;
-  top: 0px;
-  position: absolute;
 
-  .nameList {
-    margin-left: 6px;
-    background-color: #fff;
-    cursor: pointer;
-    box-shadow: 0 1px 4px 0 rgba(145, 157, 174, 0.5);
-
-    .nameItem {
-      padding: 8px;
-      white-space: nowrap;
-      color: #212d40;
-      font-size: 14px;
-    }
-
-    &:before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 50%;
-      left: 0;
-      transform: translate(0%, -50%);
-      border-left: 0;
-      border-bottom: 6px solid transparent;
-      border-top: 6px solid transparent;
-      border-right: 6px solid #fff;
-    }
-  }
-}
 
 .activeMenu.menuItem {
   border-right: 2px solid #16111e;
@@ -196,34 +197,57 @@
   }
 }
 
-
-.userInfo {
-  padding-left: 22px;
-  position: relative;
-
+.userInfoHidden {
   &:hover {
     .nameWrapper {
       display: block;
     }
   }
+}
+
+.userInfo {
+  padding-left: 22px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-start;
 
   .left {
     width: 34px;
     height: 34px;
     display: flex;
     align-items: center;
-    justify-content: center;
     cursor: pointer;
+    padding-left: 8px;
+    padding-right: 8px;
 
     img {
       width: 19px;
       height: 19px;
     }
 
+    //&:hover {
+    //  border-radius: 7px;
+    //  border: solid 2px #e3e6ff;
+    //  background-color: rgba(242, 244, 255, 0.8);
+    //}
+  }
+
+  .right {
+    margin-left: 19px;
+    color: #959595;
+    font-weight: 500;
+    white-space: nowrap;
+    position: relative;
+    cursor: pointer;
+
     &:hover {
-      border-radius: 7px;
-      border: solid 2px #e3e6ff;
-      background-color: rgba(242, 244, 255, 0.8);
+      .nameWrapper {
+        display: block;
+        top: -4px;
+        left: 60px;
+      }
     }
   }
 }

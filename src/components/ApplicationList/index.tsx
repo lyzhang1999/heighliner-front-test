@@ -44,7 +44,7 @@ export default function ApplicationList({list, clusterList}: Props) {
                 </div>
                 <div className={styles.right}>
                   <div className={styles.title}>
-                    <span>{item.app_name}</span>
+                    <span className={styles.name}>{item.app_name}</span>
                     {
                       (status === ApplicationStatus.COMPLETED) &&
                       <span className={styles.statusIcon}>

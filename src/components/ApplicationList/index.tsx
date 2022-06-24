@@ -68,11 +68,12 @@ export default function ApplicationList({list, clusterList}: Props) {
                     }
                   </div>
                   <div className={styles.status}>
-                    Cluster： {cluster && cluster}
+                    Owner： <span className={styles.value}>{item.owner_name}</span>
                   </div>
                   <div className={styles.status}>
-                    CreatTime： {formatDate(get(item, ['last_release', 'created_at']) * 1000)}
+                    Cluster： <span className={styles.value}> {cluster && cluster}</span>
                   </div>
+
                   {
                     get(item, ['stack', 'name']) &&
                     <span className={styles.stack}>

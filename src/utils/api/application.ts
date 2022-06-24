@@ -92,6 +92,8 @@ export interface ApplicationObject {
   app_name: string;
   last_release: Last_release;
   stack: Stack;
+  owner_id: number,
+  owner_name: string,
 }
 
 export interface getAppListReq {

@@ -4,7 +4,7 @@ import {getOriIdByContext} from "@/utils/utils";
 export enum ClusterProvider {
   Kubeconfig = "kubeconfig",
   AWS = "AWS",
-  Free = "Free",
+  Free = "freeCluster",
 }
 
 export enum ClusterStatus {

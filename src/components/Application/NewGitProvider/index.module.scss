@@ -33,14 +33,9 @@
 }
 
 .bottom {
-  margin-bottom: 43px;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  margin-top: 50px;
 }
 
 .help {
@@ -72,7 +67,7 @@
 //cluster css
 .copyCode {
   margin-top: 10px;
-  height: 62px;
+  height: 42px;
   flex-grow: 0;
   padding: 13px 9px 2px 34px;
   border-radius: 12px;
@@ -86,4 +81,3 @@
     font-family: Menlo;
   }
 }
-

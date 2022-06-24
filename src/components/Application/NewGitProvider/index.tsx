@@ -101,15 +101,15 @@ export default function NewGitProvider({
             </div>
           </div>
           <div className={styles.bottom}>
-            <Btn style={{marginRight: '87px'}}
-                 onClick={handleConfirm}
-            >
-              CREATE
-            </Btn>
             <Btn type={BtnType.gray}
                  onClick={() => setModalDisplay(false)}
             >
-              CANCEL
+              Cancel
+            </Btn>
+            <Btn style={{marginLeft: '37px'}}
+                 onClick={handleConfirm}
+            >
+              Create
             </Btn>
           </div>
         </div>

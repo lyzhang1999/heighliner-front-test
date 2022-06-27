@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Dialog, DialogActions, DialogContent,
   DialogContentText, Popover,
+  Table, TableBody, TableCell, TableRow, TableHead,
 } from '@mui/material';
+import {isEmpty} from "lodash-es";
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
 import {deleteCluster} from "@/utils/api/cluster";
 import styles from './index.module.scss';
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {formatDate} from "@/utils/utils";
 
 import { useClusterList } from '@/hooks/cluster';
+
+import { ClusterItemComp } from './ClusterItem';
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [dialogVisible, setDialogVisible] = useState<boolean>(false)
   const [deleteItemID, setDeleteItemID] = useState<number>(0);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
   const [clusterList, getClusters] = useClusterList();
 
   function successCb() {
@@ -34,8 +36,8 @@ const Clusters = () => {
     })
   }
 
-  const handleClick = (e: any, id: number) => {
-    setAnchorEl(e?.currentTarget);
+  const handleClick = (id: number) => (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
     setDeleteItemID(id);
   };
 
@@ -52,10 +54,33 @@ const Clusters = () => {
     setDialogVisible(true);
   }
 
+  if (isEmpty(clusterList)) {
+    return (
+      <Layout
+        pageHeader="Clusters"
+        rightBtnDesc="Add Cluster"
+        rightBtnCb={() => setModalDisplay(!modalDisplay)}
+      >
+        <div className={styles.emptyContent}>
+          <p>There are no Kubernetes cluster found.</p>
+          <p>You can click right top button to add one.</p>
+        </div>
+        <NewClusterModal
+          {...{
+            setModalDisplay,
+            modalDisplay,
+              successCb,
+            }}
+        />
+      </Layout>
+    )
+  }
+
   return (
-    <Layout pageHeader="Clusters"
-            rightBtnDesc="Add Cluster"
-            rightBtnCb={() => setModalDisplay(!modalDisplay)}
+    <Layout
+      pageHeader="Clusters"
+      rightBtnDesc="Add Cluster"
+      rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <Dialog onClose={closeDialog} open={dialogVisible}>
         <DialogContent>
@@ -80,32 +105,30 @@ const Clusters = () => {
         }}
       >
         <div className={styles.deleteIcon} onClick={openDeleteDialog}>
-          {/*<DeleteIcon/>*/}
           <span>Delete</span>
         </div>
       </Popover>
-
       <div className={styles.wrapper}>
-        {
-          clusterList.map(item => {
-            return (
-              <div className={styles.card} key={item.name}>
-                <div className={styles.moreIcon}
-                     onClick={(e) => handleClick(e, item.id)}>
-                  <MoreVertIcon/>
-                </div>
-                <div className={styles.logo}>
-                  <img src="/img/cluster/k8s-logo.webp" alt="github"/>
-                </div>
-                <div className={styles.content}>
-                  <div className={styles.organiztion}>Cluster: {item.name}</div>
-                  <div>Status: {item.status}</div>
-                  <div className={styles.creatTime}>CreateTime: {formatDate(item.created_at * 1000)}</div>
-                </div>
-              </div>
-            )
-          })
-        }
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell width={200} align='right'>CLUSTER</TableCell>
+              <TableCell width={330} style={{ paddingLeft: 120 }} align="left">REGION</TableCell>
+              <TableCell align="left">CREATED BY</TableCell>
+              <TableCell align="left">VERSION</TableCell>
+              <TableCell align="left"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              clusterList.map(item => (
+                <ClusterItemComp
+                  {...{ item, handleClick }}
+                />
+              ))
+            }
+          </TableBody>
+        </Table>
       </div>
       <NewClusterModal
         {...{

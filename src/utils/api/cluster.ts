@@ -19,9 +19,11 @@ export interface ClusterItem {
   updated_at: number;
   name: string;
   org_id: number;
-  provider: string;
-  kubeconfig: ClusterProvider;
+  provider: ClusterProvider;
+  kubeconfig: string;
   status: ClusterStatus;
+  created_by: string,
+  created_by_name: string,
 }
 
 export type Clusters = ClusterItem[];

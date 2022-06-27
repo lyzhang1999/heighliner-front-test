@@ -121,8 +121,9 @@ const Clusters = () => {
           </TableHead>
           <TableBody>
             {
-              clusterList.map(item => (
+              clusterList.map((item, index) => (
                 <ClusterItemComp
+                  key={index}
                   {...{ item, handleClick }}
                 />
               ))

@@ -246,6 +246,11 @@
     position: relative;
     cursor: pointer;
 
+    .name {
+      width: 100%;
+      overflow: hidden;
+    }
+
     &:hover {
       .nameWrapper {
         display: block;

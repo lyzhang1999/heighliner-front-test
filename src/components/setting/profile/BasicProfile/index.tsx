@@ -20,6 +20,7 @@ import {
   useForm,
 } from "react-hook-form";
 import { BasicProfileReq, updateBasicProfile } from "@/utils/api/profile";
+import ContextHook from "@/hooks/contextHook";
 
 enum BasicProfileFieldMap {
   avatar = "avatar",
@@ -49,6 +50,8 @@ export default function BasicProfile(): React.ReactElement {
   } = useForm({
     defaultValues: defaultBasicProfileField,
   });
+
+  let {dispatch} = ContextHook();
 
   // Transfer image uploaded into base64 string
   useEffect(() => {
@@ -96,7 +99,8 @@ export default function BasicProfile(): React.ReactElement {
       return;
     }
 
-    updateBasicProfile(req).then(() => {
+    updateBasicProfile(req).then((res) => {
+      dispatch({userInfo: res})
       Message.success("Update basic profile successfully.");
     });
   };

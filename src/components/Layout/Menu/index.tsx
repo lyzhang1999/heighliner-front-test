@@ -13,11 +13,13 @@ import {useRouter} from "next/router";
 import {get} from 'lodash-es';
 import {getOriNameByContext} from "@/utils/utils";
 import Pop from "@/components/Layout/Menu/Pop";
+import Identicon from 'identicon.js';
+import md5 from 'md5';
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
   const {state, dispatch} = useContext(Context);
-  const {organizationList, menuSpread, currentOrganization} = state;
+  const {organizationList, menuSpread, currentOrganization, userInfo} = state;
   const router = useRouter();
 
   function setSpread() {
@@ -52,10 +54,24 @@ const Menu = () => {
   }
 
   let name = get(currentOrganization, 'name', '');
+  let userId: number = get(userInfo, 'id', 0)
+  let hash: string = md5(String(userId));
+  let avatar = get(userInfo, 'avatar', '');
 
   function goHome() {
     router.push(`/${getOriNameByContext()}/applications`)
   }
+
+  let options = {
+    foreground: [195, 205, 109, 255],
+    // background: [255, 255, 255, 255],         // rgba white
+    // margin: 0.2,                              // 20% margin
+    // size: 20,                                // 420px square
+    format: 'svg'                             // use SVG instead of PNG
+  };
+
+  // @ts-ignore
+  const imgData: string = new Identicon(hash, options).toString();
 
   const menuList = [
     // {
@@ -167,10 +183,10 @@ const Menu = () => {
           styles.userInfo,
           !menuSpread && styles.userInfoHidden
         )
-
       }>
         <div className={styles.left}>
-          <img src="/img/slider/icon9.svg" alt=""/>
+          <img src={avatar ? avatar : `data:image/svg+xml;base64,${imgData}`} alt=""/>
+          {/*<img src="/img/slider/icon9.svg" alt=""/>*/}
           {
             !menuSpread &&
             <Pop cb={logout}>Logout</Pop>
@@ -179,7 +195,9 @@ const Menu = () => {
         {
           menuSpread &&
           <div className={styles.right}>
-            {get(state, 'userInfo.username', '')}
+            <div className={styles.name}>
+               {get(state, 'userInfo.username', '')}
+            </div>
             <Pop cb={logout}>Logout</Pop>
           </div>
         }

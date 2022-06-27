@@ -10,7 +10,6 @@ import {getOriIdByContext, Message} from "@/utils/utils";
 import {
   Autocomplete,
   Button,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -26,10 +25,8 @@ import React, {
   ReactElement,
   SetStateAction,
   useEffect,
-  useRef,
   useState,
 } from "react";
-import { Controller, useForm } from "react-hook-form";
 
 import styles from "./index.module.scss";
 
@@ -108,6 +105,7 @@ export default function InviteMember({
       </DialogContent>
       <Stack direction="row" gap={1} className={styles.row}>
         <Autocomplete
+          size="small"
           id="combo-box-demo"
           getOptionLabel={(option) => option.username}
           options={options}
@@ -124,12 +122,13 @@ export default function InviteMember({
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
           }}
-          noOptionsText="No suggestion."
-          renderInput={(params) => <TextField {...params} label="Invitee" />}
+          noOptionsText="Can`t match any user"
+          renderInput={(params) => <TextField {...params} label="Invitee"/>}
         />
         <Select
           value={memberType}
-          // label="Role"
+          size="small"
+          sx={{minWidth: '120px'}}
           onChange={(event) => {
             setMemberType(event.target.value as MemberType);
           }}
@@ -142,7 +141,9 @@ export default function InviteMember({
           </MenuItem>
         </Select>
       </Stack>
-      <DialogActions>
+      <DialogActions
+        sx={{padding: '30px 24px 16px 30px'}}
+      >
         <Button
           onClick={() => {
             setOpen(false);
@@ -150,7 +151,9 @@ export default function InviteMember({
         >
           Cancel
         </Button>
-        <Button onClick={invitation}>Invitation</Button>
+        <Button onClick={invitation}
+                variant="contained"
+        >Invitation</Button>
       </DialogActions>
     </Dialog>
   );

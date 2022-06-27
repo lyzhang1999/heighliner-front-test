@@ -71,7 +71,9 @@ export default function ShiftRole({
           setOpen(false);
         }}
       >
-        <DialogTitle>
+        <DialogTitle
+          sx={{minWidth: "400px"}}
+        >
           Change <strong>{username}</strong>&apos;s role
         </DialogTitle>
         <DialogContent>
@@ -83,17 +85,22 @@ export default function ShiftRole({
                 setNewMemberType(event.target.value as MemberType);
               }}
               size="small"
+              sx={{width: "100%"}}
             >
               <MenuItem value={MemberTypeEnum.Admin}>Admin</MenuItem>
               <MenuItem value={MemberTypeEnum.Member}>Member</MenuItem>
             </Select>
           </Box>
         </DialogContent>
-        <DialogActions>
+        <DialogActions
+          sx={{padding: '16px 24px'}}
+        >
           <Button onClick={() => setOpen(false)} autoFocus>
             Cancel
           </Button>
-          <Button onClick={onShiftRole}>Confirm</Button>
+          <Button onClick={onShiftRole}
+                  variant="contained"
+          >Confirm</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -1,4 +1,4 @@
-import { deleteMember } from "@/utils/api/org";
+import {deleteMember} from "@/utils/api/org";
 import {
   Button,
   Dialog,
@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Message} from "@/utils/utils";
 
 interface Props {
@@ -45,7 +45,9 @@ export default function Delete({
 
   return (
     <>
-      <Button onClick={clickHandler}>Delete</Button>
+      <Button onClick={clickHandler}
+              color="error"
+      >Delete</Button>
       <Dialog
         open={open}
         onClose={() => {
@@ -61,11 +63,16 @@ export default function Delete({
             and records also are erased.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions
+          sx={{padding: '16px 24px'}}
+        >
           <Button onClick={() => setOpen(false)} autoFocus>
             Cancel
           </Button>
-          <Button onClick={toDeleteMember}>Confirm</Button>
+          <Button onClick={toDeleteMember}
+                  color="error"
+                  variant="contained"
+          >Confirm</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -12,7 +12,7 @@ import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 
 import Layout from "@/components/Layout";
-import {getOriIdByContext} from "@/utils/utils";
+import {formatDate, getOriIdByContext} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import {
@@ -26,6 +26,7 @@ import InviteMember from "@/components/Team/InviteMember";
 import {Context} from "@/utils/store";
 import ShiftRole from "@/components/Team/ShiftRole";
 import DeleteMember from "@/components/Team/DeleteMember";
+import {get} from "lodash-es";
 
 enum Action {
   Invite = "Invite",
@@ -103,6 +104,7 @@ const Teams = () => {
   const currentMemberType = currentOrganization?.member_type;
 
   const flushTeams = () => {
+    setInviteDialog(false);
     // Fetch the team members
     const getOrgMembersReq: GetOrgMembersReq = {
       org_id: +getOriIdByContext(),
@@ -145,23 +147,25 @@ const Teams = () => {
       }}
     >
       <div className={styles.teamsWrapper}>
-        <Table sx={{minWidth: 650}} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>UserName</TableCell>
+              <TableCell align="right">Joined at</TableCell>
               <TableCell align="right">Role</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orgMembers?.data.map(({user_id, username, member_type}) => (
+            {orgMembers?.data.map(({user_id, username, member_type, created_at}) => (
               <TableRow
                 key={user_id}
-                sx={{"&:last-child td, &:last-child th": {border: 0}}}
+                sx={{'&:last-child td, &:last-child th': {border: 0}}}
               >
                 <TableCell component="th" scope="row">
                   {username}
                 </TableCell>
+                <TableCell align="right">{formatDate(created_at * 1000)}</TableCell>
                 <TableCell align="right">{member_type}</TableCell>
                 <TableCell align="right">
                   {getActionSet(currentMemberType!, member_type).map(
@@ -195,21 +199,26 @@ const Teams = () => {
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[pageSize]}
-                count={
-                  orgMembers && orgMembers?.pagination.total > 0
-                    ? +orgMembers?.pagination.total
-                    : -1
-                }
-                onPageChange={onPageChange}
-                page={currentPage}
-                rowsPerPage={pageSize}
-              />
-            </TableRow>
-          </TableFooter>
+          {
+            (get(orgMembers, 'pagination.total', 0) > 10) &&
+            <TableFooter>
+              <TableRow
+                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+              >
+                <TablePagination
+                  rowsPerPageOptions={[pageSize]}
+                  count={
+                    orgMembers && orgMembers?.pagination.total > 0
+                      ? +orgMembers?.pagination.total
+                      : -1
+                  }
+                  onPageChange={onPageChange}
+                  page={currentPage}
+                  rowsPerPage={pageSize}
+                />
+              </TableRow>
+            </TableFooter>
+          }
         </Table>
       </div>
       <InviteMember

@@ -1,90 +1,13 @@
 .wrapper {
   background-color: #fff;
 
-  .clusterItem {
-    position: relative;
+  .regionColumn {
+    width: 300px;
+    padding-left: 130px;
 
-    img {
-      width: 35px;
-    }
-
-    .moreIcon {
-      cursor: pointer;
-      position: absolute;
-      right: 47px;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 24px;
-
-      &:hover {
-        background-color: #eee;
-        border-radius: 4px;
-      }
-    }
-
-    .clusterMeta {
-      display: flex;
-      align-items: center;
-
-      .icon {
-        margin: 0 15px;
-      }
-
-      .name {
-        width: 100px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-  
-    .statusDot {
-      clip-path: circle(40%);
-      width: 11px;
-      height: 11px;
-    }
-
-    .ActiveDot {
-      background-color: #9eea91;
-    }
-
-    .InitializingDot {
-      background-color: #ffb31f;
-    }
-
-    .InactiveDot {
-      background-color: #ff6046;
-    }
-
-    .region {
-      padding: 7px 36px;
-      border-radius: 9px;
-      background-color: rgba(193, 202, 234, 0.8);
-      display: inline-block;
-      line-height: 1;
-    }
-
-    .version {
-      display: inline-block;
-      background-color: #e0f5fa;
-      padding: 5px;
-      border-radius: 12px;
-    }
-
-    .statusIconText {
-      display: flex;
-    }
-
-    .ActiveIconText {
-      color: #38c17d;
-    }
-
-    .InitializingIconText {
-      color: #ffb31f;
-    }
-
-    .InactiveIconText {
-      color: #ff6046;
+    @media screen and (max-width: 1200px) {
+      width: 200px;
+      padding-left: 16px;
     }
   }
 }

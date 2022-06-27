@@ -9,11 +9,10 @@ import {isEmpty} from "lodash-es";
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
 import {deleteCluster} from "@/utils/api/cluster";
-import styles from './index.module.scss';
-
 import { useClusterList } from '@/hooks/cluster';
+import { ClusterItemComp } from '@/components/Cluster/ClusterItem';
 
-import { ClusterItemComp } from './ClusterItem';
+import styles from './index.module.scss';
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -113,7 +112,7 @@ const Clusters = () => {
           <TableHead>
             <TableRow>
               <TableCell width={200} align='right'>CLUSTER</TableCell>
-              <TableCell width={330} style={{ paddingLeft: 120 }} align="left">REGION</TableCell>
+              <TableCell className={styles.regionColumn} align="left">REGION</TableCell>
               <TableCell align="left">CREATED BY</TableCell>
               <TableCell align="left">VERSION</TableCell>
               <TableCell align="left"></TableCell>

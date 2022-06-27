@@ -56,7 +56,7 @@ export const ClusterItemComp = ({
           <div className={styles.name} title={item.name}>{item.name}</div>
         </div>
       </TableCell>
-      <TableCell style={{ paddingLeft: 120 }} align="left" width={330}>
+      <TableCell align="left" className={styles.regionColumn}>
         <div className={styles.region}>Hong Kong</div>
       </TableCell>
       <TableCell>

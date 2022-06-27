@@ -43,6 +43,9 @@ export const StatusIconText = ({
       text = 'Creating'
       icon = '/img/cluster/creating-status.webp'
       break
+    default:
+      text = 'Creating'
+      icon = '/img/cluster/creating-status.webp'
   }
 
   return (

@@ -116,7 +116,7 @@ const Menu = () => {
     {
       activeIcon: "/img/slider/icon11Active.svg",
       icon: "/img/slider/icon11.svg",
-      href: `/settings`,
+      href: `/profile`,
       name: "Profile",
     },
   ];

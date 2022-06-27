@@ -4,6 +4,7 @@ import {NoticeRef} from "@/components/Notice";
 import {OrgList, roleType} from "@/utils/api/org";
 import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
+import {UserInfo} from "@/utils/api/profile";
 
 export function isBrowser() {
   return process.title === "browser";
@@ -45,6 +46,15 @@ export function getOrganizationNameByUrl(): string {
     return encodeURIComponent(list[3]);
   } else {
     return '';
+  }
+}
+
+export function getUserInfo(): UserInfo | null{
+  let result = GlobalContxtRef.current?.getState(['userInfo']);
+  if (isBrowser() && result) {
+    return result;
+  } else {
+    return null;
   }
 }
 

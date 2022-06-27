@@ -1,0 +1,119 @@
+@import "/src/styles/utils";
+
+.wrapper {
+  // margin-top: 25px;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 27px 34px 17px 28px;
+
+  .avatarWrap {
+    display: flex;
+    align-items: center;
+
+    div:nth-child(2) {
+      margin-left: 89px;
+      @include setEqualWidthHeight(79px);
+    }
+
+    button:nth-child(3) {
+      margin-left: 442px;
+    }
+  }
+
+  .usernameWrapper {
+    margin-top: 14px;
+    display: flex;
+    // align-items: center;
+    height: 56px;
+
+    h2:nth-child(1) {
+      margin-right: 92px;
+      margin-top: 17px;
+    }
+
+    .usernameWrap {
+      height: 56px;
+      position: relative;
+      margin-top: 10px;
+
+      $inputWidth: 221px;
+      & > div > div {
+        input {
+          width: $inputWidth - 16px;
+          padding: 8px 0 7px 16px;
+          font-size: 15px;
+        }
+
+        fieldset {
+          border-radius: 5px;
+          border: solid 1px #e5e4e7;
+        }
+      }
+
+      $BtnWidth: 24px;
+      .changeBtn,
+      .cancelBtn {
+        position: absolute;
+        @include setEqualWidthHeight($BtnWidth);
+        left: 3px + $inputWidth;
+        top: 6px;
+        border: none;
+        border-radius: 6px;
+        padding: 0;
+      }
+
+      .changeBtn {
+        background-color: #1b51b9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &::before {
+          content: "";
+          display: block;
+          width: 10px;
+          height: 5px;
+          border-left: solid 2px #fff;
+          border-bottom: solid 2px #fff;
+          transform: translateY(-1px) rotate(315deg);
+        }
+      }
+
+      .cancelBtn {
+        left: 3px + $inputWidth + 4.3px + $BtnWidth;
+        border: solid 1px #959595;
+        background-color: #f9fafd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &::after,
+        &::before {
+          content: "";
+          display: block;
+          height: 9.89px;
+          width: 1.5px;
+          background-color: #606479;
+          transform-origin: center;
+        }
+
+        &::after {
+          transform: rotate(45deg) translate(-1px, 0.2px);
+        }
+
+        &::before {
+          transform: rotate(315deg) translate(1px, 0.2px);
+        }
+      }
+    }
+
+    .usernameTextWrap {
+      display: flex;
+      
+
+      p {
+        width: 512px;
+      }
+    }
+  }
+}

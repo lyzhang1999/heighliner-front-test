@@ -1,0 +1,84 @@
+.passwordWrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 23px 0 25px 28px;
+
+  p:nth-child(2) {
+    margin-left: 66px;
+    width: 97px;
+  }
+
+  button:nth-child(3) {
+    margin-left: 313px;
+  }
+}
+
+.changePasswordWrapper {
+  padding: 34px 0 34px 28px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 723px;
+
+  h1 {
+  }
+}
+
+.dialog {
+  h2 {
+    font-size: 15px;
+    font-weight: 500;
+    width: 159px;
+    margin-right: 21px;
+  }
+
+  & > div:nth-child(3) {
+    & > div:nth-child(1) {
+      max-width: initial;
+      border-radius: 14px;
+    }
+  }
+
+  .passwordWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    input {
+      border-radius: 5px;
+      width: 394px;
+    }
+
+    .password {
+      width: 394px;
+      border: 0;
+
+      & > div {
+        padding-right: 0;
+      }
+
+      input {
+        height: 21px;
+        padding-top: 7px;
+        padding-bottom: 8px;
+        padding-left: 26px;
+      }
+
+      fieldset {
+        border: solid 1px #d8dbe1;
+      }
+    }
+  }
+}
+
+.buttonGroup {
+  margin-top: 219px;
+  display: flex;
+  gap: 20px;
+
+  & > button:nth-child(2) {
+    filter: grayscale(0.7);
+  }
+}

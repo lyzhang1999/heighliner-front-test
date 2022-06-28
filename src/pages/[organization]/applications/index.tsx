@@ -10,6 +10,7 @@ import {ClusterItem, getClusterList} from "@/utils/api/cluster";
 import {getStacks, Stack} from "@/utils/api/stack";
 import {getOrgMembers, Member} from "@/utils/api/org";
 import {get} from "lodash-es";
+import DeleteApplication from "@/components/DeleteApplication";
 
 const AllKey = "THEDEFAULTALLKEY" + uuid();
 
@@ -23,6 +24,9 @@ const Applications = () => {
     owner_ids: [],
     stack_ids: []
   })
+
+  const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
+  const [deleteID, setDeleteID] = useState<number>(-1);
 
   const router = useRouter();
 
@@ -43,6 +47,12 @@ const Applications = () => {
       setApplist(res);
     });
   }, [selectRule])
+
+  function deleteSuccessCb() {
+    getApplicationList(selectRule).then((res) => {
+      setApplist(res);
+    });
+  }
 
   function goPanel(appId: number, releaseId: number) {
     const queryParameters = new URLSearchParams({
@@ -143,8 +153,18 @@ const Applications = () => {
         <ApplicationList
           list={applist}
           clusterList={clusterList}
+          setDeleteID={setDeleteID}
+          setDeleteModalVisible={setDeleteModalVisible}
         />
       </div>
+      <DeleteApplication
+        {...{
+          deleteModalVisible,
+          deleteSuccessCb,
+          setDeleteModalVisible,
+          deleteID
+        }}
+      />
     </Layout>
   );
 };

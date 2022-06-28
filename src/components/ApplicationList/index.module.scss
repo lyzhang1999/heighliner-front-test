@@ -141,3 +141,21 @@
 }
 
 
+.deleteIcon {
+  padding: 4px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+
+  &:hover {
+    background-color: #ccc;
+  }
+}
+
+.moreIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+

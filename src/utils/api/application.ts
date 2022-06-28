@@ -1,6 +1,5 @@
 import http from "../axios";
 import {getOriIdByContext} from "../utils";
-import {isEmpty} from "lodash-es";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -216,3 +215,8 @@ export function getRepoList(appId: string): Promise<GetRepoListRes> {
     `/orgs/${getOriIdByContext()}/applications/${appId}/repositorys`
   );
 }
+
+export function deleteApplication(appId: number): Promise<any>{
+  return http.delete(`/orgs/${getOriIdByContext()}/applications/${appId}`);
+}
+

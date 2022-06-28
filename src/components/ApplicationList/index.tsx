@@ -1,14 +1,36 @@
 import styles from "./index.module.scss";
 import {ApplicationObject, ApplicationStatus} from "@/utils/api/application";
-import {formatDate, getOrganizationNameByUrl} from "@/utils/utils";
+import {getOrganizationNameByUrl} from "@/utils/utils";
 import {useRouter} from "next/router";
-import {GinIcon} from "@/utils/CDN";
 import {find, get} from "lodash-es";
 import {ClusterItem} from "@/utils/api/cluster";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import React from "react";
+import {Popover} from "@mui/material";
 
-type Props = { list: ApplicationObject[], clusterList: ClusterItem[] }
+type Props = {
+  list: ApplicationObject[],
+  clusterList: ClusterItem[] ,
+  setDeleteID: React.Dispatch<React.SetStateAction<number>>,
+  setDeleteModalVisible:  React.Dispatch<React.SetStateAction<boolean>>
+}
 
-export default function ApplicationList({list, clusterList}: Props) {
+export default function ApplicationList({list, clusterList, setDeleteID, setDeleteModalVisible}: Props) {
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const handleClick = (e: any, id: number) => {
+    e.stopPropagation();
+    setAnchorEl(e?.currentTarget);
+    setDeleteID(id);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  function openDeleteDialog() {
+    setDeleteModalVisible(true);
+  }
+
   const router = useRouter();
 
   function goPanel(appId: number, releaseId: number, stauts: any) {
@@ -25,6 +47,21 @@ export default function ApplicationList({list, clusterList}: Props) {
 
   return (
     <div className={styles.wrapper}>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <div className={styles.deleteIcon} onClick={openDeleteDialog}>
+          <span>
+              Delete
+          </span>
+        </div>
+      </Popover>
       {
         list.map(item => {
           let status = get(item, ['last_release', 'status']);
@@ -73,13 +110,18 @@ export default function ApplicationList({list, clusterList}: Props) {
                   <div className={styles.status}>
                     Cluster： <span className={styles.value}> {cluster && cluster}</span>
                   </div>
-
                   {
                     get(item, ['stack', 'name']) &&
                     <span className={styles.stack}>
                     {get(item, ['stack', 'name'])}
                   </span>
                   }
+                  <div
+                    className={styles.moreIcon}
+                    onClick={(e) => handleClick(e, get(item, 'app_id'))}
+                  >
+                    <MoreVertIcon/>
+                  </div>
                 </div>
               </div>
             </div>

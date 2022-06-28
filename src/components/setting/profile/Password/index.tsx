@@ -26,6 +26,7 @@ enum Password {
   Old = "Old",
   New = "New",
   NewConfirmation = "NewConfirmation",
+  All = "All",
 }
 
 enum FieldsMap {
@@ -68,6 +69,11 @@ export default function Passwords(): React.ReactElement {
   };
   const handleClose = () => {
     setOpen(false);
+    reset();
+    dispatchShowPassword({
+      type: Password.All,
+      payload: false
+    })
   };
 
   const {
@@ -89,8 +95,8 @@ export default function Passwords(): React.ReactElement {
     };
     updatePassword(req)
       .then(() => {
+        handleClose();
         Message.success("Update successfully.");
-        reset();
       })
       .catch((err) => {
         const { err_msg } = err.response.data;
@@ -309,9 +315,13 @@ function useShowPassword() {
 
   const reducer: Reducer<
     typeof initialState,
-    {
-      type: Password;
-    }
+    | {
+        type: Password.Old | Password.New | Password.NewConfirmation;
+      }
+    | {
+        type: Password.All;
+        payload: boolean;
+      }
   > = (preState, action) => {
     const nextState = cloneDeep(preState);
 
@@ -325,6 +335,11 @@ function useShowPassword() {
       case Password.NewConfirmation:
         nextState[Password.NewConfirmation] =
           !preState[Password.NewConfirmation];
+        break;
+      case Password.All:
+        nextState[Password.Old] = action.payload;
+        nextState[Password.New] = action.payload;
+        nextState[Password.NewConfirmation] = action.payload;
         break;
     }
 

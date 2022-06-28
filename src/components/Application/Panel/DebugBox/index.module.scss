@@ -2,7 +2,6 @@
 
 .box {
   width: 180px;
-  // height: 180px;
   box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.5);
   border: solid 2px #edf0f3;
   background-color: #fff;
@@ -10,7 +9,6 @@
   @include setVerticalPadding(11px);
 
   .lines {
-    // margin-top: 11px;
     margin-right: 17px;
     display: flex;
     justify-content: flex-end;
@@ -30,7 +28,6 @@
 
   .appName {
     display: flex;
-    align-items: flex-start;
     justify-content: center;
     font-size: 10px;
     font-weight: 500;
@@ -42,7 +39,7 @@
     }
 
     .name {
-      width: 49px;
+      width: 128px;
       line-height: 1.2;
     }
   }

@@ -100,7 +100,7 @@ const TransferOrganization = (props: Props) => {
         </Table>
       </DialogContent>
       {
-        (count > 10) && <TablePagination
+        (total > 10) && <TablePagination
           rowsPerPageOptions={[10]}
           count={total}
           onPageChange={pageChange}

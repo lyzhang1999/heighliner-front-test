@@ -72,8 +72,8 @@ $panelWidth: 807px;
     margin-top: 0;
   }
 
-  .gitProviderWrap,
   .applicationNameWrap,
+  .gitProviderWrap,
   .domainWrap {
     display: flex;
     flex-direction: row;
@@ -81,6 +81,14 @@ $panelWidth: 807px;
 
     margin-top: 53px;
     gap: 52px;
+
+    & > div:nth-child(2) {
+      position: relative;
+
+      p {
+        position: absolute;
+      }
+    }
   }
 
   .applicationNameInput,
@@ -122,6 +130,17 @@ $panelWidth: 807px;
 
   .stacksWrap, .clustersWrap {
     margin-top: 53px;
+
+    & > div:nth-child(3) {
+      position: relative;
+
+      p {
+        margin: 0;
+        margin-left: 5px;
+        position: absolute;
+      }
+    }
+
   }
 
   .star {

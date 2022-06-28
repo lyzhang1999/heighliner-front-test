@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Popover,
@@ -11,50 +11,44 @@ import {
   TableCell,
   TableRow,
   TableHead,
-} from '@mui/material';
-import '@/utils/axios';
+} from "@mui/material";
+import "@/utils/axios";
 
 import Layout from "@/components/Layout";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {formatDate} from "@/utils/utils";
-import AddGitProvider from '@/components/AddGitProvider';
-import {
-  deleteProviderList,
-  getGitProviderList,
-  GitProviderType
-} from "@/utils/api/gitProvider";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { formatDate } from "@/utils/utils";
+import AddGitProvider from "@/components/AddGitProvider";
 
-import styles from './index.module.scss';
-import {isEmpty} from "lodash-es";
+import styles from "./index.module.scss";
+import { isEmpty } from "lodash-es";
+import useGitProviders from "@/hooks/gitProviders";
+import { deleteGitProvider } from "@/utils/api/gitProviders";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
-  const [prividerList, setProviderList] = useState<GitProviderType[]>([]);
-  const [dialogVisible, setDialogVisible] = useState<boolean>(false)
+  // const [prividerList, setProviderList] = useState<GitProviderType[]>([]);
+  const [gitProviders, getGitProviders] = useGitProviders();
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false);
   const [deleteItemID, setDeleteItemID] = useState<number>(0);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
 
   function successCb() {
-    getProvider();
+    getGitProviders();
   }
 
   useEffect(() => {
-    getProvider()
-  }, [])
-
-  function getProvider() {
-    getGitProviderList().then(res => {
-      setProviderList(res);
-    })
-  }
+    getGitProviders();
+  }, []);
 
   function deleteProvider() {
-    deleteProviderList(deleteItemID).then(res => {
-      getProvider();
+    deleteGitProvider(deleteItemID).then((res) => {
+      getGitProviders();
       setDeleteItemID(0);
       setDialogVisible(false);
       setAnchorEl(null);
-    })
+    });
   }
 
   const handleClick = (e: any, id: number) => {
@@ -71,19 +65,18 @@ const Clusters = () => {
     setAnchorEl(null);
   };
 
-
   function openDeleteDialog() {
     setDialogVisible(true);
   }
 
   return (
-    <Layout pageHeader="Git Provider"
-            rightBtnDesc="ADD PROVIDER"
-            rightBtnCb={() => setModalDisplay(!modalDisplay)}
+    <Layout
+      pageHeader="Git Provider"
+      rightBtnDesc="ADD PROVIDER"
+      rightBtnCb={() => setModalDisplay(!modalDisplay)}
     >
       <div className={styles.wrapper}>
-        {
-          !isEmpty(prividerList) &&
+        {!isEmpty(gitProviders) && (
           <Table>
             <TableHead>
               <TableRow>
@@ -93,25 +86,33 @@ const Clusters = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {prividerList.map((item) => (
+              {gitProviders.map((item) => (
                 <TableRow
                   key={item.id}
-                  sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="item">
                     <div className={styles.orgWrapper}>
-                      <img src="/img/gitprovider/github.webp" alt="github" className={styles.githubIcon}/>
-                      <span className={styles.orgName}>{item.git_org_name}</span>
+                      <img
+                        src="/img/gitprovider/github.webp"
+                        alt="github"
+                        className={styles.githubIcon}
+                      />
+                      <span className={styles.orgName}>
+                        {item.git_org_name}
+                      </span>
                     </div>
                   </TableCell>
-                  <TableCell align="right">{formatDate(item.created_at * 1000)}</TableCell>
+                  <TableCell align="right">
+                    {formatDate(item.created_at * 1000)}
+                  </TableCell>
                   <TableCell align="right">
                     <div className={styles.moreIcon}>
                       <div
                         className={styles.icon}
                         onClick={(e) => handleClick(e, item.id)}
                       >
-                        <MoreVertIcon/>
+                        <MoreVertIcon />
                       </div>
                     </div>
                   </TableCell>
@@ -119,8 +120,7 @@ const Clusters = () => {
               ))}
             </TableBody>
           </Table>
-        }
-
+        )}
       </div>
       <Dialog onClose={closeDialog} open={dialogVisible}>
         <DialogContent>
@@ -130,9 +130,7 @@ const Clusters = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>Cancel</Button>
-          <Button onClick={deleteProvider}>
-            Confirm
-          </Button>
+          <Button onClick={deleteProvider}>Confirm</Button>
         </DialogActions>
       </Dialog>
       <Popover
@@ -140,14 +138,12 @@ const Clusters = () => {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left",
         }}
       >
         <div className={styles.deleteIcon} onClick={openDeleteDialog}>
-          <span>
-              Delete
-          </span>
+          <span>Delete</span>
         </div>
       </Popover>
       <AddGitProvider
@@ -158,6 +154,6 @@ const Clusters = () => {
         }}
       />
     </Layout>
-  )
-}
+  );
+};
 export default Clusters;

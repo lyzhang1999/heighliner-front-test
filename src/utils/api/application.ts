@@ -4,9 +4,10 @@ import {getOriIdByContext} from "../utils";
 export interface CreateApplicationRequest {
   cluster_id: number;
   git_config: {
-    org_name: string;
-    provider: string;
-    token: string;
+    // org_name: string;
+    // provider: string;
+    // token: string;
+    git_provider_id: number;
   };
   name: string;
   networking: {

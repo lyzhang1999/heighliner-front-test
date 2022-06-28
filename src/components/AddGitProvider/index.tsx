@@ -9,6 +9,11 @@ import Btn, { BtnType } from "@/components/Btn";
 import styles from "./index.module.scss";
 import GitHubApp from "./GitHubApp";
 import GitHubPAT from "./GitHubPAT";
+import {
+  createGitProvider,
+  GitProvider,
+  GitProviderType,
+} from "@/utils/api/gitProviders";
 
 interface Props {
   modalDisplay: boolean;
@@ -40,10 +45,11 @@ export default function AddGitProvider({
       return;
     }
 
-    createProviderList({
+    createGitProvider({
       git_org_name: gitProviderOrgName,
-      provider: "GITHUB",
-      token: token,
+      provider: GitProvider.GitHub,
+      type: GitProviderType.PAT,
+      personal_access_token: token,
     }).then((res) => {
       Message.success("Add Git provider personal access token successfully");
       setModalDisplay(false);

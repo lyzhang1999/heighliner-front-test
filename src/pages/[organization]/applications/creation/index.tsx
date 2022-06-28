@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   Button,
   FormControl,
   FormHelperText,
-  Input,
   MenuItem,
   Select,
   Stack,
@@ -19,27 +18,18 @@ import clsx from "clsx";
 import Layout from "@/components/Layout";
 import {
   ClusterProvider,
-  Clusters,
   ClusterStatus,
   getCluster,
   getClusterList,
 } from "@/utils/api/cluster";
-import { getStacks, Stacks } from "@/utils/api/stack";
 
 import styles from "./index.module.scss";
-import {
-  getGitProviderList,
-  GitHubProvider,
-  GitProviders,
-} from "@/utils/api/gitProvider";
 import NewClusterModal from "@/components/NewClusterModal";
-import NewGitProvider from "@/components/Application/NewGitProvider";
 import {
   createApplication,
   CreateApplicationRequest,
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
-import { Context } from "@/utils/store";
 import { get } from "lodash-es";
 import { formatDate, getOrganizationNameByUrl, Message } from "@/utils/utils";
 import {
@@ -53,7 +43,11 @@ import {
 } from "@/utils/CDN";
 import Spinner from "@/basicComponents/Loaders/Spinner";
 import GitHubSVG from "/public/img/gitprovider/GITHUB.svg";
-import { style } from "@mui/system";
+import AddGitProvider from "@/components/AddGitProvider";
+import { useClusterList } from "@/hooks/cluster";
+import useGitProviders from "@/hooks/gitProviders";
+import useStacks from "@/hooks/stacks";
+import { GitProvider } from "@/utils/api/gitProviders";
 
 type FieldsDataType = typeof DefaultFieldsData;
 
@@ -98,9 +92,9 @@ export default function Index(): React.ReactElement {
   const [openAddGitProviderDrawer, setOpenAddGitProviderDrawer] =
     useState(false);
 
-  const [stacks, setStacks] = useState<Stacks>([]);
-  const [clusters, setClusters] = useState<Clusters>([]);
-  const [gitProviders, setGitProviders] = useState<GitProviders>([]);
+  const [stackList, getStackList] = useStacks();
+  const [clusterList, getClusterList] = useClusterList();
+  const [gitProviderList, getGitProviderList] = useGitProviders();
 
   const router = useRouter();
 
@@ -125,45 +119,32 @@ export default function Index(): React.ReactElement {
     });
   };
 
-  // Fetch the stack list and cluster list
-  useEffect(() => {
-    getStacks().then((res) => {
-      setStacks(res);
-    });
-    getClusterList().then((res) => {
-      setClusters(res);
-    });
-    getGitProviderList().then((res) => {
-      setGitProviders(res);
-    });
-  }, []);
-
-  // When open add cluster or git provider drawer, updating data.
-  useEffect(() => {
-    getClusterList().then((res) => {
-      setClusters(res);
-    });
-  }, [openAddClusterDrawer]);
-  useEffect(() => {
-    getGitProviderList().then((res) => {
-      setGitProviders(res);
-    });
-  }, [openAddGitProviderDrawer]);
-
   // Get the form in need
   const {
     handleSubmit,
     control,
     formState: { errors },
-    watch,
+    setValue,
   } = useForm<FieldsDataType>({
     defaultValues: DefaultFieldsData,
   });
 
+  useEffect(() => {
+    calculateUnderBgStyle(0);
+  }, []);
+
+  // When open add cluster or git provider drawer, updating data.
+  useEffect(() => {
+    getClusterList();
+  }, [openAddClusterDrawer]);
+  useEffect(() => {
+    getGitProviderList();
+  }, [openAddGitProviderDrawer]);
+
   const onSubmit: SubmitHandler<FieldsDataType> = async (data) => {
     // Check the cluster status
     const cluster_id = +data[fieldsMap.cluster.name];
-    const cluster = clusters.find((cluster) => cluster.id === cluster_id);
+    const cluster = clusterList.find((cluster) => cluster.id === cluster_id);
     if (cluster!.status === ClusterStatus.Initializing) {
       const res = await getCluster({
         cluster_id: cluster_id,
@@ -179,16 +160,14 @@ export default function Index(): React.ReactElement {
 
     // Get git_config's org_name, provider and token
     const git_provider_id = +data[fieldsMap.gitProvider.name];
-    const git_config = gitProviders.find(
+    const git_config = gitProviderList.find(
       (gitProvider) => git_provider_id === gitProvider.id
     );
 
     const createApplicationRequest: CreateApplicationRequest = {
       cluster_id: +data[fieldsMap.cluster.name],
       git_config: {
-        org_name: git_config!.git_org_name,
-        provider: git_config!.provider,
-        token: git_config!.token,
+        git_provider_id: +data[fieldsMap.gitProvider.name],
       },
       name: data[fieldsMap.applicationName.name],
       networking: {
@@ -210,14 +189,13 @@ export default function Index(): React.ReactElement {
 
   return (
     <Layout notStandardLayout>
-      {/* <div className={styles.panel}> */}
       <form onSubmit={handleSubmit(onSubmit)} className={styles.panel}>
         <Typography variant="h1">New Application</Typography>
         <div className={styles.underBackground} style={underBgStyle}></div>
         <Controller
           name={fieldsMap.applicationName.name}
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field }) => (
             <FormControl
               ref={eleList[0]}
               error={errors[fieldsMap.applicationName.name] ? true : false}
@@ -235,6 +213,8 @@ export default function Index(): React.ReactElement {
                   onFocus={() => {
                     calculateUnderBgStyle(0);
                   }}
+                  placeholder="Please enter the application name."
+                  autoFocus
                 ></TextField>
                 <FormHelperText id="my-helper-text">
                   {errors[fieldsMap.applicationName.name] &&
@@ -290,7 +270,7 @@ export default function Index(): React.ReactElement {
                   calculateUnderBgStyle(1);
                 }}
               >
-                {stacks.map(({ name, id }) => {
+                {stackList.map(({ name, id }) => {
                   const icons = get(stacksMap, name, []);
                   return (
                     <li
@@ -327,10 +307,12 @@ export default function Index(): React.ReactElement {
                   );
                 })}
               </ul>
-              <FormHelperText id="my-helper-text">
-                {errors[fieldsMap.stack.name] &&
-                  errors[fieldsMap.stack.name].message}
-              </FormHelperText>
+              <div>
+                <FormHelperText id="my-helper-text">
+                  {errors[fieldsMap.stack.name] &&
+                    errors[fieldsMap.stack.name].message}
+                </FormHelperText>
+              </div>
             </FormControl>
           )}
           rules={{
@@ -356,7 +338,7 @@ export default function Index(): React.ReactElement {
                   calculateUnderBgStyle(2);
                 }}
               >
-                {clusters.map((cluster) => (
+                {clusterList.map((cluster) => (
                   <Tooltip title={cluster.status} key={cluster.name}>
                     <li
                       key={cluster.name}
@@ -412,10 +394,12 @@ export default function Index(): React.ReactElement {
                   New Cluster
                 </li>
               </ul>
-              <FormHelperText id="my-helper-text">
-                {errors[fieldsMap.cluster.name] &&
-                  errors[fieldsMap.cluster.name].message}
-              </FormHelperText>
+              <div>
+                <FormHelperText id="my-helper-text">
+                  {errors[fieldsMap.cluster.name] &&
+                    errors[fieldsMap.cluster.name].message}
+                </FormHelperText>
+              </div>
             </FormControl>
           )}
           rules={{
@@ -453,14 +437,15 @@ export default function Index(): React.ReactElement {
                     calculateUnderBgStyle(3);
                   }}
                 >
-                  {gitProviders.map(
+                  {gitProviderList.map(
                     ({ id, git_org_name, provider, created_at }) => (
                       <MenuItem
                         key={id}
                         value={id}
                         className={styles.gitProviderItem}
+                        placeholder="Please choose a git provider."
                       >
-                        {provider === GitHubProvider.GITHUB && <GitHubSVG />}
+                        {provider === GitProvider.GitHub && <GitHubSVG />}
                         <Stack>
                           <div className={styles.gitOrgname}>
                             {git_org_name}
@@ -510,6 +495,7 @@ export default function Index(): React.ReactElement {
                   onFocus={() => {
                     calculateUnderBgStyle(4);
                   }}
+                  placeholder="Please enter the application domain."
                 ></TextField>
                 <FormHelperText id="my-helper-text">
                   {errors[fieldsMap.domain.name] &&
@@ -552,7 +538,7 @@ export default function Index(): React.ReactElement {
         setModalDisplay={setOpenAddClusterDrawer}
         modalDisplay={openAddClusterDrawer}
       />
-      <NewGitProvider
+      <AddGitProvider
         setModalDisplay={setOpenAddGitProviderDrawer}
         modalDisplay={openAddGitProviderDrawer}
       />

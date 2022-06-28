@@ -1,6 +1,6 @@
 /**
  * Define constants used globally.
- * You should add prefix `Global_[enum-name]_` to each value in case 
+ * You should add prefix `Global_[enum-name]_` to each value in case
  * have same default value with other enum value where imported.
  */
 

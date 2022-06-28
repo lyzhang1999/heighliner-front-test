@@ -10,13 +10,14 @@ import {Popover} from "@mui/material";
 
 type Props = {
   list: ApplicationObject[],
-  clusterList: ClusterItem[] ,
+  clusterList: ClusterItem[],
   setDeleteID: React.Dispatch<React.SetStateAction<number>>,
-  setDeleteModalVisible:  React.Dispatch<React.SetStateAction<boolean>>
+  setDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>
+  anchorEl: HTMLButtonElement | null,
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>,
 }
 
-export default function ApplicationList({list, clusterList, setDeleteID, setDeleteModalVisible}: Props) {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+export default function ApplicationList({list, clusterList, setDeleteID, setDeleteModalVisible, anchorEl, setAnchorEl}: Props) {
   const handleClick = (e: any, id: number) => {
     e.stopPropagation();
     setAnchorEl(e?.currentTarget);

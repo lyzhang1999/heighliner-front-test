@@ -50,7 +50,7 @@ const Menu = () => {
 
   function logout() {
     cookie.delCookie('token');
-    router.push('/login');
+    location.pathname = '/login';
   }
 
   let name = get(currentOrganization, 'name', '');

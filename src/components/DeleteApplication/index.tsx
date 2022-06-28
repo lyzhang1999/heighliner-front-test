@@ -10,13 +10,15 @@ interface Props {
   deleteModalVisible: boolean,
   deleteSuccessCb: () => void,
   setDeleteModalVisible: (val: boolean) => void,
-  deleteID: number
+  deleteID: number,
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>,
 }
 
 const DeleteApplication = (props: Props) => {
-  let {deleteModalVisible, deleteSuccessCb, setDeleteModalVisible, deleteID} = props;
+  let {deleteModalVisible, deleteSuccessCb, setDeleteModalVisible, deleteID, setAnchorEl} = props;
 
   const handleClose = () => {
+    setAnchorEl(null);
     setDeleteModalVisible(false);
   };
 

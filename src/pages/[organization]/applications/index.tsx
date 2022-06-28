@@ -27,6 +27,7 @@ const Applications = () => {
 
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
   const [deleteID, setDeleteID] = useState<number>(-1);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const router = useRouter();
 
@@ -49,6 +50,7 @@ const Applications = () => {
   }, [selectRule])
 
   function deleteSuccessCb() {
+    setAnchorEl(null)
     getApplicationList(selectRule).then((res) => {
       setApplist(res);
     });
@@ -155,7 +157,9 @@ const Applications = () => {
               list: applist,
               clusterList,
               setDeleteID,
-              setDeleteModalVisible
+              setDeleteModalVisible,
+            anchorEl,
+            setAnchorEl
           }}
         />
       </div>
@@ -164,7 +168,8 @@ const Applications = () => {
           deleteModalVisible,
           deleteSuccessCb,
           setDeleteModalVisible,
-          deleteID
+          deleteID,
+          setAnchorEl
         }}
       />
     </Layout>

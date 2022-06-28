@@ -77,7 +77,7 @@ export default function GitHubApp(props: Props): React.ReactElement {
         justifyContent="center"
         alignItems="center"
       >
-        <Button onClick={openGitHubAppInstallationWindow} variant="outlined">
+        <Button onClick={openGitHubAppInstallationWindow} variant="outlined" disabled>
           <AddCircleOutlineIcon />
           &nbsp;Add a new organization
         </Button>

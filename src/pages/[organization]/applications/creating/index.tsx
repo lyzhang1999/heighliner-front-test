@@ -102,7 +102,7 @@ const CreatingApplication = () => {
       term = new Terminal({
         fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
         fontSize: 12,
-        lineHeight: 1,
+        lineHeight: 0.5,
         scrollback: 999999,
       })
       term.loadAddon(fitAddon);

@@ -8,6 +8,8 @@
     margin-top: 18px;
     border-radius: 4px;
     height: calc(100vh - 190px);
+    padding-left: 10px;
+    background-color: #000;
 
     :global(.xterm-viewport) {
       width: 100% !important;

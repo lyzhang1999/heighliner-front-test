@@ -52,6 +52,14 @@ export default function InviteMember({
   );
 
   useEffect(() => {
+    if(open === true){
+      setOptions([]);
+      setValue(null);
+      setInputValue('');
+    }
+  }, [open])
+
+  useEffect(() => {
     // Can't fetch invitee suggestion list
     if (inputValue.trim().length <= 0) {
       setOptions([]);
@@ -113,6 +121,7 @@ export default function InviteMember({
           isOptionEqualToValue={(option, value) =>
             option.user_id === value.user_id
           }
+          getOptionDisabled={(option) => option?.is_member}
           className={styles.searchBar}
           value={value}
           onChange={(event, newValue) => {

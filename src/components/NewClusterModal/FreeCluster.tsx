@@ -2,13 +2,8 @@
  * Free Cluster
  */
 
-import React, { useState, useEffect } from "react";
-import {
-  TextField,
-} from '@mui/material';
-import {trim} from "lodash-es";
+import React from "react";
 
-import {Message} from "@/utils/utils";
 import {createCluster} from "@/utils/api/cluster";
 import Btn from "@/components/Btn";
 
@@ -21,28 +16,13 @@ interface Props {
 }
 
 export const FreeClusterPanel = ({
-  modalDisplay,
   successCb,
   isAvailable,
 }: Props): React.ReactElement => {
-  const [name, setName] = useState<string>('')
-
-  useEffect(() => {
-    setName('');
-  }, [modalDisplay])
-
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)
-  }
-
   function handleConfirm() {
-    if (!trim(name)) {
-      Message.error("Please input a cluster name");
-      return;
-    }
     createCluster({
       "kubeconfig": '',
-      "name": trim(name),
+      "name": '',
       "provider": "freeCluster",
     }).then(() => {
       successCb && successCb();
@@ -62,18 +42,6 @@ export const FreeClusterPanel = ({
       {
         isAvailable && (
           <div>
-            <div className={styles.formWrapper}>
-              <div className={styles.label}>
-                Name *
-              </div>
-              <TextField
-                fullWidth
-                value={name}
-                onChange={handleChangeName}
-                size='small'
-                placeholder="Please input a cluster name"
-              />
-            </div>
             <div className={styles.bottom}>
               <Btn style={{marginLeft: '37px'}}
                   onClick={handleConfirm}

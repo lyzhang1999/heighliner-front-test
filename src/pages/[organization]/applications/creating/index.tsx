@@ -17,7 +17,6 @@ import "xterm/css/xterm.css";
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
-  let globalState = '';
   const [durationTime, setDurationTime] = useState<number>(0);
   const [skipTime, setSkipTime] = useState<number>(5);
   const router = useRouter();
@@ -33,6 +32,7 @@ const CreatingApplication = () => {
   let term: any = null;
   let leaveFlag: boolean = false;
   let ro: any = null;
+  let globalState = '';
 
   function getStatus(isFirst: boolean) {
     getApplicationStatus({app_id, release_id}).then((res) => {
@@ -102,7 +102,7 @@ const CreatingApplication = () => {
       term = new Terminal({
         fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
         fontSize: 12,
-        lineHeight: 0.5,
+        lineHeight: 1,
         scrollback: 999999,
       })
       term.loadAddon(fitAddon);
@@ -125,29 +125,28 @@ const CreatingApplication = () => {
       }
 
       window.addEventListener('resize', resizeCb);
-      getLog();
+      getLogEventSource();
     }
     getlogTimeOut = setTimeout(() => {
       initTerminal()
     }, 0);
   }
 
-  function getLog() {
-    console.warn('getLog')
+  function getLogEventSource() {
+    console.warn('getLogEventSource')
     const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
     const token = cookie.getCookie('token');
     var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
-    console.warn(eventSource)
-    console.warn()
     eventSource.onerror = function () {
-      console.warn('onerror', globalState)
+      console.warn('onerror');
+      eventSource.close();
       setTimeout(() => {
         console.warn('onerrorTimeout', globalState)
         if (leaveFlag) {
           return;
         }
         if (globalState === ApplicationStatus.PROCESSING) {
-          getLog();
+          getLogEventSource();
         }
       }, 1000)
     }
@@ -155,20 +154,17 @@ const CreatingApplication = () => {
       term.writeln(get(e, 'data'));
     });
     eventSource.addEventListener("END", function (e) {
-      console.warn('END')
+      console.warn('end')
       eventSource.close();
-
       setTimeout(() => {
-        console.warn(globalState)
-        console.warn("end" + globalState)
+        console.warn("onend" + globalState)
         if (leaveFlag) {
           return;
         }
         if (globalState === ApplicationStatus.PROCESSING) {
-          getLog();
+          getLogEventSource();
         }
       }, 5000);
-
     });
   }
 

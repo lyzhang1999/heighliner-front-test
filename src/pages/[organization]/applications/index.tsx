@@ -151,10 +151,12 @@ const Applications = () => {
           </div>
         </div>
         <ApplicationList
-          list={applist}
-          clusterList={clusterList}
-          setDeleteID={setDeleteID}
-          setDeleteModalVisible={setDeleteModalVisible}
+          {...{
+              list: applist,
+              clusterList,
+              setDeleteID,
+              setDeleteModalVisible
+          }}
         />
       </div>
       <DeleteApplication

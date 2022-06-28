@@ -97,6 +97,12 @@ export default function BasicProfile(): React.ReactElement {
     }
   }, [fileRejections]);
 
+  const onKeydownHandler = (event: React.KeyboardEvent) => {
+    if (event.code === "Enter") {
+      handleSubmit(updateUsername)(event);
+    }
+  };
+
   const updateUsername: SubmitHandler<FieldValues> = (data) => {
     const newUsername = data[BasicProfileFieldMap.username];
 
@@ -150,6 +156,7 @@ export default function BasicProfile(): React.ReactElement {
                     value={field.value}
                     onChange={field.onChange}
                     size="small"
+                    onKeyDown={onKeydownHandler}
                   ></TextField>
                   <FormHelperText>
                     {errors[BasicProfileFieldMap["username"]] &&

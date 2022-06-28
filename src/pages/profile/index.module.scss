@@ -1,9 +1,13 @@
 @import "/src/styles/utils";
 
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .container {
   @include setVerticalPadding(12.52vh);
-  margin-left: auto;
-  margin-right: auto;
 
   h1 {
     font-size: 25px;

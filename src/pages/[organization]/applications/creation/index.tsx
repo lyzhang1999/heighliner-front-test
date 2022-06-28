@@ -20,7 +20,6 @@ import {
   ClusterProvider,
   ClusterStatus,
   getCluster,
-  getClusterList,
 } from "@/utils/api/cluster";
 
 import styles from "./index.module.scss";
@@ -74,7 +73,7 @@ const DefaultFieldsData = {
   [fieldsMap.stack.name]: "",
   [fieldsMap.cluster.name]: "",
   [fieldsMap.gitProvider.name]: "",
-  [fieldsMap.domain.name]: "",
+  // [fieldsMap.domain.name]: "",
 };
 
 const stacksMap: { [index: string]: string[] } = {
@@ -104,7 +103,7 @@ export default function Index(): React.ReactElement {
     useRef<HTMLDivElement | null>(null),
     useRef<HTMLDivElement | null>(null),
     useRef<HTMLDivElement | null>(null),
-    useRef<HTMLDivElement | null>(null),
+    // useRef<HTMLDivElement | null>(null),
   ];
 
   const [underBgStyle, setUnderBgStyle] = useState({
@@ -124,7 +123,6 @@ export default function Index(): React.ReactElement {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
   } = useForm<FieldsDataType>({
     defaultValues: DefaultFieldsData,
   });
@@ -171,7 +169,7 @@ export default function Index(): React.ReactElement {
       },
       name: data[fieldsMap.applicationName.name],
       networking: {
-        domain: data[fieldsMap.domain.name],
+        domain: "",
       },
       stack_id: +data[fieldsMap.stack.name],
     };
@@ -426,6 +424,10 @@ export default function Index(): React.ReactElement {
                     if (e.target.value === "new") {
                       setOpenAddGitProviderDrawer(true);
                     } else {
+                      // Compatible with field.onChange event.
+                      setTimeout(() => {
+                        calculateUnderBgStyle(3);
+                      })
                       field.onChange(e);
                     }
                   }}
@@ -474,7 +476,7 @@ export default function Index(): React.ReactElement {
           }}
         />
 
-        <Controller
+        {/* <Controller
           name={fieldsMap.domain.name}
           control={control}
           render={({ field }) => (
@@ -527,7 +529,7 @@ export default function Index(): React.ReactElement {
               },
             },
           }}
-        />
+        /> */}
         <div className={styles.submitWrap}>
           <Button type="submit" className={styles.submit} value="CREATE">
             CREATE
@@ -536,6 +538,9 @@ export default function Index(): React.ReactElement {
       </form>
       <NewClusterModal
         setModalDisplay={setOpenAddClusterDrawer}
+        successCb={() => {
+          setOpenAddClusterDrawer(false);
+        }}
         modalDisplay={openAddClusterDrawer}
       />
       <AddGitProvider

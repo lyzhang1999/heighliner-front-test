@@ -136,7 +136,7 @@ const CreatingApplication = () => {
     console.warn('getLogEventSource')
     const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
     const token = cookie.getCookie('token');
-    var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}});
+    var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}, heartbeatTimeout: 1000 * 60 * 5});
     eventSource.onerror = function () {
       console.warn('onerror');
       eventSource.close();

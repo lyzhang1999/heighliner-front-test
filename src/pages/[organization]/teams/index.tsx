@@ -141,7 +141,7 @@ const Teams = () => {
   return (
     <Layout
       pageHeader="Teams"
-      rightBtnDesc={getActionSet(currentMemberType!).includes(Action.Invite) ? "INVITE USER" : ''}
+      rightBtnDesc={getActionSet(currentMemberType!).includes(Action.Invite) ? "invite user" : ''}
       rightBtnCb={() => {
         setInviteDialog(true);
       }}

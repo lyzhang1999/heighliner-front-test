@@ -532,7 +532,7 @@ export default function Index(): React.ReactElement {
         /> */}
         <div className={styles.submitWrap}>
           <Button type="submit" className={styles.submit} value="CREATE">
-            CREATE
+            create
           </Button>
         </div>
       </form>

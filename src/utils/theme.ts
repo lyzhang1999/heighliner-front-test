@@ -58,6 +58,16 @@ const theme = createTheme({
         }
       `,
     },
+    MuiButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          textTransform: "capitalize",
+        },
+      },
+    },
   },
 });
 

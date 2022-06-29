@@ -1,10 +1,10 @@
 import react, {ReactElement, useContext, useEffect} from 'react';
 import Menu from './Menu';
 import clsx from "clsx";
-import Btn from "@/components/Btn";
 import styles from './index.module.scss';
 import {getUserInfo} from "@/utils/api/profile";
 import {Context} from "@/utils/store";
+import { Button } from '@mui/material';
 
 interface HomeProps {
   children?: react.ReactNode,
@@ -53,9 +53,9 @@ const Layout = (props: HomeProps): react.ReactElement => {
                   {pageHeader}
                   {
                     rightBtnDesc &&
-                    <Btn onClick={rightBtnCb}>
+                    <Button onClick={rightBtnCb} variant="contained">
                       {rightBtnDesc}
-                    </Btn>
+                    </Button>
                   }
                 </div>
               }

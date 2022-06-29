@@ -4,11 +4,11 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  Button,
   TextField,
 } from '@mui/material';
 import {trim} from "lodash-es";
 
-import Btn from "@/components/Btn";
 import {Message} from "@/utils/utils";
 import {createCluster} from "@/utils/api/cluster";
 
@@ -97,11 +97,13 @@ export const KubeconfigPanel = ({
         </div>
       </div>
       <div className={styles.bottom}>
-        <Btn style={{marginLeft: '37px'}}
+        <Button 
+            style={{marginLeft: '37px'}}
             onClick={handleConfirm}
+            variant="contained"
         >
-          Add
-        </Btn>
+          add
+        </Button>
       </div>
     </div>
   )

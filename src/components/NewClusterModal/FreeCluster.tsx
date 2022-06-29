@@ -5,9 +5,9 @@
 import React from "react";
 
 import {createCluster} from "@/utils/api/cluster";
-import Btn from "@/components/Btn";
 
 import styles from './index.module.scss';
+import { Button } from "@mui/material";
 
 interface Props {
   modalDisplay: boolean,
@@ -43,11 +43,12 @@ export const FreeClusterPanel = ({
         isAvailable && (
           <div>
             <div className={styles.bottom}>
-              <Btn style={{marginLeft: '37px'}}
+              <Button style={{marginLeft: '37px'}}
                   onClick={handleConfirm}
+                  variant="contained"
               >
-                Add
-              </Btn>
+                add
+              </Button>
             </div>
           </div>
         )

@@ -70,7 +70,7 @@ const Organizations = () => {
   return (
     <Layout
       pageHeader="Organizations"
-      rightBtnDesc="NEW ORGANIZATION"
+      rightBtnDesc="new organization"
       rightBtnCb={() => setOpen(true)}
     >
       <div className={styles.tableWrapper}>

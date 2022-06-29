@@ -88,7 +88,7 @@ const Applications = () => {
   return (
     <Layout
       pageHeader="Applications"
-      rightBtnDesc="ADD APPLICATION"
+      rightBtnDesc="add application"
       rightBtnCb={() => {
         router.push(
           `/${encodeURIComponent(

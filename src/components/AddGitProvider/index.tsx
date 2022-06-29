@@ -1,10 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Drawer, Tab } from "@mui/material";
+import { Button, Drawer, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
-import { createProviderList } from "@/utils/api/gitProvider";
 import { Message } from "@/utils/utils";
-import Btn, { BtnType } from "@/components/Btn";
 
 import styles from "./index.module.scss";
 import GitHubApp from "./GitHubApp";
@@ -97,13 +95,17 @@ export default function AddGitProvider({
             </TabPanel>
             <div className={styles.bottom}>
               <TabPanel value={AddType.AddGitHubPAT}>
-                <Btn style={{ marginRight: "87px" }} onClick={handleConfirm}>
-                  CREATE
-                </Btn>
+                <Button
+                  style={{ marginRight: "87px" }}
+                  onClick={handleConfirm}
+                  variant="contained"
+                >
+                  create
+                </Button>
               </TabPanel>
-              <Btn type={BtnType.gray} onClick={() => setModalDisplay(false)}>
-                CANCEL
-              </Btn>
+              <Button onClick={() => setModalDisplay(false)}>
+                cancel
+              </Button>
             </div>
           </TabContext>
         </div>

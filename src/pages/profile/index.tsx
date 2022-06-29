@@ -18,9 +18,9 @@ export default function Setting(): React.ReactElement {
             <div className={styles.card}>
               <BasicProfile />
             </div>
-            <div className={styles.card}>
-              <Email />
-            </div>
+            {/*<div className={styles.card}>*/}
+            {/*  <Email />*/}
+            {/*</div>*/}
             <div className={styles.card}>
               <Password />
             </div>

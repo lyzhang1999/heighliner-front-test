@@ -1,3 +1,5 @@
+@import "@/styles/globalVar.scss";
+
 .clusterItem {
   position: relative;
 
@@ -5,15 +7,15 @@
     width: 35px;
   }
 
-  .regionColumn {
-    width: 300px;
-    padding-left: 130px;
-
-    @media screen and (max-width: 1200px) {
-      width: 200px;
-      padding-left: 16px;
-    }
-  }
+  //.regionColumn {
+  //  width: 300px;
+  //  padding-left: 130px;
+  //
+  //  @media screen and (max-width: 1200px) {
+  //    width: 200px;
+  //    padding-left: 16px;
+  //  }
+  //}
 
   .moreIcon {
     cursor: pointer;
@@ -64,7 +66,7 @@
   }
 
   .region {
-    padding: 7px 36px;
+    padding: 7px 20px;
     border-radius: 9px;
     background-color: rgba(193, 202, 234, 0.8);
     display: inline-block;
@@ -74,7 +76,7 @@
   .version {
     display: inline-block;
     background-color: #e0f5fa;
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 12px;
   }
 
@@ -93,4 +95,9 @@
   .InactiveIconText {
     color: #ff6046;
   }
+
+  .time{
+    @include timeStyles;
+  }
+
 }

@@ -48,3 +48,8 @@
 .defaultText {
   color: #6C727B;
 }
+
+.time{
+  @include timeStyles;
+}
+

@@ -1,4 +1,11 @@
+@import "@/styles/globalVar.scss";
+
 
 .teamsWrapper{
   background-color: #fff;
 }
+
+.time{
+  @include timeStyles;
+}
+

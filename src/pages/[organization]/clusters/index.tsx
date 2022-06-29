@@ -112,10 +112,11 @@ const Clusters = () => {
           <TableHead>
             <TableRow>
               <TableCell width={200} align='right'>CLUSTER</TableCell>
-              <TableCell className={styles.regionColumn} align="left">REGION</TableCell>
-              <TableCell align="left">CREATED BY</TableCell>
-              <TableCell align="left">VERSION</TableCell>
-              <TableCell align="left"></TableCell>
+              <TableCell className={styles.regionColumn} align="right">REGION</TableCell>
+              <TableCell align="right">CREATED BY</TableCell>
+              <TableCell align="right">VERSION</TableCell>
+              <TableCell align="right">CREATE TIME</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

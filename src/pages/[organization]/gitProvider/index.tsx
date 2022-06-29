@@ -80,9 +80,10 @@ const Clusters = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>GitOrganization</TableCell>
-                <TableCell align="right">CreateTime</TableCell>
-                <TableCell align="right">Action</TableCell>
+                <TableCell>GIT ORGANIZATION</TableCell>
+                <TableCell align="right">CREAT TIME</TableCell>
+                <TableCell align="right">CREATE BY</TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -104,7 +105,11 @@ const Clusters = () => {
                     </div>
                   </TableCell>
                   <TableCell align="right">
-                    {formatDate(item.created_at * 1000)}
+                    <div className={styles.time}>{formatDate(item.created_at * 1000)}</div>
+                  </TableCell>
+
+                  <TableCell align="right">
+                    <div >{item.created_by_name}</div>
                   </TableCell>
                   <TableCell align="right">
                     <div className={styles.moreIcon}>

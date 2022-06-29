@@ -150,10 +150,10 @@ const Teams = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>UserName</TableCell>
-              <TableCell align="right">Joined at</TableCell>
-              <TableCell align="right">Role</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell>USERNAME</TableCell>
+              <TableCell align="right">JOINT AT</TableCell>
+              <TableCell align="right">ROLE</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -165,7 +165,9 @@ const Teams = () => {
                 <TableCell component="th" scope="row">
                   {username}
                 </TableCell>
-                <TableCell align="right">{formatDate(created_at * 1000)}</TableCell>
+                <TableCell align="right">
+                  <div className={styles.time}>{formatDate(created_at * 1000)}</div>
+                </TableCell>
                 <TableCell align="right">{member_type}</TableCell>
                 <TableCell align="right">
                   {getActionSet(currentMemberType!, member_type).map(

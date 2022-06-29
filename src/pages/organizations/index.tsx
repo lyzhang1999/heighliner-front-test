@@ -77,10 +77,10 @@ const Organizations = () => {
         <Table sx={{}} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Organization Name</TableCell>
-              <TableCell align="right">Created Time</TableCell>
-              <TableCell align="right">Role</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell>ORGANIZATINO NAME</TableCell>
+              <TableCell align="right">CREATE TIME</TableCell>
+              <TableCell align="right">ROLE</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,7 +94,9 @@ const Organizations = () => {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">{formatDate(row.created_at * 1000)}</TableCell>
+                  <TableCell align="right">
+                    {formatDate(row.created_at * 1000)}
+                  </TableCell>
                   <TableCell align="right">{member_type}</TableCell>
 
                   <TableCell align="right">

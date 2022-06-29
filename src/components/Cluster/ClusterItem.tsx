@@ -18,9 +18,10 @@ import {
   ClusterStatus,
 } from "@/utils/api/cluster";
 
-import { StatusDot, StatusIconText } from './Status';
+import {StatusDot, StatusIconText} from './Status';
 
 import styles from './index.module.scss';
+import {formatDate} from "@/utils/utils";
 
 type Props = {
   item: ClusterItem,
@@ -37,9 +38,9 @@ function getStatusText(status: ClusterStatus): string {
 }
 
 export const ClusterItemComp = ({
-  item,
-  handleClick,
-}: Props): React.ReactElement => {
+                                  item,
+                                  handleClick,
+                                }: Props): React.ReactElement => {
   return (
     <TableRow
       className={styles.clusterItem}
@@ -48,7 +49,7 @@ export const ClusterItemComp = ({
       <TableCell align="right" width={200}>
         <div className={styles.clusterMeta}>
           <div className={styles.status}>
-            <StatusDot status={item.status} />
+            <StatusDot status={item.status}/>
           </div>
           <div className={styles.icon} title={getStatusText(item.status)}>
             <img src={getClusterIcon(item.provider)} alt="cluster provider"/>
@@ -56,21 +57,24 @@ export const ClusterItemComp = ({
           <div className={styles.name} title={item.name}>{item.name}</div>
         </div>
       </TableCell>
-      <TableCell align="left" className={styles.regionColumn}>
+      <TableCell align="right" className={styles.regionColumn}>
         <div className={styles.region}>Hong Kong</div>
       </TableCell>
-      <TableCell>
+      <TableCell align="right">
         <div className="creator">{item.created_by_name}</div>
       </TableCell>
-      <TableCell>
+      <TableCell align="right">
         <div className={styles.version}>{'v1.22.6'}</div>
       </TableCell>
       <TableCell align="right">
+        <div className={styles.time}>{formatDate(item.created_at * 1000)}</div>
+      </TableCell>
+      <TableCell align="right" sx={{minWidth: "130px"}}>
         <div className={styles.status}>
-          <StatusIconText status={item.status} />
+          <StatusIconText status={item.status}/>
         </div>
         <div className={styles.moreIcon} onClick={handleClick(item.id)}>
-          <MoreVertIcon />
+          <MoreVertIcon/>
         </div>
       </TableCell>
     </TableRow>

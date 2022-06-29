@@ -5,6 +5,7 @@ import {OrgList, roleType} from "@/utils/api/org";
 import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
 import {UserInfo} from "@/utils/api/profile";
+import dayjs from "dayjs";
 
 export function isBrowser() {
   return process.title === "browser";
@@ -76,15 +77,7 @@ export function setLoginToken(value: string) {
 }
 
 export function formatDate(d: number) {
-  var now = new Date(d);
-  var year = now.getFullYear();
-  var month = now.getMonth() + 1;
-  var date = now.getDate();
-  var hour = now.getHours();
-  var minute = now.getMinutes();
-  var second = now.getSeconds();
-  return year + "/" + month + "/" + date + " " + hour + ":" + minute;
-  // return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+  return  dayjs(d).format('YYYY-MM-DD HH:mm');
 }
 
 export function getQuery(variable: string): string {

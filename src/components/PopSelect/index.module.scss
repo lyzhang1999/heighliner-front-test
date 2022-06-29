@@ -1,0 +1,17 @@
+.selectWrapper {
+  padding: 6px 0px;
+
+  .redItem {
+    color: #ff5247;
+  }
+
+  .selectItem {
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 15px;
+
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+}

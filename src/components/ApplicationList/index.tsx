@@ -7,6 +7,8 @@ import {ClusterItem} from "@/utils/api/cluster";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
 import {Popover} from "@mui/material";
+import popStyles from "@/components/PopSelect/index.module.scss";
+import clsx from "clsx";
 
 type Props = {
   list: ApplicationObject[],
@@ -64,10 +66,8 @@ export default function ApplicationList({
           horizontal: 'left',
         }}
       >
-        <div className={styles.deleteIcon} onClick={openDeleteDialog}>
-          <span>
-              Delete
-          </span>
+        <div className={popStyles.selectWrapper} onClick={openDeleteDialog}>
+          <span className={clsx(popStyles.selectItem, popStyles.redItem)}>Delete</span>
         </div>
       </Popover>
       {

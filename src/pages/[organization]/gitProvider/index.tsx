@@ -20,9 +20,11 @@ import { formatDate } from "@/utils/utils";
 import AddGitProvider from "@/components/AddGitProvider";
 
 import styles from "./index.module.scss";
+import popStyles from '@/components/PopSelect/index.module.scss'
 import { isEmpty } from "lodash-es";
 import useGitProviders from "@/hooks/gitProviders";
 import { deleteGitProvider } from "@/utils/api/gitProviders";
+import clsx from "clsx";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -147,8 +149,8 @@ const Clusters = () => {
           horizontal: "left",
         }}
       >
-        <div className={styles.deleteIcon} onClick={openDeleteDialog}>
-          <span>Delete</span>
+        <div className={popStyles.selectWrapper} onClick={openDeleteDialog}>
+          <span className={clsx(popStyles.selectItem, popStyles.redItem)}>Delete</span>
         </div>
       </Popover>
       <AddGitProvider

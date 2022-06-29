@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import {Button, TableRow, TableHead, TableCell, TableBody, Table, Tooltip} from "@mui/material";
+import {TableRow, TableHead, TableCell, TableBody, Table, Tooltip} from "@mui/material";
 import CreateOrganization from "@/pages/organizations/createOrganization";
 import DeleteOrganization from "@/pages/organizations/deleteOrganization";
 import TransferOrganization from "@/pages/organizations/transferOrganization";
@@ -13,6 +13,8 @@ import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
 import {get, omit} from "lodash-es";
 import {useRouter} from "next/router";
 import RoleTag from "@/components/RoleTag";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PopSelect, {PopItem} from "@/components/PopSelect";
 
 const Organizations = () => {
   const {state, dispatch} = useContext(Context);
@@ -25,6 +27,12 @@ const Organizations = () => {
   const [transferId, setTransferId] = useState<number>(0);
   const [leaveModalVisible, setLeaveModalVisible] = useState<boolean>(false);
   const [leaveId, setLeaveId] = useState<number>(0);
+  const [activeType, setActiveType] = React.useState<string>("");
+
+  useEffect(() => {
+    // @ts-ignore
+    PopRef?.current?.setSelect(null)
+  }, [deleteModalVisible, leaveModalVisible, transferModalVisible])
 
   const router = useRouter();
   useEffect(() => {
@@ -68,12 +76,38 @@ const Organizations = () => {
     })
   }
 
+  let PopRef = React.useRef<React.MutableRefObject<null>>(null);
+
+  function getPopItem(): PopItem[] {
+    let item: PopItem[] = [];
+    if ([roleType.Owner].includes(activeType)) {
+      item.push({
+        key: "Delete",
+        red: true,
+        clickCb: () => setDeleteModalVisible(true)
+      }, {
+        key: "Transfer",
+        clickCb: () => setTransferModalVisible(true)
+      })
+    } else if ([roleType.Admin, roleType.Member].includes(activeType)) {
+      item.push({
+        key: "Leave",
+        clickCb: () => setLeaveModalVisible(true)
+      })
+    }
+    return item;
+  }
+
   return (
     <Layout
       pageHeader="Organizations"
       rightBtnDesc="new organization"
       rightBtnCb={() => setOpen(true)}
     >
+      <PopSelect
+        ref={PopRef}
+        item={getPopItem()}
+      />
       <div className={styles.tableWrapper}>
         <Table sx={{}} aria-label="simple table">
           <TableHead>
@@ -101,62 +135,26 @@ const Organizations = () => {
                   <TableCell align="right">
                     <RoleTag type={member_type}/>
                   </TableCell>
-
                   <TableCell align="right">
                     {
-                      [roleType.Owner].includes(member_type) && row.type === 'Default' &&
-                      <Tooltip
-                        title="Init organization does not allow operations"
-                        placement="left"
-                      >
-                        <span>
-                          <Button
-                            sx={{cursor: 'not-allowed'}}
-                            disabled
-                          >
-                            Transfer
-                          </Button>
-                        </span>
-                      </Tooltip>
-                    }
-                    {
-                      [roleType.Owner].includes(member_type) && row.type !== 'Default' &&
-                      <div className={styles.actionWrapper}>
-                        <Button
-                          sx={{cursor: 'pointer'}}
-                          color="error"
-                          onClick={() => {
-                            setDeleteId(row.id);
-                            setDeleteModalVisible(true);
-                          }}
+                      [roleType.Owner].includes(member_type) && row.type === 'Default' ?
+                        <Tooltip
+                          title="Init organization does not allow operations"
+                          placement="left"
                         >
-                          Delete
-                        </Button>
-                        <Button
-                          sx={{cursor: 'pointer'}}
-                          onClick={() => {
-                            setTransferModalVisible(true);
-                            setTransferId(row.id)
-                          }}
-                        >
-                          Transfer
-                        </Button>
-                      </div>
-                    }
-                    {
-                      [roleType.Admin, roleType.Member].includes(member_type) &&
-                      <Button
-                        sx={{cursor: 'pointer'}}
-                        onClick={() => {
-                          setLeaveModalVisible(true);
+                          <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
+                        </Tooltip>
+                        :
+                        <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
+                          setDeleteId(row.id);
+                          setTransferId(row.id);
                           setLeaveId(row.id);
-                        }}
-                      >
-                        Leave
-                      </Button>
+                          setActiveType(member_type);
+                          // @ts-ignore
+                          PopRef?.current?.setSelect(event?.currentTarget)
+                        }}/>
                     }
                   </TableCell>
-
                 </TableRow>
               )
             })}

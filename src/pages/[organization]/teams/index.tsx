@@ -1,12 +1,11 @@
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
   TableFooter,
   TableHead,
   TablePagination,
-  TableRow, Tooltip, MenuItem, Select
+  TableRow, MenuItem, Select
 } from "@mui/material";
 import * as React from "react";
 import {ReactNode, useContext, useEffect, useState} from "react";
@@ -24,13 +23,11 @@ import {
 } from "@/utils/api/org";
 import InviteMember from "@/components/Team/InviteMember";
 import {Context} from "@/utils/store";
-import ShiftRole from "@/components/Team/ShiftRole";
-import DeleteMember from "@/components/Team/DeleteMember";
 import {get, orderBy} from "lodash-es";
 import RoleTag from "@/components/RoleTag";
 import DeleteUser from "@/components/Team/DeleteUser"
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import PopSelect, {PopItem} from "@/components/PopSelect";
+import PopSelect from "@/components/PopSelect";
 
 enum Action {
   Invite = "Invite",
@@ -103,9 +100,7 @@ const Teams = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
   const [deleteID, setDeleteId] = useState<number>(0);
-  // const [activeType, setActiveType] = React.useState<string>("");
   let PopRef = React.useRef<React.MutableRefObject<null>>(null);
-
 
   function deleteSuccessCb() {
     flushTeams();
@@ -188,8 +183,6 @@ const Teams = () => {
 
     shiftRole(shiftRoleReq).then(() => {
       Message.success(`change role success`)
-      // successCallback && successCallback();
-      // setOpen(false);
       flushTeams();
     });
   }
@@ -197,7 +190,7 @@ const Teams = () => {
   return (
     <Layout
       pageHeader="Teams"
-      rightBtnDesc={getActionSet(currentMemberType!).includes(Action.Invite) ? "invite user" : ''}
+      rightBtnDesc={([roleType.Owner, roleType.Admin].includes(currentMemberType as string)) ? "invite user" : ''}
       rightBtnCb={() => {
         setInviteDialog(true);
       }}

@@ -1,6 +1,7 @@
 import http from "@/utils/axios";
 import {Page} from "./type";
 import {find, get, uniq} from "lodash-es";
+import {getOriIdByContext} from "@/utils/utils";
 
 export interface OrgList {
   id: number;
@@ -146,12 +147,11 @@ export interface DeleteMember {
   user_id: number;
 }
 
-export const deleteMember = (req: DeleteMember) => {
-  return http.delete(`/orgs/${req.org_id}/members/${req.user_id}`);
+export const deleteMember = (user_id: number) => {
+  return http.delete(`/orgs/${getOriIdByContext()}/members/${user_id}`);
 };
 
 export interface ShiftRoleReq {
-  org_id: number;
   user_id: number;
   body: {
     member_type: MemberType;
@@ -159,5 +159,5 @@ export interface ShiftRoleReq {
 }
 
 export const shiftRole = (req: ShiftRoleReq) => {
-  return http.put(`/orgs/${req.org_id}/members/${req.user_id}/role`, req.body);
+  return http.put(`/orgs/${getOriIdByContext()}/members/${req.user_id}/role`, req.body);
 };

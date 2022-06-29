@@ -6,13 +6,13 @@ import {
   TableFooter,
   TableHead,
   TablePagination,
-  TableRow,
+  TableRow, Tooltip, MenuItem, Select
 } from "@mui/material";
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {ReactNode, useContext, useEffect, useState} from "react";
 
 import Layout from "@/components/Layout";
-import {formatDate, getOriIdByContext} from "@/utils/utils";
+import {formatDate, getOriIdByContext, Message} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import {
@@ -20,14 +20,17 @@ import {
   GetOrgMembersReq,
   GetOrgMembersRes,
   MemberType,
-  MemberTypeEnum,
+  MemberTypeEnum, roleType, shiftRole, ShiftRoleReq,
 } from "@/utils/api/org";
 import InviteMember from "@/components/Team/InviteMember";
 import {Context} from "@/utils/store";
 import ShiftRole from "@/components/Team/ShiftRole";
 import DeleteMember from "@/components/Team/DeleteMember";
-import {get} from "lodash-es";
+import {get, orderBy} from "lodash-es";
 import RoleTag from "@/components/RoleTag";
+import DeleteUser from "@/components/Team/DeleteUser"
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PopSelect, {PopItem} from "@/components/PopSelect";
 
 enum Action {
   Invite = "Invite",
@@ -98,11 +101,21 @@ const Teams = () => {
   const [inviteDialog, setInviteDialog] = useState(false);
   const [orgMembers, setOrgMembers] = useState<GetOrgMembersRes>();
   const [currentPage, setCurrentPage] = useState(0);
+  const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
+  const [deleteID, setDeleteId] = useState<number>(0);
+  // const [activeType, setActiveType] = React.useState<string>("");
+  let PopRef = React.useRef<React.MutableRefObject<null>>(null);
+
+
+  function deleteSuccessCb() {
+    flushTeams();
+  }
 
   const {
     state: {currentOrganization},
   } = useContext(Context);
   const currentMemberType = currentOrganization?.member_type;
+  const currentMemberId = currentOrganization?.user_id;
 
   const flushTeams = () => {
     setInviteDialog(false);
@@ -139,6 +152,48 @@ const Teams = () => {
     setCurrentPage(newPage);
   }
 
+  // function getPopItem(): PopItem[] {
+  //   let item: PopItem[] = [];
+  //   if ([roleType.Owner].includes(activeType)) {
+  //     item.push({
+  //       key: "Delete",
+  //       red: true,
+  //       clickCb: () => setDeleteModalVisible(true)
+  //     }, {
+  //       key: "Transfer",
+  //       clickCb: () => {
+  //       }
+  //     })
+  //   } else if ([roleType.Admin, roleType.Member].includes(activeType)) {
+  //     item.push({
+  //       key: "Leave",
+  //       clickCb: () => {
+  //       }
+  //     })
+  //   }
+  //   return item;
+  // }
+
+  function handleChange(v: ReactNode, user_id: number) {
+    let value = get(v, 'props.children', '');
+    if (!value) {
+      return;
+    }
+    const shiftRoleReq: ShiftRoleReq = {
+      user_id: user_id,
+      body: {
+        member_type: value,
+      },
+    };
+
+    shiftRole(shiftRoleReq).then(() => {
+      Message.success(`change role success`)
+      // successCallback && successCallback();
+      // setOpen(false);
+      flushTeams();
+    });
+  }
+
   return (
     <Layout
       pageHeader="Teams"
@@ -147,6 +202,14 @@ const Teams = () => {
         setInviteDialog(true);
       }}
     >
+      <PopSelect
+        ref={PopRef}
+        item={[{
+          key: "Delete",
+          red: true,
+          clickCb: () => setDeleteModalVisible(true)
+        }]}
+      />
       <div className={styles.teamsWrapper}>
         <Table aria-label="simple table">
           <TableHead>
@@ -170,36 +233,64 @@ const Teams = () => {
                   <div className={styles.time}>{formatDate(created_at * 1000)}</div>
                 </TableCell>
                 <TableCell align="right">
-                  <RoleTag type={member_type}/>
+                  {
+                    (![roleType.Owner].includes(member_type) &&
+                      [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
+                      (currentMemberId !== user_id)) ?
+                      <Select
+                        value={member_type}
+                        label=""
+                        size="small"
+                        sx={{".MuiSelect-select": {padding: "4px 10px", fontSize: '14px'}}}
+                        onChange={(e, v: ReactNode) => handleChange(v, user_id)}
+                      >
+                        <MenuItem value={MemberTypeEnum.Member}>{MemberTypeEnum.Member}</MenuItem>
+                        <MenuItem value={MemberTypeEnum.Admin}>{MemberTypeEnum.Admin}</MenuItem>
+                      </Select>
+                      :
+                      <RoleTag type={member_type}/>
+                  }
                 </TableCell>
                 <TableCell align="right">
-                  {getActionSet(currentMemberType!, member_type).map(
-                    (action, index) => {
-                      switch (action) {
-                        case Action.ShiftRole:
-                          return (
-                            <ShiftRole
-                              key={index}
-                              currentMemberType={member_type}
-                              username={username}
-                              userId={user_id}
-                              orgId={+getOriIdByContext()}
-                              successCallback={flushTeams}
-                            />
-                          );
-                        case Action.Delete:
-                          return (
-                            <DeleteMember
-                              key={index}
-                              userId={user_id}
-                              orgId={+getOriIdByContext()}
-                              username={username}
-                              successCallback={flushTeams}
-                            />
-                          );
-                      }
-                    }
-                  )}
+
+                  {/*{getActionSet(currentMemberType!, member_type).map(*/}
+                  {/*  (action, index) => {*/}
+                  {/*    switch (action) {*/}
+                  {/*      case Action.ShiftRole:*/}
+                  {/*        return (*/}
+                  {/*          <ShiftRole*/}
+                  {/*            key={index}*/}
+                  {/*            currentMemberType={member_type}*/}
+                  {/*            username={username}*/}
+                  {/*            userId={user_id}*/}
+                  {/*            orgId={+getOriIdByContext()}*/}
+                  {/*            successCallback={flushTeams}*/}
+                  {/*          />*/}
+                  {/*        );*/}
+                  {/*      case Action.Delete:*/}
+                  {/*        return (*/}
+                  {/*          <DeleteMember*/}
+                  {/*            key={index}*/}
+                  {/*            userId={user_id}*/}
+                  {/*            orgId={+getOriIdByContext()}*/}
+                  {/*            username={username}*/}
+                  {/*            successCallback={flushTeams}*/}
+                  {/*          />*/}
+                  {/*        );*/}
+                  {/*    }*/}
+                  {/*  }*/}
+                  {/*)}*/}
+                  {
+                    ![roleType.Owner].includes(member_type) &&
+                    [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
+                    (currentMemberId !== user_id) &&
+                    <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
+                      setDeleteId(user_id);
+                      // setActiveType(member_type);
+                      // @ts-ignore
+                      PopRef?.current?.setSelect(event?.currentTarget)
+                    }}/>
+                  }
                 </TableCell>
               </TableRow>
             ))}
@@ -230,6 +321,14 @@ const Teams = () => {
         open={inviteDialog}
         setOpen={setInviteDialog}
         inviteMemberSuccessCb={flushTeams}
+      />
+      <DeleteUser
+        {...{
+          deleteModalVisible,
+          deleteSuccessCb,
+          setDeleteModalVisible,
+          deleteID
+        }}
       />
     </Layout>
   );

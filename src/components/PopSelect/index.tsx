@@ -37,17 +37,12 @@ function PopSelect({item}: PopProps, ref: any) {
       }}
     >
       <div className={styles.selectWrapper}>
-        {item.map(i => {
-          if (i.red) {
-            return <div className={clsx(styles.selectItem, styles.redItem)}
-                        onClick={i.clickCb}
-            >{i.key}</div>
-          } else {
-            return <div className={clsx(styles.selectItem)}
-                        onClick={i.clickCb}
-            >{i.key}</div>
-          }
-        })}
+        {item.map(i => (
+          <div className={clsx(styles.selectItem, i.red && styles.redItem)}
+               key={i.key}
+               onClick={i.clickCb}
+          >{i.key}</div>
+        ))}
       </div>
     </Popover>
   )

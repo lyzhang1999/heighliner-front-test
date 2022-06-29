@@ -48,7 +48,6 @@ export default function ShiftRole({
     }
 
     const shiftRoleReq: ShiftRoleReq = {
-      org_id: orgId,
       user_id: userId,
       body: {
         member_type: newMemberType,

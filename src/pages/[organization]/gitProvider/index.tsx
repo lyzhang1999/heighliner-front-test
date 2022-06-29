@@ -137,7 +137,10 @@ const Clusters = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>Cancel</Button>
-          <Button onClick={deleteProvider}>Confirm</Button>
+          <Button onClick={deleteProvider}
+                  color="error"
+                  variant="contained"
+          >Confirm</Button>
         </DialogActions>
       </Dialog>
       <Popover

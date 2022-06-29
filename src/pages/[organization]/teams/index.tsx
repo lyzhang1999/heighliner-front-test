@@ -27,6 +27,7 @@ import {Context} from "@/utils/store";
 import ShiftRole from "@/components/Team/ShiftRole";
 import DeleteMember from "@/components/Team/DeleteMember";
 import {get} from "lodash-es";
+import RoleTag from "@/components/RoleTag";
 
 enum Action {
   Invite = "Invite",
@@ -168,7 +169,9 @@ const Teams = () => {
                 <TableCell align="right">
                   <div className={styles.time}>{formatDate(created_at * 1000)}</div>
                 </TableCell>
-                <TableCell align="right">{member_type}</TableCell>
+                <TableCell align="right">
+                  <RoleTag type={member_type}/>
+                </TableCell>
                 <TableCell align="right">
                   {getActionSet(currentMemberType!, member_type).map(
                     (action, index) => {

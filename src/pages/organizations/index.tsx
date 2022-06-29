@@ -12,6 +12,7 @@ import {getOrgList, OrgList, roleType} from "@/utils/api/org";
 import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
 import {get, omit} from "lodash-es";
 import {useRouter} from "next/router";
+import RoleTag from "@/components/RoleTag";
 
 const Organizations = () => {
   const {state, dispatch} = useContext(Context);
@@ -95,9 +96,11 @@ const Organizations = () => {
                     {row.name}
                   </TableCell>
                   <TableCell align="right">
-                    {formatDate(row.created_at * 1000)}
+                    <div className={styles.time}> {formatDate(row.created_at * 1000)}</div>
                   </TableCell>
-                  <TableCell align="right">{member_type}</TableCell>
+                  <TableCell align="right">
+                    <RoleTag type={member_type}/>
+                  </TableCell>
 
                   <TableCell align="right">
                     {

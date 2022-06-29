@@ -21,6 +21,7 @@ import EyeClose from "/public/img/eye/close.svg";
 
 import styles from "./index.module.scss";
 import { cloneDeep } from "lodash-es";
+import {PassportReg} from "@/utils/config";
 
 enum Password {
   Old = "Old",
@@ -53,7 +54,7 @@ const commonRules = {
   validate: {
     regexp: (value: string) => {
       return (
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(value) ||
+        PassportReg.test(value) ||
         "Must contain uppercase, lowercase, and numbers."
       );
     },

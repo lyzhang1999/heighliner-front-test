@@ -10,6 +10,7 @@ import styles from "../login/index.module.scss";
 import Image from "next/image";
 import {signUpApi} from "@/utils/api/login";
 import {Message} from "@/utils/utils";
+import {PassportReg} from "@/utils/config";
 
 const inputStyle = {
   marginTop: "6px",
@@ -52,7 +53,8 @@ const formRule: RuleItem[] = [
       {[RuleKey.max]: 20, msg: "the max length is 20"},
       {[RuleKey.min]: 8, msg: "the min length is 8"},
       {
-        [RuleKey.reg]: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
+        // [RuleKey.reg]: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
+        [RuleKey.reg]: PassportReg,
         msg: "must contain uppercase, lowercase, and numbers"
       },
     ]

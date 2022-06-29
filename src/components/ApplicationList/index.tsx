@@ -17,7 +17,14 @@ type Props = {
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>,
 }
 
-export default function ApplicationList({list, clusterList, setDeleteID, setDeleteModalVisible, anchorEl, setAnchorEl}: Props) {
+export default function ApplicationList({
+                                          list,
+                                          clusterList,
+                                          setDeleteID,
+                                          setDeleteModalVisible,
+                                          anchorEl,
+                                          setAnchorEl
+                                        }: Props) {
   const handleClick = (e: any, id: number) => {
     e.stopPropagation();
     setAnchorEl(e?.currentTarget);
@@ -83,27 +90,37 @@ export default function ApplicationList({list, clusterList, setDeleteID, setDele
                 <div className={styles.right}>
                   <div className={styles.title}>
                     <span className={styles.name}>{item.app_name}</span>
-                    {
-                      (status === ApplicationStatus.COMPLETED) &&
-                      <span className={styles.statusIcon}>
-                      <img src="/img/application/create.webp" alt=""/>
-                      <span className={styles.running}>running</span>
+                    <span className={styles.statusWrapper}>
+                      {
+                        (status === ApplicationStatus.COMPLETED) &&
+                        <span className={styles.statusIcon}>
+                          <img src="/img/application/create.webp" alt=""/>
+                          <span className={styles.running}>running</span>
+                        </span>
+                      }
+                      {
+                        (status === ApplicationStatus.PROCESSING) &&
+                        <span className={styles.statusIcon}>
+                          <img src="/img/application/creating.webp" alt="" className={styles.rotate}/>
+                          <span className={styles.creating}>Creating</span>
+                        </span>
+                      }
+                      {
+                        (status === ApplicationStatus.FAILED) &&
+                        <span className={styles.statusIcon}>
+                          <img src="/img/application/createfailed.webp" alt=""/>
+                          <span className={styles.failed}>Failed</span>
+                        </span>
+                      }
+                        <div
+                            className={styles.moreIcon}
+                            onClick={(e) => handleClick(e, get(item, 'app_id'))}
+                          >
+                          <MoreVertIcon/>
+                        </div>
                     </span>
-                    }
-                    {
-                      (status === ApplicationStatus.PROCESSING) &&
-                      <span className={styles.statusIcon}>
-                      <img src="/img/application/creating.webp" alt="" className={styles.rotate}/>
-                      <span className={styles.creating}>Creating</span>
-                    </span>
-                    }
-                    {
-                      (status === ApplicationStatus.FAILED) &&
-                      <span className={styles.statusIcon}>
-                      <img src="/img/application/createfailed.webp" alt=""/>
-                      <span className={styles.failed}>Failed</span>
-                    </span>
-                    }
+
+
                   </div>
                   <div className={styles.status}>
                     Owner： <span className={styles.value}>{item.owner_name}</span>
@@ -117,12 +134,7 @@ export default function ApplicationList({list, clusterList, setDeleteID, setDele
                     {get(item, ['stack', 'name'])}
                   </span>
                   }
-                  <div
-                    className={styles.moreIcon}
-                    onClick={(e) => handleClick(e, get(item, 'app_id'))}
-                  >
-                    <MoreVertIcon/>
-                  </div>
+
                 </div>
               </div>
             </div>

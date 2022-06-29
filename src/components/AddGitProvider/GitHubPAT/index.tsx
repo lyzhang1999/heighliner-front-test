@@ -1,34 +1,61 @@
-import { TextField } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import { Button, TextField } from "@mui/material";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { GetGitProviderUrl } from "@/utils/config";
 
 import styles from "./index.module.scss";
+import { Message } from "@/utils/utils";
+import {
+  createGitProvider,
+  GitProvider,
+  GitProviderType,
+} from "@/utils/api/gitProviders";
 
 interface Props {
-  token: string;
-  setToken: Dispatch<SetStateAction<string>>;
-  gitProviderOrgName: string;
-  setGitProviderOrgName: Dispatch<SetStateAction<string>>;
   modalDisplay: boolean;
   setModalDisplay: Dispatch<SetStateAction<boolean>>;
   successCb?: Function;
 }
 
 export default function GitHubPAT(props: Props): React.ReactElement {
+  const [gitProviderOrgName, setGitProviderOrgName] = useState<string>("");
+  const [token, setToken] = useState<string>("");
+
+  const handleConfirm = () => {
+    if (!gitProviderOrgName) {
+      Message.error("Please input GitHub organization name");
+      return;
+    }
+    if (!token) {
+      Message.error("Please input GitHub personal access token");
+      return;
+    }
+
+    createGitProvider({
+      git_org_name: gitProviderOrgName,
+      provider: GitProvider.GitHub,
+      type: GitProviderType.PAT,
+      personal_access_token: token,
+    }).then((res) => {
+      Message.success("Add Git provider personal access token successfully");
+      props.setModalDisplay(false);
+      props.successCb && props.successCb();
+    });
+  };
+
   const changeGitProviderOrgNameHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    props.setGitProviderOrgName(event.target.value);
+    setGitProviderOrgName(event.target.value);
   };
 
   const changeTokenHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setToken(event.target.value);
+    setToken(event.target.value);
   };
 
   useEffect(() => {
-    props.setGitProviderOrgName("");
-    props.setToken("");
+    setGitProviderOrgName("");
+    setToken("");
   }, [props.modalDisplay]);
 
   return (
@@ -37,7 +64,7 @@ export default function GitHubPAT(props: Props): React.ReactElement {
         <div className={styles.label}>Name*</div>
         <TextField
           fullWidth
-          value={props.gitProviderOrgName}
+          value={gitProviderOrgName}
           onChange={changeGitProviderOrgNameHandler}
           size="small"
           placeholder="GIt provider organization name"
@@ -47,7 +74,7 @@ export default function GitHubPAT(props: Props): React.ReactElement {
         <div className={styles.label}>Access Token*</div>
         <TextField
           fullWidth
-          value={props.token}
+          value={token}
           size="small"
           onChange={changeTokenHandler}
           placeholder="GIt provider personal access Token"
@@ -62,6 +89,16 @@ export default function GitHubPAT(props: Props): React.ReactElement {
         >
           click me
         </span>
+      </div>
+      <div className={styles.bottom}>
+        <Button
+          // style={{ marginRight: "87px" }}
+          onClick={handleConfirm}
+          variant="contained"
+          className={styles.bottom}
+        >
+          create
+        </Button>
       </div>
     </div>
   );

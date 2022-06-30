@@ -147,28 +147,6 @@ const Teams = () => {
     setCurrentPage(newPage);
   }
 
-  // function getPopItem(): PopItem[] {
-  //   let item: PopItem[] = [];
-  //   if ([roleType.Owner].includes(activeType)) {
-  //     item.push({
-  //       key: "Delete",
-  //       red: true,
-  //       clickCb: () => setDeleteModalVisible(true)
-  //     }, {
-  //       key: "Transfer",
-  //       clickCb: () => {
-  //       }
-  //     })
-  //   } else if ([roleType.Admin, roleType.Member].includes(activeType)) {
-  //     item.push({
-  //       key: "Leave",
-  //       clickCb: () => {
-  //       }
-  //     })
-  //   }
-  //   return item;
-  // }
-
   function handleChange(v: ReactNode, user_id: number) {
     let value = get(v, 'props.children', '');
     if (!value) {
@@ -237,7 +215,7 @@ const Teams = () => {
                         label=""
                         size="small"
                         variant="standard"
-                        sx={{".MuiSelect-select": {padding: "4px 10px", fontSize: '14px'}}}
+                        sx={{".MuiSelect-select": {padding: "4px 10px", fontSize: '14px'}, width: '86px'}}
                         onChange={(e, v: ReactNode) => handleChange(v, user_id)}
                       >
                         <MenuItem value={MemberTypeEnum.Member}>{MemberTypeEnum.Member}</MenuItem>

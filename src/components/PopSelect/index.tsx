@@ -2,6 +2,7 @@ import styles from './index.module.scss'
 import clsx from "clsx";
 import * as React from "react";
 import {Popover} from "@mui/material";
+import {CommonProps} from "@/utils/commonType";
 
 
 export interface PopItem {
@@ -10,7 +11,7 @@ export interface PopItem {
   red?: boolean;
 };
 
-export interface PopProps {
+export interface PopProps extends CommonProps{
   item: PopItem[]
 }
 

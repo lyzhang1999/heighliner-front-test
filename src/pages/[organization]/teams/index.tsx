@@ -234,6 +234,7 @@ const Teams = () => {
                         value={member_type}
                         label=""
                         size="small"
+                        variant="standard"
                         sx={{".MuiSelect-select": {padding: "4px 10px", fontSize: '14px'}}}
                         onChange={(e, v: ReactNode) => handleChange(v, user_id)}
                       >

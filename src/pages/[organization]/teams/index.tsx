@@ -204,8 +204,10 @@ const Teams = () => {
         }]}
       />
       <div className={styles.teamsWrapper}>
-        <Table aria-label="simple table">
-          <TableHead>
+        <Table aria-label="simple table" className="transparentHeader">
+          <TableHead
+            sx={{"& .tr": {backgroundColor: "rgba(0,0,0,0);"}}}
+          >
             <TableRow>
               <TableCell>USERNAME</TableCell>
               <TableCell align="right">JOINT AT</TableCell>

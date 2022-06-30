@@ -109,7 +109,7 @@ const Organizations = () => {
         item={getPopItem()}
       />
       <div className={styles.tableWrapper}>
-        <Table sx={{}} aria-label="simple table">
+        <Table className="transparentHeader">
           <TableHead>
             <TableRow>
               <TableCell>ORGANIZATINO NAME</TableCell>
@@ -124,7 +124,6 @@ const Organizations = () => {
               return (
                 <TableRow
                   key={row.name}
-                  sx={{'&:last-child td, &:last-child th': {border: 0}}}
                 >
                   <TableCell component="th" scope="row">
                     {row.name}

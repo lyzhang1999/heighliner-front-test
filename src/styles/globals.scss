@@ -25,3 +25,31 @@ body {
   border-bottom-left-radius: 14px;
   box-shadow: -2px 4px 10px 0 rgba(226, 228, 245, 0.6);
 }
+
+.transparentHeader {
+  thead {
+    background-color: rgba(0, 0, 0, 0);
+
+    tr {
+
+      th {
+        border: 0px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      th, td {
+        background-color: #fff;
+
+      }
+
+      &:last-child {
+        td, th {
+          border: 0px;
+        }
+      }
+    }
+  }
+}

@@ -113,7 +113,7 @@ const Clusters = () => {
         </div>
       </Popover>
       <div className={styles.wrapper}>
-        <Table>
+        <Table className="transparentHeader">
           <TableHead>
             <TableRow>
               <TableCell width={200} align='right'>CLUSTER</TableCell>

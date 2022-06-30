@@ -79,7 +79,7 @@ const Clusters = () => {
     >
       <div className={styles.wrapper}>
         {!isEmpty(gitProviders) && (
-          <Table>
+          <Table className="transparentHeader">
             <TableHead>
               <TableRow>
                 <TableCell>GIT ORGANIZATION</TableCell>

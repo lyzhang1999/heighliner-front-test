@@ -23,7 +23,7 @@ import {
 } from "@/utils/api/org";
 import InviteMember from "@/components/Team/InviteMember";
 import {Context} from "@/utils/store";
-import {get, orderBy} from "lodash-es";
+import {get} from "lodash-es";
 import RoleTag from "@/components/RoleTag";
 import DeleteUser from "@/components/Team/DeleteUser"
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -100,14 +100,14 @@ const Teams = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
   const [deleteID, setDeleteId] = useState<number>(0);
-  let PopRef = React.useRef<React.MutableRefObject<null>>(null);
+  const [mountDom, setMountDom] = useState<Element | null>(null);
 
   function deleteSuccessCb() {
     flushTeams();
   }
 
   useEffect(() => {
-    PopRef?.current?.setSelect(null)
+    setMountDom(null);
   }, [deleteModalVisible])
 
   const {
@@ -178,12 +178,15 @@ const Teams = () => {
       }}
     >
       <PopSelect
-        ref={PopRef}
-        item={[{
-          key: "Delete",
-          red: true,
-          clickCb: () => setDeleteModalVisible(true)
-        }]}
+        {...{
+          mountDom,
+          setMountDom,
+          item: [{
+            key: "Delete",
+            red: true,
+            clickCb: () => setDeleteModalVisible(true)
+          }]
+        }}
       />
       <div className={styles.teamsWrapper}>
         <Table aria-label="simple table" className="transparentHeader">
@@ -269,9 +272,7 @@ const Teams = () => {
                     (currentMemberId !== user_id) &&
                     <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
                       setDeleteId(user_id);
-                      // setActiveType(member_type);
-                      // @ts-ignore
-                      PopRef?.current?.setSelect(event?.currentTarget)
+                      setMountDom(event?.currentTarget);
                     }}/>
                   }
                 </TableCell>

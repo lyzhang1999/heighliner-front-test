@@ -1,0 +1,19 @@
+@import "/src/styles/utils";
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include setVerticalPadding(20px);
+
+  button {
+    border-color: red;
+    color: red;
+  }
+
+  button:hover {
+    background-color: red;
+    border-color: red;
+    color: white;
+  }
+}

@@ -1,5 +1,6 @@
 import http from "@/utils/axios";
 import { getOriIdByContext } from "@/utils/utils";
+import { CreativeApiReturnField } from "../commonType";
 
 export enum GitProvider {
   GitHub = "GitHub",
@@ -10,16 +11,12 @@ export enum GitProviderType {
   GitHubApp = "GitHubApp",
 }
 
-interface GitProviderItemCommonFields {
-  created_at: number;
-  created_by: number;
+interface GitProviderItemCommonFields extends CreativeApiReturnField{
   created_by_name: string;
   git_org_name: string;
   id: number;
   org_id: number;
   provider: GitProvider;
-  updated_at: number;
-  updated_by: number;
 }
 
 export interface GitProviderItemForPAT extends GitProviderItemCommonFields {

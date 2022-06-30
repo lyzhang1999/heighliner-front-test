@@ -1,5 +1,6 @@
 import http from "@/utils/axios";
 import {getOriIdByContext} from "@/utils/utils";
+import { CreativeApiReturnField } from "../commonType";
 
 export enum ClusterProvider {
   Kubeconfig = "kubeconfig",
@@ -13,16 +14,13 @@ export enum ClusterStatus {
   "Inactive" = "Inactive",
 }
 
-export interface ClusterItem {
+export interface ClusterItem extends CreativeApiReturnField{
   id: number;
-  created_at: number;
-  updated_at: number;
   name: string;
   org_id: number;
   provider: ClusterProvider;
   kubeconfig: string;
   status: ClusterStatus;
-  created_by: string,
   created_by_name: string,
 }
 

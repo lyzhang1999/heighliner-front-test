@@ -1,10 +1,9 @@
 import http from "../axios";
+import { CreativeApiReturnField } from "../commonType";
 
-export interface Stack {
-  created_at: number;
+export interface Stack extends CreativeApiReturnField{
   id: number;
   name: string;
-  updated_at: number;
   url: string;
   version: string;
 }

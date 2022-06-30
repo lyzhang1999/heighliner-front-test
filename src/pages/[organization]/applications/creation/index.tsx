@@ -123,6 +123,7 @@ export default function Index(): React.ReactElement {
     handleSubmit,
     control,
     formState: { errors },
+    setValue
   } = useForm<FieldsDataType>({
     defaultValues: DefaultFieldsData,
   });
@@ -138,6 +139,21 @@ export default function Index(): React.ReactElement {
   useEffect(() => {
     getGitProviderList();
   }, [openAddGitProviderDrawer]);
+
+   // Choose only one cluster/gitProvider
+   useEffect(() => {
+    if (
+      clusterList.length === 1 &&
+      clusterList[0].status === ClusterStatus.Active
+    ) {
+      setValue(fieldsMap.cluster.name, clusterList[0].id.toString());
+    }
+  }, [clusterList]);
+  useEffect(() => {
+    if (gitProviderList.length === 1) {
+      setValue(fieldsMap.gitProvider.name, gitProviderList[0].id.toString());
+    }
+  }, [gitProviderList]);
 
   const onSubmit: SubmitHandler<FieldsDataType> = async (data) => {
     // Check the cluster status
@@ -155,12 +171,6 @@ export default function Index(): React.ReactElement {
         return;
       }
     }
-
-    // Get git_config's org_name, provider and token
-    const git_provider_id = +data[fieldsMap.gitProvider.name];
-    const git_config = gitProviderList.find(
-      (gitProvider) => git_provider_id === gitProvider.id
-    );
 
     const createApplicationRequest: CreateApplicationRequest = {
       cluster_id: +data[fieldsMap.cluster.name],

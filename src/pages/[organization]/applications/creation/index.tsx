@@ -42,7 +42,7 @@ import {
 } from "@/utils/CDN";
 import Spinner from "@/basicComponents/Loaders/Spinner";
 import GitHubSVG from "/public/img/gitprovider/GITHUB.svg";
-import AddGitProvider from "@/components/AddGitProvider";
+import AddGitProvider, { AddGitProviderSuccessCb } from "@/components/AddGitProvider";
 import { useClusterList } from "@/hooks/cluster";
 import useGitProviders from "@/hooks/gitProviders";
 import useStacks from "@/hooks/stacks";
@@ -154,6 +154,10 @@ export default function Index(): React.ReactElement {
       setValue(fieldsMap.gitProvider.name, gitProviderList[0].id.toString());
     }
   }, [gitProviderList]);
+
+  const addGitProviderSuccessCb: AddGitProviderSuccessCb = (gitProviderItem) => {
+    setValue(fieldsMap.gitProvider.name, gitProviderItem.id.toString());
+  }
 
   const onSubmit: SubmitHandler<FieldsDataType> = async (data) => {
     // Check the cluster status
@@ -556,6 +560,7 @@ export default function Index(): React.ReactElement {
       <AddGitProvider
         setModalDisplay={setOpenAddGitProviderDrawer}
         modalDisplay={openAddGitProviderDrawer}
+        successCb={addGitProviderSuccessCb}
       />
     </Layout>
   );

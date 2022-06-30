@@ -10,18 +10,29 @@ export enum GitProviderType {
   GitHubApp = "GitHubApp",
 }
 
-export interface GitProviderItem {
+interface GitProviderItemCommonFields {
   created_at: number;
   created_by: number;
   created_by_name: string;
   git_org_name: string;
   id: number;
-  installation_id: number;
   org_id: number;
-  personal_access_token: string;
   provider: GitProvider;
-  type: GitProviderType;
+  updated_at: number;
+  updated_by: number;
 }
+
+export interface GitProviderItemForPAT extends GitProviderItemCommonFields {
+  type: GitProviderType.PAT;
+  personal_access_token: string;
+}
+
+export interface GitProviderItemForGitHubApp extends GitProviderItemCommonFields {
+  type: GitProviderType.GitHubApp;
+  installation_id: number;
+}
+
+export type GitProviderItem = GitProviderItemForPAT | GitProviderItemForGitHubApp;
 
 export type GitProviderList = Array<GitProviderItem>;
 

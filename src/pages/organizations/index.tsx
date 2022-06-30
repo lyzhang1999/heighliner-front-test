@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 import {useContext, useEffect, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
-import {getOrgList, OrgList, roleType} from "@/utils/api/org";
+import {getOrgList, OrgList, RoleIcon, roleType} from "@/utils/api/org";
 import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
 import {get, omit} from "lodash-es";
 import {useRouter} from "next/router";
@@ -126,7 +126,12 @@ const Organizations = () => {
                   key={row.name}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    <div className={styles.name}>
+                      <img src={RoleIcon[member_type]} alt="user"/>
+                      <span>
+                        {row.name}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell align="right">
                     <div className={styles.time}> {formatDate(row.created_at * 1000)}</div>

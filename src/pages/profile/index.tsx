@@ -10,7 +10,8 @@ import Email from "@/components/setting/profile/Email";
 
 export default function Setting(): React.ReactElement {
   return (
-    <Layout notStandardLayout={true}>
+    <Layout notStandardLayout={true}
+    >
       <div className={styles.wrapper}>
         <div className={styles.container}>
           <Typography variant="h1">User Profile</Typography>

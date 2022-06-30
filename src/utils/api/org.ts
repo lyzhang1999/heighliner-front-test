@@ -31,6 +31,12 @@ export const roleType = {
   Member: "Member",
 };
 
+export const RoleIcon = {
+  [roleType.Owner]: '/img/teams/owner.webp',
+  [roleType.Admin]: '/img/teams/admin.webp',
+  [roleType.Member]: '/img/teams/member.webp'
+}
+
 export const getOrgList = (): Promise<Org> => {
   return new Promise((resolve, reject) => {
     http.get("/orgs?page=1&page_size=999").then(res => {

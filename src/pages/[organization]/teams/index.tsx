@@ -19,7 +19,7 @@ import {
   GetOrgMembersReq,
   GetOrgMembersRes,
   MemberType,
-  MemberTypeEnum, roleType, shiftRole, ShiftRoleReq,
+  MemberTypeEnum, RoleIcon, roleType, shiftRole, ShiftRoleReq,
 } from "@/utils/api/org";
 import InviteMember from "@/components/Team/InviteMember";
 import {Context} from "@/utils/store";
@@ -204,7 +204,12 @@ const Teams = () => {
                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
               >
                 <TableCell component="th" scope="row">
-                  {username}
+                  <div className={styles.name}>
+                    <img src={RoleIcon[member_type]} alt="user"/>
+                    <span>
+                        {username}
+                      </span>
+                  </div>
                 </TableCell>
                 <TableCell align="right">
                   <div className={styles.time}>{formatDate(created_at * 1000)}</div>

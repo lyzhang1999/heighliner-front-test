@@ -2,14 +2,14 @@ import { Button, TextField } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { GetGitProviderUrl } from "@/utils/config";
-
-import styles from "./index.module.scss";
 import { Message } from "@/utils/utils";
 import {
   createGitProvider,
   GitProvider,
   GitProviderType,
 } from "@/utils/api/gitProviders";
+
+import styles from "./index.module.scss";
 
 interface Props {
   modalDisplay: boolean;
@@ -39,7 +39,7 @@ export default function GitHubPAT(props: Props): React.ReactElement {
     }).then((res) => {
       Message.success("Add Git provider personal access token successfully");
       props.setModalDisplay(false);
-      props.successCb && props.successCb();
+      props.successCb && props.successCb(res);
     });
   };
 

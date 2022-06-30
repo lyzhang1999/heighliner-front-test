@@ -17,7 +17,7 @@ import "@/utils/axios";
 import Layout from "@/components/Layout";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { formatDate } from "@/utils/utils";
-import AddGitProvider from "@/components/AddGitProvider";
+import AddGitProvider, { AddGitProviderSuccessCb } from "@/components/AddGitProvider";
 
 import styles from "./index.module.scss";
 import popStyles from '@/components/PopSelect/index.module.scss'
@@ -36,7 +36,7 @@ const Clusters = () => {
     null
   );
 
-  function successCb() {
+  const successCb: AddGitProviderSuccessCb = () => {
     getGitProviders();
   }
 

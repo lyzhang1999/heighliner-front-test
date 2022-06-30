@@ -36,7 +36,7 @@ const DeleteOrganization = (props: Props) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Are yuo sure to delete the Organization?
+        Are you sure to delete the Organization?
       </DialogTitle>
       <DialogActions
         sx={{padding: '16px 24px'}}

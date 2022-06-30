@@ -82,8 +82,8 @@ const Menu = () => {
     {
       activeIcon: "/img/slider/icon7Active.svg",
       icon: "/img/slider/icon7.svg",
-      href: `/${name}/teams`,
-      name: "Teams",
+      href: `/${name}/members`,
+      name: "Members",
     },
   ];
   let avatar = get(userInfo, 'avatar', '');

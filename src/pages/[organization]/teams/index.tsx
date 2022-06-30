@@ -106,6 +106,10 @@ const Teams = () => {
     flushTeams();
   }
 
+  useEffect(() => {
+    PopRef?.current?.setSelect(null)
+  }, [deleteModalVisible])
+
   const {
     state: {currentOrganization},
   } = useContext(Context);

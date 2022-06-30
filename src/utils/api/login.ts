@@ -22,9 +22,9 @@ export const login = (params: Req): Promise<Res> => {
   if (code) {
     url = `/auth/token?login_type=${logintype}&code=${code}`
   } else {
-    url = `/auth/token?login_type=${logintype}&username=${user}&password=${pass}`
+    url = `/auth/token?login_type=${logintype}`
   }
-  return http.get(url)
+  return http.post(url, {username: user, password: pass})
 }
 
 interface SignUpReq {

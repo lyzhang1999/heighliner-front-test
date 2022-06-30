@@ -112,7 +112,7 @@ const Organizations = () => {
         <Table className="transparentHeader">
           <TableHead>
             <TableRow>
-              <TableCell>ORGANIZATINO NAME</TableCell>
+              <TableCell>ORGANIZATION NAME</TableCell>
               <TableCell align="right">CREATE TIME</TableCell>
               <TableCell align="right">ROLE</TableCell>
               <TableCell align="right"></TableCell>

@@ -28,10 +28,10 @@ const Organizations = () => {
   const [leaveModalVisible, setLeaveModalVisible] = useState<boolean>(false);
   const [leaveId, setLeaveId] = useState<number>(0);
   const [activeType, setActiveType] = React.useState<string>("");
+  const [mountDom, setMountDom] = useState<Element | null>(null);
 
   useEffect(() => {
-    // @ts-ignore
-    PopRef?.current?.setSelect(null)
+    setMountDom(null);
   }, [deleteModalVisible, leaveModalVisible, transferModalVisible])
 
   const router = useRouter();
@@ -76,8 +76,6 @@ const Organizations = () => {
     })
   }
 
-  let PopRef = React.useRef<React.MutableRefObject<null>>(null);
-
   function getPopItem(): PopItem[] {
     let item: PopItem[] = [];
     if ([roleType.Owner].includes(activeType)) {
@@ -105,8 +103,11 @@ const Organizations = () => {
       rightBtnCb={() => setOpen(true)}
     >
       <PopSelect
-        ref={PopRef}
-        item={getPopItem()}
+        {...{
+          mountDom,
+          setMountDom,
+          item: getPopItem()
+        }}
       />
       <div className={styles.tableWrapper}>
         <Table className="transparentHeader">
@@ -154,8 +155,7 @@ const Organizations = () => {
                           setTransferId(row.id);
                           setLeaveId(row.id);
                           setActiveType(member_type);
-                          // @ts-ignore
-                          PopRef?.current?.setSelect(event?.currentTarget)
+                          setMountDom(event?.currentTarget);
                         }}/>
                     }
                   </TableCell>

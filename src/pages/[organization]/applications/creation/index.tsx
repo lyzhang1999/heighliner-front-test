@@ -254,18 +254,19 @@ export default function Index(): React.ReactElement {
             </FormControl>
           )}
           rules={{
+            /** Follow with RFC 1035 */
             required: "Please enter your application name.",
             validate: {
               illegalCharacter: (value) => {
                 return (
-                  !/[^a-z0-9\.-]/.test(value) ||
-                  "The name only contain lowercase alphanumeric character, dot, or hyphen."
+                  !/[^a-z0-9-]/.test(value) ||
+                  "The name only contain lowercase alphanumeric character, or hyphen(-)."
                 );
               },
               illegalStart: (value) => {
                 return (
-                  /^[a-z0-9]/.test(value) ||
-                  "The name should start with lowercase alphanumeric character."
+                  /^[a-z]/.test(value) ||
+                  "The name should start with lowercase letter character."
                 );
               },
               illegalEnd: (value) => {
@@ -276,8 +277,8 @@ export default function Index(): React.ReactElement {
               },
             },
             maxLength: {
-              value: 253,
-              message: "The max length is 253 character.",
+              value: 63,
+              message: "The max length is 63 character.",
             },
           }}
         />

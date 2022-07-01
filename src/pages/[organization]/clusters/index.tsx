@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button, Dialog, DialogActions, DialogContent,
   DialogContentText, Popover,
   Table, TableBody, TableCell, TableRow, TableHead,
 } from '@mui/material';
-import {isEmpty} from "lodash-es";
+import {find, isEmpty} from "lodash-es";
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
-import {deleteCluster} from "@/utils/api/cluster";
-import { useClusterList } from '@/hooks/cluster';
-import { ClusterItemComp } from '@/components/Cluster/ClusterItem';
+import {ClusterStatus, deleteCluster} from "@/utils/api/cluster";
+import {useClusterList} from '@/hooks/cluster';
+import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 
 import styles from './index.module.scss';
 import popStyles from "@/components/PopSelect/index.module.scss";
@@ -36,6 +36,22 @@ const Clusters = () => {
       setAnchorEl(null);
     })
   }
+
+  useEffect(() => {
+    let hasInitializingCluster = find(clusterList, {status: ClusterStatus.Initializing});
+    let timer: (NodeJS.Timeout | null) = null;
+    if (hasInitializingCluster) {
+      timer = setTimeout(() => {
+        getClusters();
+      }, 1000 * 60);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    }
+  }, [clusterList])
 
   const handleClick = (id: number) => (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -70,8 +86,8 @@ const Clusters = () => {
           {...{
             setModalDisplay,
             modalDisplay,
-              successCb,
-            }}
+            successCb,
+          }}
         />
       </Layout>
     )
@@ -129,7 +145,7 @@ const Clusters = () => {
               clusterList.map((item, index) => (
                 <ClusterItemComp
                   key={index}
-                  {...{ item, handleClick }}
+                  {...{item, handleClick}}
                 />
               ))
             }

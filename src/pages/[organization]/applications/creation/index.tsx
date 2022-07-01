@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -17,7 +17,6 @@ import clsx from "clsx";
 
 import Layout from "@/components/Layout";
 import {
-  ClusterItem,
   ClusterProvider,
   ClusterStatus,
   getCluster,

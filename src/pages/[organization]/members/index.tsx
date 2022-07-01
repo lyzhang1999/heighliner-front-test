@@ -18,14 +18,13 @@ import {
   getOrgMembers,
   GetOrgMembersReq,
   GetOrgMembersRes,
-  MemberType,
   MemberTypeEnum, RoleIcon, roleType, shiftRole, ShiftRoleReq,
 } from "@/utils/api/org";
-import InviteMember from "@/components/Team/InviteMember";
+import InviteMember from "@/components/Member/InviteMember";
 import {Context} from "@/utils/store";
 import {get} from "lodash-es";
 import RoleTag from "@/components/RoleTag";
-import DeleteUser from "@/components/Team/DeleteUser"
+import DeleteUser from "@/components/Member/DeleteUser"
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PopSelect from "@/components/PopSelect";
 
@@ -39,61 +38,7 @@ type ActionSet = Array<keyof typeof Action>;
 
 const pageSize = 10;
 
-function getActionSet(
-  currentMemberType: MemberType,
-  comparedMemberType?: MemberType
-): ActionSet {
-  switch (true) {
-    // Check only current member type.
-    case comparedMemberType === undefined:
-      switch (true) {
-        // Owner has all actions.
-        case currentMemberType === MemberTypeEnum.Owner:
-          return [Action.Invite, Action.Delete, Action.ShiftRole];
-        // Admin have invite by default.
-        case currentMemberType === MemberTypeEnum.Admin:
-          return [Action.Invite];
-        // Member didn't any actions.
-        case currentMemberType === MemberTypeEnum.Member:
-          return [];
-      }
-    // Compare with other memberType
-    case comparedMemberType !== undefined:
-      switch (true) {
-        case currentMemberType === MemberTypeEnum.Owner:
-          switch (true) {
-            case comparedMemberType === MemberTypeEnum.Owner:
-              return [Action.Invite];
-            case comparedMemberType === MemberTypeEnum.Admin:
-              return [Action.Invite, Action.Delete, Action.ShiftRole];
-            case comparedMemberType === MemberTypeEnum.Member:
-              return [Action.Invite, Action.Delete, Action.ShiftRole];
-          }
-        case currentMemberType === MemberTypeEnum.Admin:
-          switch (true) {
-            case comparedMemberType === MemberTypeEnum.Owner:
-              return [Action.Invite];
-            case comparedMemberType === MemberTypeEnum.Admin:
-              return [Action.Invite];
-            case comparedMemberType === MemberTypeEnum.Member:
-              return [Action.Invite, Action.Delete];
-          }
-        case currentMemberType === MemberTypeEnum.Member:
-          switch (true) {
-            case comparedMemberType === MemberTypeEnum.Owner:
-              return [];
-            case comparedMemberType === MemberTypeEnum.Admin:
-              return [];
-            case comparedMemberType === MemberTypeEnum.Member:
-              return [];
-          }
-      }
-    default:
-      return [];
-  }
-}
-
-const Teams = () => {
+const Members = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
   const [orgMembers, setOrgMembers] = useState<GetOrgMembersRes>();
@@ -103,7 +48,7 @@ const Teams = () => {
   const [mountDom, setMountDom] = useState<Element | null>(null);
 
   function deleteSuccessCb() {
-    flushTeams();
+    flushMembers();
   }
 
   useEffect(() => {
@@ -116,7 +61,7 @@ const Teams = () => {
   const currentMemberType = currentOrganization?.member_type;
   const currentMemberId = currentOrganization?.user_id;
 
-  const flushTeams = () => {
+  const flushMembers = () => {
     setInviteDialog(false);
     // Fetch the team members
     const getOrgMembersReq: GetOrgMembersReq = {
@@ -131,11 +76,11 @@ const Teams = () => {
   };
 
   useEffect(() => {
-    flushTeams();
+    flushMembers();
   }, []);
 
   useEffect(() => {
-    flushTeams();
+    flushMembers();
   }, [currentPage]);
 
   // close server render
@@ -165,13 +110,13 @@ const Teams = () => {
 
     shiftRole(shiftRoleReq).then(() => {
       Message.success(`change role success`)
-      flushTeams();
+      flushMembers();
     });
   }
 
   return (
     <Layout
-      pageHeader="Teams"
+      pageHeader="Members"
       rightBtnDesc={([roleType.Owner, roleType.Admin].includes(currentMemberType as string)) ? "invite user" : ''}
       rightBtnCb={() => {
         setInviteDialog(true);
@@ -188,7 +133,7 @@ const Teams = () => {
           }]
         }}
       />
-      <div className={styles.teamsWrapper}>
+      <div>
         <Table aria-label="simple table" className="transparentHeader">
           <TableHead
             sx={{"& .tr": {backgroundColor: "rgba(0,0,0,0);"}}}
@@ -238,34 +183,6 @@ const Teams = () => {
                   }
                 </TableCell>
                 <TableCell align="right">
-
-                  {/*{getActionSet(currentMemberType!, member_type).map(*/}
-                  {/*  (action, index) => {*/}
-                  {/*    switch (action) {*/}
-                  {/*      case Action.ShiftRole:*/}
-                  {/*        return (*/}
-                  {/*          <ShiftRole*/}
-                  {/*            key={index}*/}
-                  {/*            currentMemberType={member_type}*/}
-                  {/*            username={username}*/}
-                  {/*            userId={user_id}*/}
-                  {/*            orgId={+getOriIdByContext()}*/}
-                  {/*            successCallback={flushTeams}*/}
-                  {/*          />*/}
-                  {/*        );*/}
-                  {/*      case Action.Delete:*/}
-                  {/*        return (*/}
-                  {/*          <DeleteMember*/}
-                  {/*            key={index}*/}
-                  {/*            userId={user_id}*/}
-                  {/*            orgId={+getOriIdByContext()}*/}
-                  {/*            username={username}*/}
-                  {/*            successCallback={flushTeams}*/}
-                  {/*          />*/}
-                  {/*        );*/}
-                  {/*    }*/}
-                  {/*  }*/}
-                  {/*)}*/}
                   {
                     ![roleType.Owner].includes(member_type) &&
                     [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
@@ -304,7 +221,7 @@ const Teams = () => {
       <InviteMember
         open={inviteDialog}
         setOpen={setInviteDialog}
-        inviteMemberSuccessCb={flushTeams}
+        inviteMemberSuccessCb={flushMembers}
       />
       <DeleteUser
         {...{
@@ -318,4 +235,4 @@ const Teams = () => {
   );
 };
 
-export default Teams;
+export default Members;

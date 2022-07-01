@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import {NextPage} from "next";
 import clsx from "clsx";
-import { TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import {useRouter} from "next/router";
 
 import {getPopUpsWindowFeatures} from "@/utils/window";
@@ -31,7 +31,7 @@ const Login: NextPage = () => {
       let list = res.data;
       dispatch({
         organizationList: list,
-        currentOrganization: omit({ ...list[0], ...list[0].member}, 'member')
+        currentOrganization: omit({...list[0], ...list[0].member}, 'member')
       });
       let oriName = encodeURIComponent(list[0]?.name);
       router.push(`${oriName}/applications`);

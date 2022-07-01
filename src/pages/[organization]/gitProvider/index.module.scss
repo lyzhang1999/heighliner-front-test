@@ -12,9 +12,7 @@
   }
 }
 
-
 .wrapper {
-  //background-color: #fff;
 
   .orgWrapper {
     display: flex;
@@ -43,6 +41,6 @@
   }
 }
 
-.time{
+.time {
   @include timeStyles;
 }

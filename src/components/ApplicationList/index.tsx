@@ -112,15 +112,13 @@ export default function ApplicationList({
                           <span className={styles.failed}>Failed</span>
                         </span>
                       }
-                        <div
-                            className={styles.moreIcon}
-                            onClick={(e) => handleClick(e, get(item, 'app_id'))}
-                          >
+                      <div
+                        className={styles.moreIcon}
+                        onClick={(e) => handleClick(e, get(item, 'app_id'))}
+                      >
                           <MoreVertIcon/>
                         </div>
                     </span>
-
-
                   </div>
                   <div className={styles.status}>
                     Owner： <span className={styles.value}>{item.owner_name}</span>
@@ -131,10 +129,9 @@ export default function ApplicationList({
                   {
                     get(item, ['stack', 'name']) &&
                     <span className={styles.stack}>
-                    {get(item, ['stack', 'name'])}
-                  </span>
+                      {get(item, ['stack', 'name'])}
+                    </span>
                   }
-
                 </div>
               </div>
             </div>

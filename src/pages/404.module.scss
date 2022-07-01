@@ -1,0 +1,27 @@
+.wrapper {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  justify-content: center;
+
+  .content {
+    display: flex;
+    align-items: center;
+
+    .count {
+      display: inline-block;
+      border-right: 1px solid rgba(0, 0, 0, 0.3);
+      margin: 0px 20px 0px 0px;
+      padding: 10px 23px 10px 0px;
+      font-size: 24px;
+      font-weight: 500;
+      vertical-align: top;
+    }
+
+    .home {
+      cursor: pointer;
+      color: #2f84ea;
+    }
+  }
+}

@@ -62,7 +62,7 @@ function App({Component, pageProps}: AppProps) {
           });
           let defaultOriName = getDefaultOrg(list).name;
           if ((ifLoginDisablePage.includes(router.pathname))) {
-            location.pathname = `${defaultOriName}/applications`;
+            location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
             return;
           }
           if (noCheckOrgNamePage.includes(location.pathname)) {
@@ -76,7 +76,7 @@ function App({Component, pageProps}: AppProps) {
             startRender();
             return;
           }
-          location.pathname = `${defaultOriName}/applications`;
+          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
         }).catch(err => {
           router.push("/login");
           startRender();

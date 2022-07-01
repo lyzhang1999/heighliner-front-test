@@ -31,7 +31,7 @@ import {
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
 import { get } from "lodash-es";
-import { formatDate, getOrganizationNameByUrl, Message } from "@/utils/utils";
+import {formatDate, getUrlEncodeName, Message} from "@/utils/utils";
 import {
   getClusterIcon,
   GinIcon,
@@ -202,9 +202,7 @@ export default function Index(): React.ReactElement {
 
     createApplication(createApplicationRequest).then((res) => {
       router.push(
-        `/${encodeURIComponent(
-          getOrganizationNameByUrl()
-        )}/applications/creating?app_id=${res.app_id}&release_id=${
+        `/${getUrlEncodeName()}/applications/creating?app_id=${res.app_id}&release_id=${
           res.release_id
         }`
       );

@@ -46,10 +46,10 @@ const Menu = () => {
     }
   };
 
-  let name = get(currentOrganization, 'name', '');
+  let name = encodeURIComponent(get(currentOrganization, 'name', ''));
 
   function goHome() {
-    router.push(`/${getOriNameByContext()}/applications`)
+    router.push(`/${encodeURIComponent(getOriNameByContext())}/applications`)
   }
 
   const menuList = [

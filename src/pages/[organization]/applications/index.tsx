@@ -3,7 +3,7 @@ import {Select, MenuItem, InputLabel, FormControl, FormHelperText} from "@mui/ma
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext, uuid} from "@/utils/utils";
+import {getOrganizationNameByUrl, getOriIdByContext, getUrlEncodeName, uuid} from "@/utils/utils";
 import {ApplicationObject, getApplicationList, getAppListReq} from "@/utils/api/application";
 import ApplicationList from "@/components/ApplicationList";
 import {ClusterItem, getClusterList} from "@/utils/api/cluster";
@@ -56,16 +56,6 @@ const Applications = () => {
     });
   }
 
-  function goPanel(appId: number, releaseId: number) {
-    const queryParameters = new URLSearchParams({
-      app_id: appId.toString(),
-      release_id: releaseId.toString(),
-    });
-    router.push(
-      `/${getOrganizationNameByUrl()}/applications/panel?${queryParameters.toString()}`
-    );
-  }
-
   function handleChange(a: ReactNode, key: string) {
     let val = get(a, 'props.value');
     let currentVal = get(selectRule, [key, 0]);
@@ -91,9 +81,7 @@ const Applications = () => {
       rightBtnDesc="add application"
       rightBtnCb={() => {
         router.push(
-          `/${encodeURIComponent(
-            getOrganizationNameByUrl()
-          )}/applications/creation`
+          `/${getUrlEncodeName()}/applications/creation`
         );
       }}
       notStandardLayout
@@ -154,10 +142,10 @@ const Applications = () => {
         </div>
         <ApplicationList
           {...{
-              list: applist,
-              clusterList,
-              setDeleteID,
-              setDeleteModalVisible,
+            list: applist,
+            clusterList,
+            setDeleteID,
+            setDeleteModalVisible,
             anchorEl,
             setAnchorEl
           }}

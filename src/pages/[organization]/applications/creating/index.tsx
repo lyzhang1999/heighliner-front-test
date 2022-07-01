@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
 import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext, getQuery, Message} from "@/utils/utils";
+import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
@@ -172,7 +172,7 @@ const CreatingApplication = () => {
 
   function goDashboard() {
     Message.success('Creat Success');
-    router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
+    router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
   function skip() {

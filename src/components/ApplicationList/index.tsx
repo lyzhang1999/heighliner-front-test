@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 import {ApplicationObject, ApplicationStatus} from "@/utils/api/application";
-import {getOrganizationNameByUrl} from "@/utils/utils";
+import {getUrlEncodeName} from "@/utils/utils";
 import {useRouter} from "next/router";
 import {find, get} from "lodash-es";
 import {ClusterItem} from "@/utils/api/cluster";
@@ -46,11 +46,11 @@ export default function ApplicationList({
   function goPanel(appId: number, releaseId: number, stauts: any) {
     if (stauts === ApplicationStatus.COMPLETED) {
       router.push(
-        `/${getOrganizationNameByUrl()}/applications/panel?app_id=${appId}&release_id=${releaseId}`
+        `/${getUrlEncodeName()}/applications/panel?app_id=${appId}&release_id=${releaseId}`
       );
     } else {
       router.push(
-        `/${getOrganizationNameByUrl()}/applications/creating?app_id=${appId}&release_id=${releaseId}`
+        `/${getUrlEncodeName()}/applications/creating?app_id=${appId}&release_id=${releaseId}`
       );
     }
   }

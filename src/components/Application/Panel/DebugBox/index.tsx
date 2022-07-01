@@ -51,10 +51,8 @@ export default function DebugBox({
       action: action,
     };
 
-    // console.log(parameters)
-
     const queryString = new URLSearchParams(parameters);
-    window.open(`vscode://nocalhost.nocalhost?${queryString.toString()}`);
+    window.open(`vscode://forkmain.forkmain?${queryString.toString()}`);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -124,20 +124,6 @@ export default function Index(): React.ReactElement {
   useEffect(() => {
     calculateUnderBgStyle(0);
   }, []);
-  useEffect(() => {
-    calculateUnderBgStyle(2);
-  }, [clusterList]);
-  useEffect(() => {
-    calculateUnderBgStyle(3);
-  }, [gitProviderList]);
-
-  // When open add cluster or git provider drawer, updating data.
-  useEffect(() => {
-    getClusterList();
-  }, [openAddClusterDrawer]);
-  useEffect(() => {
-    getGitProviderList();
-  }, [openAddGitProviderDrawer]);
 
   // Choose only one cluster/gitProvider
   useEffect(() => {
@@ -154,13 +140,18 @@ export default function Index(): React.ReactElement {
     }
   }, [gitProviderList]);
 
+  const addClusterSuccessCb = () => {
+    getClusterList();
+    setOpenAddClusterDrawer(false);
+  };
+
   const addGitProviderSuccessCb: AddGitProviderSuccessCb = (
     gitProviderItem
   ) => {
+    getGitProviderList();
     setValue(fieldsMap.gitProvider, gitProviderItem.id.toString());
   };
 
-  // Polling status for initializing cluster.
   useEffect(() => {
     const hasInitializingCluster = clusterList.some(
       (cluster) => cluster.status === ClusterStatus.Initializing
@@ -168,10 +159,10 @@ export default function Index(): React.ReactElement {
 
     let timer: ReturnType<typeof setTimeout>;
     if (hasInitializingCluster) {
-        timer = setTimeout(()=> {
-          getClusterList();
-          clearTimeout(timer);
-        }, 30000);
+      timer = setTimeout(() => {
+        getClusterList();
+        clearTimeout(timer);
+      }, 30000);
     }
 
     return () => clearTimeout(timer);
@@ -257,24 +248,15 @@ export default function Index(): React.ReactElement {
             /** Follow with RFC 1035 */
             required: "Please enter your application name.",
             validate: {
-              illegalCharacter: (value) => {
-                return (
-                  !/[^a-z0-9-]/.test(value) ||
-                  "The name should only contain lowercase alphanumeric character, or hyphen(-)."
-                );
-              },
-              illegalStart: (value) => {
-                return (
-                  /^[a-z]/.test(value) ||
-                  "The name should start with lowercase letter character."
-                );
-              },
-              illegalEnd: (value) => {
-                return (
-                  /[a-z0-9]$/.test(value) ||
-                  "Then name should end with lowercase alphanumeric character."
-                );
-              },
+              illegalCharacter: (value) =>
+                !/[^a-z0-9-]/.test(value) ||
+                "The name should only contain lowercase alphanumeric character, or hyphen(-).",
+              illegalStart: (value) =>
+                /^[a-z]/.test(value) ||
+                "The name should start with lowercase letter character.",
+              illegalEnd: (value) =>
+                /[a-z0-9]$/.test(value) ||
+                "Then name should end with lowercase alphanumeric character.",
             },
             maxLength: {
               value: 63,
@@ -570,9 +552,7 @@ export default function Index(): React.ReactElement {
       </form>
       <NewClusterModal
         setModalDisplay={setOpenAddClusterDrawer}
-        successCb={() => {
-          setOpenAddClusterDrawer(false);
-        }}
+        successCb={addClusterSuccessCb}
         modalDisplay={openAddClusterDrawer}
       />
       <AddGitProvider

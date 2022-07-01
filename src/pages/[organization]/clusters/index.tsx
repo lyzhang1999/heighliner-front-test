@@ -45,11 +45,7 @@ const Clusters = () => {
         getClusters();
       }, 1000 * 60);
     }
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    }
+    return () => clearTimeout(timer);
   }, [clusterList])
 
   const handleClick = (id: number) => (event: React.MouseEvent<HTMLDivElement>) => {

@@ -1,7 +1,6 @@
 import * as React from "react";
 import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
-import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
 import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
@@ -13,22 +12,18 @@ import {get} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
 
-
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
   const [durationTime, setDurationTime] = useState<number>(0);
-  const [skipTime, setSkipTime] = useState<number>(5);
+  const [skipTime, setSkipTime] = useState<number>(-1);
   const router = useRouter();
 
   let app_id: string = getQuery('app_id');
   let release_id: string = getQuery('release_id');
 
-  let durationTimeInterval: any = null;
-  let getStatusInterval: any = null;
-  let getlogTimeOut: any = null;
-  let resizeCb: any = null;
-  let skipTimer: any = null;
+  let durationTimeInterval: ReturnType<typeof setInterval>;
+  let getStatusInterval: any;
   let term: any = null;
   let leaveFlag: boolean = false;
   let ro: any = null;
@@ -53,19 +48,15 @@ const CreatingApplication = () => {
           setDurationTime(Math.trunc((completion_time - start_time)));
         }
         getStatusInterval && clearInterval(getStatusInterval);
-        getStatusInterval = null;
         durationTimeInterval && clearInterval(durationTimeInterval)
-        durationTimeInterval = null;
-        skip();
+        setSkipTime(5);
       }
       if (status === ApplicationStatus.FAILED) {
         if (completion_time && start_time) {
           setDurationTime(Math.trunc((completion_time - start_time)));
         }
         getStatusInterval && clearInterval(getStatusInterval);
-        getStatusInterval = null;
         durationTimeInterval && clearInterval(durationTimeInterval)
-        durationTimeInterval = null;
       }
     })
   }
@@ -73,60 +64,47 @@ const CreatingApplication = () => {
   useEffect(() => {
     getStatus(true);
     getStatusInterval = setInterval(getStatus, 5000);
-    getlog();
+    renderLog();
     return () => {
       getStatusInterval && clearInterval(getStatusInterval);
-      getStatusInterval = null;
       durationTimeInterval && clearInterval(durationTimeInterval);
-      durationTimeInterval = null;
-      resizeCb && window.removeEventListener('resize', resizeCb);
-      skipTimer && clearInterval(skipTimer);
-      skipTimer = null;
-      getlogTimeOut && clearTimeout(getlogTimeOut);
-      getlogTimeOut = null;
       leaveFlag = true;
       try {
         ro && ro.unobserve(document.getElementById('TERMIANLWRAPPER'));
       } catch (e) {
-        console.warn('ro.unobserve error')
+        console.log('ro.unobserve error')
       }
     }
   }, [])
 
-
-  function getlog() {
+  function renderLog() {
     const initTerminal = async () => {
       const {Terminal} = await import('xterm')
       const {FitAddon} = await import('xterm-addon-fit');
       const fitAddon = new FitAddon();
       term = new Terminal({
-        fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
+        fontFamily: "Monaco, Menlo, Consolas, Courier New, monospace",
         fontSize: 12,
         lineHeight: 1,
         scrollback: 999999,
       })
       term.loadAddon(fitAddon);
-      term.open(document.getElementById('terminal'));
+      term.open(document.getElementById('TERMINAL'));
       fitAddon.fit();
-
       var target = document.getElementById('TERMIANLWRAPPER');
-
       ro = new ResizeObserver(() => {
         try {
           fitAddon.fit();
         } catch (e) {
-          console.warn('fitAddon.fit() err')
+          console.log('fitAddon.fit() err')
         }
       });
-
       if (target) {
         ro.observe(target);
       }
-
-      window.addEventListener('resize', resizeCb);
       getLogEventSource();
     }
-    getlogTimeOut = setTimeout(() => {
+    setTimeout(() => {
       initTerminal()
     }, 0);
   }
@@ -175,17 +153,17 @@ const CreatingApplication = () => {
     router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
-  function skip() {
-    skipTimer = setInterval(() => {
-      setSkipTime(t => {
-        if (t === 1) {
-          clearInterval(skipTimer);
-          goDashboard();
-        }
-        return t - 1;
-      });
-    }, 1000)
-  }
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (skipTime > 0) {
+      timer = setTimeout(() => {
+        setSkipTime(skipTime - 1);
+      }, 1000)
+    } else if (skipTime === 0) {
+      goDashboard();
+    }
+    return () => clearTimeout(timer)
+  }, [skipTime])
 
   // close server render
   React.useEffect(() => {
@@ -213,7 +191,7 @@ const CreatingApplication = () => {
             </Alert>
           }
         </div>
-        <div id="terminal"
+        <div id="TERMINAL"
              className={styles.terminal}
         >
         </div>

@@ -51,11 +51,7 @@ const Applications = () => {
         getList();
       }, 1000 * 60);
     }
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    }
+    return () => clearTimeout(timer);
   }, [applist])
 
   useEffect(() => {

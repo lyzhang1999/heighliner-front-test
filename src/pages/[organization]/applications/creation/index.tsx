@@ -124,6 +124,12 @@ export default function Index(): React.ReactElement {
   useEffect(() => {
     calculateUnderBgStyle(0);
   }, []);
+  useEffect(() => {
+    calculateUnderBgStyle(2);
+  }, [clusterList]);
+  useEffect(() => {
+    calculateUnderBgStyle(3);
+  }, [gitProviderList]);
 
   // When open add cluster or git provider drawer, updating data.
   useEffect(() => {

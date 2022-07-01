@@ -260,7 +260,7 @@ export default function Index(): React.ReactElement {
               illegalCharacter: (value) => {
                 return (
                   !/[^a-z0-9-]/.test(value) ||
-                  "The name only contain lowercase alphanumeric character, or hyphen(-)."
+                  "The name only contains lowercase alphanumeric character, or hyphen(-)."
                 );
               },
               illegalStart: (value) => {

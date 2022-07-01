@@ -10,7 +10,7 @@ import {
 } from "@/utils/api/gitProviders";
 
 import styles from "./index.module.scss";
-import {trim} from "lodash-es";
+import { trim } from "lodash-es";
 
 interface Props {
   modalDisplay: boolean;
@@ -47,11 +47,11 @@ export default function GitHubPAT(props: Props): React.ReactElement {
   const changeGitProviderOrgNameHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setGitProviderOrgName(event.target.value);
+    setGitProviderOrgName(trim(event.target.value));
   };
 
   const changeTokenHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setToken(event.target.value);
+    setToken(trim(event.target.value));
   };
 
   useEffect(() => {

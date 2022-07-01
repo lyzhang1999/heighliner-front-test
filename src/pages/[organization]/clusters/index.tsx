@@ -39,7 +39,7 @@ const Clusters = () => {
 
   useEffect(() => {
     let hasInitializingCluster = find(clusterList, {status: ClusterStatus.Initializing});
-    let timer: (NodeJS.Timeout | null) = null;
+    let timer: ReturnType<typeof setTimeout>;
     if (hasInitializingCluster) {
       timer = setTimeout(() => {
         getClusters();
@@ -48,7 +48,6 @@ const Clusters = () => {
     return () => {
       if (timer) {
         clearTimeout(timer);
-        timer = null;
       }
     }
   }, [clusterList])

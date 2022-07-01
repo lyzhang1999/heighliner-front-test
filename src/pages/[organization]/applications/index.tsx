@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import {getOriIdByContext, getUrlEncodeName, uuid} from "@/utils/utils";
 import {ApplicationObject, ApplicationStatus, getApplicationList, getAppListReq} from "@/utils/api/application";
 import ApplicationList from "@/components/ApplicationList";
-import {ClusterItem, ClusterStatus, getClusterList} from "@/utils/api/cluster";
+import {ClusterItem, getClusterList} from "@/utils/api/cluster";
 import {getStacks, Stack} from "@/utils/api/stack";
 import {getOrgMembers, Member} from "@/utils/api/org";
 import {find, get} from "lodash-es";
@@ -45,7 +45,7 @@ const Applications = () => {
 
   useEffect(() => {
     let hasProcessingApp = find(applist, {last_release: {status: ApplicationStatus.PROCESSING}});
-    let timer: (NodeJS.Timeout | null) = null;
+    let timer: ReturnType<typeof setTimeout>;
     if (hasProcessingApp) {
       timer = setTimeout(() => {
         getList();
@@ -54,7 +54,6 @@ const Applications = () => {
     return () => {
       if (timer) {
         clearTimeout(timer);
-        timer = null;
       }
     }
   }, [applist])

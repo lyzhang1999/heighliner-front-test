@@ -1,8 +1,8 @@
-import { Button, TextField } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {Button, TextField} from "@mui/material";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 
-import { GetGitProviderUrl } from "@/utils/config";
-import { Message } from "@/utils/utils";
+import {GetGitProviderUrl} from "@/utils/config";
+import {Message} from "@/utils/utils";
 import {
   createGitProvider,
   GitProvider,
@@ -23,20 +23,20 @@ export default function GitHubPAT(props: Props): React.ReactElement {
   const [token, setToken] = useState<string>("");
 
   const handleConfirm = () => {
-    if (!gitProviderOrgName) {
+    if (!trim(gitProviderOrgName)) {
       Message.error("Please input GitHub organization name");
       return;
     }
-    if (!token) {
+    if (!trim(token)) {
       Message.error("Please input GitHub personal access token");
       return;
     }
 
     createGitProvider({
-      git_org_name: gitProviderOrgName,
+      git_org_name: trim(gitProviderOrgName),
       provider: GitProvider.GitHub,
       type: GitProviderType.PAT,
-      personal_access_token: token,
+      personal_access_token: trim(token),
     }).then((res) => {
       Message.success("Add Git provider personal access token successfully");
       props.setModalDisplay(false);
@@ -82,7 +82,7 @@ export default function GitHubPAT(props: Props): React.ReactElement {
         />
       </div>
       <div className={styles.help}>
-        <img src="/img/gitprovider/InfoOutlined.webp" alt="" />
+        <img src="/img/gitprovider/InfoOutlined.webp" alt=""/>
         <span className={styles.desc}>How to get access token?</span>
         <span
           className={styles.link}

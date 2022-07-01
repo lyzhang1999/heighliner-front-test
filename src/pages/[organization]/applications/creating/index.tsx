@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
 import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext, getQuery, Message} from "@/utils/utils";
+import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
@@ -106,7 +106,6 @@ const CreatingApplication = () => {
         scrollback: 999999,
       })
       term.loadAddon(fitAddon);
-      // @ts-ignore
       term.open(document.getElementById('terminal'));
       fitAddon.fit();
 
@@ -136,7 +135,10 @@ const CreatingApplication = () => {
     console.warn('getLogEventSource')
     const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
     const token = cookie.getCookie('token');
-    var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}, heartbeatTimeout: 1000 * 60 * 5});
+    var eventSource = new EventSourcePolyfill(url, {
+      headers: {Authorization: `Bearer ${token}`},
+      heartbeatTimeout: 1000 * 60 * 5
+    });
     eventSource.onerror = function () {
       console.warn('onerror');
       eventSource.close();
@@ -170,7 +172,7 @@ const CreatingApplication = () => {
 
   function goDashboard() {
     Message.success('Creat Success');
-    router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
+    router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
   function skip() {
@@ -208,8 +210,6 @@ const CreatingApplication = () => {
             status === ApplicationStatus.COMPLETED &&
             <Alert severity="success">
               Success, auto go panel page after {skipTime}s
-              {/*<span className={styles.goDashboard}*/}
-              {/*      onClick={goDashboard}>dashboard</span>*/}
             </Alert>
           }
         </div>
@@ -223,4 +223,3 @@ const CreatingApplication = () => {
 }
 
 export default CreatingApplication
-// http://localhost/zhangze/applications/creating?app_id=42&release_id=42

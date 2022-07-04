@@ -88,21 +88,20 @@ const Login: NextPage = () => {
 
   return (
     <div className={clsx("relative", styles.container)}>
-      <div className={clsx("absolute flex gap-4", styles.logo)}>
-        <Image
-          src="/img/logo/header-logo.webp"
-          alt="ForkMain"
-          width={51}
-          height={33}
-        />
-        <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5}/>
-      </div>
+      {/*<div className={clsx("absolute flex gap-4", styles.logo)}>*/}
+      {/*  <Image*/}
+      {/*    src="/img/logo/header-logo.webp"*/}
+      {/*    alt="ForkMain"*/}
+      {/*    width={51}*/}
+      {/*    height={33}*/}
+      {/*  />*/}
+      {/*  <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5}/>*/}
+      {/*</div>*/}
 
       <div className={styles.cardWrapper}>
         <div className={styles.title}>
-          Sign up a Account
+          Sign up
         </div>
-
         <TextField id="standard-basic" label="User" variant="standard" sx={inputStyle}
                    value={inputValue[Key.USERNAME]}
                    onChange={(e) => {
@@ -136,6 +135,7 @@ const Login: NextPage = () => {
                      }
                    }}
         />
+
         <div className={styles.action}>
           <div className={styles.btn}>
             {/*Forgot Password*/}

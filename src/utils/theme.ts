@@ -100,6 +100,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          fontFamily: "Inter"
+        }
+      }
+    },
   },
 });
 

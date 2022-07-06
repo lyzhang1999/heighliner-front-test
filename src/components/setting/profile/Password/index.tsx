@@ -42,7 +42,7 @@ const defaultValues = {
   [FieldsMap.NewPasswordConfirmation]: "",
 };
 
-const commonRules = {
+export const commonRules = {
   minLength: {
     value: 8,
     message: "At least 8 characters.",

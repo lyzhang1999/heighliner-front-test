@@ -1,7 +1,7 @@
 @import "../../styles/globalVar.scss";
 
 .container {
-  background-image: url("/img/login/login-page-bg@3x.webp");
+  //background-image: url("/img/login/login-page-bg@3x.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -43,17 +43,25 @@
   width: 366px;
   background-color: #fff;
   position: absolute;
-  left: 30%;
+  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   padding: 24px 40px 40px 40px;
+  box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.8);
+
+  .form {
+    :global(.MuiFormControl-root) {
+      //min-height: 64px;
+      margin-top: 10px;
+    }
+  }
 
   .title {
-    font-size: 23px;
+    font-size: 22px;
     font-weight: 500;
-    text-align: left;
+    //text-align: left;
     line-height: 2;
-    color: #6002ee;
+    color: #343434;
   }
 
   .githubLoginBtn {
@@ -70,32 +78,39 @@
   }
 
   .action {
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 2;
-    text-align: left;
-    color: #6002ee;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #464646;
+    margin-top: 16px;
 
     .btn {
-      cursor: pointer;
+      .login {
+        color: #1b51b9;
+        cursor: pointer;
+      }
     }
   }
 
   .signIn {
     margin-top: 20px;
-    font-size: 11px;
-    font-weight: 500;
     text-align: center;
     color: #fff;
     cursor: pointer;
-    background-color: #6002ee;
-    line-height: 37px;
-    border-radius: 0;
-    height: 37px;
+    background-color: #1b51b9;
+    line-height: 40px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 100%;
+    border-width: 0px;
+    outline: #1b51b9;
   }
 }
 

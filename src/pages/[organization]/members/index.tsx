@@ -134,14 +134,21 @@ const Members = () => {
         }}
       />
       <div>
-        <Table aria-label="simple table" className="transparentHeader">
+        <Table
+          aria-label="simple table"
+          className="transparentHeader"
+          sx={{
+            fontFamily: 'Inter'
+          }}
+          >
           <TableHead
             sx={{"& .tr": {backgroundColor: "rgba(0,0,0,0);"}}}
           >
             <TableRow>
-              <TableCell>USERNAME</TableCell>
-              <TableCell align="right">JOINT AT</TableCell>
-              <TableCell align="right">ROLE</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Joined at</TableCell>
+              <TableCell align="right">Role</TableCell>
+              <TableCell align="right">Status</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
@@ -181,6 +188,9 @@ const Members = () => {
                       :
                       <RoleTag type={member_type}/>
                   }
+                </TableCell>
+                <TableCell align="right">
+                  xxx
                 </TableCell>
                 <TableCell align="right">
                   <div className={styles.moreIcon}>

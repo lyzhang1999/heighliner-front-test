@@ -16,7 +16,16 @@ import {CssBaseline} from "@mui/material";
 import {find} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 
-const noCheckLoginPage = ['/login/github', '/signup', '/distributor/post-install-github-app', '/inviteConfirm', '/forgotPassword', "/resetPassword"];
+const noCheckLoginPage = [
+  '/entrance/sign-in',
+  '/entrance/sign-up',
+  '/login/github',
+  '/signup',
+  '/distributor/post-install-github-app',
+  '/inviteConfirm',
+  '/forgotPassword',
+  "/resetPassword"
+];
 const noCheckOrgNamePage = ['/organizations', '/settings'];
 const ifLoginDisablePage = ["/", '/login', '/signup'];
 

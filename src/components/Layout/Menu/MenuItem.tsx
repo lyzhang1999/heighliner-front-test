@@ -14,14 +14,18 @@ function isActiveNav(currentPath: string) {
   }
 }
 
-interface MenuProps {
+export type MenuList = Array<{
   activeIcon: string,
   icon: string,
   href: string,
   name: string,
+}>
+
+interface Props {
+  list: MenuList;
 }
 
-export default function MenuItem({list}: { list: MenuProps[] }) {
+export default function MenuItem({ list }: Props) {
 
   const {state: {menuSpread}} = useContext(Context);
   const router = useRouter();

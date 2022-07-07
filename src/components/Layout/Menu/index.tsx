@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import styles from './index.module.scss';
 import {Context} from "@/utils/store";
-import MenuItem from "@/components/Layout/Menu/MenuItem";
+import MenuItem, { MenuList } from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import {OrgList} from "@/utils/api/org";
@@ -52,7 +52,7 @@ const Menu = () => {
     router.push(`/${encodeURIComponent(getOriNameByContext())}/applications`)
   }
 
-  const menuList = [
+  const menuList: MenuList = [
     // {
     //   activeIcon: "/img/slider/homeActive.svg",
     //   icon: "/img/slider/home.svg",
@@ -103,7 +103,7 @@ const Menu = () => {
     }
   }
 
-  const bottomList = [
+  const bottomList: MenuList = [
     {
       activeIcon: "/img/slider/icon10Active.svg",
       icon: "/img/slider/icon10.svg",

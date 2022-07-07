@@ -5,6 +5,7 @@ import { Button, FormControl, InputAdornment, TextField } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 import { ForkMainLogo } from "@/utils/CDN";
 import Email from "/public/img/entrance/sign-in/Email.svg";
@@ -40,7 +41,11 @@ export default function SignIn(): React.ReactElement {
           <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt="" />
         </div>
         <h1 className={styles.title}>sign in</h1>
-        <Button variant="outlined" className={styles.signInGitHubBtn}>
+        <Button
+          variant="outlined"
+          className={styles.signInGitHubBtn}
+          startIcon={<GitHubIcon />}
+        >
           Sign in with GitHub
         </Button>
         <div className={styles.splitter}>or</div>

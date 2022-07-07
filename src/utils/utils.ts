@@ -44,10 +44,14 @@ export function getOrganizationNameByUrl(): string {
   if (isBrowser()) {
     let url = location.href;
     let list = url.split('/');
-    return encodeURIComponent(list[3]);
+    return decodeURIComponent(list[3]);
   } else {
     return '';
   }
+}
+
+export function getUrlEncodeName(): string {
+  return encodeURIComponent(getOrganizationNameByUrl());
 }
 
 export function getUserInfo(): UserInfo | null{

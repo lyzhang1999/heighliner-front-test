@@ -4,34 +4,24 @@ import * as React from "react";
 import {Popover} from "@mui/material";
 import {CommonProps} from "@/utils/commonType";
 
-
 export interface PopItem {
   key: string;
   clickCb: () => void;
   red?: boolean;
 };
 
-export interface PopProps extends CommonProps{
-  item: PopItem[]
+export interface PopProps extends CommonProps {
+  item: PopItem[],
+  mountDom: Element | null,
+  setMountDom: (dom: (Element | null)) => void
 }
 
-function PopSelect({item}: PopProps, ref: any) {
-  const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
-  React.useImperativeHandle(ref, () => ({
-    setSelect: (dom: any) => {
-      setAnchorEl(dom);
-    }
-  }));
-
-  function handleClose() {
-    setAnchorEl(null)
-  }
-
+export default function PopSelect({item, mountDom, setMountDom}: PopProps) {
   return (
     <Popover
-      open={Boolean(anchorEl)}
-      anchorEl={anchorEl}
-      onClose={handleClose}
+      open={Boolean(mountDom)}
+      anchorEl={mountDom}
+      onClose={() => setMountDom(null)}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'left',
@@ -48,5 +38,3 @@ function PopSelect({item}: PopProps, ref: any) {
     </Popover>
   )
 }
-
-export default React.forwardRef(PopSelect);

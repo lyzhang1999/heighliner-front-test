@@ -7,10 +7,16 @@ import RightDrawer from "@/basicComponents/RightDrawer";
 import styles from "./index.module.scss";
 import GitHubApp from "./GitHubApp";
 import GitHubPAT from "./GitHubPAT";
+import { GitProviderItem } from "@/utils/api/gitProviders";
+
+export type AddGitProviderSuccessCb = (
+  newGitProviderItem: GitProviderItem
+) => void;
+
 interface Props {
   modalDisplay: boolean;
   setModalDisplay: Dispatch<SetStateAction<boolean>>;
-  successCb?: Function;
+  successCb?: AddGitProviderSuccessCb;
 }
 
 enum AddType {
@@ -51,11 +57,12 @@ export default function AddGitProvider({
               {...{
                 modalDisplay,
                 setModalDisplay,
+                successCb,
               }}
             />
           </TabPanel>
           <TabPanel value={AddType.AddGitHubOrganization}>
-            <GitHubApp {...{ setModalDisplay }} />
+            <GitHubApp {...{ setModalDisplay, successCb }} />
           </TabPanel>
         </TabContext>
       </RightDrawer>

@@ -8,13 +8,13 @@ import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/materi
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import {OrgList} from "@/utils/api/org";
 import {find} from "lodash-es";
-import cookie from "@/utils/cookie";
 import {useRouter} from "next/router";
 import {get} from 'lodash-es';
-import {getOriNameByContext} from "@/utils/utils";
-import Pop from "@/components/Layout/Menu/Pop";
-import Identicon from 'identicon.js';
+import {getOriNameByContext, uuid} from "@/utils/utils";
+import Identicon, {IdenticonOptions} from 'identicon.js';
 import md5 from 'md5';
+
+const NEWORGANIZATION = "NEWORGANIZATION" + uuid();
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -35,43 +35,22 @@ const Menu = () => {
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    if ("NEWORGANIZATION" === event.target.value) {
+    if (NEWORGANIZATION === event.target.value) {
       router.push('/organizations?new=true')
       return;
     }
     let selectItem = find(organizationList, {id: event.target.value});
     if (selectItem) {
       let name = get(selectItem, 'name');
-      // dispatch({currentOrganization: omit({...selectItem, ...selectItem.member}, 'member')})
-      // router.push(`/${encodeURIComponent(name)}/applications`);
       name && (location.pathname = `/${encodeURIComponent(name)}/applications`);
     }
   };
 
-  function logout() {
-    cookie.delCookie('token');
-    location.pathname = '/login';
-  }
-
-  let name = get(currentOrganization, 'name', '');
-  let userId: number = get(userInfo, 'id', 0)
-  let hash: string = md5(String(userId));
-  let avatar = get(userInfo, 'avatar', '');
+  let name = encodeURIComponent(get(currentOrganization, 'name', ''));
 
   function goHome() {
-    router.push(`/${getOriNameByContext()}/applications`)
+    router.push(`/${encodeURIComponent(getOriNameByContext())}/applications`)
   }
-
-  let options = {
-    foreground: [195, 205, 109, 255],
-    // background: [255, 255, 255, 255],         // rgba white
-    // margin: 0.2,                              // 20% margin
-    // size: 20,                                // 420px square
-    format: 'svg'                             // use SVG instead of PNG
-  };
-
-  // @ts-ignore
-  const imgData: string = new Identicon(hash, options).toString();
 
   const menuList = [
     // {
@@ -101,10 +80,28 @@ const Menu = () => {
     {
       activeIcon: "/img/slider/icon7Active.svg",
       icon: "/img/slider/icon7.svg",
-      href: `/${name}/teams`,
-      name: "Teams",
+      href: `/${name}/members`,
+      name: "Members",
     },
   ];
+  let avatar = get(userInfo, 'avatar', '');
+
+  function getAvatar(balckBack?: boolean) {
+    if (avatar) {
+      return avatar;
+    } else {
+      let userId: number = get(userInfo, 'id', 0)
+      let hash: string = md5(String(userId));
+      let options: IdenticonOptions = {
+        foreground: [205, 203, 235, 255],
+        background: balckBack ? [0, 0, 0, 255] : [255, 255, 255, 255],
+        size: 20,
+        format: 'svg'
+      };
+      const imgData = new Identicon(hash, options).toString();
+      return `data:image/svg+xml;base64,${imgData}`
+    }
+  }
 
   const bottomList = [
     {
@@ -114,10 +111,10 @@ const Menu = () => {
       name: "Organizations",
     },
     {
-      activeIcon: "/img/slider/icon11Active.svg",
-      icon: "/img/slider/icon11.svg",
+      activeIcon: getAvatar(true),
+      icon: getAvatar(),
       href: `/profile`,
-      name: "Profile",
+      name: get(state, 'userInfo.username', ''),
     },
   ];
 
@@ -142,10 +139,8 @@ const Menu = () => {
                 color: "#212d40",
                 marginLeft: "6px"
               }}
-              // @ts-ignore
-              value={Number(currentOrganization?.org_id)}
+              value={String(currentOrganization?.org_id)}
             >
-
               {(organizationList as OrgList[]).map((item) => {
                 return (
                   <SelectMenuItem
@@ -157,8 +152,8 @@ const Menu = () => {
                 );
               })}
               <SelectMenuItem
-                value="NEWORGANIZATION"
-                key='NEWORGANIZATION'
+                value={NEWORGANIZATION}
+                key={NEWORGANIZATION}
               >
                 <AddCircleOutlineOutlinedIcon/>
                 <span style={{marginLeft: "10px"}}>New Organization</span>
@@ -177,30 +172,6 @@ const Menu = () => {
         <MenuItem
           list={bottomList}
         />
-      </div>
-      <div className={
-        clsx(
-          styles.userInfo,
-          !menuSpread && styles.userInfoHidden
-        )
-      }>
-        <div className={styles.left}>
-          <img src={avatar ? avatar : `data:image/svg+xml;base64,${imgData}`} alt=""/>
-          {/*<img src="/img/slider/icon9.svg" alt=""/>*/}
-          {
-            !menuSpread &&
-            <Pop cb={logout}>Logout</Pop>
-          }
-        </div>
-        {
-          menuSpread &&
-          <div className={styles.right}>
-            <div className={styles.name}>
-               {get(state, 'userInfo.username', '')}
-            </div>
-            <Pop cb={logout}>Logout</Pop>
-          </div>
-        }
       </div>
       <div className={clsx(styles.spreadAction)} onClick={setSpread}>
         <img src={!menuSpread ? "/img/slider/spreadLeft.svg" : "/img/slider/spreadRight.svg"} alt=""

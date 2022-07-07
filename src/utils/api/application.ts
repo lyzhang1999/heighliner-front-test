@@ -1,4 +1,5 @@
 import http from "../axios";
+import { CreativeApiReturnField } from "../commonType";
 import {getOriIdByContext} from "../utils";
 
 export interface CreateApplicationRequest {
@@ -38,12 +39,8 @@ export enum ApplicationStatus {
   FAILED = "Failed",
 }
 
-export interface GetApplicationStatusRes {
+export interface GetApplicationStatusRes extends CreativeApiReturnField{
   id: number;
-  created_at: number;
-  created_by: number;
-  updated_at: number;
-  updated_by: number;
   application_id: number;
   name: string;
   namespace: string;
@@ -63,10 +60,8 @@ export function getApplicationStatus(req: GetApplicationReq): Promise<GetApplica
 }
 
 
-export interface Last_release {
+export interface Last_release extends CreativeApiReturnField{
   id: number;
-  created_at: number;
-  updated_at: number;
   application_id: number;
   name: string;
   namespace: string;
@@ -180,9 +175,8 @@ export interface GetApplicationInfoReq {
   app_id: number;
 }
 
-export interface GetApplicationInfoRes {
+export interface GetApplicationInfoRes extends CreativeApiReturnField{
   cluster_id: number;
-  created_at: number;
   domain: string;
   git_org_name: string;
   git_provider: string;
@@ -191,7 +185,6 @@ export interface GetApplicationInfoRes {
   name: string;
   org_id: number;
   stack_id: number;
-  updated_at: number;
 }
 
 export function getApplicationInfo(

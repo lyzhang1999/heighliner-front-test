@@ -2,6 +2,7 @@ import http from "@/utils/axios";
 import {Page} from "./type";
 import {find, get, uniq} from "lodash-es";
 import {getOriIdByContext} from "@/utils/utils";
+import { CreativeApiReturnField } from "../commonType";
 
 export interface OrgList {
   id: number;
@@ -79,10 +80,8 @@ export interface GetOrgMembersReq {
 }
 
 
-export type Member = {
+export interface Member extends CreativeApiReturnField {
   id: number;
-  created_at: number;
-  updated_at: number;
   org_id: number;
   user_id: number;
   member_type: MemberType;

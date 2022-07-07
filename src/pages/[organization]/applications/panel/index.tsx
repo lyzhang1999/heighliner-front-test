@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
-import { Box, Stack } from "@mui/material";
+import React, {createContext, useEffect, useState} from "react";
+import {Box, Stack} from "@mui/material";
 import Image from "next/image";
 
 import CodeSVG from "/public/img/application/panel/code.svg";
@@ -7,8 +7,8 @@ import InfiniteSVG from "/public/img/application/panel/infinite.svg";
 import CloudSVG from "/public/img/application/panel/cloud.svg";
 import Running from "/public/img/application/panel/running.svg";
 import Layout from "@/components/Layout";
-import DitchTab, { TabItems } from "@/basicComponents/DitchTab";
-import { GinIcon, SpringIcon, VueIcon } from "@/utils/CDN";
+import DitchTab, {TabItems} from "@/basicComponents/DitchTab";
+import {GinIcon, SpringIcon, VueIcon} from "@/utils/CDN";
 import DevEnvironment from "@/components/Application/Panel/DevEnvironment";
 import RepoList from "@/components/Application/Panel/RepoList";
 
@@ -19,8 +19,8 @@ import {
   GetApplicationInfoRes,
   getApplicationStatus,
 } from "@/utils/api/application";
-import { useRouter } from "next/router";
-import { getOriIdByContext } from "@/utils/utils";
+import {useRouter} from "next/router";
+import {getOriIdByContext} from "@/utils/utils";
 
 enum TabItemLabels {
   Code = "Code",
@@ -31,18 +31,18 @@ enum TabItemLabels {
 const tabItems: TabItems<keyof typeof TabItemLabels> = [
   {
     label: TabItemLabels.Code,
-    icon: <CodeSVG fill="#404a59" />,
-    selectedIcon: <CodeSVG fill="#FFFFFF" />,
+    icon: <CodeSVG fill="#404a59"/>,
+    selectedIcon: <CodeSVG fill="#FFFFFF"/>,
   },
   {
     label: TabItemLabels.Ship,
-    icon: <InfiniteSVG fill="#404a59" />,
-    selectedIcon: <InfiniteSVG fill="#FFFFFF" />,
+    icon: <InfiniteSVG fill="#404a59"/>,
+    selectedIcon: <InfiniteSVG fill="#FFFFFF"/>,
   },
   {
     label: TabItemLabels.Run,
-    icon: <CloudSVG fill="#404a59" />,
-    selectedIcon: <CloudSVG fill="#FFFFFF" />,
+    icon: <CloudSVG fill="#404a59"/>,
+    selectedIcon: <CloudSVG fill="#FFFFFF"/>,
   },
 ];
 
@@ -60,6 +60,8 @@ export const ApplicationInfoContext = createContext<GetApplicationInfoRes>({
   org_id: 0,
   stack_id: 0,
   updated_at: 0,
+  updated_by: 0,
+  created_by: 0
 });
 
 export default function Panel(): React.ReactElement {
@@ -123,7 +125,7 @@ export default function Panel(): React.ReactElement {
             <div className={styles.stackStatus}>
               {status && status === ApplicationStatus.COMPLETED && (
                 <>
-                  <Running /> Running
+                  <Running/> Running
                 </>
               )}
               {status && status === ApplicationStatus.FAILED && <>Failed</>}
@@ -140,7 +142,7 @@ export default function Panel(): React.ReactElement {
           >
             {techSet.map((tech, index) => (
               <div className={styles.techIcon} key={index}>
-                <Image src={tech} alt="" width={25} height={25} />
+                <Image src={tech} alt="" width={25} height={25}/>
               </div>
             ))}
           </Stack>
@@ -148,10 +150,10 @@ export default function Panel(): React.ReactElement {
         <div className={styles.container}>
           <p className={styles.title}>Dev Environments</p>
           <Stack gap="36px">
-            <DevEnvironment />
+            <DevEnvironment/>
           </Stack>
           <div className={styles.titleRepo}>Repositories</div>
-          <RepoList />
+          <RepoList/>
         </div>
       </ApplicationInfoContext.Provider>
     </Layout>

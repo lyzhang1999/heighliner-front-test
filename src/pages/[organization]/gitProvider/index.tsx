@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Button,
   Popover,
@@ -16,14 +16,14 @@ import "@/utils/axios";
 
 import Layout from "@/components/Layout";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { formatDate } from "@/utils/utils";
-import AddGitProvider from "@/components/AddGitProvider";
+import {formatDate} from "@/utils/utils";
+import AddGitProvider, {AddGitProviderSuccessCb} from "@/components/AddGitProvider";
 
 import styles from "./index.module.scss";
 import popStyles from '@/components/PopSelect/index.module.scss'
-import { isEmpty } from "lodash-es";
+import {isEmpty} from "lodash-es";
 import useGitProviders from "@/hooks/gitProviders";
-import { deleteGitProvider } from "@/utils/api/gitProviders";
+import {deleteGitProvider} from "@/utils/api/gitProviders";
 import clsx from "clsx";
 
 const Clusters = () => {
@@ -36,7 +36,7 @@ const Clusters = () => {
     null
   );
 
-  function successCb() {
+  const successCb: AddGitProviderSuccessCb = () => {
     getGitProviders();
   }
 
@@ -92,7 +92,7 @@ const Clusters = () => {
               {gitProviders.map((item) => (
                 <TableRow
                   key={item.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{"&:last-child td, &:last-child th": {border: 0}}}
                 >
                   <TableCell component="th" scope="item">
                     <div className={styles.orgWrapper}>
@@ -111,7 +111,7 @@ const Clusters = () => {
                   </TableCell>
 
                   <TableCell align="right">
-                    <div >{item.created_by_name}</div>
+                    <div>{item.created_by_name}</div>
                   </TableCell>
                   <TableCell align="right">
                     <div className={styles.moreIcon}>
@@ -119,7 +119,7 @@ const Clusters = () => {
                         className={styles.icon}
                         onClick={(e) => handleClick(e, item.id)}
                       >
-                        <MoreVertIcon />
+                        <MoreVertIcon/>
                       </div>
                     </div>
                   </TableCell>

@@ -1,9 +1,8 @@
 import * as React from "react";
 import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
-import {Terminal} from 'xterm';
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext, getQuery, Message} from "@/utils/utils";
+import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
@@ -13,22 +12,18 @@ import {get} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
 
-
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
   const [durationTime, setDurationTime] = useState<number>(0);
-  const [skipTime, setSkipTime] = useState<number>(5);
+  const [skipTime, setSkipTime] = useState<number>(-1);
   const router = useRouter();
 
   let app_id: string = getQuery('app_id');
   let release_id: string = getQuery('release_id');
 
-  let durationTimeInterval: any = null;
-  let getStatusInterval: any = null;
-  let getlogTimeOut: any = null;
-  let resizeCb: any = null;
-  let skipTimer: any = null;
+  let durationTimeInterval: ReturnType<typeof setInterval>;
+  let getStatusInterval: any;
   let term: any = null;
   let leaveFlag: boolean = false;
   let ro: any = null;
@@ -53,19 +48,15 @@ const CreatingApplication = () => {
           setDurationTime(Math.trunc((completion_time - start_time)));
         }
         getStatusInterval && clearInterval(getStatusInterval);
-        getStatusInterval = null;
         durationTimeInterval && clearInterval(durationTimeInterval)
-        durationTimeInterval = null;
-        skip();
+        setSkipTime(5);
       }
       if (status === ApplicationStatus.FAILED) {
         if (completion_time && start_time) {
           setDurationTime(Math.trunc((completion_time - start_time)));
         }
         getStatusInterval && clearInterval(getStatusInterval);
-        getStatusInterval = null;
         durationTimeInterval && clearInterval(durationTimeInterval)
-        durationTimeInterval = null;
       }
     })
   }
@@ -73,61 +64,47 @@ const CreatingApplication = () => {
   useEffect(() => {
     getStatus(true);
     getStatusInterval = setInterval(getStatus, 5000);
-    getlog();
+    renderLog();
     return () => {
       getStatusInterval && clearInterval(getStatusInterval);
-      getStatusInterval = null;
       durationTimeInterval && clearInterval(durationTimeInterval);
-      durationTimeInterval = null;
-      resizeCb && window.removeEventListener('resize', resizeCb);
-      skipTimer && clearInterval(skipTimer);
-      skipTimer = null;
-      getlogTimeOut && clearTimeout(getlogTimeOut);
-      getlogTimeOut = null;
       leaveFlag = true;
       try {
         ro && ro.unobserve(document.getElementById('TERMIANLWRAPPER'));
       } catch (e) {
-        console.warn('ro.unobserve error')
+        console.log('ro.unobserve error')
       }
     }
   }, [])
 
-
-  function getlog() {
+  function renderLog() {
     const initTerminal = async () => {
       const {Terminal} = await import('xterm')
       const {FitAddon} = await import('xterm-addon-fit');
       const fitAddon = new FitAddon();
       term = new Terminal({
-        fontFamily: "Monaco,Menlo,Consolas,Courier New,monospace",
+        fontFamily: "Monaco, Menlo, Consolas, Courier New, monospace",
         fontSize: 12,
         lineHeight: 1,
         scrollback: 999999,
       })
       term.loadAddon(fitAddon);
-      // @ts-ignore
-      term.open(document.getElementById('terminal'));
+      term.open(document.getElementById('TERMINAL'));
       fitAddon.fit();
-
       var target = document.getElementById('TERMIANLWRAPPER');
-
       ro = new ResizeObserver(() => {
         try {
           fitAddon.fit();
         } catch (e) {
-          console.warn('fitAddon.fit() err')
+          console.log('fitAddon.fit() err')
         }
       });
-
       if (target) {
         ro.observe(target);
       }
-
-      window.addEventListener('resize', resizeCb);
       getLogEventSource();
     }
-    getlogTimeOut = setTimeout(() => {
+    setTimeout(() => {
       initTerminal()
     }, 0);
   }
@@ -136,7 +113,10 @@ const CreatingApplication = () => {
     console.warn('getLogEventSource')
     const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
     const token = cookie.getCookie('token');
-    var eventSource = new EventSourcePolyfill(url, {headers: {Authorization: `Bearer ${token}`}, heartbeatTimeout: 1000 * 60 * 5});
+    var eventSource = new EventSourcePolyfill(url, {
+      headers: {Authorization: `Bearer ${token}`},
+      heartbeatTimeout: 1000 * 60 * 5
+    });
     eventSource.onerror = function () {
       console.warn('onerror');
       eventSource.close();
@@ -170,20 +150,20 @@ const CreatingApplication = () => {
 
   function goDashboard() {
     Message.success('Creat Success');
-    router.replace(`/${getOrganizationNameByUrl()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
+    router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
-  function skip() {
-    skipTimer = setInterval(() => {
-      setSkipTime(t => {
-        if (t === 1) {
-          clearInterval(skipTimer);
-          goDashboard();
-        }
-        return t - 1;
-      });
-    }, 1000)
-  }
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (skipTime > 0) {
+      timer = setTimeout(() => {
+        setSkipTime(skipTime - 1);
+      }, 1000)
+    } else if (skipTime === 0) {
+      goDashboard();
+    }
+    return () => clearTimeout(timer)
+  }, [skipTime])
 
   // close server render
   React.useEffect(() => {
@@ -208,12 +188,10 @@ const CreatingApplication = () => {
             status === ApplicationStatus.COMPLETED &&
             <Alert severity="success">
               Success, auto go panel page after {skipTime}s
-              {/*<span className={styles.goDashboard}*/}
-              {/*      onClick={goDashboard}>dashboard</span>*/}
             </Alert>
           }
         </div>
-        <div id="terminal"
+        <div id="TERMINAL"
              className={styles.terminal}
         >
         </div>
@@ -223,4 +201,3 @@ const CreatingApplication = () => {
 }
 
 export default CreatingApplication
-// http://localhost/zhangze/applications/creating?app_id=42&release_id=42

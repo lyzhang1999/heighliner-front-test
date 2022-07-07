@@ -1,5 +1,6 @@
 import http from "@/utils/axios";
 import { getOriIdByContext } from "@/utils/utils";
+import { CreativeApiReturnField } from "../commonType";
 
 export enum GitProvider {
   GitHub = "GitHub",
@@ -10,18 +11,25 @@ export enum GitProviderType {
   GitHubApp = "GitHubApp",
 }
 
-export interface GitProviderItem {
-  created_at: number;
-  created_by: number;
+interface GitProviderItemCommonFields extends CreativeApiReturnField{
   created_by_name: string;
   git_org_name: string;
   id: number;
-  installation_id: number;
   org_id: number;
-  personal_access_token: string;
   provider: GitProvider;
-  type: GitProviderType;
 }
+
+export interface GitProviderItemForPAT extends GitProviderItemCommonFields {
+  type: GitProviderType.PAT;
+  personal_access_token: string;
+}
+
+export interface GitProviderItemForGitHubApp extends GitProviderItemCommonFields {
+  type: GitProviderType.GitHubApp;
+  installation_id: number;
+}
+
+export type GitProviderItem = GitProviderItemForPAT | GitProviderItemForGitHubApp;
 
 export type GitProviderList = Array<GitProviderItem>;
 

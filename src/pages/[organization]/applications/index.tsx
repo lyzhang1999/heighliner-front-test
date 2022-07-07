@@ -3,13 +3,13 @@ import {Select, MenuItem, InputLabel, FormControl, FormHelperText} from "@mui/ma
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
-import {getOrganizationNameByUrl, getOriIdByContext, uuid} from "@/utils/utils";
-import {ApplicationObject, getApplicationList, getAppListReq} from "@/utils/api/application";
+import {getOriIdByContext, getUrlEncodeName, uuid} from "@/utils/utils";
+import {ApplicationObject, ApplicationStatus, getApplicationList, getAppListReq} from "@/utils/api/application";
 import ApplicationList from "@/components/ApplicationList";
 import {ClusterItem, getClusterList} from "@/utils/api/cluster";
 import {getStacks, Stack} from "@/utils/api/stack";
 import {getOrgMembers, Member} from "@/utils/api/org";
-import {get} from "lodash-es";
+import {find, get} from "lodash-es";
 import DeleteApplication from "@/components/DeleteApplication";
 
 const AllKey = "THEDEFAULTALLKEY" + uuid();
@@ -44,26 +44,29 @@ const Applications = () => {
   }, []);
 
   useEffect(() => {
-    getApplicationList(selectRule).then((res) => {
-      setApplist(res);
-    });
+    let hasProcessingApp = find(applist, {last_release: {status: ApplicationStatus.PROCESSING}});
+    let timer: ReturnType<typeof setTimeout>;
+    if (hasProcessingApp) {
+      timer = setTimeout(() => {
+        getList();
+      }, 1000 * 60);
+    }
+    return () => clearTimeout(timer);
+  }, [applist])
+
+  useEffect(() => {
+    getList()
   }, [selectRule])
 
   function deleteSuccessCb() {
     setAnchorEl(null)
+    getList();
+  }
+
+  function getList() {
     getApplicationList(selectRule).then((res) => {
       setApplist(res);
     });
-  }
-
-  function goPanel(appId: number, releaseId: number) {
-    const queryParameters = new URLSearchParams({
-      app_id: appId.toString(),
-      release_id: releaseId.toString(),
-    });
-    router.push(
-      `/${getOrganizationNameByUrl()}/applications/panel?${queryParameters.toString()}`
-    );
   }
 
   function handleChange(a: ReactNode, key: string) {
@@ -91,9 +94,7 @@ const Applications = () => {
       rightBtnDesc="add application"
       rightBtnCb={() => {
         router.push(
-          `/${encodeURIComponent(
-            getOrganizationNameByUrl()
-          )}/applications/creation`
+          `/${getUrlEncodeName()}/applications/creation`
         );
       }}
       notStandardLayout
@@ -154,10 +155,10 @@ const Applications = () => {
         </div>
         <ApplicationList
           {...{
-              list: applist,
-              clusterList,
-              setDeleteID,
-              setDeleteModalVisible,
+            list: applist,
+            clusterList,
+            setDeleteID,
+            setDeleteModalVisible,
             anchorEl,
             setAnchorEl
           }}

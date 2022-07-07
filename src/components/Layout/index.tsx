@@ -4,7 +4,7 @@ import clsx from "clsx";
 import styles from './index.module.scss';
 import {getUserInfo} from "@/utils/api/profile";
 import {Context} from "@/utils/store";
-import { Button } from '@mui/material';
+import {Button} from '@mui/material';
 
 interface HomeProps {
   children?: react.ReactNode,

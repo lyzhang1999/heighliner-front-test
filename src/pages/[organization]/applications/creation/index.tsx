@@ -30,7 +30,7 @@ import {
 } from "@/utils/api/application";
 import { useRouter } from "next/router";
 import { get } from "lodash-es";
-import { formatDate, getOrganizationNameByUrl, Message } from "@/utils/utils";
+import {formatDate, getUrlEncodeName, Message} from "@/utils/utils";
 import {
   getClusterIcon,
   GinIcon,
@@ -42,7 +42,9 @@ import {
 } from "@/utils/CDN";
 import Spinner from "@/basicComponents/Loaders/Spinner";
 import GitHubSVG from "/public/img/gitprovider/GITHUB.svg";
-import AddGitProvider from "@/components/AddGitProvider";
+import AddGitProvider, {
+  AddGitProviderSuccessCb,
+} from "@/components/AddGitProvider";
 import { useClusterList } from "@/hooks/cluster";
 import useGitProviders from "@/hooks/gitProviders";
 import useStacks from "@/hooks/stacks";
@@ -51,28 +53,18 @@ import { GitProvider } from "@/utils/api/gitProviders";
 type FieldsDataType = typeof DefaultFieldsData;
 
 const fieldsMap = {
-  applicationName: {
-    name: "name",
-  },
-  stack: {
-    name: "stack",
-  },
-  cluster: {
-    name: "clusters",
-  },
-  gitProvider: {
-    name: "git provider",
-  },
-  domain: {
-    name: "domain",
-  },
+  applicationName: "name",
+  stack: "stack",
+  cluster: "cluster",
+  gitProvider: "git provider",
+  domain: "domain",
 };
 
 const DefaultFieldsData = {
-  [fieldsMap.applicationName.name]: "",
-  [fieldsMap.stack.name]: "",
-  [fieldsMap.cluster.name]: "",
-  [fieldsMap.gitProvider.name]: "",
+  [fieldsMap.applicationName]: "",
+  [fieldsMap.stack]: "",
+  [fieldsMap.cluster]: "",
+  [fieldsMap.gitProvider]: "",
   // [fieldsMap.domain.name]: "",
 };
 
@@ -123,7 +115,7 @@ export default function Index(): React.ReactElement {
     handleSubmit,
     control,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm<FieldsDataType>({
     defaultValues: DefaultFieldsData,
   });
@@ -132,32 +124,52 @@ export default function Index(): React.ReactElement {
     calculateUnderBgStyle(0);
   }, []);
 
-  // When open add cluster or git provider drawer, updating data.
+  // Choose only one cluster/gitProvider
   useEffect(() => {
-    getClusterList();
-  }, [openAddClusterDrawer]);
-  useEffect(() => {
-    getGitProviderList();
-  }, [openAddGitProviderDrawer]);
-
-   // Choose only one cluster/gitProvider
-   useEffect(() => {
     if (
       clusterList.length === 1 &&
       clusterList[0].status === ClusterStatus.Active
     ) {
-      setValue(fieldsMap.cluster.name, clusterList[0].id.toString());
+      setValue(fieldsMap.cluster, clusterList[0].id.toString());
     }
   }, [clusterList]);
   useEffect(() => {
     if (gitProviderList.length === 1) {
-      setValue(fieldsMap.gitProvider.name, gitProviderList[0].id.toString());
+      setValue(fieldsMap.gitProvider, gitProviderList[0].id.toString());
     }
   }, [gitProviderList]);
 
+  const addClusterSuccessCb = () => {
+    getClusterList();
+    setOpenAddClusterDrawer(false);
+  };
+
+  const addGitProviderSuccessCb: AddGitProviderSuccessCb = (
+    gitProviderItem
+  ) => {
+    getGitProviderList();
+    setValue(fieldsMap.gitProvider, gitProviderItem.id.toString());
+  };
+
+  useEffect(() => {
+    const hasInitializingCluster = clusterList.some(
+      (cluster) => cluster.status === ClusterStatus.Initializing
+    );
+
+    let timer: ReturnType<typeof setTimeout>;
+    if (hasInitializingCluster) {
+      timer = setTimeout(() => {
+        getClusterList();
+        clearTimeout(timer);
+      }, 30000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [clusterList]);
+
   const onSubmit: SubmitHandler<FieldsDataType> = async (data) => {
     // Check the cluster status
-    const cluster_id = +data[fieldsMap.cluster.name];
+    const cluster_id = +data[fieldsMap.cluster];
     const cluster = clusterList.find((cluster) => cluster.id === cluster_id);
     if (cluster!.status === ClusterStatus.Initializing) {
       const res = await getCluster({
@@ -173,22 +185,20 @@ export default function Index(): React.ReactElement {
     }
 
     const createApplicationRequest: CreateApplicationRequest = {
-      cluster_id: +data[fieldsMap.cluster.name],
+      cluster_id: +data[fieldsMap.cluster],
       git_config: {
-        git_provider_id: +data[fieldsMap.gitProvider.name],
+        git_provider_id: +data[fieldsMap.gitProvider],
       },
-      name: data[fieldsMap.applicationName.name],
+      name: data[fieldsMap.applicationName],
       networking: {
         domain: "",
       },
-      stack_id: +data[fieldsMap.stack.name],
+      stack_id: +data[fieldsMap.stack],
     };
 
     createApplication(createApplicationRequest).then((res) => {
       router.push(
-        `/${encodeURIComponent(
-          getOrganizationNameByUrl()
-        )}/applications/creating?app_id=${res.app_id}&release_id=${
+        `/${getUrlEncodeName()}/applications/creating?app_id=${res.app_id}&release_id=${
           res.release_id
         }`
       );
@@ -201,16 +211,16 @@ export default function Index(): React.ReactElement {
         <Typography variant="h1">New Application</Typography>
         <div className={styles.underBackground} style={underBgStyle}></div>
         <Controller
-          name={fieldsMap.applicationName.name}
+          name={fieldsMap.applicationName}
           control={control}
           render={({ field }) => (
             <FormControl
               ref={eleList[0]}
-              error={errors[fieldsMap.applicationName.name] ? true : false}
+              error={errors[fieldsMap.applicationName] ? true : false}
               className={styles.applicationNameWrap}
             >
               <h2 className={styles.applicationName}>
-                {fieldsMap.applicationName.name}
+                {fieldsMap.applicationName}
                 <span className={styles.star}>*</span>
               </h2>
               <div>
@@ -225,51 +235,43 @@ export default function Index(): React.ReactElement {
                   autoFocus
                 ></TextField>
                 <FormHelperText id="my-helper-text">
-                  {errors[fieldsMap.applicationName.name] &&
-                    errors[fieldsMap.applicationName.name].message}
+                  {errors[fieldsMap.applicationName] &&
+                    errors[fieldsMap.applicationName].message}
                 </FormHelperText>
               </div>
             </FormControl>
           )}
           rules={{
+            /** Follow with RFC 1035 */
             required: "Please enter your application name.",
             validate: {
-              illegalCharacter: (value) => {
-                return (
-                  !/[^a-z0-9\.-]/.test(value) ||
-                  "The name only contain lowercase alphanumeric character, dot, or hyphen."
-                );
-              },
-              illegalStart: (value) => {
-                return (
-                  /^[a-z0-9]/.test(value) ||
-                  "The name should start with lowercase alphanumeric character."
-                );
-              },
-              illegalEnd: (value) => {
-                return (
-                  /[a-z0-9]$/.test(value) ||
-                  "Then name should end with lowercase alphanumeric character."
-                );
-              },
+              illegalCharacter: (value) =>
+                !/[^a-z0-9-]/.test(value) ||
+                "The name should only contain lowercase alphanumeric character, or hyphen(-).",
+              illegalStart: (value) =>
+                /^[a-z]/.test(value) ||
+                "The name should start with lowercase letter character.",
+              illegalEnd: (value) =>
+                /[a-z0-9]$/.test(value) ||
+                "Then name should end with lowercase alphanumeric character.",
             },
             maxLength: {
-              value: 253,
-              message: "The max length is 253 character.",
+              value: 63,
+              message: "The max length is 63 character.",
             },
           }}
         />
         <Controller
-          name={fieldsMap.stack.name}
+          name={fieldsMap.stack}
           control={control}
           render={({ field }) => (
             <FormControl
               ref={eleList[1]}
-              error={errors[fieldsMap.stack.name] ? true : false}
+              error={errors[fieldsMap.stack] ? true : false}
               className={styles.stacksWrap}
             >
               <h2>
-                {fieldsMap.stack.name}
+                {fieldsMap.stack}
                 <span className={styles.star}>*</span>
               </h2>
               <ul
@@ -317,8 +319,7 @@ export default function Index(): React.ReactElement {
               </ul>
               <div>
                 <FormHelperText id="my-helper-text">
-                  {errors[fieldsMap.stack.name] &&
-                    errors[fieldsMap.stack.name].message}
+                  {errors[fieldsMap.stack] && errors[fieldsMap.stack].message}
                 </FormHelperText>
               </div>
             </FormControl>
@@ -328,16 +329,16 @@ export default function Index(): React.ReactElement {
           }}
         />
         <Controller
-          name={fieldsMap.cluster.name}
+          name={fieldsMap.cluster}
           control={control}
           render={({ field }) => (
             <FormControl
               ref={eleList[2]}
-              error={errors[fieldsMap.cluster.name] ? true : false}
+              error={errors[fieldsMap.cluster] ? true : false}
               className={styles.clustersWrap}
             >
               <h2>
-                {fieldsMap.cluster.name}
+                {fieldsMap.cluster}
                 <span className={styles.star}>*</span>
               </h2>
               <ul
@@ -404,8 +405,8 @@ export default function Index(): React.ReactElement {
               </ul>
               <div>
                 <FormHelperText id="my-helper-text">
-                  {errors[fieldsMap.cluster.name] &&
-                    errors[fieldsMap.cluster.name].message}
+                  {errors[fieldsMap.cluster] &&
+                    errors[fieldsMap.cluster].message}
                 </FormHelperText>
               </div>
             </FormControl>
@@ -415,16 +416,16 @@ export default function Index(): React.ReactElement {
           }}
         />
         <Controller
-          name={fieldsMap.gitProvider.name}
+          name={fieldsMap.gitProvider}
           control={control}
           render={({ field }) => (
             <FormControl
               ref={eleList[3]}
-              error={errors[fieldsMap.gitProvider.name] ? true : false}
+              error={errors[fieldsMap.gitProvider] ? true : false}
               className={styles.gitProviderWrap}
             >
               <h2>
-                {fieldsMap.gitProvider.name}
+                {fieldsMap.gitProvider}
                 <span className={styles.star}>*</span>
               </h2>
               <div>
@@ -437,7 +438,7 @@ export default function Index(): React.ReactElement {
                       // Compatible with field.onChange event.
                       setTimeout(() => {
                         calculateUnderBgStyle(3);
-                      })
+                      });
                       field.onChange(e);
                     }
                   }}
@@ -475,8 +476,8 @@ export default function Index(): React.ReactElement {
                   </MenuItem>
                 </Select>
                 <FormHelperText id="my-helper-text">
-                  {errors[fieldsMap.gitProvider.name] &&
-                    errors[fieldsMap.gitProvider.name].message}
+                  {errors[fieldsMap.gitProvider] &&
+                    errors[fieldsMap.gitProvider].message}
                 </FormHelperText>
               </div>
             </FormControl>
@@ -548,14 +549,13 @@ export default function Index(): React.ReactElement {
       </form>
       <NewClusterModal
         setModalDisplay={setOpenAddClusterDrawer}
-        successCb={() => {
-          setOpenAddClusterDrawer(false);
-        }}
+        successCb={addClusterSuccessCb}
         modalDisplay={openAddClusterDrawer}
       />
       <AddGitProvider
         setModalDisplay={setOpenAddGitProviderDrawer}
         modalDisplay={openAddGitProviderDrawer}
+        successCb={addGitProviderSuccessCb}
       />
     </Layout>
   );

@@ -2,13 +2,15 @@
   padding: 6px 0px;
 
   .redItem {
-    color: #ff5247;
+    color: rgb(211, 47, 47);;
   }
 
   .selectItem {
-    padding: 4px 10px;
+    padding: 5px 15px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 500;
 
     &:hover {
       background-color: #ccc;

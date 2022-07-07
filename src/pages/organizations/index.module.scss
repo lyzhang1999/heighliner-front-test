@@ -60,5 +60,9 @@
   }
 }
 
+.moreIcon{
+  @include moreIconWrapper;
+}
+
 
 

@@ -155,12 +155,14 @@ const Members = () => {
           }}
           className={clsx("transparentHeader", styles.table)}
         >
-          <TableHead sx={{ 
-            "& .MuiTableCell-root.MuiTableCell-head": {
-              color: "#606479",
-              fontSize: '15px'
-            }
-            }}>
+          <TableHead
+            sx={{
+              "& .MuiTableCell-root.MuiTableCell-head": {
+                color: "#606479",
+                fontSize: "15px",
+              },
+            }}
+          >
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align="right">Joined at</TableCell>
@@ -221,19 +223,21 @@ const Members = () => {
                   </TableCell>
                   <TableCell align="right">xxx</TableCell>
                   <TableCell align="right">
-                    {![roleType.Owner].includes(member_type) &&
-                      [roleType.Owner, roleType.Admin].includes(
-                        currentMemberType as string
-                      ) &&
-                      currentMemberId !== user_id && (
-                        <MoreVertIcon
-                          sx={{ cursor: "pointer" }}
-                          onClick={(event) => {
-                            setDeleteId(user_id);
-                            setMountDom(event?.currentTarget);
-                          }}
-                        />
-                      )}
+                    <div className={styles.moreIcon}>
+                      {![roleType.Owner].includes(member_type) &&
+                        [roleType.Owner, roleType.Admin].includes(
+                          currentMemberType as string
+                        ) &&
+                        currentMemberId !== user_id && (
+                          <MoreVertIcon
+                            sx={{ cursor: "pointer" }}
+                            onClick={(event) => {
+                              setDeleteId(user_id);
+                              setMountDom(event?.currentTarget);
+                            }}
+                          />
+                        )}
+                    </div>
                   </TableCell>
                 </TableRow>
               )

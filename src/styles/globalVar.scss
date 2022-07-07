@@ -19,7 +19,17 @@ $theme-color: #6002ee;
   text-overflow: ellipsis;
 }
 
-@mixin timeStyles{
+@mixin timeStyles {
   color: #5b626c;
+}
+
+@mixin moreIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  :global(.MuiSvgIcon-root:hover) {
+    background-color: #eee;
+    border-radius: 4px;
+  }
 }
 

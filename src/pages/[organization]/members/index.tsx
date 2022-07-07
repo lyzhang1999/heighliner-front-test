@@ -5,28 +5,35 @@ import {
   TableFooter,
   TableHead,
   TablePagination,
-  TableRow, MenuItem, Select
+  TableRow,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import * as React from "react";
-import {ReactNode, useContext, useEffect, useState} from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
+import clsx from "clsx";
 
 import Layout from "@/components/Layout";
-import {formatDate, getOriIdByContext, Message} from "@/utils/utils";
-
-import styles from "./index.module.scss";
+import { formatDate, getOriIdByContext, Message } from "@/utils/utils";
 import {
   getOrgMembers,
   GetOrgMembersReq,
   GetOrgMembersRes,
-  MemberTypeEnum, RoleIcon, roleType, shiftRole, ShiftRoleReq,
+  MemberTypeEnum,
+  RoleIcon,
+  roleType,
+  shiftRole,
+  ShiftRoleReq,
 } from "@/utils/api/org";
 import InviteMember from "@/components/Member/InviteMember";
-import {Context} from "@/utils/store";
-import {get} from "lodash-es";
+import { Context } from "@/utils/store";
+import { get } from "lodash-es";
 import RoleTag from "@/components/RoleTag";
-import DeleteUser from "@/components/Member/DeleteUser"
+import DeleteUser from "@/components/Member/DeleteUser";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PopSelect from "@/components/PopSelect";
+
+import styles from "./index.module.scss";
 
 enum Action {
   Invite = "Invite",
@@ -53,10 +60,10 @@ const Members = () => {
 
   useEffect(() => {
     setMountDom(null);
-  }, [deleteModalVisible])
+  }, [deleteModalVisible]);
 
   const {
-    state: {currentOrganization},
+    state: { currentOrganization },
   } = useContext(Context);
   const currentMemberType = currentOrganization?.member_type;
   const currentMemberId = currentOrganization?.user_id;
@@ -97,7 +104,7 @@ const Members = () => {
   }
 
   function handleChange(v: ReactNode, user_id: number) {
-    let value = get(v, 'props.children', '');
+    let value = get(v, "props.children", "");
     if (!value) {
       return;
     }
@@ -109,7 +116,7 @@ const Members = () => {
     };
 
     shiftRole(shiftRoleReq).then(() => {
-      Message.success(`change role success`)
+      Message.success(`change role success`);
       flushMembers();
     });
   }
@@ -117,7 +124,11 @@ const Members = () => {
   return (
     <Layout
       pageHeader="Members"
-      rightBtnDesc={([roleType.Owner, roleType.Admin].includes(currentMemberType as string)) ? "invite user" : ''}
+      rightBtnDesc={
+        [roleType.Owner, roleType.Admin].includes(currentMemberType as string)
+          ? "invite user"
+          : ""
+      }
       rightBtnCb={() => {
         setInviteDialog(true);
       }}
@@ -126,24 +137,30 @@ const Members = () => {
         {...{
           mountDom,
           setMountDom,
-          item: [{
-            key: "Delete",
-            red: true,
-            clickCb: () => setDeleteModalVisible(true)
-          }]
+          item: [
+            {
+              key: "Delete",
+              red: true,
+              clickCb: () => setDeleteModalVisible(true),
+            },
+          ],
         }}
       />
       <div>
         <Table
           aria-label="simple table"
-          className="transparentHeader"
           sx={{
-            fontFamily: 'Inter'
+            borderCollapse: "separate",
+            borderSpacing: "0 14px",
           }}
-          >
-          <TableHead
-            sx={{"& .tr": {backgroundColor: "rgba(0,0,0,0);"}}}
-          >
+          className={clsx("transparentHeader", styles.table)}
+        >
+          <TableHead sx={{ 
+            "& .MuiTableCell-root.MuiTableCell-head": {
+              color: "#606479",
+              fontSize: '15px'
+            }
+            }}>
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align="right">Joined at</TableCell>
@@ -153,64 +170,79 @@ const Members = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orgMembers?.data.map(({user_id, username, member_type, created_at}) => (
-              <TableRow
-                key={user_id}
-                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-              >
-                <TableCell component="th" scope="row">
-                  <div className={styles.name}>
-                    <img src={RoleIcon[member_type]} alt="user"/>
-                    <span>
-                        {username}
-                      </span>
-                  </div>
-                </TableCell>
-                <TableCell align="right">
-                  <div className={styles.time}>{formatDate(created_at * 1000)}</div>
-                </TableCell>
-                <TableCell align="right">
-                  {
-                    (![roleType.Owner].includes(member_type) &&
-                      [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
-                      (currentMemberId !== user_id)) ?
+            {orgMembers?.data.map(
+              ({ user_id, username, member_type, created_at }) => (
+                <TableRow
+                  key={user_id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  className={styles.tbodyRow}
+                >
+                  <TableCell component="th" scope="row">
+                    <div className={styles.name}>
+                      <img src={RoleIcon[member_type]} alt="user" />
+                      <span>{username}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="right">
+                    <div className={styles.time}>
+                      {formatDate(created_at * 1000)}
+                    </div>
+                  </TableCell>
+                  <TableCell align="right">
+                    {![roleType.Owner].includes(member_type) &&
+                    [roleType.Owner, roleType.Admin].includes(
+                      currentMemberType as string
+                    ) &&
+                    currentMemberId !== user_id ? (
                       <Select
                         value={member_type}
                         label=""
                         size="small"
                         variant="standard"
-                        sx={{".MuiSelect-select": {padding: "4px 10px", fontSize: '14px'}, width: '86px'}}
+                        sx={{
+                          ".MuiSelect-select": {
+                            padding: "4px 10px",
+                            fontSize: "14px",
+                          },
+                          width: "86px",
+                        }}
                         onChange={(e, v: ReactNode) => handleChange(v, user_id)}
                       >
-                        <MenuItem value={MemberTypeEnum.Member}>{MemberTypeEnum.Member}</MenuItem>
-                        <MenuItem value={MemberTypeEnum.Admin}>{MemberTypeEnum.Admin}</MenuItem>
+                        <MenuItem value={MemberTypeEnum.Member}>
+                          {MemberTypeEnum.Member}
+                        </MenuItem>
+                        <MenuItem value={MemberTypeEnum.Admin}>
+                          {MemberTypeEnum.Admin}
+                        </MenuItem>
                       </Select>
-                      :
-                      <RoleTag type={member_type}/>
-                  }
-                </TableCell>
-                <TableCell align="right">
-                  xxx
-                </TableCell>
-                <TableCell align="right">
-                  {
-                    ![roleType.Owner].includes(member_type) &&
-                    [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
-                    (currentMemberId !== user_id) &&
-                    <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
-                      setDeleteId(user_id);
-                      setMountDom(event?.currentTarget);
-                    }}/>
-                  }
-                </TableCell>
-              </TableRow>
-            ))}
+                    ) : (
+                      <RoleTag type={member_type} />
+                    )}
+                  </TableCell>
+                  <TableCell align="right">xxx</TableCell>
+                  <TableCell align="right">
+                    {![roleType.Owner].includes(member_type) &&
+                      [roleType.Owner, roleType.Admin].includes(
+                        currentMemberType as string
+                      ) &&
+                      currentMemberId !== user_id && (
+                        <MoreVertIcon
+                          sx={{ cursor: "pointer" }}
+                          onClick={(event) => {
+                            setDeleteId(user_id);
+                            setMountDom(event?.currentTarget);
+                          }}
+                        />
+                      )}
+                  </TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
-          {
-            (get(orgMembers, 'pagination.total', 0) > 10) &&
+          {get(orgMembers, "pagination.total", 0) > 10 && (
             <TableFooter>
               <TableRow
-                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TablePagination
                   rowsPerPageOptions={[pageSize]}
@@ -225,7 +257,7 @@ const Members = () => {
                 />
               </TableRow>
             </TableFooter>
-          }
+          )}
         </Table>
       </div>
       <InviteMember
@@ -238,7 +270,7 @@ const Members = () => {
           deleteModalVisible,
           deleteSuccessCb,
           setDeleteModalVisible,
-          deleteID
+          deleteID,
         }}
       />
     </Layout>

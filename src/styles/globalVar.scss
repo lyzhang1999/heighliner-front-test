@@ -23,3 +23,9 @@ $theme-color: #6002ee;
   color: #5b626c;
 }
 
+@mixin moreIconWrapper{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+

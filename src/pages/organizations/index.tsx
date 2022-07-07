@@ -141,23 +141,26 @@ const Organizations = () => {
                     <RoleTag type={member_type}/>
                   </TableCell>
                   <TableCell align="right">
-                    {
-                      [roleType.Owner].includes(member_type) && row.type === 'Default' ?
-                        <Tooltip
-                          title="Init organization does not allow operations"
-                          placement="left"
-                        >
-                          <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
-                        </Tooltip>
-                        :
-                        <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
-                          setDeleteId(row.id);
-                          setTransferId(row.id);
-                          setLeaveId(row.id);
-                          setActiveType(member_type);
-                          setMountDom(event?.currentTarget);
-                        }}/>
-                    }
+                    <div className={styles.moreIcon}>
+                      {
+                        [roleType.Owner].includes(member_type) && row.type === 'Default' ?
+                          <Tooltip
+                            title="Init organization does not allow operations"
+                            placement="left"
+                          >
+                            <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
+                          </Tooltip>
+                          :
+                          <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
+                            setDeleteId(row.id);
+                            setTransferId(row.id);
+                            setLeaveId(row.id);
+                            setActiveType(member_type);
+                            setMountDom(event?.currentTarget);
+                          }}/>
+                      }
+                    </div>
+
                   </TableCell>
                 </TableRow>
               )

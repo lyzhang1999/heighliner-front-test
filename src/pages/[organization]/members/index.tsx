@@ -183,15 +183,17 @@ const Members = () => {
                   }
                 </TableCell>
                 <TableCell align="right">
-                  {
-                    ![roleType.Owner].includes(member_type) &&
-                    [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
-                    (currentMemberId !== user_id) &&
-                    <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
-                      setDeleteId(user_id);
-                      setMountDom(event?.currentTarget);
-                    }}/>
-                  }
+                  <div className={styles.moreIcon}>
+                    {
+                      ![roleType.Owner].includes(member_type) &&
+                      [roleType.Owner, roleType.Admin].includes(currentMemberType as string) &&
+                      (currentMemberId !== user_id) &&
+                      <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
+                        setDeleteId(user_id);
+                        setMountDom(event?.currentTarget);
+                      }}/>
+                    }
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

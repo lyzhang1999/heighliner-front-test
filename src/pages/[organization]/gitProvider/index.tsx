@@ -115,12 +115,10 @@ const Clusters = () => {
                   </TableCell>
                   <TableCell align="right">
                     <div className={styles.moreIcon}>
-                      <div
-                        className={styles.icon}
-                        onClick={(e) => handleClick(e, item.id)}
-                      >
-                        <MoreVertIcon/>
-                      </div>
+                        <MoreVertIcon
+                          sx={{cursor: "pointer"}}
+                          onClick={(e) => handleClick(e, item.id)}
+                        />
                     </div>
                   </TableCell>
                 </TableRow>

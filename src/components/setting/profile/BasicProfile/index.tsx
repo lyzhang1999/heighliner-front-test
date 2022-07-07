@@ -130,7 +130,7 @@ export default function BasicProfile(): React.ReactElement {
         render={({ field }) => (
           <div className={styles.avatarWrap}>
             <h2>Avatar</h2>
-            <Avatar src={field.value}></Avatar>
+            <Avatar src={field.value} className={styles.avatar}></Avatar>
             <Button>
               <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />

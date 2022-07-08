@@ -133,7 +133,9 @@ const Clusters = () => {
             Are you sure to delete the Git-Provider?
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions
+          sx={{padding: '16px 24px'}}
+        >
           <Button onClick={closeDialog}
                   variant="outlined"
           >Cancel</Button>

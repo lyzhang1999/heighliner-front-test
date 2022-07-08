@@ -101,10 +101,12 @@ const Clusters = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
+          <Button onClick={closeDialog}
+                  variant="outlined"
+          >Cancel</Button>
           <Button onClick={deleteItem}
                   color="error"
-                  variant="contained"
+                  variant="outlined"
           >
             Confirm
           </Button>

@@ -42,10 +42,11 @@ const DeleteUser = (props: Props) => {
         sx={{padding: '16px 24px'}}
       >
         <Button onClick={handleClose}
+                variant="outlined"
         >Cancel</Button>
         <Button onClick={deleteIt}
                 color="error"
-                variant="contained"
+                variant="outlined"
         >
           Delete
         </Button>

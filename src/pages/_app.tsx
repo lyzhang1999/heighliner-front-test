@@ -24,7 +24,8 @@ const noCheckLoginPage = [
   '/distributor/post-install-github-app',
   '/inviteConfirm',
   '/forgotPassword',
-  "/resetPassword"
+  "/resetPassword",
+  '/version'
 ];
 const noCheckOrgNamePage = ['/organizations', '/settings'];
 const ifLoginDisablePage = ["/", '/login', '/signup'];

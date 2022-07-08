@@ -155,8 +155,8 @@ const Menu = () => {
                 value={NEWORGANIZATION}
                 key={NEWORGANIZATION}
               >
-                <AddCircleOutlineOutlinedIcon/>
-                <span style={{marginLeft: "10px"}}>New Organization</span>
+                {/*<AddCircleOutlineOutlinedIcon/>*/}
+                <span style={{color: "#1b51b9"}}>New organization</span>
               </SelectMenuItem>
             </Select>
             <div className={clsx(styles.selectIcon)} onClick={handleOpen}>

@@ -76,13 +76,9 @@
 
     .logo {
       width: 34px;
-      //height: 34px;
-      //border-radius: 4px;
       display: flex;
       align-items: center;
       cursor: pointer;
-
-      //border: solid 1px #e9e9ea;
 
       img {
         width: 34px;
@@ -227,12 +223,6 @@
       width: 19px;
       height: 19px;
     }
-
-    //&:hover {
-    //  border-radius: 7px;
-    //  border: solid 2px #e3e6ff;
-    //  background-color: rgba(242, 244, 255, 0.8);
-    //}
   }
 
   .right {

@@ -22,11 +22,12 @@ const noCheckLoginPage = [
   '/login/github',
   '/signup',
   '/distributor/post-install-github-app',
-  '/inviteConfirm',
-  '/forgotPassword',
-  "/resetPassword",
+  '/invite-confirm',
+  '/forgot-password',
+  "/reset-password",
   '/version',
-  '/signup-success'
+  '/signup-success',
+  "/verify-email"
 ];
 
 const noCheckOrgNamePage = ['/organizations', '/settings'];

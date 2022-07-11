@@ -14,7 +14,7 @@ const inputStyle = {
   // width: "100%"
 }
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
 
   const [showPassport, setShowPassport] = useState({
     pass: false,
@@ -32,7 +32,7 @@ export default function ForgotPassword() {
     }
   });
 
-  const handleClickShowPassword = (key) => {
+  const handleClickShowPassword = (key: ("pass" | "confirmPass")) => {
     setShowPassport({
       ...showPassport,
       [key]: !showPassport[key],

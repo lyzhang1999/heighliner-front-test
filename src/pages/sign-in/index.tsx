@@ -31,7 +31,7 @@ const FieldMap = {
   Password: "Password",
 };
 
-const IconFocusStyle = {
+export const IconFocusStyle = {
   "& .MuiOutlinedInput-root.Mui-focused": {
     "& > fieldset": {
       borderColor: "#1b51b9",
@@ -58,7 +58,7 @@ export default function SignIn(): React.ReactElement {
   });
 
   const gotoSignUpPage = () => {
-    router.push(`/signup`);
+    router.push(`/sign-up`);
   };
 
   const gotoCurrentOrg = () => {

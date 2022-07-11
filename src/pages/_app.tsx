@@ -19,7 +19,7 @@ import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContex
 const noCheckLoginPage = [
   '/sign-in',
   '/login/github',
-  '/signup',
+  '/sign-up',
   '/distributor/post-install-github-app',
   '/invite-confirm',
   '/forgot-password',
@@ -30,7 +30,7 @@ const noCheckLoginPage = [
 ];
 
 const noCheckOrgNamePage = ['/organizations', '/settings'];
-const ifLoginDisablePage = ["/", '/login', '/signup'];
+const ifLoginDisablePage = ["/", '/login', '/sign-up'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);

@@ -20,7 +20,7 @@ import Lock from "/public/img/entrance/sign-in/Lock.svg";
 import EyeOpen from "/public/img/eye/open.svg";
 import EyeClose from "/public/img/eye/close.svg";
 import { getAuthToken, GetAuthTokenReq, LoginType } from "@/api/auth";
-import { setLoginToken } from "@/utils/utils";
+import {getCurrentOrg, getDefaultOrg, setLoginToken} from "@/utils/utils";
 import { getOrgList } from "@/api/org";
 
 import styles from "./index.module.scss";
@@ -68,7 +68,7 @@ export default function SignIn(): React.ReactElement {
       let list = res.data;
       dispatch({
         organizationList: list,
-        currentOrganization: omit({ ...list[0], ...list[0].member }, "member"),
+        currentOrganization:  getCurrentOrg(getDefaultOrg(list)),
       });
       let oriName = encodeURIComponent(list[0]?.name);
       router.push(`${oriName}/applications`);

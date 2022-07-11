@@ -1,7 +1,7 @@
 name: Create and Publish a Docker image
 on:
   push:
-    branches: ['main']
+    branches: ['dev']
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: ${{ env.ORG }}/${{ env.HELM_REPO }}
-          ref: refs/heads/main
+          ref: refs/heads/dev
           persist-credentials: false
           fetch-depth: 0
           token: ${{ secrets.PAT }}

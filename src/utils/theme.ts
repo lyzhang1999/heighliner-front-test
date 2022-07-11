@@ -83,7 +83,7 @@ const theme = createTheme({
         }
 
         @font-face {
-          font-family: 'Roboto';
+          font-family: 'Inter';
           font-style: normal;
           font-weight: 500;
           src: url(${InterMedium}) format('truetype');

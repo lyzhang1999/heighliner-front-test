@@ -1,14 +1,14 @@
 @import "@/styles/globalVar.scss";
+@import "@/styles/utils";
 
 .time {
   @include timeStyles;
+  color: #4ec8de;
 }
 
 .name {
   display: flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 15px;
 
   img {
     width: 20px;
@@ -19,6 +19,7 @@
 }
 
 .table {
+
   .tbodyRow {
     height: 92px;
     position: relative;

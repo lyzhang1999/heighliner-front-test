@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const path = require('path')
+const nextBuildId = require('next-build-id')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -32,6 +33,11 @@ const nextConfig = {
 
     return config
   },
+  /**
+   * By default, buildId will use the latest git commit hash 
+   * from the local git repository (equivalent of git rev-parse HEAD).
+   */
+  generateBuildId: () => nextBuildId({ dir: __dirname })
 }
 
 module.exports = nextConfig

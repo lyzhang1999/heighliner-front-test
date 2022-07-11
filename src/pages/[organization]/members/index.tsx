@@ -45,6 +45,25 @@ type ActionSet = Array<keyof typeof Action>;
 
 const pageSize = 10;
 
+const getMenuItemCommonStyle = (roleIcon: string) => {
+  return {
+    width: '155px',
+    color: "#606479",
+    fontSize: "15px",
+    display: "flex",
+    alignItems: "center",
+    gap: "9px",
+    "&::before": {
+      content: `""`,
+      display: "block",
+      width: "16px",
+      height: "16px",
+      backgroundImage: `url(${roleIcon})`,
+      backgroundSize: "contain",
+    },
+  };
+};
+
 const Members = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
@@ -152,6 +171,11 @@ const Members = () => {
           sx={{
             borderCollapse: "separate",
             borderSpacing: "0 14px",
+            '.MuiTableCell-root.MuiTableCell-body': {
+              fontSize: "15px",
+              fontWeight: 500,
+              borderBottom: 'none'
+            }
           }}
           className={clsx("transparentHeader", styles.table)}
         >
@@ -159,12 +183,13 @@ const Members = () => {
             sx={{
               "& .MuiTableCell-root.MuiTableCell-head": {
                 color: "#606479",
-                fontSize: "15px",
+                
               },
             }}
           >
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell align="right">Action</TableCell>
               <TableCell align="right">Joined at</TableCell>
               <TableCell align="right">Role</TableCell>
               <TableCell align="right">Status</TableCell>
@@ -186,11 +211,6 @@ const Members = () => {
                     </div>
                   </TableCell>
                   <TableCell align="right">
-                    <div className={styles.time}>
-                      {formatDate(created_at * 1000)}
-                    </div>
-                  </TableCell>
-                  <TableCell align="right">
                     {![roleType.Owner].includes(member_type) &&
                     [roleType.Owner, roleType.Admin].includes(
                       currentMemberType as string
@@ -202,25 +222,46 @@ const Members = () => {
                         size="small"
                         variant="standard"
                         sx={{
+                          color: "#283547",
                           ".MuiSelect-select": {
                             padding: "4px 10px",
                             fontSize: "14px",
                           },
                           width: "86px",
+                          "&::before, :hover:not(.Mui-disabled):before": {
+                            borderBottom: "none",
+                          },
+                          "& .MuiSelect-select.MuiSelect-standard.MuiInput-input.MuiInputBase-input":
+                            {
+                              backgroundColor: "#f1f3f5",
+                              borderRadius: "5px",
+                            },
                         }}
                         onChange={(e, v: ReactNode) => handleChange(v, user_id)}
                       >
-                        <MenuItem value={MemberTypeEnum.Member}>
-                          {MemberTypeEnum.Member}
-                        </MenuItem>
-                        <MenuItem value={MemberTypeEnum.Admin}>
+                        <MenuItem
+                          value={MemberTypeEnum.Admin}
+                          sx={getMenuItemCommonStyle(RoleIcon[roleType.Owner])}
+                        >
                           {MemberTypeEnum.Admin}
+                        </MenuItem>
+                        <MenuItem
+                          value={MemberTypeEnum.Member}
+                          sx={getMenuItemCommonStyle(RoleIcon[roleType.Member])}
+                        >
+                          {MemberTypeEnum.Member}
                         </MenuItem>
                       </Select>
                     ) : (
                       <RoleTag type={member_type} />
                     )}
                   </TableCell>
+                  <TableCell align="right">
+                    <div className={styles.time}>
+                      {formatDate(created_at * 1000)}
+                    </div>
+                  </TableCell>
+                  <TableCell align="right">{member_type}</TableCell>
                   <TableCell align="right">xxx</TableCell>
                   <TableCell align="right">
                     <div className={styles.moreIcon}>

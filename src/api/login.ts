@@ -27,7 +27,7 @@ export const login = (params: Req): Promise<Res> => {
   return http.post(url, {username: user, password: pass})
 }
 
-interface SignUpReq {
+export interface SignUpReq {
   check_password: string,
   password: string,
   nickname: string,
@@ -40,4 +40,9 @@ interface SignUpRes {
 
 export const signUpApi = (params: SignUpReq): Promise<SignUpRes> => {
   return http.post("/register", params)
+}
+
+
+export const checkEmail = (token: string): Promise<{ token: string }> => {
+  return http.post('/user/email_verification', {token})
 }

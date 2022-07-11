@@ -114,7 +114,7 @@ const Menu = () => {
       activeIcon: getAvatar(true),
       icon: getAvatar(),
       href: `/profile`,
-      name: get(state, 'userInfo.username', ''),
+      name: get(state, 'userInfo.nickname', ''),
     },
   ];
 

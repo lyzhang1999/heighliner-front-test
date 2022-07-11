@@ -27,7 +27,7 @@ export interface BasicProfileRes {
   password: string;
   status: number;
   updated_at: number;
-  username: string;
+  nickname: string;
 }
 
 export function updateBasicProfile(
@@ -43,7 +43,7 @@ export interface UserInfo {
   created_by: number;
   updated_at: number;
   updated_by: number;
-  username: string;
+  nickname: string;
   password: string;
   email: string;
   avatar: string;

@@ -54,8 +54,8 @@ const SignUp: NextPage = () => {
   };
 
 
-  function gologin() {
-    router.push('/login')
+  function goSignIn() {
+    router.push('/sign-in')
   }
 
   return (
@@ -203,10 +203,8 @@ const SignUp: NextPage = () => {
           <input className={styles.signIn} onClick={handleSubmit(onSubmit)} type="submit" value="Sign up"/>
         </form>
         <div className={styles.action}>
-          <div className={styles.btn} onClick={() => {
-            router.push('/login')
-          }}>
-            Already have an account? <span onClick={gologin} className={styles.login}>Log In</span>
+          <div className={styles.btn} onClick={goSignIn}>
+            Already have an account? <span onClick={goSignIn} className={styles.login}>Sign in</span>
           </div>
         </div>
       </div>

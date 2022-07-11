@@ -30,7 +30,7 @@ const noCheckLoginPage = [
 ];
 
 const noCheckOrgNamePage = ['/organizations', '/settings'];
-const ifLoginDisablePage = ["/", '/login', '/sign-up'];
+const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);

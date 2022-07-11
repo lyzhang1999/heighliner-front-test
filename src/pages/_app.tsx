@@ -25,8 +25,10 @@ const noCheckLoginPage = [
   '/inviteConfirm',
   '/forgotPassword',
   "/resetPassword",
-  '/version'
+  '/version',
+  '/signup-success'
 ];
+
 const noCheckOrgNamePage = ['/organizations', '/settings'];
 const ifLoginDisablePage = ["/", '/login', '/signup'];
 

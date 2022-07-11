@@ -6,10 +6,7 @@ import {useRouter} from "next/router";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
-import {signUpApi} from "@/api/login";
-import {Message} from "@/utils/utils";
-import {PassportReg} from "@/utils/config";
-import {checkInput, checkAllParams, RuleItem, RuleKey} from './formUtil';
+import {signUpApi, SignUpReq} from "@/api/login";
 import {useForm, Controller} from "react-hook-form";
 import {get} from "lodash-es";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -19,8 +16,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {emailRule, passportRule, userNameRule} from "@/pages/signup/formRules";
 
 const inputStyle = {
-  // marginTop: "20px",
-  // width: "100%"
 }
 
 const Login: NextPage = () => {
@@ -37,28 +32,20 @@ const Login: NextPage = () => {
 
   const {control, handleSubmit, formState: {errors}, register, getValues} = useForm({
     defaultValues: {
-      username: "",
+      nickname: "",
       email: "",
       password: "",
       check_password: "",
     }
   });
 
-  const onSubmit = (data) => {
-    let {check_password, email, password, username: nickname} = data;
-
-    signUpApi({
-      check_password,
-      email,
-      password,
-      nickname,
-    }).then(res => {
-      Message.success('Sign Up Success');
-      gologin();
+  const onSubmit = (data: SignUpReq) => {
+    signUpApi(data).then(res => {
+      router.push('./signup-success');
     })
   };
 
-  const handleClickShowPassword = (key) => {
+  const handleClickShowPassword = (key: ('pass' | "confirmPass")) => {
     setShowPassport({
       ...showPassport,
       [key]: !showPassport[key],
@@ -87,7 +74,7 @@ const Login: NextPage = () => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <Controller
-            name="username"
+            name="nickname"
             control={control}
             render={({field}) => (
               <TextField label="Name*"
@@ -96,8 +83,8 @@ const Login: NextPage = () => {
                          value={field.value}
                          fullWidth
                          onChange={field.onChange}
-                         error={Boolean(get(errors, ['username', 'message']))}
-                         helperText={get(errors, ['username', 'message'])}
+                         error={Boolean(get(errors, ['nickname', 'message']))}
+                         helperText={get(errors, ['nickname', 'message'])}
                          InputProps={{
                            startAdornment: (
                              <InputAdornment position="start">

@@ -24,7 +24,7 @@ export default function Logout(): React.ReactElement {
 
   const logout = () => {
     cookie.delCookie("token");
-    location.pathname = "/login";
+    location.pathname = "/sign-in";
   };
 
   return (

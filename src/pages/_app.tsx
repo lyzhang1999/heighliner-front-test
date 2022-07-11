@@ -30,7 +30,7 @@ const noCheckLoginPage = [
 ];
 
 const noCheckOrgNamePage = ['/organizations', '/settings'];
-const ifLoginDisablePage = ["/", '/login', '/signup'];
+const ifLoginDisablePage = ["/", '/login', '/sign-in', '/signup'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -90,12 +90,12 @@ function App({Component, pageProps}: AppProps) {
           }
           location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
         }).catch(err => {
-          router.push("/login");
+          router.push("/sign-in");
           startRender();
         })
       } else {
         startRender()
-        router.push("/login");
+        router.push("/sign-in");
       }
     } else {
       startRender()

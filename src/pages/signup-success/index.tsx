@@ -5,7 +5,7 @@ export default function SignupSuccess() {
   const router = useRouter();
 
   function validateCb() {
-    router.push('/login');
+    location.pathname = "/login";
   }
 
   return (

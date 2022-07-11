@@ -22,7 +22,7 @@ import styles from "./index.module.scss";
 
 enum BasicProfileFieldMap {
   avatar = "avatar",
-  username = "username",
+  nickname = "nickname",
 }
 
 export default function BasicProfile(): React.ReactElement {
@@ -43,7 +43,7 @@ export default function BasicProfile(): React.ReactElement {
   // Form controller
   const defaultBasicProfileField = {
     [BasicProfileFieldMap.avatar]: globalState.userInfo?.avatar,
-    [BasicProfileFieldMap.username]: globalState.userInfo?.username,
+    [BasicProfileFieldMap.nickname]: globalState.userInfo?.nickname,
   };
   const {
     control,
@@ -104,7 +104,7 @@ export default function BasicProfile(): React.ReactElement {
   };
 
   const updateUsername: SubmitHandler<FieldValues> = (data) => {
-    const newUsername = data[BasicProfileFieldMap.username];
+    const newUsername = data[BasicProfileFieldMap.nickname];
 
     const req: BasicProfileReq = {
       username: newUsername,
@@ -114,10 +114,10 @@ export default function BasicProfile(): React.ReactElement {
       globalStateDispatch({
         userInfo: {
           ...globalState.userInfo,
-          username: newUsername,
+          nickname: newUsername,
         },
       });
-      Message.success("Update username successfully.");
+      Message.success("Update nickname successfully.");
       setUsernameEditing(false);
     });
   };
@@ -142,10 +142,10 @@ export default function BasicProfile(): React.ReactElement {
       />
       <Controller
         control={control}
-        name={BasicProfileFieldMap["username"]}
+        name={BasicProfileFieldMap["nickname"]}
         render={({ field }) => (
           <FormControl
-            error={errors[BasicProfileFieldMap["username"]] ? true : false}
+            error={errors[BasicProfileFieldMap["nickname"]] ? true : false}
           >
             <div className={styles.usernameWrapper}>
               <h2>Name</h2>
@@ -159,8 +159,8 @@ export default function BasicProfile(): React.ReactElement {
                     onKeyDown={onKeydownHandler}
                   ></TextField>
                   <FormHelperText>
-                    {errors[BasicProfileFieldMap["username"]] &&
-                      errors[BasicProfileFieldMap["username"]]!.message}
+                    {errors[BasicProfileFieldMap["nickname"]] &&
+                      errors[BasicProfileFieldMap["nickname"]]!.message}
                   </FormHelperText>
                   <button
                     className={styles.changeBtn}
@@ -175,7 +175,7 @@ export default function BasicProfile(): React.ReactElement {
                 </div>
               ) : (
                 <div className={styles.usernameTextWrap}>
-                  <p>{globalState.userInfo?.username}</p>
+                  <p>{globalState.userInfo?.nickname}</p>
                   <Button onClick={() => setUsernameEditing(true)}>Edit</Button>
                 </div>
               )}
@@ -198,8 +198,8 @@ export default function BasicProfile(): React.ReactElement {
           },
           validate: {
             sameWithOld: (value) =>
-              value !== defaultBasicProfileField.username ||
-              "Nothing changed to the username.",
+              value !== defaultBasicProfileField.nickname ||
+              "Nothing changed to the nickname.",
           },
         }}
       />

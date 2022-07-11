@@ -85,7 +85,6 @@ export default function GitHubApp(props: Props): React.ReactElement {
       <GlobalLoading
         {...{
           openGlobalLoading,
-          setOpenGlobalLoading,
           title: "Processing",
           description:
             `Please choose a organization to ` +

@@ -18,7 +18,7 @@ import {emailRule, passportRule, userNameRule} from "@/pages/signup/formRules";
 const inputStyle = {
 }
 
-const Login: NextPage = () => {
+const SignUp: NextPage = () => {
   const router = useRouter();
 
   const [showPassport, setShowPassport] = useState({
@@ -213,4 +213,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default SignUp;

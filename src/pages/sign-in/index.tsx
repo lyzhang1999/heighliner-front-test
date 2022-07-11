@@ -25,6 +25,7 @@ import { getOrgList } from "@/api/org";
 
 import styles from "./index.module.scss";
 import { Context } from "@/utils/store";
+import GlobalLoading from "@/basicComponents/GlobalLoading";
 
 const FieldMap = {
   Email: "Email",
@@ -43,6 +44,7 @@ export const IconFocusStyle = {
 };
 
 export default function SignIn(): React.ReactElement {
+  const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
   const router = useRouter();
   const { dispatch } = useContext(Context);
   const {
@@ -74,6 +76,8 @@ export default function SignIn(): React.ReactElement {
   };
 
   const onSignIn: SubmitHandler<FieldValues> = (data) => {
+    setOpenGlobalLoading(true);
+
     const req: GetAuthTokenReq = {
       login_type: LoginType.Email,
       body: {
@@ -105,6 +109,9 @@ export default function SignIn(): React.ReactElement {
               message: "Please check your password if is correct.",
             });
         }
+      })
+      .finally(() => {
+        setOpenGlobalLoading(false);
       });
   };
 
@@ -205,6 +212,12 @@ export default function SignIn(): React.ReactElement {
           </Button>
         </form>
       </div>
+      <GlobalLoading
+        {...{
+          openGlobalLoading,
+          title: "Sign in ...",
+        }}
+      />
     </div>
   );
 }

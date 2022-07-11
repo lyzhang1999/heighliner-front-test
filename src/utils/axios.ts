@@ -41,8 +41,8 @@ http.interceptors.response.use((res: AxiosResponse) => {
   if (status === 401) {
     cookie.delCookie('token');
   }
-  if (status === 401 && (location.pathname !== '/login')) {
-    location.pathname = '/login';
+  if (status === 401 && (location.pathname !== '/sign-in')) {
+    location.pathname = '/sign-in';
     return;
   }
   let errMsg = data?.msg || data?.err_msg || data;

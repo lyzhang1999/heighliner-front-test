@@ -76,8 +76,14 @@ export function uuid() {
   return uuid
 }
 
-export function setLoginToken(value: string) {
-  cookie.setCookie('token', value, 1000 * 60 * 60 * 48); // 48h
+export function setLoginToken(value: string, expiration?: number) {
+  let exTime = 1000 * 60 * 60 * 48; // 48 hours by default
+  if(expiration !== undefined) {
+    const delta = expiration - Date.now();
+    delta >= 0 && (exTime = delta);
+  }
+
+  cookie.setCookie('token', value, exTime);
 }
 
 export function formatDate(d: number) {

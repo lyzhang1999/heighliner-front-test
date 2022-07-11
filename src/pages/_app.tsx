@@ -17,8 +17,7 @@ import {find} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 
 const noCheckLoginPage = [
-  '/entrance/sign-in',
-  '/entrance/sign-up',
+  '/sign-in',
   '/login/github',
   '/signup',
   '/distributor/post-install-github-app',

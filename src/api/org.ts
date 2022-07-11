@@ -2,7 +2,7 @@ import http from "@/utils/axios";
 import {Page} from "./type";
 import {find, get, uniq} from "lodash-es";
 import {getOriIdByContext} from "@/utils/utils";
-import { CreativeApiReturnField } from "../commonType";
+import { CreativeApiReturnField } from "../utils/commonType";
 
 export interface OrgList {
   id: number;

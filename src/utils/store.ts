@@ -1,6 +1,6 @@
 import React, {createContext} from 'react'
-import {MemberType, OrgList} from './api/org'
-import {UserInfo} from "@/utils/api/profile";
+import {MemberType, OrgList} from '../api/org'
+import {UserInfo} from "@/api/profile";
 
 export interface State {
   organizationList?: OrgList[],

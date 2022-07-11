@@ -10,7 +10,7 @@ import {
 import {trim} from "lodash-es";
 
 import {Message} from "@/utils/utils";
-import {createCluster} from "@/utils/api/cluster";
+import {createCluster} from "@/api/cluster";
 
 import styles from './index.module.scss';
 

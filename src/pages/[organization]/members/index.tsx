@@ -24,7 +24,7 @@ import {
   roleType,
   shiftRole,
   ShiftRoleReq,
-} from "@/utils/api/org";
+} from "@/api/org";
 import InviteMember from "@/components/Member/InviteMember";
 import { Context } from "@/utils/store";
 import { get } from "lodash-es";

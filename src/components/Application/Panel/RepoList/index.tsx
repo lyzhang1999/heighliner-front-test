@@ -1,7 +1,7 @@
 import styles from './index.module.scss';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {getRepoList, GetRepoListRes} from "@/utils/api/application";
+import {getRepoList, GetRepoListRes} from "@/api/application";
 
 const list = [
   {

@@ -1,6 +1,6 @@
 import http from "@/utils/axios";
 import { getOriIdByContext } from "@/utils/utils";
-import { CreativeApiReturnField } from "../commonType";
+import { CreativeApiReturnField } from "../utils/commonType";
 
 export enum GitProvider {
   GitHub = "GitHub",

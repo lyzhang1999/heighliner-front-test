@@ -2,7 +2,7 @@ import react, {ReactElement, useContext, useEffect, useState} from 'react';
 import Menu from './Menu';
 import clsx from "clsx";
 import styles from './index.module.scss';
-import {getUserInfo} from "@/utils/api/profile";
+import {getUserInfo} from "@/api/profile";
 import {Context} from "@/utils/store";
 import {Button} from '@mui/material';
 

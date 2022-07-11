@@ -1,6 +1,6 @@
-import http from "../axios";
-import { CreativeApiReturnField } from "../commonType";
-import {getOriIdByContext} from "../utils";
+import http from "../utils/axios";
+import { CreativeApiReturnField } from "../utils/commonType";
+import {getOriIdByContext} from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;

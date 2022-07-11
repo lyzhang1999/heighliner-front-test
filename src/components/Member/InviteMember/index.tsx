@@ -5,7 +5,7 @@ import {
   InviteeSuggestionsRes,
   MemberType,
   MemberTypeEnum,
-} from "@/utils/api/org";
+} from "@/api/org";
 import { getOriIdByContext, Message } from "@/utils/utils";
 import {
   Autocomplete,

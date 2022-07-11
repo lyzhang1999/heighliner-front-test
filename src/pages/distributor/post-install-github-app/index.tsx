@@ -8,7 +8,7 @@ import { Alert, AlertTitle } from "@mui/material";
 
 import PageCenter from "@/basicComponents/PageCenter";
 import { TemporaryStorageItems } from "@/components/AddGitProvider/GitHubApp";
-import { putInstallation, PutInstallationReq } from "@/utils/api/github";
+import { putInstallation, PutInstallationReq } from "@/api/github";
 import CloseWindowCounter from "@/basicComponents/CloseWindowCounter";
 import { Result } from "@/utils/constants";
 

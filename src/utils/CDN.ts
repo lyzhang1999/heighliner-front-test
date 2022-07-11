@@ -2,7 +2,7 @@
  * All resources store in the CDN
  */
 
-import { ClusterProvider } from "./api/cluster";
+import { ClusterProvider } from "../api/cluster";
 
 export const ForkMainLogo = 
   "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/ForkMain%20Logo%403x.png";

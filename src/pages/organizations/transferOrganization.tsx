@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
-import {getOrgMembers, GetOrgMembersRes, transferOri} from "@/utils/api/org";
+import {getOrgMembers, GetOrgMembersRes, transferOri} from "@/api/org";
 import styles from './index.module.scss';
 import {Context} from "@/utils/store";
 import {get} from "lodash-es";

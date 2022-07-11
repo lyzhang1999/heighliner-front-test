@@ -30,7 +30,8 @@ export const login = (params: Req): Promise<Res> => {
 interface SignUpReq {
   check_password: string,
   password: string,
-  username: string
+  nickname: string,
+  email: string,
 }
 
 interface SignUpRes {

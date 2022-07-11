@@ -8,7 +8,7 @@ import {find, isEmpty} from "lodash-es";
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
-import {ClusterStatus, deleteCluster} from "@/utils/api/cluster";
+import {ClusterStatus, deleteCluster} from "@/api/cluster";
 import {useClusterList} from '@/hooks/cluster';
 import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 

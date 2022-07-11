@@ -23,7 +23,7 @@ import styles from "./index.module.scss";
 import popStyles from '@/components/PopSelect/index.module.scss'
 import {isEmpty} from "lodash-es";
 import useGitProviders from "@/hooks/gitProviders";
-import {deleteGitProvider} from "@/utils/api/gitProviders";
+import {deleteGitProvider} from "@/api/gitProviders";
 import clsx from "clsx";
 
 const Clusters = () => {

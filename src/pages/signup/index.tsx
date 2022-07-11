@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 
 import styles from "./index.module.scss";
 import Image from "next/image";
-import {signUpApi} from "@/utils/api/login";
+import {signUpApi} from "@/api/login";
 import {Message} from "@/utils/utils";
 import {PassportReg} from "@/utils/config";
 import {checkInput, checkAllParams, RuleItem, RuleKey} from './formUtil';
@@ -44,7 +44,19 @@ const Login: NextPage = () => {
     }
   });
 
-  const onSubmit = data => console.log(data);
+  const onSubmit = (data) => {
+    let {check_password, email, password, username: nickname} = data;
+
+    signUpApi({
+      check_password,
+      email,
+      password,
+      nickname,
+    }).then(res => {
+      Message.success('Sign Up Success');
+      gologin();
+    })
+  };
 
   const handleClickShowPassword = (key) => {
     setShowPassport({
@@ -58,18 +70,6 @@ const Login: NextPage = () => {
     router.push('/login')
   }
 
-  function signUp() {
-    // let errMsg = checkAllParams(inputValue, formRule);
-    // if (errMsg) {
-    //   Message.error('errMsg')
-    //   return;
-    // }
-    // signUpApi(inputValue).then(res => {
-    //   Message.success('Sign Up Success');
-    //   gologin();
-    // })
-  }
-
   return (
     <div className={clsx("relative", styles.container)}>
       {/*<div className={clsx("absolute flex gap-4", styles.logo)}>*/}
@@ -81,7 +81,6 @@ const Login: NextPage = () => {
       {/*  />*/}
       {/*  <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5}/>*/}
       {/*</div>*/}
-
       <div className={styles.cardWrapper}>
         <div className={styles.title}>
           Sign up
@@ -110,7 +109,6 @@ const Login: NextPage = () => {
             )}
             rules={userNameRule}
           />
-
           <Controller
             name="email"
             control={control}
@@ -215,9 +213,7 @@ const Login: NextPage = () => {
             }}
           />
           <input className={styles.signIn} onClick={handleSubmit(onSubmit)} type="submit" value="Sign up"/>
-
         </form>
-
         <div className={styles.action}>
           <div className={styles.btn} onClick={() => {
             router.push('/login')

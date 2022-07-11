@@ -16,7 +16,7 @@ import {
 
 import { fileToBase64, Message } from "@/utils/utils";
 import { Context } from "@/utils/store";
-import { BasicProfileReq, updateBasicProfile } from "@/utils/api/profile";
+import { BasicProfileReq, updateBasicProfile } from "@/api/profile";
 
 import styles from "./index.module.scss";
 

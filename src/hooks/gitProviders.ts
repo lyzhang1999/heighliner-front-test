@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getGitProviderList, GitProviderList } from "@/utils/api/gitProviders";
+import { getGitProviderList, GitProviderList } from "@/api/gitProviders";
 
 export default function useGitProviders(): [
   GitProviderList,

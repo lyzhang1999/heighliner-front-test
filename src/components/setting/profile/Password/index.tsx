@@ -14,7 +14,7 @@ import {
   useForm,
 } from "react-hook-form";
 
-import { PasswordReq, updatePassword } from "@/utils/api/profile";
+import { PasswordReq, updatePassword } from "@/api/profile";
 import { Message } from "@/utils/utils";
 import EyeOpen from "/public/img/eye/open.svg";
 import EyeClose from "/public/img/eye/close.svg";

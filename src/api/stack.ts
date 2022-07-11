@@ -1,5 +1,5 @@
-import http from "../axios";
-import { CreativeApiReturnField } from "../commonType";
+import http from "../utils/axios";
+import { CreativeApiReturnField } from "../utils/commonType";
 
 export interface Stack extends CreativeApiReturnField{
   id: number;

@@ -1,4 +1,4 @@
-import http from "../axios";
+import http from "../utils/axios";
 
 export interface PasswordReq {
   ["check_new_password"]: string;

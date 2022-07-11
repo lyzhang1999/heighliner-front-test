@@ -4,7 +4,7 @@ import {
   MemberTypeEnum,
   shiftRole,
   ShiftRoleReq,
-} from "@/utils/api/org";
+} from "@/api/org";
 import {
   Box,
   Button,

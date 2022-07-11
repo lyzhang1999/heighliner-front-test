@@ -5,7 +5,7 @@ import {Button, TextField} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
 import {useState} from "react";
-import {createOrg} from "@/utils/api/org";
+import {createOrg} from "@/api/org";
 import {Message} from "@/utils/utils";
 
 interface Props {

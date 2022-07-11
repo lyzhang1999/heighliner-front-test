@@ -7,7 +7,7 @@ import RightDrawer from "@/basicComponents/RightDrawer";
 import styles from "./index.module.scss";
 import GitHubApp from "./GitHubApp";
 import GitHubPAT from "./GitHubPAT";
-import { GitProviderItem } from "@/utils/api/gitProviders";
+import { GitProviderItem } from "@/api/gitProviders";
 
 export type AddGitProviderSuccessCb = (
   newGitProviderItem: GitProviderItem

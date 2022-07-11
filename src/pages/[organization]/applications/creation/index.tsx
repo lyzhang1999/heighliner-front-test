@@ -20,14 +20,14 @@ import {
   ClusterProvider,
   ClusterStatus,
   getCluster,
-} from "@/utils/api/cluster";
+} from "@/api/cluster";
 
 import styles from "./index.module.scss";
 import NewClusterModal from "@/components/NewClusterModal";
 import {
   createApplication,
   CreateApplicationRequest,
-} from "@/utils/api/application";
+} from "@/api/application";
 import { useRouter } from "next/router";
 import { get } from "lodash-es";
 import {formatDate, getUrlEncodeName, Message} from "@/utils/utils";
@@ -48,7 +48,7 @@ import AddGitProvider, {
 import { useClusterList } from "@/hooks/cluster";
 import useGitProviders from "@/hooks/gitProviders";
 import useStacks from "@/hooks/stacks";
-import { GitProvider } from "@/utils/api/gitProviders";
+import { GitProvider } from "@/api/gitProviders";
 
 type FieldsDataType = typeof DefaultFieldsData;
 

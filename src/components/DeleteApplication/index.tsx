@@ -4,7 +4,7 @@ import {Button} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
 import {Message} from "@/utils/utils";
-import {deleteApplication} from "@/utils/api/application";
+import {deleteApplication} from "@/api/application";
 
 interface Props {
   deleteModalVisible: boolean,

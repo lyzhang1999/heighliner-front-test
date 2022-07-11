@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 
 import styles from "../login/index.module.scss";
 import Image from "next/image";
-import {signUpApi} from "@/utils/api/login";
+import {signUpApi} from "@/api/login";
 import {Message} from "@/utils/utils";
 import {PassportReg} from "@/utils/config";
 import {checkInput, checkAllParams, RuleItem, RuleKey} from './formUtil';

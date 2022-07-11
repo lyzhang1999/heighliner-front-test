@@ -6,7 +6,7 @@ import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/ut
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
-import {getApplicationStatus, ApplicationStatus} from "@/utils/api/application";
+import {getApplicationStatus, ApplicationStatus} from "@/api/application";
 import {Alert} from "@mui/material";
 import {get} from "lodash-es";
 import styles from "./index.module.scss";

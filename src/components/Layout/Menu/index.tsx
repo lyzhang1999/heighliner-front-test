@@ -6,7 +6,7 @@ import {Context} from "@/utils/store";
 import MenuItem, { MenuList } from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import {OrgList} from "@/utils/api/org";
+import {OrgList} from "@/api/org";
 import {find} from "lodash-es";
 import {useRouter} from "next/router";
 import {get} from 'lodash-es';

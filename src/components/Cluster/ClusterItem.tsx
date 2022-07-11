@@ -16,7 +16,7 @@ import {
 import {
   ClusterItem,
   ClusterStatus,
-} from "@/utils/api/cluster";
+} from "@/api/cluster";
 
 import {StatusDot, StatusIconText} from './Status';
 

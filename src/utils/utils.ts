@@ -1,10 +1,10 @@
 import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
 import {NoticeRef} from "@/components/Notice";
-import {OrgList, roleType} from "@/utils/api/org";
+import {OrgList, roleType} from "@/api/org";
 import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
-import {UserInfo} from "@/utils/api/profile";
+import {UserInfo} from "@/api/profile";
 import dayjs from "dayjs";
 
 export function isBrowser() {

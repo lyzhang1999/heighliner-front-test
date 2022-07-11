@@ -9,7 +9,7 @@ import Edit from "/public/img/application/panel/edit.svg";
 import Stats from "/public/img/application/panel/stats.svg";
 import WWW from "/public/img/application/panel/www.svg";
 import Set from "/public/img/application/panel/set.svg";
-import { GetAppEnvironmentsRes, WorkloadType } from "@/utils/api/application";
+import { GetAppEnvironmentsRes, WorkloadType } from "@/api/application";
 
 import styles from "./index.module.scss";
 import { ApplicationInfoContext } from "@/pages/[organization]/applications/panel";

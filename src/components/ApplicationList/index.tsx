@@ -1,9 +1,9 @@
 import styles from "./index.module.scss";
-import {ApplicationObject, ApplicationStatus} from "@/utils/api/application";
+import {ApplicationObject, ApplicationStatus} from "@/api/application";
 import {getUrlEncodeName} from "@/utils/utils";
 import {useRouter} from "next/router";
 import {find, get} from "lodash-es";
-import {ClusterItem} from "@/utils/api/cluster";
+import {ClusterItem} from "@/api/cluster";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
 import {Popover} from "@mui/material";

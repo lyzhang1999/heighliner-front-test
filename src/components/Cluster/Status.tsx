@@ -9,7 +9,7 @@ import Image from "next/image";
 
 import {
   ClusterStatus,
-} from "@/utils/api/cluster";
+} from "@/api/cluster";
 
 import styles from './index.module.scss';
 

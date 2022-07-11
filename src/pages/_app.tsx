@@ -29,7 +29,7 @@ const noCheckLoginPage = [
   "/verify-email"
 ];
 
-const noCheckOrgNamePage = ['/organizations', '/settings'];
+const noCheckOrgNamePage = ['/organizations', '/profile'];
 const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];
 
 function App({Component, pageProps}: AppProps) {

@@ -65,6 +65,45 @@ function App({Component, pageProps}: AppProps) {
   }
 
   function loginCheck() {
+    if (cookie.getCookie('token')) {
+      getOrgList().then(res => {
+        let list = res.data;
+        dispatch({
+          organizationList: list,
+        });
+        let defaultOriName = getDefaultOrg(list).name;
+        if (ifLoginDisablePage.includes(router.pathname)) {
+          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+          return;
+        }
+        if (noCheckOrgNamePage.includes(router.pathname)) {
+          dispatch({currentOrganization: getCurrentOrg(list[0])})
+          startRender();
+          return;
+        }
+        let currentOri = find(list, {name: getOrganizationNameByUrl()});
+        if (currentOri) {
+          dispatch({currentOrganization: getCurrentOrg(currentOri)})
+          startRender();
+          return;
+        } else {
+          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+        }
+      }).catch(err => {
+        cookie.delCookie("token");
+        location.pathname = '/sign-in';
+      })
+    } else {
+      if (noCheckLoginPage.includes(router.pathname)) {
+        startRender();
+      } else {
+        location.pathname = '/sign-in';
+      }
+    }
+
+    return;
+
+
     if (!noCheckLoginPage.includes(router.pathname)) {
       if (cookie.getCookie('token')) {
         getOrgList().then(res => {

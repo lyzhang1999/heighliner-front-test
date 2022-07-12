@@ -10,6 +10,11 @@ export const http = axios.create({
   timeout: 10000,
 });
 
+
+const noDefaultErrMsgPath = [
+  '/user/email_verification'
+]
+
 http.interceptors.request.use((config: AxiosRequestConfig) => {
   const token = cookie.getCookie('token');
   if (token) {
@@ -37,6 +42,10 @@ http.interceptors.response.use((res: AxiosResponse) => {
   }
   return data;
 }, (err) => {
+  let url = get(err, ['config', 'url'], '');
+  if(noDefaultErrMsgPath.includes(url)){
+    return Promise.reject(err)
+  }
   let {status, data} = err.response;
   if (status === 401) {
     cookie.delCookie('token');

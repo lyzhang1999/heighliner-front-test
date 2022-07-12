@@ -13,7 +13,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import {VisibilityOff, Visibility} from "@mui/icons-material";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {emailRule, passportRule, userNameRule} from "@/pages/sign-up/formRules";
+import {emailRule, passportRule, userNameRule} from "@/utils/formRules";
 import {IconFocusStyle} from "@/pages/sign-in";
 
 const inputStyle = {

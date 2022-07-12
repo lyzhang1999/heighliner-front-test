@@ -1,10 +1,14 @@
 import PageWrapper from "@/components/PageWrapper";
 import {getQuery, setLoginToken} from "@/utils/utils";
-import {useEffect} from "react";
-import cookie from "@/utils/cookie";
+import {useEffect, useState} from "react";
 import {checkEmail} from "@/api/login";
 
 export default function VerifyEmail() {
+  const [render, setRender] = useState<boolean>(false);
+
+  useEffect(() => {
+    confirm()
+  }, [])
 
   function confirm() {
     let urlToken = getQuery("token");
@@ -12,15 +16,20 @@ export default function VerifyEmail() {
       setLoginToken(res.token);
       location.pathname = '/';
     }).catch(err => {
+      setRender(true);
     })
+  }
+
+  if (!render) {
+    return null;
   }
 
   return (
     <PageWrapper
-      title="Join Fork Main"
-      desc="Are you sure to sign up forkmain."
-      btnDesc={"Yes I`m sure"}
-      btnCb={confirm}
+      title="Authentication Failed"
+      desc="It looks like you may have clicked on an invalid email verification link, Please close this window and try authenticating again."
+      // btnDesc={"Yes I`m sure"}
+      // btnCb={confirm}
     >
     </PageWrapper>
   )

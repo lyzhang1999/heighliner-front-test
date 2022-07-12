@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {NextPage} from "next";
 import clsx from "clsx";
 import {TextField, InputAdornment, IconButton} from "@mui/material";
@@ -15,6 +15,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {emailRule, passportRule, userNameRule} from "@/utils/formRules";
 import {IconFocusStyle} from "@/pages/sign-in";
+import {ForkMainLogo} from "@/utils/CDN";
 
 const inputStyle = {
 }
@@ -70,6 +71,9 @@ const SignUp: NextPage = () => {
       {/*  <Image src="/img/logo/white-heighliner.svg" alt="Heighliner" width={111.3} height={23.5}/>*/}
       {/*</div>*/}
       <div className={styles.cardWrapper}>
+        <div className={styles.logo}>
+          <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt="" />
+        </div>
         <div className={styles.title}>
           Sign up
         </div>

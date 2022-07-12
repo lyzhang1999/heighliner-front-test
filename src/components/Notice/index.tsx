@@ -63,7 +63,7 @@ const Notice = (): ReactElement => {
               }}
     >
       <Alert onClose={close} severity={type}>
-        {message}
+        {/* {message} */}
       </Alert>
     </Snackbar>
   );

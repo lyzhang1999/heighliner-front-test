@@ -94,7 +94,7 @@ export default function PostInstallGitHubApp(): React.ReactElement {
               your organization successfully.
             </AlertTitle>
             The window will automatically closed after{" "}
-            <CloseWindowCounter seconds={30000} /> second.
+            <CloseWindowCounter seconds={3000} /> second.
           </Alert>
         )}
       </>

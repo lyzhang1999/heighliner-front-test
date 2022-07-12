@@ -26,6 +26,8 @@ import { getOrgList } from "@/api/org";
 import styles from "./index.module.scss";
 import { Context } from "@/utils/store";
 import GlobalLoading from "@/basicComponents/GlobalLoading";
+import usePasswordEye from "@/hooks/passwordEye";
+import GitHub from "@/components/sign-in/GitHub.tsx";
 
 const FieldMap = {
   Email: "Email",
@@ -58,6 +60,7 @@ export default function SignIn(): React.ReactElement {
       [FieldMap.Password]: "",
     },
   });
+  const [eyeStatus, reverseEyeStatus, type] = usePasswordEye();
 
   const gotoSignUpPage = () => {
     router.push(`/signup`);
@@ -122,13 +125,9 @@ export default function SignIn(): React.ReactElement {
           <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt="" />
         </div>
         <h1 className={styles.title}>sign in</h1>
-        <Button
-          variant="outlined"
-          className={styles.signInGitHubBtn}
-          startIcon={<GitHubIcon />}
-        >
-          Sign in with GitHub
-        </Button>
+        <div style={{ marginTop: "25px" }}>
+          <GitHub />
+        </div>
         <div className={styles.splitter}>or</div>
         <form onSubmit={handleSubmit(onSignIn)}>
           <Controller
@@ -177,14 +176,16 @@ export default function SignIn(): React.ReactElement {
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <EyeClose />
+                        <Button onClick={reverseEyeStatus}>
+                          {eyeStatus ? <EyeOpen /> : <EyeClose />}
+                        </Button>
                       </InputAdornment>
                     ),
                   }}
                   onChange={field.onChange}
                   className={styles.passwordInput}
                   sx={IconFocusStyle}
-                  type="password"
+                  type={type}
                   helperText={errors[FieldMap.Password]?.message}
                   error={errors[FieldMap.Password] !== undefined}
                 />

@@ -21,6 +21,7 @@ const noCheckLoginPage = [
   '/login/github',
   '/signup',
   '/distributor/post-install-github-app',
+  '/distributor/post-auth-github',
   '/invite-confirm',
   '/forgot-password',
   "/reset-password",

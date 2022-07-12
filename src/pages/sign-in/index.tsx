@@ -1,7 +1,13 @@
 /**
  * New sign-in page for Forkmain
  */
-import { Button, FormControl, InputAdornment, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
@@ -11,23 +17,22 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import { omit, trim } from "lodash-es";
+import { trim } from "lodash-es";
 
 import { ForkMainLogo } from "@/utils/CDN";
 import Email from "/public/img/entrance/sign-in/Email.svg";
 import Lock from "/public/img/entrance/sign-in/Lock.svg";
-import EyeOpen from "/public/img/eye/open.svg";
-import EyeClose from "/public/img/eye/close.svg";
+import EyeOpen from "@/basicComponents/Eye/Open";
+import EyeClose from "@/basicComponents/Eye/Close";
 import { getAuthToken, GetAuthTokenReq, LoginType } from "@/api/auth";
-import {getCurrentOrg, getDefaultOrg, setLoginToken} from "@/utils/utils";
+import { getCurrentOrg, getDefaultOrg, setLoginToken } from "@/utils/utils";
 import { getOrgList } from "@/api/org";
-
-import styles from "./index.module.scss";
 import { Context } from "@/utils/store";
 import GlobalLoading from "@/basicComponents/GlobalLoading";
 import usePasswordEye from "@/hooks/passwordEye";
 import GitHub from "@/components/sign-in/GitHub.tsx";
+
+import styles from "./index.module.scss";
 
 const FieldMap = {
   Email: "Email",
@@ -71,7 +76,7 @@ export default function SignIn(): React.ReactElement {
       let list = res.data;
       dispatch({
         organizationList: list,
-        currentOrganization:  getCurrentOrg(getDefaultOrg(list)),
+        currentOrganization: getCurrentOrg(getDefaultOrg(list)),
       });
       let oriName = encodeURIComponent(list[0]?.name);
       router.push(`${oriName}/applications`);
@@ -176,9 +181,9 @@ export default function SignIn(): React.ReactElement {
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <Button onClick={reverseEyeStatus}>
+                        <IconButton onClick={reverseEyeStatus}>
                           {eyeStatus ? <EyeOpen /> : <EyeClose />}
-                        </Button>
+                        </IconButton>
                       </InputAdornment>
                     ),
                   }}

@@ -19,7 +19,7 @@ import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContex
 const noCheckLoginPage = [
   '/sign-in',
   '/login/github',
-  '/signup',
+  '/sign-up',
   '/distributor/post-install-github-app',
   '/distributor/post-auth-github',
   '/invite-confirm',
@@ -30,8 +30,8 @@ const noCheckLoginPage = [
   "/verify-email"
 ];
 
-const noCheckOrgNamePage = ['/organizations', '/settings'];
-const ifLoginDisablePage = ["/", '/login', '/sign-in', '/signup'];
+const noCheckOrgNamePage = ['/organizations', '/profile'];
+const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -66,6 +66,45 @@ function App({Component, pageProps}: AppProps) {
   }
 
   function loginCheck() {
+    if (cookie.getCookie('token')) {
+      getOrgList().then(res => {
+        let list = res.data;
+        dispatch({
+          organizationList: list,
+        });
+        let defaultOriName = getDefaultOrg(list).name;
+        if (ifLoginDisablePage.includes(router.pathname)) {
+          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+          return;
+        }
+        if (noCheckOrgNamePage.includes(router.pathname)) {
+          dispatch({currentOrganization: getCurrentOrg(list[0])})
+          startRender();
+          return;
+        }
+        let currentOri = find(list, {name: getOrganizationNameByUrl()});
+        if (currentOri) {
+          dispatch({currentOrganization: getCurrentOrg(currentOri)})
+          startRender();
+          return;
+        } else {
+          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+        }
+      }).catch(err => {
+        cookie.delCookie("token");
+        location.pathname = '/sign-in';
+      })
+    } else {
+      if (noCheckLoginPage.includes(router.pathname)) {
+        startRender();
+      } else {
+        location.pathname = '/sign-in';
+      }
+    }
+
+    return;
+
+
     if (!noCheckLoginPage.includes(router.pathname)) {
       if (cookie.getCookie('token')) {
         getOrgList().then(res => {
@@ -91,12 +130,12 @@ function App({Component, pageProps}: AppProps) {
           }
           location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
         }).catch(err => {
-          router.push("/sign-in");
+          router.push("/login");
           startRender();
         })
       } else {
         startRender()
-        router.push("/sign-in");
+        router.push("/login");
       }
     } else {
       startRender()

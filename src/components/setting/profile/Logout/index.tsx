@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 import styles from "./index.module.scss";
 
@@ -46,9 +46,13 @@ export default function Logout(): React.ReactElement {
             This operation will clear your login status.
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ padding: "16px 24px" }}>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={logout} color="error" variant="contained">
+        <DialogActions sx={{padding: "16px 24px"}}>
+          <Button onClick={handleClose}
+                  variant="outlined">
+            Cancel
+          </Button>
+          <Button onClick={logout} color="error"
+                  variant="outlined">
             logout
           </Button>
         </DialogActions>

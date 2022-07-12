@@ -62,7 +62,7 @@ const Login: NextPage = () => {
   }
 
   function goSignup() {
-    router.push('/signup')
+    router.push('/sign-up')
   }
 
   return (

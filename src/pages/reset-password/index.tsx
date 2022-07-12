@@ -3,7 +3,7 @@ import {Controller, useForm} from "react-hook-form";
 import {IconButton, InputAdornment, TextField} from "@mui/material";
 import {get} from "lodash-es";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import {emailRule, passportRule} from "@/pages/signup/formRules";
+import {emailRule, passportRule} from "@/utils/formRules";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {useState} from "react";

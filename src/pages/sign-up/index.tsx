@@ -13,7 +13,8 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import {VisibilityOff, Visibility} from "@mui/icons-material";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {emailRule, passportRule, userNameRule} from "@/pages/signup/formRules";
+import {emailRule, passportRule, userNameRule} from "@/utils/formRules";
+import {IconFocusStyle} from "@/pages/sign-in";
 
 const inputStyle = {
 }
@@ -78,7 +79,7 @@ const SignUp: NextPage = () => {
             control={control}
             render={({field}) => (
               <TextField label="Name*"
-                         sx={inputStyle}
+                         sx={IconFocusStyle}
                          size="small"
                          value={field.value}
                          fullWidth
@@ -101,7 +102,7 @@ const SignUp: NextPage = () => {
             control={control}
             render={({field}) => (
               <TextField label="Email*"
-                         sx={inputStyle}
+                         sx={IconFocusStyle}
                          size="small"
                          value={field.value}
                          onChange={field.onChange}
@@ -125,7 +126,7 @@ const SignUp: NextPage = () => {
             control={control}
             render={({field}) => (
               <TextField label="Password*"
-                         sx={inputStyle}
+                         sx={IconFocusStyle}
                          size="small"
                          type={showPassport.pass ? 'text' : 'password'}
                          value={field.value}
@@ -160,7 +161,7 @@ const SignUp: NextPage = () => {
             control={control}
             render={({field}) => (
               <TextField label="Confirm Password*"
-                         sx={inputStyle}
+                         sx={IconFocusStyle}
                          size="small"
                          fullWidth
                          type={showPassport.confirmPass ? 'text' : 'password'}

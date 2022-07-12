@@ -3,7 +3,7 @@ import {Controller, useForm} from "react-hook-form";
 import {InputAdornment, TextField} from "@mui/material";
 import {get} from "lodash-es";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import {emailRule} from "@/pages/signup/formRules";
+import {emailRule} from "@/utils/formRules";
 import PageWrapper from "@/components/PageWrapper";
 
 export default function ForgotPassword() {

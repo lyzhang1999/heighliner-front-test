@@ -3,6 +3,7 @@ import React, {createContext, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
+import Canvas from "@/pages/[organization]/applications/newpanel/canvas";
 
 
 export default function Newpanel() {
@@ -13,7 +14,8 @@ export default function Newpanel() {
 
   return (
     <Layout notStandardLayout pageHeader="applications/my shop">
-      <div>
+      <div className={styles.wrapper}>
+        <Canvas/>
         <RepoList/>
       </div>
     </Layout>

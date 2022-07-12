@@ -9,9 +9,10 @@ export enum GitProvider {
 export enum GitProviderType {
   PAT = "PAT",
   GitHubApp = "GitHubApp",
+  GitHubOAuth = "GitHubOAuthApp",
 }
 
-interface GitProviderItemCommonFields extends CreativeApiReturnField{
+interface GitProviderItemCommonFields extends CreativeApiReturnField {
   created_by_name: string;
   git_org_name: string;
   id: number;
@@ -24,12 +25,22 @@ export interface GitProviderItemForPAT extends GitProviderItemCommonFields {
   personal_access_token: string;
 }
 
-export interface GitProviderItemForGitHubApp extends GitProviderItemCommonFields {
+export interface GitProviderItemForGitHubApp
+  extends GitProviderItemCommonFields {
   type: GitProviderType.GitHubApp;
   installation_id: number;
 }
 
-export type GitProviderItem = GitProviderItemForPAT | GitProviderItemForGitHubApp;
+export interface GitProviderItemForGitHubOAuthApp
+  extends GitProviderItemCommonFields {
+  type: GitProviderType.GitHubOAuth;
+  code: number;
+}
+
+export type GitProviderItem =
+  | GitProviderItemForPAT
+  | GitProviderItemForGitHubApp
+  | GitProviderItemForGitHubOAuthApp;
 
 export type GitProviderList = Array<GitProviderItem>;
 
@@ -37,7 +48,7 @@ export const getGitProviderList = (): Promise<GitProviderList> => {
   return http.get(`/orgs/${getOriIdByContext()}/git_providers`);
 };
 
-type CreateGitProviderReq =
+export type CreateGitProviderReq =
   | {
       git_org_name: string;
       provider: GitProvider;
@@ -49,12 +60,15 @@ type CreateGitProviderReq =
       provider: GitProvider;
       type: GitProviderType.GitHubApp;
       installation_id: number;
+    }
+  | {
+      provider: GitProvider;
+      type: GitProviderType.GitHubOAuth;
+      code: string;
     };
 
-export const createGitProvider =(
-  req: CreateGitProviderReq
-) => {
-  return http.post(`/orgs/${getOriIdByContext()}/git_providers`, req);
+export const createGitProvider = (req: CreateGitProviderReq) => {
+  return http.post(`/user/git_providers`, req);
 };
 
 export const deleteGitProvider = (

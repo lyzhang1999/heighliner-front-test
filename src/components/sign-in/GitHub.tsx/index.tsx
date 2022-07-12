@@ -10,7 +10,7 @@ export enum GitHub_TemporaryStorageItems {
 }
 
 export default function GitHub(): React.ReactElement {
-  const url = new URL(process.env.NEXT_PUBLIC_GITHUB_URL!);
+  const url = new URL(process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_LOGIN_URL!);
   const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
 
   const openGitHubAuthorization = () => {

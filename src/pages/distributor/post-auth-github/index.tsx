@@ -17,10 +17,6 @@ export default function PostAuthGitHub(): React.ReactElement {
 
   useEffect(() => {
     const { error, state: stateInURL, code } = router.query;
-    console.group(">>>>><<<<<<");
-    console.log(router.query);
-    console.log();
-    console.groupEnd();
 
     const stateInLocalStorage = window.localStorage.getItem(
       GitHub_TemporaryStorageItems.State

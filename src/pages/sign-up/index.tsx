@@ -4,18 +4,20 @@ import clsx from "clsx";
 import {TextField, InputAdornment, IconButton} from "@mui/material";
 import {useRouter} from "next/router";
 
+
 import styles from "./index.module.scss";
 import Image from "next/image";
 import {signUpApi, SignUpReq} from "@/api/login";
 import {useForm, Controller} from "react-hook-form";
 import {get} from "lodash-es";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import {VisibilityOff, Visibility} from "@mui/icons-material";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {emailRule, passportRule, userNameRule} from "@/utils/formRules";
 import {IconFocusStyle} from "@/pages/sign-in";
 import {ForkMainLogo} from "@/utils/CDN";
+import EyeOpen from "@/basicComponents/Eye/Open";
+import EyeClose from "@/basicComponents/Eye/Close";
 
 const inputStyle = {
 }
@@ -151,7 +153,7 @@ const SignUp: NextPage = () => {
                                  onMouseDown={handleMouseDownPassword}
                                  edge="end"
                                >
-                                 {showPassport.pass ? <VisibilityOff/> : <Visibility/>}
+                                 {showPassport.pass ? <EyeOpen/> : <EyeClose/> }
                                </IconButton>
                              </InputAdornment>
                            )
@@ -186,7 +188,7 @@ const SignUp: NextPage = () => {
                                  onMouseDown={handleMouseDownPassword}
                                  edge="end"
                                >
-                                 {showPassport.confirmPass ? <VisibilityOff/> : <Visibility/>}
+                                 {showPassport.confirmPass ? <EyeOpen/> : <EyeClose/>}
                                </IconButton>
                              </InputAdornment>
                            )

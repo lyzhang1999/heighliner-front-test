@@ -139,7 +139,7 @@ const SignUp: NextPage = () => {
                          value={field.value}
                          onChange={field.onChange}
                          fullWidth
-                         disabled={isCompleteInfo)}
+                         disabled={isCompleteInfo}
                          error={Boolean(get(errors, ['email', 'message']))}
                          helperText={get(errors, ['email', 'message'])}
                          InputProps={{

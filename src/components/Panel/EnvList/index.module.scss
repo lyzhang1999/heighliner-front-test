@@ -122,7 +122,7 @@
       max-width: calc(100% - 50px);
     }
 
-    .hiddenWrapper{
+    .hiddenWrapper {
       display: none;
     }
   }
@@ -135,9 +135,31 @@
     .spreadIcon {
       transform: rotate(180deg);
     }
-    .hiddenWrapper{
+
+    .hiddenWrapper {
       display: block;
     }
+  }
+}
+
+.forkEnv {
+  max-width: 500px;
+  height: 46px;
+  border-radius: 8px;
+  border: 1px dashed #abb4c3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid #abb4c3;
+  }
+
+  .desc {
+    margin-left: 10px;
+    font-weight: 500;
+    color: #2e4d88;
   }
 }
 

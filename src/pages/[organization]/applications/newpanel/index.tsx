@@ -4,24 +4,48 @@ import styles from './index.module.scss';
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
 import Canvas from "@/pages/[organization]/applications/newpanel/canvas";
-import EnvList from "@/components/Panel/EnvList";
+import EnvList, {itemClass} from "@/components/Panel/EnvList";
+import {reduce} from "lodash-es";
 
 
 export default function Newpanel() {
+  const [arrList, setArrList] = useState([]);
 
   useEffect(() => {
 
+    setTimeout(() => {
+      getPosition()
+    }, 1000)
   }, []);
+
+  function getPosition() {
+    var item = document.querySelectorAll(`.${itemClass}`);
+    let arr: number[] = [];
+    Array.from(item).map((i, index) => {
+      if (index === 0) {
+        return;
+      }
+      arr.push(i.getBoundingClientRect().top - item[0].getBoundingClientRect().top)
+    })
+    setArrList(arr)
+  }
+
+  function spreadCb(){
+    setTimeout(() => {
+      getPosition();
+    }, 0)
+
+  }
 
   return (
     <Layout notStandardLayout pageHeader="applications/my shop">
       <div className={styles.wrapper}>
         {/*<div className={styles.left}>*/}
-          <Canvas/>
-          <EnvList/>
+        <Canvas arrList={arrList}/>
+        <EnvList spreadCb={spreadCb}/>
         {/*</div>*/}
         {/*<div className={styles.right}>*/}
-          <RepoList/>
+        <RepoList/>
         {/*</div>*/}
       </div>
     </Layout>

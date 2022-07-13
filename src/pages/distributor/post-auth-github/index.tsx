@@ -1,15 +1,12 @@
-import {
-  createGitProvider,
-  CreateGitProviderReq,
-  GitProvider,
-  GitProviderType,
-} from "@/api/gitProviders";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Alert, AlertTitle, CircularProgress } from "@mui/material";
+
+import { getAuthToken, GetAuthTokenReq, LoginType } from "@/api/auth";
 import CloseWindowCounter from "@/basicComponents/CloseWindowCounter";
 import PageCenter from "@/basicComponents/PageCenter";
 import { GitHub_TemporaryStorageItems } from "@/components/sign-in/GitHub.tsx";
-import { Alert, AlertTitle, CircularProgress } from "@mui/material";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { setLoginToken } from "@/utils/utils";
 
 enum Result {
   Processing = "Processing",
@@ -50,16 +47,18 @@ export default function PostAuthGitHub(): React.ReactElement {
   }, [router.query]);
 
   const auth = (code: string) => {
-    const req: CreateGitProviderReq = {
-      provider: GitProvider.GitHub,
-      type: GitProviderType.GitHubOAuth,
-      code,
+    const req: GetAuthTokenReq = {
+      login_type: LoginType.GitHub,
+      code: code,
     };
-    createGitProvider(req)
-      .then(() => {
+
+    getAuthToken(req)
+      .then((res) => {
+        setLoginToken(res.token, res.expire_in);
         setResult(Result.Success);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error(error);
         setResult(Result.Error);
       });
   };
@@ -82,9 +81,7 @@ export default function PostAuthGitHub(): React.ReactElement {
         )}
         {result === Result.Success && (
           <Alert>
-            <AlertTitle>
-              You have authenticated successfully.
-            </AlertTitle>
+            <AlertTitle>You have authenticated successfully.</AlertTitle>
             The window will automatically closed after{" "}
             <CloseWindowCounter seconds={30000} /> second.
           </Alert>

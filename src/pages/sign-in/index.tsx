@@ -33,6 +33,7 @@ import usePasswordEye from "@/hooks/passwordEye";
 import GitHub from "@/components/sign-in/GitHub.tsx";
 
 import styles from "./index.module.scss";
+import useRedirectCurrentOrganization from "@/hooks/redirectCurrentOrganization";
 
 const FieldMap = {
   Email: "Email",
@@ -71,17 +72,7 @@ export default function SignIn(): React.ReactElement {
     router.push(`/sign-up`);
   };
 
-  const gotoCurrentOrg = () => {
-    getOrgList().then((res) => {
-      let list = res.data;
-      dispatch({
-        organizationList: list,
-        currentOrganization: getCurrentOrg(getDefaultOrg(list)),
-      });
-      let oriName = encodeURIComponent(list[0]?.name);
-      router.push(`${oriName}/applications`);
-    });
-  };
+  const redirectCurrentOrganization = useRedirectCurrentOrganization();
 
   const onSignIn: SubmitHandler<FieldValues> = (data) => {
     setOpenGlobalLoading(true);
@@ -97,7 +88,7 @@ export default function SignIn(): React.ReactElement {
     getAuthToken(req)
       .then((res) => {
         setLoginToken(res.token, res.expire_in);
-        gotoCurrentOrg();
+        redirectCurrentOrganization();
       })
       .catch((err) => {
         console.error(err);

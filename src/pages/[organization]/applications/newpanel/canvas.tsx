@@ -8,7 +8,6 @@ const borderRadius = 10;
 
 const list = [80, 100, 200, 300, 500];
 
-
 export default function Canvas() {
 
   useEffect(() => {
@@ -38,7 +37,6 @@ export default function Canvas() {
     <div>
       <canvas id="tutorial" width="1000" height="2000" style={{"zoom": "0.5"}}>
       {/*<canvas id="tutorial" width="1000" height="10000"> */}
-
       </canvas>
     </div>
   )

@@ -97,7 +97,7 @@ function App({Component, pageProps}: AppProps) {
       }).catch(err => {
         if ((get(err, "response.status") === 302) && (get(err, 'response.data.redirect_to') === 'userInfoComplete')) {
           if (location.pathname !== '/sign-up') {
-            location.href = location.origin + '/sign-up?complateInfo=true'
+            location.href = location.origin + '/sign-up?completeInfo=true'
           }else{
             startRender();
           }

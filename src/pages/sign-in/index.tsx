@@ -25,15 +25,14 @@ import Lock from "/public/img/entrance/sign-in/Lock.svg";
 import EyeOpen from "@/basicComponents/Eye/Open";
 import EyeClose from "@/basicComponents/Eye/Close";
 import { getAuthToken, GetAuthTokenReq, LoginType } from "@/api/auth";
-import { getCurrentOrg, getDefaultOrg, setLoginToken } from "@/utils/utils";
-import { getOrgList } from "@/api/org";
+import { setLoginToken } from "@/utils/utils";
 import { Context } from "@/utils/store";
 import GlobalLoading from "@/basicComponents/GlobalLoading";
 import usePasswordEye from "@/hooks/passwordEye";
 import GitHub from "@/components/sign-in/GitHub.tsx";
+import useRedirectCurrentOrganization from "@/hooks/redirectCurrentOrganization";
 
 import styles from "./index.module.scss";
-import useRedirectCurrentOrganization from "@/hooks/redirectCurrentOrganization";
 
 const FieldMap = {
   Email: "Email",

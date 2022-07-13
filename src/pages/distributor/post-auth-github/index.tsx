@@ -1,20 +1,72 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Alert, AlertTitle, CircularProgress } from "@mui/material";
 
 import { getAuthToken, GetAuthTokenReq, LoginType } from "@/api/auth";
 import CloseWindowCounter from "@/basicComponents/CloseWindowCounter";
 import PageCenter from "@/basicComponents/PageCenter";
-import { GitHub_TemporaryStorageItems } from "@/components/sign-in/GitHub.tsx";
-import { setLoginToken } from "@/utils/utils";
+import { setLoginToken, uuid } from "@/utils/utils";
+import { getPopUpsWindowFeatures } from "@/utils/window";
 
-enum Result {
+export enum Result {
   Processing = "Processing",
   Access_Denied = "access_denied",
   StaleState = "StaleState",
   Success = "Success",
   Error = "Error",
 }
+
+export enum GitHubOAuthAppTemporaryStorage {
+  state = "github_oauth_app_state",
+  success = "github_oauth_app_success",
+  postAuthAction = "post_auth_action",
+}
+
+export enum PostAuthAction {
+  SignIn = "SignIn",
+  AddGitProvider = "AddGitProvider",
+}
+
+export const openGitHubOAuthWindow = (
+  url: URL,
+  setOpenGlobalLoading: Dispatch<SetStateAction<boolean>>,
+  successCb?: Function
+) => {
+  setOpenGlobalLoading(true);
+
+  // Attach to URL to protect from forge URL.
+  const state = uuid();
+  url.searchParams.set("state", state);
+
+  window.localStorage.setItem(GitHubOAuthAppTemporaryStorage.state, state);
+  window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
+
+  // Open a new window to authenticate GitHub app.
+  const GitHubAppInstallationWindow = window.open(
+    url,
+    "Authenticate ForkMain",
+    getPopUpsWindowFeatures()
+  );
+
+  // Polling the window whether or not has closed.
+  const timer = setInterval(function polling() {
+    if (GitHubAppInstallationWindow!.closed) {
+      setOpenGlobalLoading(false);
+
+      if (
+        window.localStorage.getItem(GitHubOAuthAppTemporaryStorage.success) ===
+        Result.Success
+      ) {
+        successCb && successCb();
+      }
+
+      window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.state);
+      window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
+
+      clearInterval(timer);
+    }
+  }, 1000);
+};
 
 export default function PostAuthGitHub(): React.ReactElement {
   const [result, setResult] = useState<Result>();
@@ -24,7 +76,11 @@ export default function PostAuthGitHub(): React.ReactElement {
     const { error, state: stateInURL, code } = router.query;
 
     const stateInLocalStorage = window.localStorage.getItem(
-      GitHub_TemporaryStorageItems.State
+      GitHubOAuthAppTemporaryStorage.state
+    );
+
+    const postAuthAction = window.localStorage.getItem(
+      GitHubOAuthAppTemporaryStorage.postAuthAction
     );
 
     switch (true) {
@@ -56,6 +112,11 @@ export default function PostAuthGitHub(): React.ReactElement {
       .then((res) => {
         setLoginToken(res.token, res.expire_in);
         setResult(Result.Success);
+        // Add success indicator
+        window.localStorage.setItem(
+          GitHubOAuthAppTemporaryStorage.success,
+          Result.Success
+        );
       })
       .catch((error) => {
         console.error(error);

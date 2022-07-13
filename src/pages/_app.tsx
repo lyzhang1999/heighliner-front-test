@@ -30,7 +30,11 @@ const noCheckLoginPage = [
   "/verify-email"
 ];
 
-const noCheckOrgNamePage = ['/organizations', '/profile'];
+const noCheckOrgNamePage = [
+  '/organizations',
+  '/profile',
+  '/distributor/post-auth-github'
+];
 const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];
 
 function App({Component, pageProps}: AppProps) {

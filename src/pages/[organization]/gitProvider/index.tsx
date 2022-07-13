@@ -28,7 +28,6 @@ import clsx from "clsx";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
-  // const [prividerList, setProviderList] = useState<GitProviderType[]>([]);
   const [gitProviders, getGitProviders] = useGitProviders();
   const [dialogVisible, setDialogVisible] = useState<boolean>(false);
   const [deleteItemID, setDeleteItemID] = useState<number>(0);
@@ -91,7 +90,7 @@ const Clusters = () => {
             <TableBody>
               {gitProviders.map((item) => (
                 <TableRow
-                  key={item.id}
+                  key={item.git_provider_id}
                   sx={{"&:last-child td, &:last-child th": {border: 0}}}
                 >
                   <TableCell component="th" scope="item">
@@ -117,7 +116,7 @@ const Clusters = () => {
                     <div className={styles.moreIcon}>
                         <MoreVertIcon
                           sx={{cursor: "pointer"}}
-                          onClick={(e) => handleClick(e, item.id)}
+                          onClick={(e) => handleClick(e, item.git_provider_id)}
                         />
                     </div>
                   </TableCell>

@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+import {AxiosRequestConfig} from "axios";
 import http from "../utils/axios";
 
 export enum LoginType {
@@ -8,16 +8,17 @@ export enum LoginType {
 
 export type GetAuthTokenReq =
   | {
-      login_type: LoginType.Email;
-      body: {
-        email: string;
-        password: string;
-      };
-    }
+  login_type: LoginType.Email;
+  body: {
+    email: string;
+    password: string;
+  };
+}
   | {
-      login_type: LoginType.GitHub;
-      code: string;
-    };
+  login_type: LoginType.GitHub;
+  code: string;
+};
+
 export interface GetAuthTokenRes {
   expire_in: number;
   token: string;
@@ -51,4 +52,26 @@ export function getAuthToken(req: GetAuthTokenReq): Promise<GetAuthTokenRes> {
   }
 
   return http.post(`/auth/token`, body, config);
+}
+
+interface ComplateInfoReq {
+  "check_password": string,
+  "nickname": string,
+  "password": string
+}
+
+
+
+export function completeInfo(req: ComplateInfoReq): Promise<GetAuthTokenRes>{
+  return http.patch('/user/complete_info', req, {
+    transformResponse: [
+      function (data) {
+        const json = JSON.parse(data);
+        if (json.expire_in && json.expire_in > 0) {
+          json.expire_in = json.expire_in * 1000;
+        }
+        return json;
+      },
+    ],
+  });
 }

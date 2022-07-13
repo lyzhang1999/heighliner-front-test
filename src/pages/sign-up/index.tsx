@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {NextPage} from "next";
 import clsx from "clsx";
 import {TextField, InputAdornment, IconButton} from "@mui/material";
@@ -9,7 +9,7 @@ import styles from "./index.module.scss";
 import Image from "next/image";
 import {signUpApi, SignUpReq} from "@/api/login";
 import {useForm, Controller} from "react-hook-form";
-import {get} from "lodash-es";
+import {get, omit} from "lodash-es";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -18,9 +18,11 @@ import {IconFocusStyle} from "@/pages/sign-in";
 import {ForkMainLogo} from "@/utils/CDN";
 import EyeOpen from "@/basicComponents/Eye/Open";
 import EyeClose from "@/basicComponents/Eye/Close";
+import {getQuery, setLoginToken} from "@/utils/utils";
+import {getUserInfo} from "@/api/profile";
+import {completeInfo} from "@/api/auth";
 
-const inputStyle = {
-}
+const inputStyle = {}
 
 const SignUp: NextPage = () => {
   const router = useRouter();
@@ -30,11 +32,12 @@ const SignUp: NextPage = () => {
     confirmPass: false,
   })
 
+
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
-  const {control, handleSubmit, formState: {errors}, register, getValues} = useForm({
+  const {control, handleSubmit, formState: {errors}, register, getValues, setValue} = useForm({
     defaultValues: {
       nickname: "",
       email: "",
@@ -43,10 +46,28 @@ const SignUp: NextPage = () => {
     }
   });
 
+  useEffect(() => {
+    if (getQuery('complateInfo')) {
+      getUserInfo().then(res => {
+        let {email, nickname} = res;
+        setValue('nickname', nickname);
+        setValue('email', email);
+      })
+    }
+  }, []);
+
+
   const onSubmit = (data: SignUpReq) => {
-    signUpApi(data).then(res => {
-      router.push('./signup-success');
-    })
+    if (getQuery('complateInfo')) {
+      completeInfo(omit(data, ['email'])).then(res => {
+        setLoginToken(res.token, res.expire_in);
+        location.pathname = '/';
+      })
+    } else {
+      signUpApi(data).then(res => {
+        router.push('./signup-success');
+      })
+    }
   };
 
   const handleClickShowPassword = (key: ('pass' | "confirmPass")) => {
@@ -74,7 +95,7 @@ const SignUp: NextPage = () => {
       {/*</div>*/}
       <div className={styles.cardWrapper}>
         <div className={styles.logo}>
-          <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt="" />
+          <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt=""/>
         </div>
         <div className={styles.title}>
           Sign up
@@ -113,6 +134,7 @@ const SignUp: NextPage = () => {
                          value={field.value}
                          onChange={field.onChange}
                          fullWidth
+                         disabled={Boolean(getQuery('complateInfo'))}
                          error={Boolean(get(errors, ['email', 'message']))}
                          helperText={get(errors, ['email', 'message'])}
                          InputProps={{
@@ -153,7 +175,7 @@ const SignUp: NextPage = () => {
                                  onMouseDown={handleMouseDownPassword}
                                  edge="end"
                                >
-                                 {showPassport.pass ? <EyeOpen/> : <EyeClose/> }
+                                 {showPassport.pass ? <EyeOpen/> : <EyeClose/>}
                                </IconButton>
                              </InputAdornment>
                            )

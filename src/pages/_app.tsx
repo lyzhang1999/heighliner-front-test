@@ -13,7 +13,7 @@ import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";
 import {getOrgList} from "@/api/org";
 import {CssBaseline} from "@mui/material";
-import {find} from "lodash-es";
+import {find, get} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 
 const noCheckLoginPage = [
@@ -95,8 +95,16 @@ function App({Component, pageProps}: AppProps) {
           location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
         }
       }).catch(err => {
-        cookie.delCookie("token");
-        location.pathname = '/sign-in';
+        if ((get(err, "response.status") === 302) && (get(err, 'response.data.redirect_to') === 'userInfoComplete')) {
+          if (location.pathname !== '/sign-up') {
+            location.href = location.origin + '/sign-up?complateInfo=true'
+          }else{
+            startRender();
+          }
+        } else {
+          cookie.delCookie("token");
+          location.pathname = '/sign-in';
+        }
       })
     } else {
       if (noCheckLoginPage.includes(router.pathname)) {
@@ -104,45 +112,6 @@ function App({Component, pageProps}: AppProps) {
       } else {
         location.pathname = '/sign-in';
       }
-    }
-
-    return;
-
-
-    if (!noCheckLoginPage.includes(router.pathname)) {
-      if (cookie.getCookie('token')) {
-        getOrgList().then(res => {
-          let list = res.data;
-          dispatch({
-            organizationList: list,
-          });
-          let defaultOriName = getDefaultOrg(list).name;
-          if ((ifLoginDisablePage.includes(router.pathname))) {
-            location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
-            return;
-          }
-          if (noCheckOrgNamePage.includes(location.pathname)) {
-            dispatch({currentOrganization: getCurrentOrg(list[0])})
-            startRender();
-            return;
-          }
-          let currentOri = find(list, {name: getOrganizationNameByUrl()});
-          if (currentOri) {
-            dispatch({currentOrganization: getCurrentOrg(currentOri)})
-            startRender();
-            return;
-          }
-          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
-        }).catch(err => {
-          router.push("/login");
-          startRender();
-        })
-      } else {
-        startRender()
-        router.push("/login");
-      }
-    } else {
-      startRender()
     }
   }
 

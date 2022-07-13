@@ -35,7 +35,7 @@ export default function Canvas() {
 
   return (
     <div>
-      <canvas id="tutorial" width="1000" height="2000" style={{"zoom": "0.5"}}>
+      <canvas id="tutorial" width="50" height="2000" style={{"zoom": "0.5"}}>
       {/*<canvas id="tutorial" width="1000" height="10000"> */}
       </canvas>
     </div>

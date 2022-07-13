@@ -16,9 +16,13 @@ export default function Newpanel() {
   return (
     <Layout notStandardLayout pageHeader="applications/my shop">
       <div className={styles.wrapper}>
-        <EnvList/>
-        <Canvas/>
-        <RepoList/>
+        {/*<div className={styles.left}>*/}
+          <Canvas/>
+          <EnvList/>
+        {/*</div>*/}
+        {/*<div className={styles.right}>*/}
+          <RepoList/>
+        {/*</div>*/}
       </div>
     </Layout>
   )

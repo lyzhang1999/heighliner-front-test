@@ -33,6 +33,7 @@ const noCheckLoginPage = [
 const noCheckOrgNamePage = [
   '/organizations',
   '/profile',
+  "/gitProvider",
   '/distributor/post-auth-github'
 ];
 const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];

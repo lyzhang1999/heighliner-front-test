@@ -13,7 +13,7 @@ import {Context} from "@/utils/store";
 import {Message, setLoginToken, uuid} from "@/utils/utils";
 import {login, LoginType, Res} from "@/api/login";
 import {getOrgList} from "@/api/org";
-import LoadingPoint from "@/pages/login/loadingBtn";
+import LoadingPoint from "@/pages/login-back/loadingBtn";
 
 const inputStyle = {
   marginTop: "6px",

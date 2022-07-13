@@ -12,7 +12,8 @@ export const http = axios.create({
 
 
 const noDefaultErrMsgPath = [
-  '/user/email_verification'
+  '/user/email_verification',
+  "/api/orgs"
 ]
 
 http.interceptors.request.use((config: AxiosRequestConfig) => {
@@ -43,9 +44,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
   return data;
 }, (err) => {
   let url = get(err, ['config', 'url'], '');
-  if(noDefaultErrMsgPath.includes(url)){
-    return Promise.reject(err)
-  }
+  url = url.split('?')[0];
   let {status, data} = err.response;
   if (status === 401) {
     cookie.delCookie('token');
@@ -55,7 +54,9 @@ http.interceptors.response.use((res: AxiosResponse) => {
     return;
   }
   let errMsg = data?.msg || data?.err_msg || data;
-  errMsg && Message.error(errMsg);
+  if (noDefaultErrMsgPath.includes(url)) {
+    errMsg && Message.error(errMsg);
+  }
   return Promise.reject(err);
 })
 

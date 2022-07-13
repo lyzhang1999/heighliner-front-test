@@ -4,6 +4,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { uuid } from "@/utils/utils";
 import { getPopUpsWindowFeatures } from "@/utils/window";
 import GlobalLoading from "@/basicComponents/GlobalLoading";
+import useRedirectCurrentOrganization from "@/hooks/redirectCurrentOrganization";
 
 export enum GitHub_TemporaryStorageItems {
   State = "GITHUB_STATE",
@@ -12,6 +13,7 @@ export enum GitHub_TemporaryStorageItems {
 export default function GitHub(): React.ReactElement {
   const url = new URL(process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_LOGIN_URL!);
   const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
+  const redirectCurrentOrganization = useRedirectCurrentOrganization();
 
   const openGitHubAuthorization = () => {
     // Attach to URL to protect from forge URL.
@@ -23,6 +25,7 @@ export default function GitHub(): React.ReactElement {
     );
     window.localStorage.setItem(GitHub_TemporaryStorageItems.State, state);
 
+    setOpenGlobalLoading(true);
     const GitHubLoginWindow = window.open(
       url,
       "GitHub Authorization",
@@ -34,7 +37,8 @@ export default function GitHub(): React.ReactElement {
       if (GitHubLoginWindow!.closed) {
         clearInterval(timer);
         window.localStorage.removeItem("state");
-        // oriList();
+        setOpenGlobalLoading(false);
+        redirectCurrentOrganization();
       }
     }, 1000);
   };
@@ -51,7 +55,10 @@ export default function GitHub(): React.ReactElement {
       >
         sign in with GitHub
       </Button>
-      <GlobalLoading {...{ openGlobalLoading }} />
+      <GlobalLoading {...{ 
+        openGlobalLoading,
+        title: "Please approval authentication to ForkMain in GitHub."
+        }} />
     </>
   );
 }

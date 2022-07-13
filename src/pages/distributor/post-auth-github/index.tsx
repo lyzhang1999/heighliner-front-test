@@ -39,8 +39,8 @@ export const openGitHubOAuthWindow = (
   url.searchParams.set("state", state);
 
   window.localStorage.setItem(GitHubOAuthAppTemporaryStorage.state, state);
-  window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
 
+  window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
   // Open a new window to authenticate GitHub app.
   const GitHubAppInstallationWindow = window.open(
     url,
@@ -60,8 +60,10 @@ export const openGitHubOAuthWindow = (
         successCb && successCb();
       }
 
-      window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.state);
-      window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
+      // Remove all temporary storage items.
+      for (const value of Object.values(GitHubOAuthAppTemporaryStorage)) {
+        window.localStorage.removeItem(value);
+      }
 
       clearInterval(timer);
     }
@@ -129,7 +131,6 @@ export default function PostAuthGitHub(): React.ReactElement {
         setResult(Result.Error);
       });
   };
-
 
   return (
     <PageCenter>

@@ -6,8 +6,8 @@ export default function EyeClose(): React.ReactElement {
     <div
       style={{
         position: "relative",
-        height: "24px",
-        width: "24px",
+        height: "18px",
+        width: "18px",
       }}
     >
       <Image

@@ -94,7 +94,13 @@ export default function PostAuthGitHub(): React.ReactElement {
         break;
       case code !== undefined:
         setResult(Result.Processing);
-        auth(code as string);
+        switch (postAuthAction) {
+          case PostAuthAction.SignIn:
+            auth(code as string);
+            break;
+          case PostAuthAction.AddGitProvider:
+            break;
+        }
         break;
       default:
         setResult(Result.Processing);
@@ -123,6 +129,7 @@ export default function PostAuthGitHub(): React.ReactElement {
         setResult(Result.Error);
       });
   };
+
 
   return (
     <PageCenter>

@@ -27,6 +27,8 @@ const inputStyle = {}
 const SignUp: NextPage = () => {
   const router = useRouter();
 
+  let isCompleteInfo = Boolean(getQuery('completeInfo'));
+
   const [showPassport, setShowPassport] = useState({
     pass: false,
     confirmPass: false,
@@ -47,7 +49,7 @@ const SignUp: NextPage = () => {
   });
 
   useEffect(() => {
-    if (getQuery('complateInfo')) {
+    if (isCompleteInfo) {
       getUserInfo().then(res => {
         let {email, nickname} = res;
         setValue('nickname', nickname);
@@ -58,10 +60,10 @@ const SignUp: NextPage = () => {
 
 
   const onSubmit = (data: SignUpReq) => {
-    if (getQuery('complateInfo')) {
+    if (isCompleteInfo) {
       completeInfo(omit(data, ['email'])).then(res => {
         setLoginToken(res.token, res.expire_in);
-        location.pathname = '/';
+        location.href = location.origin;
       })
     } else {
       signUpApi(data).then(res => {
@@ -98,7 +100,10 @@ const SignUp: NextPage = () => {
           <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt=""/>
         </div>
         <div className={styles.title}>
-          Sign up
+
+          {
+            isCompleteInfo ? 'Complete your message' : " Sign up"
+          }
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <Controller
@@ -134,7 +139,7 @@ const SignUp: NextPage = () => {
                          value={field.value}
                          onChange={field.onChange}
                          fullWidth
-                         disabled={Boolean(getQuery('complateInfo'))}
+                         disabled={isCompleteInfo}
                          error={Boolean(get(errors, ['email', 'message']))}
                          helperText={get(errors, ['email', 'message'])}
                          InputProps={{

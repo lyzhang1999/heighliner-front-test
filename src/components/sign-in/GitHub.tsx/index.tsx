@@ -9,6 +9,7 @@ import {
   openGitHubOAuthWindow,
   PostAuthAction,
 } from "@/pages/distributor/post-auth-github";
+import cookie from "@/utils/cookie";
 
 export enum GitHub_TemporaryStorageItems {
   State = "GITHUB_STATE",
@@ -20,6 +21,7 @@ export default function GitHub(): React.ReactElement {
   const redirectCurrentOrganization = useRedirectCurrentOrganization();
 
   const clickHandler = () => {
+    cookie.delCookie('token');
     window.localStorage.setItem(
       GitHubOAuthAppTemporaryStorage.postAuthAction,
       PostAuthAction.SignIn

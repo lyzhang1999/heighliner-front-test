@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import styles from './index.module.scss';
 import {Context} from "@/utils/store";
-import MenuItem, { MenuList } from "@/components/Layout/Menu/MenuItem";
+import MenuItem, {MenuList} from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import {OrgList} from "@/api/org";
@@ -72,12 +72,6 @@ const Menu = () => {
       name: "Clusters",
     },
     {
-      activeIcon: "/img/slider/icon6Active.svg",
-      icon: "/img/slider/icon6.svg",
-      href: `/${name}/gitProvider`,
-      name: "Git Provider",
-    },
-    {
       activeIcon: "/img/slider/icon7Active.svg",
       icon: "/img/slider/icon7.svg",
       href: `/${name}/members`,
@@ -104,6 +98,12 @@ const Menu = () => {
   }
 
   const bottomList: MenuList = [
+    {
+      activeIcon: "/img/slider/icon6Active.svg",
+      icon: "/img/slider/icon6.svg",
+      href: `/gitProvider`,
+      name: "Git Provider",
+    },
     {
       activeIcon: "/img/slider/icon10Active.svg",
       icon: "/img/slider/icon10.svg",

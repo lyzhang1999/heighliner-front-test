@@ -27,6 +27,6 @@ export default function useRedirectCurrentOrganization() {
 
  export function getOrgErr(err): void {
   if ((get(err, "response.status") === 302) && (get(err, 'response.data.redirect_to') === 'userInfoComplete') && (location.pathname !== '/sign-up')) {
-    location.href = location.origin + '/sign-up?complateInfo=true'
+    location.href = location.origin + '/sign-up?completeInfo=true'
   }
 }

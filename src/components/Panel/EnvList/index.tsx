@@ -102,7 +102,7 @@ export default function EnvList({spreadCb}: Props) {
                     })
                   }
                   <div className={styles.urlTitle}>
-                    Issues:
+                    Releases:
                   </div>
                   {
                     i.issue.map((item) => {

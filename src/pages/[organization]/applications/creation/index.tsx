@@ -135,7 +135,7 @@ export default function Index(): React.ReactElement {
   }, [clusterList]);
   useEffect(() => {
     if (gitProviderList.length === 1) {
-      setValue(fieldsMap.gitProvider, gitProviderList[0].id.toString());
+      setValue(fieldsMap.gitProvider, gitProviderList[0].git_provider_id.toString());
     }
   }, [gitProviderList]);
 
@@ -451,10 +451,10 @@ export default function Index(): React.ReactElement {
                   }}
                 >
                   {gitProviderList.map(
-                    ({ id, git_org_name, provider, created_at }) => (
+                    ({ git_provider_id, git_org_name, provider, created_at }) => (
                       <MenuItem
-                        key={id}
-                        value={id}
+                        key={git_provider_id}
+                        value={git_provider_id}
                         className={styles.gitProviderItem}
                         placeholder="Please choose a git provider."
                       >

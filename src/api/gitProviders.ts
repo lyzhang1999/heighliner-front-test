@@ -12,35 +12,6 @@ export enum GitProviderType {
   GitHubOAuth = "GitHubOAuthApp",
 }
 
-// interface GitProviderItemCommonFields extends CreativeApiReturnField {
-//   created_by_name: string;
-//   git_org_name: string;
-//   id: number;
-//   org_id: number;
-//   provider: GitProvider;
-// }
-
-// export interface GitProviderItemForPAT extends GitProviderItemCommonFields {
-//   type: GitProviderType.PAT;
-//   personal_access_token: string;
-// }
-
-// export interface GitProviderItemForGitHubApp
-//   extends GitProviderItemCommonFields {
-//   type: GitProviderType.GitHubApp;
-//   installation_id: number;
-// }
-
-// export interface GitProviderItemForGitHubOAuthApp
-//   extends GitProviderItemCommonFields {
-//   type: GitProviderType.GitHubOAuth;
-//   code: number;
-// }
-
-// export type GitProviderItem =
-//   | GitProviderItemForPAT
-//   | GitProviderItemForGitHubApp
-//   | GitProviderItemForGitHubOAuthApp;
 export interface GitProviderItem extends CreativeApiReturnField {
   created_by_name: string;
   git_org_name: string;
@@ -75,14 +46,26 @@ export type CreateGitProviderReq =
       code: string;
     };
 
-export const createGitProvider = (req: CreateGitProviderReq) => {
+export interface CreateGitProviderRes extends CreativeApiReturnField {
+  access_token: string;
+  git_org_name: string;
+  id: number;
+  installation_id: number;
+  org_id: number;
+  personal_access_token: string;
+  provider: GitProvider;
+  type: GitProviderType;
+  user_id: number;
+}
+
+export const createGitProvider = (
+  req: CreateGitProviderReq
+): Promise<CreateGitProviderRes> => {
   return http.post(`/user/git_providers`, req);
 };
 
 export const deleteGitProvider = (
   gitProviderId: number
 ): Promise<GitProviderType[]> => {
-  return http.delete(
-    `/orgs/${getOriIdByContext()}/git_providers/${gitProviderId}`
-  );
+  return http.delete(`/user/git_providers/${gitProviderId}`);
 };

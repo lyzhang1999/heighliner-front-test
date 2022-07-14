@@ -16,21 +16,14 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import clsx from "clsx";
 
 import Layout from "@/components/Layout";
-import {
-  ClusterProvider,
-  ClusterStatus,
-  getCluster,
-} from "@/api/cluster";
+import { ClusterProvider, ClusterStatus, getCluster } from "@/api/cluster";
 
 import styles from "./index.module.scss";
 import NewClusterModal from "@/components/NewClusterModal";
-import {
-  createApplication,
-  CreateApplicationRequest,
-} from "@/api/application";
+import { createApplication, CreateApplicationRequest } from "@/api/application";
 import { useRouter } from "next/router";
 import { get } from "lodash-es";
-import {formatDate, getUrlEncodeName, Message} from "@/utils/utils";
+import { formatDate, getUrlEncodeName, Message } from "@/utils/utils";
 import {
   getClusterIcon,
   GinIcon,
@@ -49,6 +42,7 @@ import { useClusterList } from "@/hooks/cluster";
 import useGitProviders from "@/hooks/gitProviders";
 import useStacks from "@/hooks/stacks";
 import { GitProvider } from "@/api/gitProviders";
+import useGitProviderOrganizations from "@/hooks/gitProvidersOrganizations";
 
 type FieldsDataType = typeof DefaultFieldsData;
 
@@ -57,6 +51,7 @@ const fieldsMap = {
   stack: "stack",
   cluster: "cluster",
   gitProvider: "git provider",
+  gitProviderOrg: "organization",
   domain: "domain",
 };
 
@@ -86,6 +81,8 @@ export default function Index(): React.ReactElement {
   const [stackList, getStackList] = useStacks();
   const [clusterList, getClusterList] = useClusterList();
   const [gitProviderList, getGitProviderList] = useGitProviders();
+  const [gitProviderOrganizations, updateGitProviderOrganizations] =
+    useGitProviderOrganizations();
 
   const router = useRouter();
 
@@ -95,7 +92,7 @@ export default function Index(): React.ReactElement {
     useRef<HTMLDivElement | null>(null),
     useRef<HTMLDivElement | null>(null),
     useRef<HTMLDivElement | null>(null),
-    // useRef<HTMLDivElement | null>(null),
+    useRef<HTMLDivElement | null>(null),
   ];
 
   const [underBgStyle, setUnderBgStyle] = useState({
@@ -135,7 +132,11 @@ export default function Index(): React.ReactElement {
   }, [clusterList]);
   useEffect(() => {
     if (gitProviderList.length === 1) {
-      setValue(fieldsMap.gitProvider, gitProviderList[0].git_provider_id.toString());
+      setValue(
+        fieldsMap.gitProvider,
+        gitProviderList[0].git_provider_id.toString()
+      );
+      updateGitProviderOrganizations(gitProviderList[0].git_provider_id);
     }
   }, [gitProviderList]);
 
@@ -187,6 +188,7 @@ export default function Index(): React.ReactElement {
     const createApplicationRequest: CreateApplicationRequest = {
       cluster_id: +data[fieldsMap.cluster],
       git_config: {
+        git_org_name: data[fieldsMap.gitProviderOrg],
         git_provider_id: +data[fieldsMap.gitProvider],
       },
       name: data[fieldsMap.applicationName],
@@ -198,9 +200,9 @@ export default function Index(): React.ReactElement {
 
     createApplication(createApplicationRequest).then((res) => {
       router.push(
-        `/${getUrlEncodeName()}/applications/creating?app_id=${res.app_id}&release_id=${
-          res.release_id
-        }`
+        `/${getUrlEncodeName()}/applications/creating?app_id=${
+          res.app_id
+        }&release_id=${res.release_id}`
       );
     });
   };
@@ -440,6 +442,7 @@ export default function Index(): React.ReactElement {
                         calculateUnderBgStyle(3);
                       });
                       field.onChange(e);
+                      updateGitProviderOrganizations(+e.target.value);
                     }
                   }}
                   displayEmpty
@@ -451,7 +454,12 @@ export default function Index(): React.ReactElement {
                   }}
                 >
                   {gitProviderList.map(
-                    ({ git_provider_id, git_org_name, provider, created_at }) => (
+                    ({
+                      git_provider_id,
+                      git_org_name,
+                      provider,
+                      created_at,
+                    }) => (
                       <MenuItem
                         key={git_provider_id}
                         value={git_provider_id}
@@ -484,6 +492,79 @@ export default function Index(): React.ReactElement {
           )}
           rules={{
             required: "Please choose a git provider.",
+          }}
+        />
+        <Controller
+          name={fieldsMap.gitProviderOrg}
+          control={control}
+          render={({ field }) => (
+            <FormControl
+              ref={eleList[4]}
+              error={errors[fieldsMap.gitProviderOrg] ? true : false}
+              className={styles.gitProviderWrap}
+            >
+              <h2>
+                {fieldsMap.gitProviderOrg}
+                <span className={styles.star}>*</span>
+              </h2>
+              <div>
+                <Select
+                  value={field.value}
+                  defaultValue=""
+                  onChange={field.onChange}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Without label" }}
+                  renderValue={(selected) => {
+                    if (gitProviderOrganizations === undefined) {
+                      return <em>Please choose a git provider first.</em>;
+                    }
+                    if (selected === "") {
+                      return <em>Please choose an organization.</em>;
+                    }
+                    return selected;
+                  }}
+                  // style={{ minWidth: 195 }}
+                  className={clsx(styles.gitProviderSelect)}
+                  onOpen={() => {
+                    calculateUnderBgStyle(4);
+                  }}
+                >
+                  {gitProviderOrganizations &&
+                    gitProviderOrganizations.map(
+                      ({
+                        git_provider_id,
+                        git_org_name,
+                        provider,
+                        created_at,
+                      }) => (
+                        <MenuItem
+                          key={git_org_name}
+                          value={git_org_name}
+                          className={styles.gitProviderItem}
+                          placeholder="Please choose a organization."
+                        >
+                          {provider === GitProvider.GitHub && <GitHubSVG />}
+                          <Stack>
+                            <div className={styles.gitOrgname}>
+                              {git_org_name}
+                            </div>
+                            <div className={styles.gitProviderUpdate}>
+                              {formatDate(created_at * 1000)}
+                            </div>
+                          </Stack>
+                        </MenuItem>
+                      )
+                    )}
+                </Select>
+                <FormHelperText id="my-helper-text">
+                  {errors[fieldsMap.gitProviderOrg] &&
+                    errors[fieldsMap.gitProviderOrg].message}
+                </FormHelperText>
+              </div>
+            </FormControl>
+          )}
+          rules={{
+            required: "Please choose a organization.",
           }}
         />
 

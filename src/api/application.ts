@@ -1,10 +1,11 @@
 import http from "../utils/axios";
 import { CreativeApiReturnField } from "../utils/commonType";
-import {getOriIdByContext} from "../utils/utils";
+import { getOriIdByContext } from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
   git_config: {
+    git_org_name: string;
     git_provider_id: number;
   };
   name: string;
@@ -39,7 +40,7 @@ export enum ApplicationStatus {
   FAILED = "Failed",
 }
 
-export interface GetApplicationStatusRes extends CreativeApiReturnField{
+export interface GetApplicationStatusRes extends CreativeApiReturnField {
   id: number;
   application_id: number;
   name: string;
@@ -51,7 +52,9 @@ export interface GetApplicationStatusRes extends CreativeApiReturnField{
   status: ApplicationStatus;
 }
 
-export function getApplicationStatus(req: GetApplicationReq): Promise<GetApplicationStatusRes> {
+export function getApplicationStatus(
+  req: GetApplicationReq
+): Promise<GetApplicationStatusRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${req.app_id}/releases/${
       req.release_id
@@ -59,8 +62,7 @@ export function getApplicationStatus(req: GetApplicationReq): Promise<GetApplica
   );
 }
 
-
-export interface Last_release extends CreativeApiReturnField{
+export interface Last_release extends CreativeApiReturnField {
   id: number;
   application_id: number;
   name: string;
@@ -86,28 +88,30 @@ export interface ApplicationObject {
   app_name: string;
   last_release: Last_release;
   stack: Stack;
-  owner_id: number,
-  owner_name: string,
+  owner_id: number;
+  owner_name: string;
 }
 
 export interface getAppListReq {
-  cluster_ids?: number[],
-  owner_ids?: number[],
-  stack_ids?: number[]
+  cluster_ids?: number[];
+  owner_ids?: number[];
+  stack_ids?: number[];
 }
 
-export function getApplicationList(params: getAppListReq = {}): Promise<ApplicationObject[]> {
-  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
+export function getApplicationList(
+  params: getAppListReq = {}
+): Promise<ApplicationObject[]> {
+  let { cluster_ids = [], owner_ids = [], stack_ids = [] } = params;
   let url = `/orgs/${getOriIdByContext()}/applications?`;
   cluster_ids.forEach((item) => {
-    url += `cluster_ids=${item}&`
-  })
+    url += `cluster_ids=${item}&`;
+  });
   owner_ids.forEach((item) => {
-    url += `owner_ids=${item}&`
-  })
+    url += `owner_ids=${item}&`;
+  });
   stack_ids.forEach((item) => {
-    url += `stack_ids=${item}&`
-  })
+    url += `stack_ids=${item}&`;
+  });
   return http.get(url);
 }
 
@@ -175,7 +179,7 @@ export interface GetApplicationInfoReq {
   app_id: number;
 }
 
-export interface GetApplicationInfoRes extends CreativeApiReturnField{
+export interface GetApplicationInfoRes extends CreativeApiReturnField {
   cluster_id: number;
   domain: string;
   git_org_name: string;
@@ -194,12 +198,12 @@ export function getApplicationInfo(
 }
 
 export type GetRepoListRes = Array<{
-  "git_organization": string,
-  "provider": string,
-  "repo_name": string,
-  "repo_type": string,
-  "repo_url": string
-}>
+  git_organization: string;
+  provider: string;
+  repo_name: string;
+  repo_type: string;
+  repo_url: string;
+}>;
 
 export function getRepoList(appId: string): Promise<GetRepoListRes> {
   return http.get(
@@ -207,7 +211,6 @@ export function getRepoList(appId: string): Promise<GetRepoListRes> {
   );
 }
 
-export function deleteApplication(appId: number): Promise<any>{
+export function deleteApplication(appId: number): Promise<any> {
   return http.delete(`/orgs/${getOriIdByContext()}/applications/${appId}`);
 }
-

@@ -69,3 +69,20 @@ export const deleteGitProvider = (
 ): Promise<GitProviderType[]> => {
   return http.delete(`/user/git_providers/${gitProviderId}`);
 };
+
+export type GitProviderOrganizations = Array<{
+  created_at: number;
+  created_by: number;
+  created_by_name: string;
+  git_org_name: string;
+  git_provider_id: number;
+  provider: GitProvider;
+  type: GitProviderType;
+  user_id: number;
+}>;
+
+export const getGitProviderOrganizations = (
+  gitProviderId: number
+): Promise<GitProviderOrganizations> => {
+  return http.get(`/user/git_providers/${gitProviderId}/organizations`);
+};

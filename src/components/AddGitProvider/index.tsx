@@ -7,11 +7,11 @@ import RightDrawer from "@/basicComponents/RightDrawer";
 import styles from "./index.module.scss";
 import GitHubApp from "./GitHubApp";
 import GitHubPAT from "./GitHubPAT";
-import { GitProviderItem } from "@/api/gitProviders";
+import { CreateGitProviderRes, GitProviderItem } from "@/api/gitProviders";
 import GitHubOAuthApp from "./GitHubOAuthApp";
 
 export type AddGitProviderSuccessCb = (
-  newGitProviderItem: GitProviderItem
+  createGitProvideRes: CreateGitProviderRes
 ) => void;
 
 interface Props {
@@ -52,13 +52,13 @@ export default function AddGitProvider({
               label={AddType.AddGitHubOrganization}
               value={AddType.AddGitHubOrganization}
             /> */}
-            <Tab label={AddType.AddGitHubPAT} value={AddType.AddGitHubPAT} />
+            {/* <Tab label={AddType.AddGitHubPAT} value={AddType.AddGitHubPAT} /> */}
             <Tab
               label={AddType.AddGitHubOAuthApp}
               value={AddType.AddGitHubOAuthApp}
             />
           </TabList>
-          <TabPanel value={AddType.AddGitHubPAT}>
+          {/* <TabPanel value={AddType.AddGitHubPAT}>
             <GitHubPAT
               {...{
                 modalDisplay,
@@ -66,12 +66,12 @@ export default function AddGitProvider({
                 successCb,
               }}
             />
-          </TabPanel>
+          </TabPanel> */}
           {/* <TabPanel value={AddType.AddGitHubOrganization}>
             <GitHubApp {...{ setModalDisplay, successCb }} />
           </TabPanel> */}
           <TabPanel value={AddType.AddGitHubOAuthApp}>
-            <GitHubOAuthApp {...{ setModalDisplay }} />
+            <GitHubOAuthApp {...{ setModalDisplay, successCb }} />
           </TabPanel>
         </TabContext>
       </RightDrawer>

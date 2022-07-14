@@ -7,6 +7,12 @@ import CloseWindowCounter from "@/basicComponents/CloseWindowCounter";
 import PageCenter from "@/basicComponents/PageCenter";
 import { setLoginToken, uuid } from "@/utils/utils";
 import { getPopUpsWindowFeatures } from "@/utils/window";
+import {
+  createGitProvider,
+  CreateGitProviderReq,
+  GitProvider,
+  GitProviderType,
+} from "@/api/gitProviders";
 
 export enum Result {
   Processing = "Processing",
@@ -20,6 +26,7 @@ export enum GitHubOAuthAppTemporaryStorage {
   state = "github_oauth_app_state",
   success = "github_oauth_app_success",
   postAuthAction = "post_auth_action",
+  createGitProviderRes = "create_git_provider_res",
 }
 
 export enum PostAuthAction {
@@ -39,8 +46,8 @@ export const openGitHubOAuthWindow = (
   url.searchParams.set("state", state);
 
   window.localStorage.setItem(GitHubOAuthAppTemporaryStorage.state, state);
-  window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
 
+  window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
   // Open a new window to authenticate GitHub app.
   const GitHubAppInstallationWindow = window.open(
     url,
@@ -60,8 +67,10 @@ export const openGitHubOAuthWindow = (
         successCb && successCb();
       }
 
-      window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.state);
-      window.localStorage.removeItem(GitHubOAuthAppTemporaryStorage.success);
+      // Remove all temporary storage items.
+      for (const value of Object.values(GitHubOAuthAppTemporaryStorage)) {
+        window.localStorage.removeItem(value);
+      }
 
       clearInterval(timer);
     }
@@ -99,6 +108,7 @@ export default function PostAuthGitHub(): React.ReactElement {
             auth(code as string);
             break;
           case PostAuthAction.AddGitProvider:
+            addGitProvider(code as string);
             break;
         }
         break;
@@ -130,6 +140,32 @@ export default function PostAuthGitHub(): React.ReactElement {
       });
   };
 
+  const addGitProvider = (code: string) => {
+    const req: CreateGitProviderReq = {
+      provider: GitProvider.GitHub,
+      type: GitProviderType.GitHubOAuth,
+      code: code,
+    };
+
+    createGitProvider(req)
+      .then((res) => {
+        setResult(Result.Success);
+        // Add success indicator
+        window.localStorage.setItem(
+          GitHubOAuthAppTemporaryStorage.success,
+          Result.Success
+        );
+        // Store success res used by callback that flush the git provider list
+        window.localStorage.setItem(
+          GitHubOAuthAppTemporaryStorage.createGitProviderRes,
+          JSON.stringify(res)
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+        setResult(Result.Error);
+      });
+  };
 
   return (
     <PageCenter>
@@ -151,7 +187,7 @@ export default function PostAuthGitHub(): React.ReactElement {
           <Alert>
             <AlertTitle>You have authenticated successfully.</AlertTitle>
             The window will automatically closed after{" "}
-            <CloseWindowCounter seconds={30000} /> second.
+            <CloseWindowCounter seconds={3} /> second.
           </Alert>
         )}
         {result === Result.Error && (

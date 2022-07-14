@@ -7,8 +7,8 @@ export default function EyeOpen(): React.ReactElement {
     <div
       style={{
         position: "relative",
-        height: "24px",
-        width: "24px",
+        height: "20px",
+        width: "20px",
       }}
     >
       <Image

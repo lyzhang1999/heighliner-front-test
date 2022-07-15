@@ -85,7 +85,7 @@ export interface Member extends CreativeApiReturnField {
   org_id: number;
   user_id: number;
   member_type: MemberType;
-  username: string;
+  nickname: string;
 }
 
 export type GetOrgMembersRes = {

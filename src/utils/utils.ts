@@ -161,3 +161,8 @@ export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
   let defaultOrg = find(orgList, {type: "Default", member: {member_type: roleType.Owner}});
   return defaultOrg as OrgList;
 }
+
+
+export function isProduct(){
+  return location.host === "forkmain.com";
+}

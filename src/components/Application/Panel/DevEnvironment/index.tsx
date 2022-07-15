@@ -16,7 +16,7 @@ import { getOrganizationNameByUrl, getOriIdByContext } from "@/utils/utils";
 import {
   getAppEnvironments,
   GetAppEnvironmentsRes,
-} from "@/utils/api/application";
+} from "@/api/application";
 import { DownloadTextInClient } from "@/basicComponents/DownloadTextInClient";
 
 export default function DevEnvironment(): React.ReactElement {

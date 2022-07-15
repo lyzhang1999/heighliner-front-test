@@ -11,14 +11,32 @@ import cookie from "@/utils/cookie";
 import Notice from '@/components/Notice/index';
 import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";
-import {getOrgList} from "@/utils/api/org";
+import {getOrgList} from "@/api/org";
 import {CssBaseline} from "@mui/material";
-import {find} from "lodash-es";
+import {find, get} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 
-const noCheckLoginPage = ['/login/github', '/signup', '/distributor/post-install-github-app'];
-const noCheckOrgNamePage = ['/organizations', '/settings'];
-const ifLoginDisablePage = ["/", '/login', '/signup'];
+const noCheckLoginPage = [
+  '/sign-in',
+  '/login/github',
+  '/sign-up',
+  '/distributor/post-install-github-app',
+  '/distributor/post-auth-github',
+  '/invite-confirm',
+  '/forgot-password',
+  "/reset-password",
+  '/version',
+  '/signup-success',
+  "/verify-email"
+];
+
+const noCheckOrgNamePage = [
+  '/organizations',
+  '/profile',
+  "/gitProvider",
+  '/distributor/post-auth-github'
+];
+const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];
 
 function App({Component, pageProps}: AppProps) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -53,40 +71,48 @@ function App({Component, pageProps}: AppProps) {
   }
 
   function loginCheck() {
-    if (!noCheckLoginPage.includes(router.pathname)) {
-      if (cookie.getCookie('token')) {
-        getOrgList().then(res => {
-          let list = res.data;
-          dispatch({
-            organizationList: list,
-          });
-          let defaultOriName = getDefaultOrg(list).name;
-          if ((ifLoginDisablePage.includes(router.pathname))) {
-            location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
-            return;
-          }
-          if (noCheckOrgNamePage.includes(location.pathname)) {
-            dispatch({currentOrganization: getCurrentOrg(list[0])})
-            startRender();
-            return;
-          }
-          let currentOri = find(list, {name: getOrganizationNameByUrl()});
-          if (currentOri) {
-            dispatch({currentOrganization: getCurrentOrg(currentOri)})
-            startRender();
-            return;
-          }
+    if (cookie.getCookie('token')) {
+      getOrgList().then(res => {
+        let list = res.data;
+        dispatch({
+          organizationList: list,
+        });
+        let defaultOriName = getDefaultOrg(list).name;
+        if (ifLoginDisablePage.includes(router.pathname)) {
           location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
-        }).catch(err => {
-          router.push("/login");
+          return;
+        }
+        if (noCheckOrgNamePage.includes(router.pathname)) {
+          dispatch({currentOrganization: getCurrentOrg(list[0])})
           startRender();
-        })
-      } else {
-        startRender()
-        router.push("/login");
-      }
+          return;
+        }
+        let currentOri = find(list, {name: getOrganizationNameByUrl()});
+        if (currentOri) {
+          dispatch({currentOrganization: getCurrentOrg(currentOri)})
+          startRender();
+          return;
+        } else {
+          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+        }
+      }).catch(err => {
+        if ((get(err, "response.status") === 302) && (get(err, 'response.data.redirect_to') === 'userInfoComplete')) {
+          if (location.pathname !== '/sign-up') {
+            location.href = location.origin + '/sign-up?completeInfo=true'
+          }else{
+            startRender();
+          }
+        } else {
+          cookie.delCookie("token");
+          location.pathname = '/sign-in';
+        }
+      })
     } else {
-      startRender()
+      if (noCheckLoginPage.includes(router.pathname)) {
+        startRender();
+      } else {
+        location.pathname = '/sign-in';
+      }
     }
   }
 

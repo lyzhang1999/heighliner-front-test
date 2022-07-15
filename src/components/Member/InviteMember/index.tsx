@@ -5,8 +5,8 @@ import {
   InviteeSuggestionsRes,
   MemberType,
   MemberTypeEnum,
-} from "@/utils/api/org";
-import {getOriIdByContext, Message} from "@/utils/utils";
+} from "@/api/org";
+import { getOriIdByContext, Message } from "@/utils/utils";
 import {
   Autocomplete,
   Button,
@@ -27,6 +27,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import styles from "./index.module.scss";
 
@@ -41,62 +42,73 @@ export default function InviteMember({
   setOpen,
   inviteMemberSuccessCb,
 }: Props): ReactElement {
-  const [options, setOptions] = useState<InviteeSuggestionsRes>([]);
-  // const loading = open && options.length === 0;
-  const [value, setValue] = useState<InviteeSuggestionsRes[number] | null>(
-    null
-  );
-  const [inputValue, setInputValue] = useState("");
+  // const [options, setOptions] = useState<InviteeSuggestionsRes>([]);
+  // const [value, setValue] = useState<InviteeSuggestionsRes[number] | null>(
+  //   null
+  // );
+  // const [inputValue, setInputValue] = useState("");
   const [memberType, setMemberType] = useState<MemberType>(
     MemberTypeEnum.Member
   );
 
-  useEffect(() => {
-    if(open === true){
-      setOptions([]);
-      setValue(null);
-      setInputValue('');
-    }
-  }, [open])
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
+      email: "",
+    },
+  });
 
-  useEffect(() => {
-    // Can't fetch invitee suggestion list
-    if (inputValue.trim().length <= 0) {
-      setOptions([]);
-      return;
-    }
+  // useEffect(() => {
+  //   if(open === true){
+  //     setOptions([]);
+  //     setValue(null);
+  //     setInputValue('');
+  //   }
+  // }, [open])
 
-    inviteeSuggestions({
-      org_id: +getOriIdByContext(),
-      username: inputValue,
-    }).then((res) => {
-      setOptions(res);
-    });
-  }, [inputValue]);
+  // useEffect(() => {
+  //   // Can't fetch invitee suggestion list
+  //   if (inputValue.trim().length <= 0) {
+  //     setOptions([]);
+  //     return;
+  //   }
 
-  const invitation = () => {
-    switch (true) {
-      case value === null:
-        Message.warning("You didn't choose an invitee.");
-        return;
-      case value?.is_member:
-        Message.warning(`The user ${value?.username} has already in your team.`);
-        return;
-    }
+  //   inviteeSuggestions({
+  //     org_id: +getOriIdByContext(),
+  //     username: inputValue,
+  //   }).then((res) => {
+  //     setOptions(res);
+  //   });
+  // }, [inputValue]);
 
-    const req: InvitationsReq = {
-      org_id: +getOriIdByContext(),
-      body: {
-        user_id: value!.user_id,
-        member_type: memberType,
-      },
-    };
+  // const invitation = () => {
+  //   switch (true) {
+  //     case value === null:
+  //       Message.warning("You didn't choose an invitee.");
+  //       return;
+  //     case value?.is_member:
+  //       Message.warning(`The user ${value?.username} has already in your team.`);
+  //       return;
+  //   }
 
-    invitations(req).then(() => {
-      Message.success(`Invite the user ${value!.username} successfully!`);
-      inviteMemberSuccessCb && inviteMemberSuccessCb();
-    });
-  };
+  //   const req: InvitationsReq = {
+  //     org_id: +getOriIdByContext(),
+  //     body: {
+  //       user_id: value!.user_id,
+  //       member_type: memberType,
+  //     },
+  //   };
+
+  //   invitations(req).then(() => {
+  //     Message.success(`Invite the user ${value!.username} successfully!`);
+  //     inviteMemberSuccessCb && inviteMemberSuccessCb();
+  //   });
+  // };
+
+  const invitation = () => {};
 
   return (
     <Dialog
@@ -108,11 +120,11 @@ export default function InviteMember({
       <DialogTitle>Invite User</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          You can directly invite a user to your team and set his role.
+          You can invite a user to your team by email.
         </DialogContentText>
       </DialogContent>
       <Stack direction="row" gap={1} className={styles.row}>
-        <Autocomplete
+        {/* <Autocomplete
           size="small"
           id="combo-box-demo"
           getOptionLabel={(option) => option.username}
@@ -133,11 +145,32 @@ export default function InviteMember({
           }}
           noOptionsText="Can`t match any user"
           renderInput={(params) => <TextField {...params} label="Invitee"/>}
+        /> */}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState }) => (
+            <TextField
+              value={field.value}
+              type="email"
+              label="Email"
+              onChange={field.onChange}
+              helperText={errors.email?.message}
+              error={errors.email !== undefined}
+            />
+          )}
+          rules={{
+            required: "Please enter invitee email.",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address.",
+            },
+          }}
         />
         <Select
           value={memberType}
           size="small"
-          sx={{minWidth: '120px'}}
+          sx={{ minWidth: "120px", maxHeight: "56px" }}
           onChange={(event) => {
             setMemberType(event.target.value as MemberType);
           }}
@@ -150,9 +183,7 @@ export default function InviteMember({
           </MenuItem>
         </Select>
       </Stack>
-      <DialogActions
-        sx={{padding: '30px 24px 16px 30px'}}
-      >
+      <DialogActions sx={{ padding: "30px 24px 16px 30px" }}>
         <Button
           onClick={() => {
             setOpen(false);
@@ -160,9 +191,9 @@ export default function InviteMember({
         >
           Cancel
         </Button>
-        <Button onClick={invitation}
-                variant="contained"
-        >Invitation</Button>
+        <Button onClick={handleSubmit(invitation)} variant="contained">
+          Invitation
+        </Button>
       </DialogActions>
     </Dialog>
   );

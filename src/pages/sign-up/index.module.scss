@@ -1,0 +1,128 @@
+@import "../../styles/globalVar.scss";
+
+//.container {
+//  //background-image: url("/img/login/login-page-bg@3x.webp");
+//  background-size: cover;
+//  background-repeat: no-repeat;
+//  background-position: center;
+//  width: 100vw;
+//  height: 100vh;
+//
+//  //.logo {
+//  //  top: 48px;
+//  //  left: 64.2px;
+//  //  position: absolute;
+//  //  display: flex;
+//  //}
+//
+//  .card {
+//    top: 300px;
+//    left: 195px;
+//    width: 366px;
+//    height: 278px;
+//
+//    .title {
+//      font-size: 23px;
+//      font-weight: 500;
+//      line-height: 2;
+//      text-align: left;
+//      color: #6002ee;
+//    }
+//
+//    .githubLoginBtn {
+//      background-color: rgba(217, 217, 217, 0);
+//      border-color: #d9dfe8;
+//      border-radius: 0;
+//      color: #000;
+//    }
+//  }
+//}
+//
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.cardWrapper {
+  width: 358px;
+  background-color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  //padding: 24px 40px 40px 40px;
+  //box-shadow: 0 2px 4px 0 rgba(226, 228, 245, 0.8);
+
+  .form {
+    :global(.MuiFormControl-root) {
+      margin-top: 16px;
+    }
+  }
+
+  .logo {
+    height: 37px;
+    position: relative;
+  }
+
+  .title {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 2;
+    color: #343434;
+    margin-top: 26px;
+  }
+
+  .githubLoginBtn {
+    background-color: rgba(217, 217, 217, 0);
+    border-color: #d9dfe8;
+    border-radius: 0;
+    color: #000;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .divider {
+    margin-top: 30px;
+  }
+
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #464646;
+    margin-top: 16px;
+
+    .btn {
+      .login {
+        color: #1b51b9;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .signIn {
+    margin-top: 20px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    background-color: #1b51b9;
+    line-height: 40px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 100%;
+    border-width: 0px;
+    outline: #1b51b9;
+  }
+}
+
+
+
+

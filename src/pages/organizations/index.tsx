@@ -8,8 +8,8 @@ import styles from './index.module.scss';
 import {useContext, useEffect, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
-import {getOrgList, OrgList, RoleIcon, roleType} from "@/utils/api/org";
-import {formatDate, getDefaultOrg, getQuery} from "@/utils/utils";
+import {getOrgList, OrgList, RoleIcon, roleType} from "@/api/org";
+import {formatDate, getCurrentOrg, getDefaultOrg, getQuery} from "@/utils/utils";
 import {get, omit} from "lodash-es";
 import {useRouter} from "next/router";
 import RoleTag from "@/components/RoleTag";
@@ -64,8 +64,7 @@ const Organizations = () => {
     if (get(currentOrganization, 'org_id') === id) {
       let defaultItem = getDefaultOrg(organizationList);
       if (defaultItem) {
-        // location.pathname = `/${encodeURIComponent(defaultItem.name)}/applications`;
-        dispatch({currentOrganization: omit({...defaultItem, ...defaultItem.member}, 'member')})
+        dispatch({currentOrganization: getCurrentOrg(defaultItem)})
       }
     }
   }
@@ -141,23 +140,26 @@ const Organizations = () => {
                     <RoleTag type={member_type}/>
                   </TableCell>
                   <TableCell align="right">
-                    {
-                      [roleType.Owner].includes(member_type) && row.type === 'Default' ?
-                        <Tooltip
-                          title="Init organization does not allow operations"
-                          placement="left"
-                        >
-                          <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
-                        </Tooltip>
-                        :
-                        <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
-                          setDeleteId(row.id);
-                          setTransferId(row.id);
-                          setLeaveId(row.id);
-                          setActiveType(member_type);
-                          setMountDom(event?.currentTarget);
-                        }}/>
-                    }
+                    <div className={styles.moreIcon}>
+                      {
+                        [roleType.Owner].includes(member_type) && row.type === 'Default' ?
+                          <Tooltip
+                            title="Init organization does not allow operations"
+                            placement="left"
+                          >
+                            <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
+                          </Tooltip>
+                          :
+                          <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
+                            setDeleteId(row.id);
+                            setTransferId(row.id);
+                            setLeaveId(row.id);
+                            setActiveType(member_type);
+                            setMountDom(event?.currentTarget);
+                          }}/>
+                      }
+                    </div>
+
                   </TableCell>
                 </TableRow>
               )

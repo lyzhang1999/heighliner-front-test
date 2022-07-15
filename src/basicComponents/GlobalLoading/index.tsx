@@ -12,7 +12,6 @@ import styles from "./index.module.scss";
 
 interface Props extends CommonProps {
   openGlobalLoading: boolean;
-  setOpenGlobalLoading: Dispatch<SetStateAction<boolean>>;
   title?: string;
   description?: string;
 }

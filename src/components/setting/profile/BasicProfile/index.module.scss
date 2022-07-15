@@ -18,6 +18,16 @@
     button:nth-child(3) {
       margin-left: 442px;
     }
+
+    .avatar {
+      :global(img:hover) {
+        transform: rotate(666turn);
+        transition-delay: 1s;
+        transition-property: all;
+        transition-duration: 59s;
+        transition-timing-function: cubic-bezier(.34, 0, .84, 1);
+      }
+    }
   }
 
   .usernameWrapper {
@@ -37,6 +47,7 @@
       margin-top: 10px;
 
       $inputWidth: 221px;
+
       & > div > div {
         input {
           width: $inputWidth - 16px;
@@ -51,6 +62,7 @@
       }
 
       $BtnWidth: 24px;
+
       .changeBtn,
       .cancelBtn {
         position: absolute;
@@ -109,7 +121,7 @@
 
     .usernameTextWrap {
       display: flex;
-      
+
 
       p {
         width: 512px;

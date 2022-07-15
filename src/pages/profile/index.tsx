@@ -5,9 +5,9 @@ import Layout from "@/components/Layout";
 import BasicProfile from "@/components/setting/profile/BasicProfile";
 import Password from "@/components/setting/profile/Password";
 import Email from "@/components/setting/profile/Email";
+import Logout from "@/components/setting/profile/Logout";
 
 import styles from "./index.module.scss";
-import Logout from "@/components/setting/profile/Logout";
 
 export default function Setting(): React.ReactElement {
   return (
@@ -20,9 +20,9 @@ export default function Setting(): React.ReactElement {
             <div className={styles.card}>
               <BasicProfile />
             </div>
-            {/*<div className={styles.card}>*/}
-            {/*  <Email />*/}
-            {/*</div>*/}
+            <div className={styles.card}>
+             <Email />
+            </div>
             <div className={styles.card}>
               <Password />
             </div>

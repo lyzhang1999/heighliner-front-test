@@ -3,7 +3,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import {Button} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
-import {leaveOriApi} from "@/utils/api/org";
+import {leaveOriApi} from "@/api/org";
 import {Message} from "@/utils/utils";
 
 interface Props {

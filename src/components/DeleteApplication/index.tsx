@@ -4,7 +4,7 @@ import {Button} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
 import {Message} from "@/utils/utils";
-import {deleteApplication} from "@/utils/api/application";
+import {deleteApplication} from "@/api/application";
 
 interface Props {
   deleteModalVisible: boolean,
@@ -44,10 +44,11 @@ const DeleteApplication = (props: Props) => {
         sx={{padding: '16px 24px'}}
       >
         <Button onClick={handleClose}
+                variant="outlined"
         >Cancel</Button>
         <Button onClick={deleteIt}
                 color="error"
-                variant="contained"
+                variant="outlined"
         >
           Delete
         </Button>

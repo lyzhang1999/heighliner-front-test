@@ -18,7 +18,7 @@ import {
   getApplicationInfo,
   GetApplicationInfoRes,
   getApplicationStatus,
-} from "@/utils/api/application";
+} from "@/api/application";
 import {useRouter} from "next/router";
 import {getOriIdByContext} from "@/utils/utils";
 

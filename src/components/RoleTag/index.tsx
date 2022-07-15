@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 import clsx from "clsx";
-import {MemberType,} from "@/utils/api/org";
+import {MemberType,} from "@/api/org";
 
 export default function RoleTag({type}: { type: MemberType }) {
   if (type === "Owner") {

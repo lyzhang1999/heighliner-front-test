@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ErrorCode, useDropzone } from "react-dropzone";
+import React, {useContext, useEffect, useState} from "react";
+import {ErrorCode, useDropzone} from "react-dropzone";
 import {
   Avatar,
   Button,
@@ -14,40 +14,46 @@ import {
   useForm,
 } from "react-hook-form";
 
-import { fileToBase64, Message } from "@/utils/utils";
-import { Context } from "@/utils/store";
-import { BasicProfileReq, updateBasicProfile } from "@/utils/api/profile";
+import {fileToBase64, Message} from "@/utils/utils";
+import {Context} from "@/utils/store";
+import {BasicProfileReq, updateBasicProfile} from "@/api/profile";
 
 import styles from "./index.module.scss";
 
 enum BasicProfileFieldMap {
   avatar = "avatar",
-  username = "username",
+  nickname = "nickname",
 }
 
 export default function BasicProfile(): React.ReactElement {
   const [usernameEditing, setUsernameEditing] = useState(false);
-  const { state: globalState, dispatch: globalStateDispatch } =
+  const {state: globalState, dispatch: globalStateDispatch} =
     useContext(Context);
 
   // Avatar updater
-  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
+  const {acceptedFiles, fileRejections, getRootProps, getInputProps} =
     useDropzone({
-      accept: { "image/*": [".png", ".webp", ".jpeg", ".jpg"] },
+      accept: {"image/*": [".png", ".webp", ".jpeg", ".jpg"]},
       noDrag: true,
       noKeyboard: true,
       maxFiles: 1,
       maxSize: 1e6, // 1MB
     });
 
+  useEffect(() => {
+    if (usernameEditing) {
+      setValue(BasicProfileFieldMap.nickname, globalState.userInfo?.nickname)
+    }
+  }, [usernameEditing])
+
   // Form controller
   const defaultBasicProfileField = {
     [BasicProfileFieldMap.avatar]: globalState.userInfo?.avatar,
-    [BasicProfileFieldMap.username]: globalState.userInfo?.username,
+    [BasicProfileFieldMap.nickname]: globalState.userInfo?.nickname,
   };
   const {
     control,
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
     setValue,
   } = useForm({
@@ -83,7 +89,7 @@ export default function BasicProfile(): React.ReactElement {
   // Show unacceptable file errors
   useEffect(() => {
     if (fileRejections.length > 0) {
-      fileRejections.map(({ file, errors }) => {
+      fileRejections.map(({file, errors}) => {
         errors.map((error) => {
           switch (error.code) {
             case ErrorCode.FileTooLarge:
@@ -104,20 +110,20 @@ export default function BasicProfile(): React.ReactElement {
   };
 
   const updateUsername: SubmitHandler<FieldValues> = (data) => {
-    const newUsername = data[BasicProfileFieldMap.username];
+    const newUsername = data[BasicProfileFieldMap.nickname];
 
     const req: BasicProfileReq = {
-      username: newUsername,
+      nickname: newUsername,
     };
 
     updateBasicProfile(req).then(() => {
       globalStateDispatch({
         userInfo: {
           ...globalState.userInfo,
-          username: newUsername,
+          nickname: newUsername,
         },
       });
-      Message.success("Update username successfully.");
+      Message.success("Update nickname successfully.");
       setUsernameEditing(false);
     });
   };
@@ -127,12 +133,12 @@ export default function BasicProfile(): React.ReactElement {
       <Controller
         name={BasicProfileFieldMap.avatar}
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <div className={styles.avatarWrap}>
             <h2>Avatar</h2>
-            <Avatar src={field.value}></Avatar>
+            <Avatar src={field.value} className={styles.avatar}></Avatar>
             <Button>
-              <div {...getRootProps({ className: "dropzone" })}>
+              <div {...getRootProps({className: "dropzone"})}>
                 <input {...getInputProps()} />
                 Upload
               </div>
@@ -142,10 +148,10 @@ export default function BasicProfile(): React.ReactElement {
       />
       <Controller
         control={control}
-        name={BasicProfileFieldMap["username"]}
-        render={({ field }) => (
+        name={BasicProfileFieldMap["nickname"]}
+        render={({field}) => (
           <FormControl
-            error={errors[BasicProfileFieldMap["username"]] ? true : false}
+            error={errors[BasicProfileFieldMap["nickname"]] ? true : false}
           >
             <div className={styles.usernameWrapper}>
               <h2>Name</h2>
@@ -159,8 +165,8 @@ export default function BasicProfile(): React.ReactElement {
                     onKeyDown={onKeydownHandler}
                   ></TextField>
                   <FormHelperText>
-                    {errors[BasicProfileFieldMap["username"]] &&
-                      errors[BasicProfileFieldMap["username"]]!.message}
+                    {errors[BasicProfileFieldMap["nickname"]] &&
+                      errors[BasicProfileFieldMap["nickname"]]!.message}
                   </FormHelperText>
                   <button
                     className={styles.changeBtn}
@@ -175,7 +181,7 @@ export default function BasicProfile(): React.ReactElement {
                 </div>
               ) : (
                 <div className={styles.usernameTextWrap}>
-                  <p>{globalState.userInfo?.username}</p>
+                  <p>{globalState.userInfo?.nickname}</p>
                   <Button onClick={() => setUsernameEditing(true)}>Edit</Button>
                 </div>
               )}
@@ -198,8 +204,8 @@ export default function BasicProfile(): React.ReactElement {
           },
           validate: {
             sameWithOld: (value) =>
-              value !== defaultBasicProfileField.username ||
-              "Nothing changed to the username.",
+              value !== defaultBasicProfileField.nickname ||
+              "Nothing changed to the nickname.",
           },
         }}
       />

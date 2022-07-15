@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getStacks, Stacks } from "@/utils/api/stack";
+import { getStacks, Stacks } from "@/api/stack";
 
 export default function useStacks():[
   Stacks,

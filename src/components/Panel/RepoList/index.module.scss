@@ -1,0 +1,121 @@
+@import "@/styles/globalVar.scss";
+
+.repolist {
+  max-width: 400px;
+  margin-left: 20px;
+  margin-top: 50px;
+
+  .reopItem {
+    margin-bottom: 27px;
+    transition: all 0.3s linear;
+    overflow: hidden;
+    height: 43px;
+    border: solid 1px rgba(201, 213, 235, 0.2);
+    border-radius: 8px;
+
+    .header {
+      transition: all 0.3s linear;
+      background-color: #e4ebf2;
+
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 43px;
+
+      cursor: pointer;
+
+      .githubIcon {
+        width: 20px;
+        height: 20px;
+        margin-left: 14px;
+        margin-right: 10px;
+      }
+
+      .name {
+        margin: 0 68px 0 9px;
+        font-size: 16px;
+        color: #202d40;
+        @include overflowEllipsis;
+        //max-width: calc(100% - 80px);
+      }
+
+      .spreadIcon {
+        position: absolute;
+        top: 18px;
+        right: 17px;
+        transition: all 0.3s linear;
+      }
+    }
+
+    .content {
+      padding: 0 40px;
+      background-color: #fff;
+      //height: 0px;
+      //overflow: hidden;
+      //transition: height 2s linear;
+      padding-bottom: 20px;
+
+      .title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        padding-top: 16px;
+
+        .branch {
+          margin-left: 10px;
+          margin-bottom: -2px;
+        }
+      }
+
+      .list {
+        font-size: 12px;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+
+        .key {
+          color: #1b51b9;
+          width: 80px;
+        }
+
+        .keyCommit {
+          color: #202d40;
+          width: 80px;
+
+
+          .commitIcon {
+            margin-right: 5px;
+          }
+        }
+
+        .branchKey {
+          color: #1b51b9;
+          width: 80px;
+
+          .branchIcon {
+            margin-right: 5px;
+            margin-bottom: -2px;
+          }
+        }
+
+        .value {
+          color: #202d40;
+          @include overflowEllipsis;
+        }
+      }
+    }
+
+    .spreadContent {
+      //height: auto;
+    }
+  }
+
+  .spreadItem {
+    height: 343px;
+
+    .spreadIcon {
+      transform: rotate(180deg);
+    }
+  }
+}
+

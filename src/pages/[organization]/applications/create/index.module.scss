@@ -1,0 +1,10 @@
+@import "/src/styles/utils";
+
+.panel {
+  display: grid;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(102, 151, 245, 0.25);
+  margin: 40px auto;
+  width: 807px;
+  padding: 34px 42px;
+}

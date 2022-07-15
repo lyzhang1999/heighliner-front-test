@@ -10,6 +10,12 @@ export const http = axios.create({
   timeout: 10000,
 });
 
+
+const noDefaultErrMsgPath = [
+  '/user/email_verification',
+  "/api/orgs"
+]
+
 http.interceptors.request.use((config: AxiosRequestConfig) => {
   const token = cookie.getCookie('token');
   if (token) {
@@ -37,16 +43,20 @@ http.interceptors.response.use((res: AxiosResponse) => {
   }
   return data;
 }, (err) => {
+  let url = get(err, ['config', 'url'], '');
+  url = url.split('?')[0];
   let {status, data} = err.response;
   if (status === 401) {
     cookie.delCookie('token');
   }
-  if (status === 401 && (location.pathname !== '/login')) {
-    location.pathname = '/login';
+  if (status === 401 && (location.pathname !== '/sign-in')) {
+    location.pathname = '/sign-in';
     return;
   }
   let errMsg = data?.msg || data?.err_msg || data;
-  errMsg && Message.error(errMsg);
+  if (noDefaultErrMsgPath.includes(url)) {
+    errMsg && Message.error(errMsg);
+  }
   return Promise.reject(err);
 })
 

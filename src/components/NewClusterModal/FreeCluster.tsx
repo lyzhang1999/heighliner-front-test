@@ -4,7 +4,7 @@
 
 import React from "react";
 
-import {createCluster} from "@/utils/api/cluster";
+import {createCluster} from "@/api/cluster";
 
 import styles from './index.module.scss';
 import { Button } from "@mui/material";

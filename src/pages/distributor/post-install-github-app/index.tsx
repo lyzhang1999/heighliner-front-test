@@ -8,7 +8,7 @@ import { Alert, AlertTitle } from "@mui/material";
 
 import PageCenter from "@/basicComponents/PageCenter";
 import { TemporaryStorageItems } from "@/components/AddGitProvider/GitHubApp";
-import { putInstallation, PutInstallationReq } from "@/utils/api/github";
+import { putInstallation, PutInstallationReq } from "@/api/github";
 import CloseWindowCounter from "@/basicComponents/CloseWindowCounter";
 import { Result } from "@/utils/constants";
 
@@ -94,7 +94,7 @@ export default function PostInstallGitHubApp(): React.ReactElement {
               your organization successfully.
             </AlertTitle>
             The window will automatically closed after{" "}
-            <CloseWindowCounter seconds={30000} /> second.
+            <CloseWindowCounter seconds={3000} /> second.
           </Alert>
         )}
       </>

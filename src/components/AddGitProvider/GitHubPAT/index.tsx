@@ -7,7 +7,7 @@ import {
   createGitProvider,
   GitProvider,
   GitProviderType,
-} from "@/utils/api/gitProviders";
+} from "@/api/gitProviders";
 
 import styles from "./index.module.scss";
 import { trim } from "lodash-es";

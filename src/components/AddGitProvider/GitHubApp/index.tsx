@@ -77,7 +77,7 @@ export default function GitHubApp(props: Props): React.ReactElement {
         justifyContent="center"
         alignItems="center"
       >
-        <Button onClick={openGitHubAppInstallationWindow} variant="outlined" disabled>
+        <Button onClick={openGitHubAppInstallationWindow} variant="outlined">
           <AddCircleOutlineIcon />
           &nbsp;Add a new organization
         </Button>
@@ -85,7 +85,6 @@ export default function GitHubApp(props: Props): React.ReactElement {
       <GlobalLoading
         {...{
           openGlobalLoading,
-          setOpenGlobalLoading,
           title: "Processing",
           description:
             `Please choose a organization to ` +

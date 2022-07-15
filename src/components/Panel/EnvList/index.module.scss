@@ -1,0 +1,181 @@
+@import "@/styles/globalVar.scss";
+
+.wrapper {
+  .item {
+    padding: 8px 10px 8px 8px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    border: solid 1px #c9d5eb;
+    background-color: #fff;
+    max-width: 500px;
+    position: relative;
+    margin: 50px 0px;
+    transition: all 0.3s linear;
+    //height: 145px;
+    //overflow: hidden;
+
+    .prevewWrapper {
+      position: absolute;
+      top: -30px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      img {
+        margin-right: 5px;
+      }
+
+      .preview {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1b51b9;
+        cursor: pointer;
+      }
+    }
+
+    .spreadIcon {
+      position: absolute;
+      bottom: 4px;
+      right: 10px;
+      cursor: pointer;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .envName {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1b51b9;
+      }
+
+      .iconWrapper {
+        img {
+          width: 20px;
+          height: 20px;
+          background-color: #fff;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .urlTitle {
+      font-size: 14px;
+      color: #000;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .url {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: left;
+      color: #000;
+      @include overflowEllipsis;
+    }
+
+    .infoWrapper {
+      margin-top: 10px;
+      width: calc(100% - 50px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .key {
+        font-size: 14px;
+        font-weight: 600;
+        text-align: left;
+        color: #000;
+        margin-right: 5px;
+      }
+
+      .circle {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: #60e3ac;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+
+      .statusValue {
+        font-size: 12px;
+      }
+
+      .configValue,
+      .logsValue {
+        cursor: pointer;
+        color: #1b51b9;
+        font-size: 12px;
+      }
+    }
+
+    .issueItem,
+    .prItem {
+      font-size: 14px;
+      text-align: left;
+      color: #1b51b9;
+      @include overflowEllipsis;
+      max-width: calc(100% - 50px);
+    }
+
+    .hiddenWrapper {
+      display: none;
+    }
+  }
+}
+
+.wrapper {
+  .spreadItem {
+    height: 297px;
+
+    .spreadIcon {
+      transform: rotate(180deg);
+    }
+
+    .hiddenWrapper {
+      display: block;
+    }
+  }
+}
+
+.forkEnv {
+  max-width: 500px;
+  height: 46px;
+  border-radius: 8px;
+  border: 1px dashed #abb4c3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    border: 1px solid #abb4c3;
+  }
+
+  .desc {
+    margin-left: 10px;
+    font-weight: 500;
+    color: #2e4d88;
+  }
+}
+
+.forkEnv, .item {
+  .star {
+    position: absolute;
+    left: -3px;
+    top: 16px;
+    width: 6px;
+    height: 6px;
+    border: 1.5px solid #4868e3;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0px 0px 4px 2px #4868e3;
+  }
+}
+
+

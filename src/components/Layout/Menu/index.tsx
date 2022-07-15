@@ -3,10 +3,10 @@ import clsx from 'clsx';
 
 import styles from './index.module.scss';
 import {Context} from "@/utils/store";
-import MenuItem from "@/components/Layout/Menu/MenuItem";
+import MenuItem, {MenuList} from "@/components/Layout/Menu/MenuItem";
 import {Select, SelectChangeEvent, MenuItem as SelectMenuItem} from "@mui/material";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import {OrgList} from "@/utils/api/org";
+import {OrgList} from "@/api/org";
 import {find} from "lodash-es";
 import {useRouter} from "next/router";
 import {get} from 'lodash-es';
@@ -52,7 +52,7 @@ const Menu = () => {
     router.push(`/${encodeURIComponent(getOriNameByContext())}/applications`)
   }
 
-  const menuList = [
+  const menuList: MenuList = [
     // {
     //   activeIcon: "/img/slider/homeActive.svg",
     //   icon: "/img/slider/home.svg",
@@ -70,12 +70,6 @@ const Menu = () => {
       icon: "/img/slider/icon3.svg",
       href: `/${name}/clusters`,
       name: "Clusters",
-    },
-    {
-      activeIcon: "/img/slider/icon6Active.svg",
-      icon: "/img/slider/icon6.svg",
-      href: `/${name}/gitProvider`,
-      name: "Git Provider",
     },
     {
       activeIcon: "/img/slider/icon7Active.svg",
@@ -103,7 +97,13 @@ const Menu = () => {
     }
   }
 
-  const bottomList = [
+  const bottomList: MenuList = [
+    {
+      activeIcon: "/img/slider/icon6Active.svg",
+      icon: "/img/slider/icon6.svg",
+      href: `/gitProvider`,
+      name: "Git Provider",
+    },
     {
       activeIcon: "/img/slider/icon10Active.svg",
       icon: "/img/slider/icon10.svg",
@@ -114,7 +114,7 @@ const Menu = () => {
       activeIcon: getAvatar(true),
       icon: getAvatar(),
       href: `/profile`,
-      name: get(state, 'userInfo.username', ''),
+      name: get(state, 'userInfo.nickname', ''),
     },
   ];
 
@@ -155,8 +155,8 @@ const Menu = () => {
                 value={NEWORGANIZATION}
                 key={NEWORGANIZATION}
               >
-                <AddCircleOutlineOutlinedIcon/>
-                <span style={{marginLeft: "10px"}}>New Organization</span>
+                {/*<AddCircleOutlineOutlinedIcon/>*/}
+                <span style={{color: "#1b51b9"}}>New organization</span>
               </SelectMenuItem>
             </Select>
             <div className={clsx(styles.selectIcon)} onClick={handleOpen}>

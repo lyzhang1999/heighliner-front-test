@@ -7,10 +7,11 @@ import RightDrawer from "@/basicComponents/RightDrawer";
 import styles from "./index.module.scss";
 import GitHubApp from "./GitHubApp";
 import GitHubPAT from "./GitHubPAT";
-import { GitProviderItem } from "@/utils/api/gitProviders";
+import { CreateGitProviderRes, GitProviderItem } from "@/api/gitProviders";
+import GitHubOAuthApp from "./GitHubOAuthApp";
 
 export type AddGitProviderSuccessCb = (
-  newGitProviderItem: GitProviderItem
+  createGitProvideRes: CreateGitProviderRes
 ) => void;
 
 interface Props {
@@ -20,8 +21,9 @@ interface Props {
 }
 
 enum AddType {
-  AddGitHubOrganization = "Add GitHub Organization",
-  AddGitHubPAT = "Add GitHub PAT",
+  AddGitHubOrganization = "GitHub Organization",
+  AddGitHubOAuthApp = "GitHub OAuth",
+  AddGitHubPAT = "GitHub PAT",
 }
 
 export default function AddGitProvider({
@@ -29,7 +31,7 @@ export default function AddGitProvider({
   setModalDisplay,
   successCb,
 }: Props) {
-  const [tabValue, setTabValue] = useState(AddType.AddGitHubOrganization);
+  const [tabValue, setTabValue] = useState(AddType.AddGitHubOAuthApp);
 
   return (
     <div className={styles.drawer}>
@@ -46,13 +48,17 @@ export default function AddGitProvider({
               setTabValue(newAddType);
             }}
           >
-            <Tab
+            {/* <Tab
               label={AddType.AddGitHubOrganization}
               value={AddType.AddGitHubOrganization}
+            /> */}
+            {/* <Tab label={AddType.AddGitHubPAT} value={AddType.AddGitHubPAT} /> */}
+            <Tab
+              label={AddType.AddGitHubOAuthApp}
+              value={AddType.AddGitHubOAuthApp}
             />
-            <Tab label={AddType.AddGitHubPAT} value={AddType.AddGitHubPAT} />
           </TabList>
-          <TabPanel value={AddType.AddGitHubPAT}>
+          {/* <TabPanel value={AddType.AddGitHubPAT}>
             <GitHubPAT
               {...{
                 modalDisplay,
@@ -60,9 +66,12 @@ export default function AddGitProvider({
                 successCb,
               }}
             />
-          </TabPanel>
-          <TabPanel value={AddType.AddGitHubOrganization}>
+          </TabPanel> */}
+          {/* <TabPanel value={AddType.AddGitHubOrganization}>
             <GitHubApp {...{ setModalDisplay, successCb }} />
+          </TabPanel> */}
+          <TabPanel value={AddType.AddGitHubOAuthApp}>
+            <GitHubOAuthApp {...{ setModalDisplay, successCb }} />
           </TabPanel>
         </TabContext>
       </RightDrawer>

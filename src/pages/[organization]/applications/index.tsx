@@ -4,11 +4,11 @@ import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
 import {getOriIdByContext, getUrlEncodeName, uuid} from "@/utils/utils";
-import {ApplicationObject, ApplicationStatus, getApplicationList, getAppListReq} from "@/utils/api/application";
+import {ApplicationObject, ApplicationStatus, getApplicationList, getAppListReq} from "@/api/application";
 import ApplicationList from "@/components/ApplicationList";
-import {ClusterItem, getClusterList} from "@/utils/api/cluster";
-import {getStacks, Stack} from "@/utils/api/stack";
-import {getOrgMembers, Member} from "@/utils/api/org";
+import {ClusterItem, getClusterList} from "@/api/cluster";
+import {getStacks, Stack} from "@/api/stack";
+import {getOrgMembers, Member} from "@/api/org";
 import {find, get} from "lodash-es";
 import DeleteApplication from "@/components/DeleteApplication";
 

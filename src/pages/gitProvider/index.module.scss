@@ -1,0 +1,44 @@
+@import "@/styles/globalVar.scss";
+
+.deleteIcon {
+  padding: 4px 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+
+  &:hover {
+    background-color: #ccc;
+  }
+}
+
+.wrapper {
+
+  .orgWrapper {
+    display: flex;
+    align-items: center;
+
+    .githubIcon {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    .orgName {
+      line-height: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .moreIcon {
+    @include moreIconWrapper;
+
+    .icon {
+      cursor: pointer;
+    }
+  }
+}
+
+.time {
+  @include timeStyles;
+}

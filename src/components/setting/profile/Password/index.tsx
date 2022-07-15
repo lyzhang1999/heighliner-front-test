@@ -13,15 +13,16 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
+import { cloneDeep } from "lodash-es";
 
-import { PasswordReq, updatePassword } from "@/utils/api/profile";
+import { PasswordReq, updatePassword } from "@/api/profile";
 import { Message } from "@/utils/utils";
-import EyeOpen from "/public/img/eye/open.svg";
-import EyeClose from "/public/img/eye/close.svg";
+import {PassportReg} from "@/utils/config";
+import EyeOpen from "@/basicComponents/Eye/Open";
+import EyeClose from "@/basicComponents/Eye/Close";
+
 
 import styles from "./index.module.scss";
-import { cloneDeep } from "lodash-es";
-import {PassportReg} from "@/utils/config";
 
 enum Password {
   Old = "Old",
@@ -42,7 +43,7 @@ const defaultValues = {
   [FieldsMap.NewPasswordConfirmation]: "",
 };
 
-const commonRules = {
+export const commonRules = {
   minLength: {
     value: 8,
     message: "At least 8 characters.",

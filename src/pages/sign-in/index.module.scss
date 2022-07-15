@@ -1,0 +1,91 @@
+.container {
+  margin-top: 82px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: 'OpenSans';
+
+  .signInWrap {
+    width: 358px;
+
+    .logo {
+      height: 37px;
+      position: relative;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-top: 26px;
+      text-transform: capitalize;
+    }
+
+    .signInBtn,
+    .signUpBtn,
+    .signInGitHubBtn {
+      font-family: 'OpenSans';
+      width: 100%;
+      height: 40px;
+    }
+
+    .splitter {
+      text-transform: capitalize;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 32px;
+      color: #828282;
+
+      &::before,
+      &::after {
+        content: "";
+        display: block;
+        width: 93px;
+        height: 1px;
+        background-color: #e6e9fa;
+      }
+    }
+
+    .emailFieldWrap,
+    .passwordFieldWrap {
+      width: 100%;
+    }
+
+    .emailFieldWrap {
+      margin-top: 50px;
+    }
+
+    .passwordFieldWrap {
+      margin-top: 16px;
+    }
+
+    .emailInput,
+    .passwordInput {
+      & > div:nth-child(2) {
+        height: 40px;
+      }
+    }
+
+    .forgotPassword {
+      color: #6f74dd;
+      font-size: 14px;
+      text-align: end;
+    }
+
+    .signInBtn {
+      margin-top: 32px;
+    }
+
+    .noAccountPrompt {
+      text-align: center;
+      color: #464646;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    
+  }
+}

@@ -8,7 +8,7 @@ import {find, isEmpty} from "lodash-es";
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
-import {ClusterStatus, deleteCluster} from "@/utils/api/cluster";
+import {ClusterStatus, deleteCluster} from "@/api/cluster";
 import {useClusterList} from '@/hooks/cluster';
 import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 
@@ -100,11 +100,15 @@ const Clusters = () => {
             Are you sure to delete the Cluster?
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
+        <DialogActions
+          sx={{padding: '16px 24px'}}
+        >
+          <Button onClick={closeDialog}
+                  variant="outlined"
+          >Cancel</Button>
           <Button onClick={deleteItem}
                   color="error"
-                  variant="contained"
+                  variant="outlined"
           >
             Confirm
           </Button>

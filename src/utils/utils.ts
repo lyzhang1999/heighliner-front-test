@@ -1,10 +1,10 @@
 import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
 import {NoticeRef} from "@/components/Notice";
-import {OrgList, roleType} from "@/utils/api/org";
+import {OrgList, roleType} from "@/api/org";
 import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
-import {UserInfo} from "@/utils/api/profile";
+import {UserInfo} from "@/api/profile";
 import dayjs from "dayjs";
 
 export function isBrowser() {
@@ -76,8 +76,14 @@ export function uuid() {
   return uuid
 }
 
-export function setLoginToken(value: string) {
-  cookie.setCookie('token', value, 1000 * 60 * 60 * 48); // 48h
+export function setLoginToken(value: string, expiration?: number) {
+  let exTime = 1000 * 60 * 60 * 48; // 48 hours by default
+  if(expiration !== undefined) {
+    const delta = expiration - Date.now();
+    delta >= 0 && (exTime = delta);
+  }
+
+  cookie.setCookie('token', value, exTime);
 }
 
 export function formatDate(d: number) {
@@ -154,4 +160,9 @@ export function getCurrentOrg(organization: OrgList): OrganizationType {
 export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
   let defaultOrg = find(orgList, {type: "Default", member: {member_type: roleType.Owner}});
   return defaultOrg as OrgList;
+}
+
+
+export function isProduct(){
+  return location.host === "forkmain.com";
 }

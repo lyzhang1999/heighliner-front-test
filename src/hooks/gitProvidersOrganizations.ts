@@ -2,17 +2,23 @@ import {
   getGitProviderOrganizations,
   GitProviderOrganizations,
 } from "@/api/gitProviders";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useGitProviderOrganizations(): [
-  GitProviderOrganizations | undefined,
-  (gitProviderId: number) => void
+  GitProviderOrganizations,
+  () => void
 ] {
   const [gitProviderOrganizations, setGitProviderOrganizations] =
-    useState<GitProviderOrganizations>();
+    useState<GitProviderOrganizations>([]);
 
-  const updateGitProviderOrganizations = (gitProviderId: number) => {
-    getGitProviderOrganizations(gitProviderId).then((res) => {
+  useEffect(() => {
+    getGitProviderOrganizations().then((res) => {
+      setGitProviderOrganizations(res);
+    });
+  }, []);
+
+  const updateGitProviderOrganizations = () => {
+    getGitProviderOrganizations().then((res) => {
       setGitProviderOrganizations(res);
     });
   };

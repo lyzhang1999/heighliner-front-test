@@ -143,14 +143,14 @@ const Members = () => {
   return (
     <Layout
       pageHeader="Members"
-      rightBtnDesc={
-        [roleType.Owner, roleType.Admin].includes(currentMemberType as string)
-          ? "invite user"
-          : ""
-      }
-      rightBtnCb={() => {
-        setInviteDialog(true);
-      }}
+      // rightBtnDesc={
+      //   [roleType.Owner, roleType.Admin].includes(currentMemberType as string)
+      //     ? "invite user"
+      //     : ""
+      // }
+      // rightBtnCb={() => {
+      //   setInviteDialog(true);
+      // }}
     >
       <PopSelect
         {...{
@@ -192,13 +192,13 @@ const Members = () => {
               <TableCell align="right">Action</TableCell>
               <TableCell align="right">Joined at</TableCell>
               <TableCell align="right">Role</TableCell>
-              <TableCell align="right">Status</TableCell>
+              {/*<TableCell align="right">Status</TableCell>*/}
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {orgMembers?.data.map(
-              ({ user_id, username, member_type, created_at }) => (
+              ({ user_id, nickname, member_type, created_at }) => (
                 <TableRow
                   key={user_id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -207,7 +207,7 @@ const Members = () => {
                   <TableCell component="th" scope="row">
                     <div className={styles.name}>
                       <img src={RoleIcon[member_type]} alt="user" />
-                      <span>{username}</span>
+                      <span>{nickname}</span>
                     </div>
                   </TableCell>
                   <TableCell align="right">
@@ -262,7 +262,7 @@ const Members = () => {
                     </div>
                   </TableCell>
                   <TableCell align="right">{member_type}</TableCell>
-                  <TableCell align="right">xxx</TableCell>
+                  {/*<TableCell align="right">xxx</TableCell>*/}
                   <TableCell align="right">
                     <div className={styles.moreIcon}>
                       {![roleType.Owner].includes(member_type) &&

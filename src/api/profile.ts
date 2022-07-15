@@ -13,7 +13,7 @@ export function updatePassword(data: PasswordReq) {
 interface _BasicProfileReq {
   avatar: string;
   email: string;
-  username: string;
+  nickname: string;
 }
 
 export type BasicProfileReq = Partial<_BasicProfileReq>;

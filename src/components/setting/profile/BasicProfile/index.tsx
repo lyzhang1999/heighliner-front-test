@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ErrorCode, useDropzone } from "react-dropzone";
+import React, {useContext, useEffect, useState} from "react";
+import {ErrorCode, useDropzone} from "react-dropzone";
 import {
   Avatar,
   Button,
@@ -14,9 +14,9 @@ import {
   useForm,
 } from "react-hook-form";
 
-import { fileToBase64, Message } from "@/utils/utils";
-import { Context } from "@/utils/store";
-import { BasicProfileReq, updateBasicProfile } from "@/api/profile";
+import {fileToBase64, Message} from "@/utils/utils";
+import {Context} from "@/utils/store";
+import {BasicProfileReq, updateBasicProfile} from "@/api/profile";
 
 import styles from "./index.module.scss";
 
@@ -27,18 +27,24 @@ enum BasicProfileFieldMap {
 
 export default function BasicProfile(): React.ReactElement {
   const [usernameEditing, setUsernameEditing] = useState(false);
-  const { state: globalState, dispatch: globalStateDispatch } =
+  const {state: globalState, dispatch: globalStateDispatch} =
     useContext(Context);
 
   // Avatar updater
-  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
+  const {acceptedFiles, fileRejections, getRootProps, getInputProps} =
     useDropzone({
-      accept: { "image/*": [".png", ".webp", ".jpeg", ".jpg"] },
+      accept: {"image/*": [".png", ".webp", ".jpeg", ".jpg"]},
       noDrag: true,
       noKeyboard: true,
       maxFiles: 1,
       maxSize: 1e6, // 1MB
     });
+
+  useEffect(() => {
+    if (usernameEditing) {
+      setValue(BasicProfileFieldMap.nickname, globalState.userInfo?.nickname)
+    }
+  }, [usernameEditing])
 
   // Form controller
   const defaultBasicProfileField = {
@@ -47,7 +53,7 @@ export default function BasicProfile(): React.ReactElement {
   };
   const {
     control,
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
     setValue,
   } = useForm({
@@ -83,7 +89,7 @@ export default function BasicProfile(): React.ReactElement {
   // Show unacceptable file errors
   useEffect(() => {
     if (fileRejections.length > 0) {
-      fileRejections.map(({ file, errors }) => {
+      fileRejections.map(({file, errors}) => {
         errors.map((error) => {
           switch (error.code) {
             case ErrorCode.FileTooLarge:
@@ -107,7 +113,7 @@ export default function BasicProfile(): React.ReactElement {
     const newUsername = data[BasicProfileFieldMap.nickname];
 
     const req: BasicProfileReq = {
-      username: newUsername,
+      nickname: newUsername,
     };
 
     updateBasicProfile(req).then(() => {
@@ -127,12 +133,12 @@ export default function BasicProfile(): React.ReactElement {
       <Controller
         name={BasicProfileFieldMap.avatar}
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <div className={styles.avatarWrap}>
             <h2>Avatar</h2>
             <Avatar src={field.value} className={styles.avatar}></Avatar>
             <Button>
-              <div {...getRootProps({ className: "dropzone" })}>
+              <div {...getRootProps({className: "dropzone"})}>
                 <input {...getInputProps()} />
                 Upload
               </div>
@@ -143,7 +149,7 @@ export default function BasicProfile(): React.ReactElement {
       <Controller
         control={control}
         name={BasicProfileFieldMap["nickname"]}
-        render={({ field }) => (
+        render={({field}) => (
           <FormControl
             error={errors[BasicProfileFieldMap["nickname"]] ? true : false}
           >

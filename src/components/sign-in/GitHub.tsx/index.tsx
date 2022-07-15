@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button } from "@mui/material";
+import React, {useState} from "react";
+import {Button} from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 import GlobalLoading from "@/basicComponents/GlobalLoading";
@@ -10,13 +10,13 @@ import {
   PostAuthAction,
 } from "@/pages/distributor/post-auth-github";
 import cookie from "@/utils/cookie";
+import {isProduct} from "@/utils/utils";
 
 export enum GitHub_TemporaryStorageItems {
   State = "GITHUB_STATE",
 }
 
 export default function GitHub(): React.ReactElement {
-  const url = new URL(process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_LOGIN_URL!);
   const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
   const redirectCurrentOrganization = useRedirectCurrentOrganization();
 
@@ -27,8 +27,10 @@ export default function GitHub(): React.ReactElement {
       PostAuthAction.SignIn
     );
 
+    let domain: string = isProduct() ? process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_LOGIN_URL_PROD! : process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_LOGIN_URL!;
+
     openGitHubOAuthWindow(
-      new URL(process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_LOGIN_URL as string),
+      new URL(domain),
       setOpenGlobalLoading,
       function successCb() {
         redirectCurrentOrganization();

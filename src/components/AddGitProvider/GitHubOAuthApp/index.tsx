@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { getPopUpsWindowFeatures } from "@/utils/window";
-import { getOriIdByContext, uuid } from "@/utils/utils";
+import {getOriIdByContext, isProduct, uuid} from "@/utils/utils";
 import GlobalLoading from "@/basicComponents/GlobalLoading";
 import {
   GitHubOAuthAppTemporaryStorage,
@@ -28,8 +28,10 @@ export default function GitHubOAuthApp(props: Props): React.ReactElement {
       PostAuthAction.AddGitProvider
     );
 
+    let domain: string = isProduct() ? process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_REPO_URL_PROD! : process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_REPO_URL!;
+
     openGitHubOAuthWindow(
-      new URL(process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_REPO_URL as string),
+      new URL(domain),
       setOpenGlobalLoading,
       function successCb() {
         props.setModalDisplay(false);

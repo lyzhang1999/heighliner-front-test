@@ -8,22 +8,43 @@ import GlobalLoading from "@/basicComponents/GlobalLoading";
 import {
   GitHubOAuthAppTemporaryStorage,
   openGitHubOAuthWindow,
-  Result,
+  PostAuthAction,
 } from "@/pages/distributor/post-auth-github";
+
+import { AddGitProviderSuccessCb } from "..";
+import { CreateGitProviderRes } from "@/api/gitProviders";
 
 interface Props {
   setModalDisplay: Dispatch<SetStateAction<boolean>>;
+  successCb?: AddGitProviderSuccessCb;
 }
 
 export default function GitHubOAuthApp(props: Props): React.ReactElement {
   const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
 
   const clickHandler = () => {
+    window.localStorage.setItem(
+      GitHubOAuthAppTemporaryStorage.postAuthAction,
+      PostAuthAction.AddGitProvider
+    );
+
     openGitHubOAuthWindow(
       new URL(process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_REPO_URL as string),
       setOpenGlobalLoading,
       function successCb() {
         props.setModalDisplay(false);
+
+        // Get the createGitProvideRes and execute the successCb.
+        const rowCreateGitProvideRes = window.localStorage.getItem(
+          GitHubOAuthAppTemporaryStorage.createGitProviderRes
+        );
+        window.localStorage.removeItem(
+          GitHubOAuthAppTemporaryStorage.createGitProviderRes
+        );
+        const createGitProvideRes = rowCreateGitProvideRes
+          ? JSON.parse(rowCreateGitProvideRes)
+          : {};
+        props.successCb && props.successCb(createGitProvideRes);
       }
     );
   };

@@ -16,6 +16,7 @@ interface Props {
 export default function Canvas({arrList}: Props) {
   var ctx = null;
   var dom = null
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
 
@@ -37,14 +38,15 @@ export default function Canvas({arrList}: Props) {
     console.warn(w, h)
     ctx.clearRect(0, 0, w, h);
 
+    // setHeight(Math.max(...arrList) + 100)
     arrList.forEach(item => {
       ctx.beginPath();
-      ctx.moveTo(50, 50);           // 创建起始点
-      ctx.lineTo(10, 50);          // 创建水平线
-      ctx.arcTo(0, 50, 0, 60, 10); // 创建弧
-      ctx.lineTo(0, item + 50);         // 创建垂直线
-      ctx.arcTo(0, item + 60, 10, item + 60, 10); // 创建弧
-      ctx.lineTo(50, item + 60);         // 创建垂直线
+      ctx.moveTo(50, 0);           // 创建起始点
+      ctx.lineTo(10, 0);          // 创建水平线
+      ctx.arcTo(0, 0, 0, 10, 10); // 创建弧
+      ctx.lineTo(0, item - 10);         // 创建垂直线
+      ctx.arcTo(0, item, 10, item, 10); // 创建弧
+      ctx.lineTo(50, item);         // 创建垂直线
       ctx.strokeStyle = "#aab7ea";
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -55,7 +57,7 @@ export default function Canvas({arrList}: Props) {
   return (
     <div>
       {/*<canvas id="tutorial" width="50" height="2000" style={{"zoom": "0.5"}}>*/}
-      <canvas id="tutorial" width="50" height="2000">
+      <canvas id="tutorial" width="50" height={height || 1000} style={{marginTop: '70px'}}>
       </canvas>
     </div>
   )

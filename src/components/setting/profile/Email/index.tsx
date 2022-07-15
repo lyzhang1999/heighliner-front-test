@@ -93,9 +93,9 @@ export default function Email(): React.ReactElement {
           ) : (
             <>
               <p>{globalState.userInfo?.email}</p>
-              <Button 
-                // onClick={() => setEditing(true)}
-              >Edit</Button>
+              {/*<Button */}
+              {/*  // onClick={() => setEditing(true)}*/}
+              {/*>Edit</Button>*/}
             </>
           )}
         </FormControl>

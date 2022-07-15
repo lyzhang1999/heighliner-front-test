@@ -78,12 +78,13 @@ export type GitProviderOrganizations = Array<{
   git_org_name: string;
   git_provider_id: number;
   provider: GitProvider;
+  reason: string;
+  status: string;
   type: GitProviderType;
   user_id: number;
 }>;
 
-export const getGitProviderOrganizations = (
-  gitProviderId: number
-): Promise<GitProviderOrganizations> => {
-  return http.get(`/user/git_providers/${gitProviderId}/organizations`);
-};
+export const getGitProviderOrganizations =
+  (): Promise<GitProviderOrganizations> => {
+    return http.get(`/user/git_providers/organizations`);
+  };

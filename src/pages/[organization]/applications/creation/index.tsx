@@ -185,8 +185,7 @@ export default function Index(): React.ReactElement {
     }
 
     const gitProvider = gitProviderOrganizations.find(
-      (gitProvider) =>
-        gitProvider.git_provider_id === +data[fieldsMap.gitProvider]
+      (gitProvider) => gitProvider.git_org_name === data[fieldsMap.gitProvider]
     );
 
     const createApplicationRequest: CreateApplicationRequest = {
@@ -465,8 +464,8 @@ export default function Index(): React.ReactElement {
                       created_by_name,
                     }) => (
                       <MenuItem
-                        key={git_provider_id}
-                        value={git_provider_id}
+                        key={git_org_name}
+                        value={git_org_name}
                         className={styles.gitProviderItem}
                         placeholder="Please choose a git provider."
                       >

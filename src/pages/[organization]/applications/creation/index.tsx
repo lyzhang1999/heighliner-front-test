@@ -130,15 +130,14 @@ export default function Index(): React.ReactElement {
       setValue(fieldsMap.cluster, clusterList[0].id.toString());
     }
   }, [clusterList]);
-  useEffect(() => {
-    if (gitProviderList.length === 1) {
-      setValue(
-        fieldsMap.gitProvider,
-        gitProviderList[0].git_provider_id.toString()
-      );
-      updateGitProviderOrganizations(gitProviderList[0].git_provider_id);
-    }
-  }, [gitProviderList]);
+  // useEffect(() => {
+  //   if (gitProviderList.length === 1) {
+  //     setValue(
+  //       fieldsMap.gitProvider,
+  //       gitProviderList[0].git_provider_id.toString()
+  //     );
+  //   }
+  // }, [gitProviderList]);
 
   const addClusterSuccessCb = () => {
     getClusterList();
@@ -185,11 +184,16 @@ export default function Index(): React.ReactElement {
       }
     }
 
+    const gitProvider = gitProviderOrganizations.find(
+      (gitProvider) =>
+        gitProvider.git_provider_id === +data[fieldsMap.gitProvider]
+    );
+
     const createApplicationRequest: CreateApplicationRequest = {
       cluster_id: +data[fieldsMap.cluster],
       git_config: {
-        git_org_name: data[fieldsMap.gitProviderOrg],
-        git_provider_id: +data[fieldsMap.gitProvider],
+        git_org_name: gitProvider!.git_org_name,
+        git_provider_id: gitProvider!.git_provider_id,
       },
       name: data[fieldsMap.applicationName],
       networking: {
@@ -442,7 +446,6 @@ export default function Index(): React.ReactElement {
                         calculateUnderBgStyle(3);
                       });
                       field.onChange(e);
-                      updateGitProviderOrganizations(+e.target.value);
                     }
                   }}
                   displayEmpty
@@ -453,12 +456,13 @@ export default function Index(): React.ReactElement {
                     calculateUnderBgStyle(3);
                   }}
                 >
-                  {gitProviderList.map(
+                  {gitProviderOrganizations.map(
                     ({
                       git_provider_id,
                       git_org_name,
                       provider,
                       created_at,
+                      created_by_name,
                     }) => (
                       <MenuItem
                         key={git_provider_id}
@@ -469,7 +473,7 @@ export default function Index(): React.ReactElement {
                         {provider === GitProvider.GitHub && <GitHubSVG />}
                         <Stack>
                           <div className={styles.gitOrgname}>
-                            {git_org_name}
+                            {git_org_name} ({created_by_name})
                           </div>
                           <div className={styles.gitProviderUpdate}>
                             {formatDate(created_at * 1000)}
@@ -494,7 +498,7 @@ export default function Index(): React.ReactElement {
             required: "Please choose a git provider.",
           }}
         />
-        <Controller
+        {/* <Controller
           name={fieldsMap.gitProviderOrg}
           control={control}
           render={({ field }) => (
@@ -510,7 +514,6 @@ export default function Index(): React.ReactElement {
               <div>
                 <Select
                   value={field.value}
-                  defaultValue=""
                   onChange={field.onChange}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
@@ -528,6 +531,7 @@ export default function Index(): React.ReactElement {
                   onOpen={() => {
                     calculateUnderBgStyle(4);
                   }}
+                  disabled={gitProviderOrganizations === undefined}
                 >
                   {gitProviderOrganizations &&
                     gitProviderOrganizations.map(
@@ -566,7 +570,7 @@ export default function Index(): React.ReactElement {
           rules={{
             required: "Please choose a organization.",
           }}
-        />
+        /> */}
 
         {/* <Controller
           name={fieldsMap.domain.name}

@@ -48,6 +48,7 @@ export default function EnvList({spreadCb}: Props) {
                   Preview
                 </span>
                 </div>
+                <div className={styles.star}></div>
                 <img src="/img/application/panel/spreadItem.svg" alt="" className={styles.spreadIcon}
                      onClick={() => spread(index)}/>
                 <div className={styles.header}>
@@ -114,6 +115,7 @@ export default function EnvList({spreadCb}: Props) {
               {
                 index === 0 &&
                 <div className={clsx(styles.forkEnv, itemClass)}>
+                  <div className={styles.star}></div>
                   <img src="/img/application/panel/forkenv.svg" alt=""/>
                   <span className={styles.desc}>
                       Fork a new environment

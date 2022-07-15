@@ -151,6 +151,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     border: 1px solid #abb4c3;
@@ -160,6 +161,19 @@
     margin-left: 10px;
     font-weight: 500;
     color: #2e4d88;
+  }
+}
+
+.forkEnv, .item {
+  .star {
+    position: absolute;
+    left: -2px;
+    top: 17.5px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #4868e3;
+    box-shadow: 0px 0px 4px 2px #4868e3;
   }
 }
 

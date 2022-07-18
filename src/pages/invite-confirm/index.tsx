@@ -49,7 +49,7 @@ export default function InviteConfirm() {
         desc={errMessage}
         btnDesc={"Logout"}
         btnCb={() => {
-          cookie.delCookie('cookie');
+          cookie.delCookie('token');
           location.reload();
         }}
       >

@@ -10,11 +10,11 @@ import {
   Select,
 } from "@mui/material";
 import * as React from "react";
-import { ReactNode, useContext, useEffect, useState } from "react";
+import {ReactNode, useContext, useEffect, useState} from "react";
 import clsx from "clsx";
 
 import Layout from "@/components/Layout";
-import { formatDate, getOriIdByContext, Message } from "@/utils/utils";
+import {formatDate, getOriIdByContext, Message} from "@/utils/utils";
 import {
   getOrgMembers,
   GetOrgMembersReq,
@@ -26,8 +26,8 @@ import {
   ShiftRoleReq,
 } from "@/api/org";
 import InviteMember from "@/components/Member/InviteMember";
-import { Context } from "@/utils/store";
-import { get } from "lodash-es";
+import {Context} from "@/utils/store";
+import {get} from "lodash-es";
 import RoleTag from "@/components/RoleTag";
 import DeleteUser from "@/components/Member/DeleteUser";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -82,7 +82,7 @@ const Members = () => {
   }, [deleteModalVisible]);
 
   const {
-    state: { currentOrganization },
+    state: {currentOrganization},
   } = useContext(Context);
   const currentMemberType = currentOrganization?.member_type;
   const currentMemberId = currentOrganization?.user_id;
@@ -143,14 +143,14 @@ const Members = () => {
   return (
     <Layout
       pageHeader="Members"
-      // rightBtnDesc={
-      //   [roleType.Owner, roleType.Admin].includes(currentMemberType as string)
-      //     ? "invite user"
-      //     : ""
-      // }
-      // rightBtnCb={() => {
-      //   setInviteDialog(true);
-      // }}
+      rightBtnDesc={
+        [roleType.Owner, roleType.Admin].includes(currentMemberType as string)
+          ? "invite user"
+          : ""
+      }
+      rightBtnCb={() => {
+        setInviteDialog(true);
+      }}
     >
       <PopSelect
         {...{
@@ -183,7 +183,7 @@ const Members = () => {
             sx={{
               "& .MuiTableCell-root.MuiTableCell-head": {
                 color: "#606479",
-                
+
               },
             }}
           >
@@ -198,15 +198,15 @@ const Members = () => {
           </TableHead>
           <TableBody>
             {orgMembers?.data.map(
-              ({ user_id, nickname, member_type, created_at }) => (
+              ({user_id, nickname, member_type, created_at}) => (
                 <TableRow
                   key={user_id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{"&:last-child td, &:last-child th": {border: 0}}}
                   className={styles.tbodyRow}
                 >
                   <TableCell component="th" scope="row">
                     <div className={styles.name}>
-                      <img src={RoleIcon[member_type]} alt="user" />
+                      <img src={RoleIcon[member_type]} alt="user"/>
                       <span>{nickname}</span>
                     </div>
                   </TableCell>
@@ -253,7 +253,7 @@ const Members = () => {
                         </MenuItem>
                       </Select>
                     ) : (
-                      <RoleTag type={member_type} />
+                      <RoleTag type={member_type}/>
                     )}
                   </TableCell>
                   <TableCell align="right">
@@ -271,7 +271,7 @@ const Members = () => {
                         ) &&
                         currentMemberId !== user_id && (
                           <MoreVertIcon
-                            sx={{ cursor: "pointer" }}
+                            sx={{cursor: "pointer"}}
                             onClick={(event) => {
                               setDeleteId(user_id);
                               setMountDom(event?.currentTarget);
@@ -287,7 +287,7 @@ const Members = () => {
           {get(orgMembers, "pagination.total", 0) > 10 && (
             <TableFooter>
               <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{"&:last-child td, &:last-child th": {border: 0}}}
               >
                 <TablePagination
                   rowsPerPageOptions={[pageSize]}

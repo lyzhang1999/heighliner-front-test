@@ -2,7 +2,7 @@ import http from "@/utils/axios";
 import {Page} from "./type";
 import {find, get, uniq} from "lodash-es";
 import {getOriIdByContext} from "@/utils/utils";
-import { CreativeApiReturnField } from "../utils/commonType";
+import {CreativeApiReturnField} from "../utils/commonType";
 
 export interface OrgList {
   id: number;
@@ -166,3 +166,13 @@ export interface ShiftRoleReq {
 export const shiftRole = (req: ShiftRoleReq) => {
   return http.put(`/orgs/${getOriIdByContext()}/members/${req.user_id}/role`, req.body);
 };
+
+
+export interface inviteReq {
+  "email": string,
+  "member_type": MemberType
+}
+
+export const inviteMember = (req: inviteReq) => {
+  return http.post(`./orgs/${getOriIdByContext()}/invitations`, req)
+}

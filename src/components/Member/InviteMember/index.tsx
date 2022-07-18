@@ -2,11 +2,11 @@ import {
   invitations,
   InvitationsReq,
   inviteeSuggestions,
-  InviteeSuggestionsRes,
+  InviteeSuggestionsRes, inviteMember,
   MemberType,
   MemberTypeEnum,
 } from "@/api/org";
-import { getOriIdByContext, Message } from "@/utils/utils";
+import {getOriIdByContext, Message} from "@/utils/utils";
 import {
   Autocomplete,
   Button,
@@ -27,7 +27,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 
 import styles from "./index.module.scss";
 
@@ -38,10 +38,10 @@ interface Props {
 }
 
 export default function InviteMember({
-  open,
-  setOpen,
-  inviteMemberSuccessCb,
-}: Props): ReactElement {
+                                       open,
+                                       setOpen,
+                                       inviteMemberSuccessCb,
+                                     }: Props): ReactElement {
   // const [options, setOptions] = useState<InviteeSuggestionsRes>([]);
   // const [value, setValue] = useState<InviteeSuggestionsRes[number] | null>(
   //   null
@@ -53,7 +53,7 @@ export default function InviteMember({
 
   const {
     control,
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
   } = useForm({
     defaultValues: {
@@ -108,7 +108,12 @@ export default function InviteMember({
   //   });
   // };
 
-  const invitation = () => {};
+
+  const invitation = (value: { email: string }) => {
+    inviteMember({email: value.email, member_type: memberType}).then(res => {
+      inviteMemberSuccessCb && inviteMemberSuccessCb();
+    })
+  };
 
   return (
     <Dialog
@@ -149,7 +154,7 @@ export default function InviteMember({
         <Controller
           name="email"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({field, fieldState}) => (
             <TextField
               value={field.value}
               type="email"
@@ -170,7 +175,7 @@ export default function InviteMember({
         <Select
           value={memberType}
           size="small"
-          sx={{ minWidth: "120px", maxHeight: "56px" }}
+          sx={{minWidth: "120px", maxHeight: "56px"}}
           onChange={(event) => {
             setMemberType(event.target.value as MemberType);
           }}
@@ -183,7 +188,7 @@ export default function InviteMember({
           </MenuItem>
         </Select>
       </Stack>
-      <DialogActions sx={{ padding: "30px 24px 16px 30px" }}>
+      <DialogActions sx={{padding: "30px 24px 16px 30px"}}>
         <Button
           onClick={() => {
             setOpen(false);

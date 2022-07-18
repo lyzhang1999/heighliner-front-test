@@ -183,7 +183,6 @@ const Members = () => {
             sx={{
               "& .MuiTableCell-root.MuiTableCell-head": {
                 color: "#606479",
-
               },
             }}
           >
@@ -192,13 +191,13 @@ const Members = () => {
               <TableCell align="right">Action</TableCell>
               <TableCell align="right">Joined at</TableCell>
               <TableCell align="right">Role</TableCell>
-              {/*<TableCell align="right">Status</TableCell>*/}
+              <TableCell align="right">Status</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {orgMembers?.data.map(
-              ({user_id, nickname, member_type, created_at}) => (
+              ({user_id, nickname, member_type, status, created_at}) => (
                 <TableRow
                   key={user_id}
                   sx={{"&:last-child td, &:last-child th": {border: 0}}}
@@ -262,7 +261,7 @@ const Members = () => {
                     </div>
                   </TableCell>
                   <TableCell align="right">{member_type}</TableCell>
-                  {/*<TableCell align="right">xxx</TableCell>*/}
+                  <TableCell align="right">{status}</TableCell>
                   <TableCell align="right">
                     <div className={styles.moreIcon}>
                       {![roleType.Owner].includes(member_type) &&

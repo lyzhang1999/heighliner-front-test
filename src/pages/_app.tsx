@@ -34,7 +34,8 @@ const noCheckOrgNamePage = [
   '/organizations',
   '/profile',
   "/gitProvider",
-  '/distributor/post-auth-github'
+  '/distributor/post-auth-github',
+  "/invite-confirm"
 ];
 const ifLoginDisablePage = ["/", '/sign-in', '/sign-up'];
 

@@ -54,7 +54,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
     return;
   }
   let errMsg = data?.msg || data?.err_msg || data;
-  if (noDefaultErrMsgPath.includes(url)) {
+  if (!noDefaultErrMsgPath.includes(url)) {
     errMsg && Message.error(errMsg);
   }
   return Promise.reject(err);

@@ -4,7 +4,6 @@ import clsx from "clsx";
 import {TextField, InputAdornment, IconButton} from "@mui/material";
 import {useRouter} from "next/router";
 
-
 import styles from "./index.module.scss";
 import Image from "next/image";
 import {signUpApi, SignUpReq} from "@/api/login";
@@ -100,9 +99,8 @@ const SignUp: NextPage = () => {
           <Image src={ForkMainLogo} layout="fill" objectFit="contain" alt=""/>
         </div>
         <div className={styles.title}>
-
           {
-            isCompleteInfo ? 'Complete your message' : " Sign up"
+            isCompleteInfo ? 'Complete your info' : " Sign up"
           }
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>

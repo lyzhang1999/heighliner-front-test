@@ -3,6 +3,7 @@ import {Page} from "./type";
 import {find, get, uniq} from "lodash-es";
 import {getOriIdByContext} from "@/utils/utils";
 import {CreativeApiReturnField} from "../utils/commonType";
+import {GetAuthTokenRes} from "@/api/auth";
 
 export interface OrgList {
   id: number;
@@ -176,4 +177,25 @@ export interface inviteReq {
 
 export const inviteMember = (req: inviteReq) => {
   return http.post(`./orgs/${getOriIdByContext()}/invitations`, req)
+}
+
+export const getInviteEmail = (token: string) => {
+  return http.post('/user/email_verification', {token})
+}
+
+interface getInviteInfoRes {
+  email: string,
+  org_id: number,
+  org_name: string,
+  user_id: number,
+  verification_type: string,
+}
+
+export const getInviteInfo = (token: string): Promise<getInviteInfoRes> => {
+  return http.post('/email_verification/check_invite_org_token', {token})
+}
+
+
+export const confirmJoin = (token: string): Promise<GetAuthTokenRes> => {
+  return http.post('/user/email_verification/invite_org', {token})
 }

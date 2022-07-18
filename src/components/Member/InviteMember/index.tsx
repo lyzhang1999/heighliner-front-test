@@ -55,19 +55,18 @@ export default function InviteMember({
     control,
     formState: {errors},
     handleSubmit,
+    setValue
   } = useForm({
     defaultValues: {
       email: "",
     },
   });
 
-  // useEffect(() => {
-  //   if(open === true){
-  //     setOptions([]);
-  //     setValue(null);
-  //     setInputValue('');
-  //   }
-  // }, [open])
+  useEffect(() => {
+    if (open === true) {
+      setValue('email', '');
+    }
+  }, [open])
 
   // useEffect(() => {
   //   // Can't fetch invitee suggestion list

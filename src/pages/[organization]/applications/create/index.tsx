@@ -8,6 +8,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import styles from "./index.module.scss";
+import CreateAppLayout from "@/components/CreateAppLayout";
 
 export const FieldsMap = {
   stack: "stack",
@@ -33,16 +34,17 @@ export default function Create(): React.ReactElement {
 
   return (
     <Layout notStandardLayout>
-      <div className={styles.panel}>
-        <GitProvider
-          {...{
-            name: FieldsMap.gitProvider,
-            control,
-            error: errors[FieldsMap.gitProvider],
-            className: styles.gitProviderWrapper,
-          }}
-        />
-      </div>
+      <CreateAppLayout/>
+      {/*<div className={styles.panel}>*/}
+        {/*<GitProvider*/}
+        {/*  {...{*/}
+        {/*    name: FieldsMap.gitProvider,*/}
+        {/*    control,*/}
+        {/*    error: errors[FieldsMap.gitProvider],*/}
+        {/*    className: styles.gitProviderWrapper,*/}
+        {/*  }}*/}
+        {/*/>*/}
+      {/*</div>*/}
     </Layout>
   );
 }

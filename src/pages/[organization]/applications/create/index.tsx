@@ -4,9 +4,10 @@
 
 import GitProvider from "@/components/Application/Create/GitProviderField";
 import SelectAStack from "@/components/Application/Create/SelectAStack";
+import FrontEnd from "@/components/Application/Create/FrontEnd";
 import Layout from "@/components/Layout";
 import React from "react";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
 import styles from "./index.module.scss";
 import CreateAppLayout from "@/components/CreateAppLayout";
@@ -27,7 +28,7 @@ export default function Create(): React.ReactElement {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: {errors},
     setValue,
   } = useForm<FieldsType>({
     defaultValues: DefaultFieldsValue,
@@ -35,16 +36,19 @@ export default function Create(): React.ReactElement {
 
   return (
     <Layout notStandardLayout>
-      <CreateAppLayout/>
+      <CreateAppLayout>
+
+        <FrontEnd></FrontEnd>
+      </CreateAppLayout>
       {/*<div className={styles.panel}>*/}
-        {/*<GitProvider*/}
-        {/*  {...{*/}
-        {/*    name: FieldsMap.gitProvider,*/}
-        {/*    control,*/}
-        {/*    error: errors[FieldsMap.gitProvider],*/}
-        {/*    className: styles.gitProviderWrapper,*/}
-        {/*  }}*/}
-        {/*/>*/}
+      {/*<GitProvider*/}
+      {/*  {...{*/}
+      {/*    name: FieldsMap.gitProvider,*/}
+      {/*    control,*/}
+      {/*    error: errors[FieldsMap.gitProvider],*/}
+      {/*    className: styles.gitProviderWrapper,*/}
+      {/*  }}*/}
+      {/*/>*/}
       {/*</div>*/}
     </Layout>
   );

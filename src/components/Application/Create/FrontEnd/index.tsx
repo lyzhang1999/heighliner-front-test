@@ -1,5 +1,5 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React from "react";
+import React, {useImperativeHandle, useRef, forwardRef} from "react";
 import styles from "./index.module.scss";
 import {TextField} from "@mui/material";
 
@@ -8,7 +8,12 @@ const IconFocusStyle = {
   height: "36px",
 }
 
-export default function FrontEnd() {
+interface Props {
+  ref: any
+}
+
+const FrontEnd = forwardRef(function frontEnd(props, ref) {
+  const {setIndex, nextIndex, submitCb} = props;
   const {register, control, handleSubmit, reset, trigger, setError} = useForm({
     defaultValues: {
       test: [{lastName: 'value'}],
@@ -26,8 +31,21 @@ export default function FrontEnd() {
     name: "test2"
   });
 
+  const inputRef: React.MutableRefObject<null> = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      inputRef.current.click();
+    }
+  }));
+
+  function submit(value) {
+    console.warn(value)
+    submitCb()
+  }
+
   return (
-    <form onSubmit={handleSubmit(data => console.log(data))}>
+    <form onSubmit={handleSubmit(submit)}>
       <div className={styles.item}>
         <div className={styles.label}>Exposure Path:</div>
         <div className={styles.content}>
@@ -105,7 +123,9 @@ export default function FrontEnd() {
           </div>
         </div>
       </div>
-      {/*<input type="submit"/>*/}
+      <input type="submit" ref={inputRef}/>
     </form>
   );
-}
+})
+
+export default FrontEnd;

@@ -11,17 +11,21 @@ const list = [
 ]
 
 interface Props {
-  children?: ReactElement
+  children?: ReactElement,
+  backCb: () => void,
+  nextCb: () => void,
+  index: number
 }
 
-export default function CreateAppLayout({children}: Props) {
+export default function CreateAppLayout({children, backCb, nextCb, index}: Props) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.left}>
         <div className={styles.header}>
           <span className={styles.name}>New application</span>
-          <span className={styles.currentIndex}>(1 / 5)</span>
-          <span className={styles.currentName}>Select a stack</span>
+          <span className={styles.currentIndex}>({index} / 5)</span>
+          <span className={styles.currentName}>{list[index - 1]
+          }</span>
         </div>
         <div className={styles.content}>
           {children}
@@ -29,11 +33,13 @@ export default function CreateAppLayout({children}: Props) {
         <div className={styles.footer}>
           <Button
             variant="outlined"
+            onClick={backCb}
           >
             Back
           </Button>
           <Button
             variant="contained"
+            onClick={nextCb}
           >
             Next
           </Button>

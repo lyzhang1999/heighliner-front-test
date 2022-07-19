@@ -3,6 +3,7 @@
  */
 
 import GitProvider from "@/components/Application/Create/GitProviderField";
+import SelectAStack from "@/components/Application/Create/SelectAStack";
 import Layout from "@/components/Layout";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -34,6 +35,7 @@ export default function Create(): React.ReactElement {
   return (
     <Layout notStandardLayout>
       <div className={styles.panel}>
+        <SelectAStack />
         <GitProvider
           {...{
             name: FieldsMap.gitProvider,

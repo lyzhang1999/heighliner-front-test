@@ -8,7 +8,7 @@ const IconFocusStyle = {
   height: "36px",
 }
 
-interface Props {
+export interface Props {
   submitCb: () => void
 }
 
@@ -38,7 +38,6 @@ const FrontEnd = forwardRef(function frontEnd(props: Props, ref) {
   }));
 
   function submit(value) {
-    console.warn(value)
     submitCb()
   }
 

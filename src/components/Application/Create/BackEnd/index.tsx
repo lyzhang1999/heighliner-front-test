@@ -1,14 +1,15 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React from "react";
+import React, {forwardRef, useImperativeHandle} from "react";
 import styles from "./index.module.scss";
 import {TextField} from "@mui/material";
+import {Props} from "@/components/Application/Create/FrontEnd";
 
 const IconFocusStyle = {
   width: "200px",
   height: "36px",
 }
 
-export default function BackEnd() {
+const BackEnd = forwardRef(function frontEnd(props: Props, ref) {
   const {register, control, handleSubmit, reset, trigger, setError} = useForm({
     defaultValues: {
       test: [{lastName: 'value'}],
@@ -25,6 +26,16 @@ export default function BackEnd() {
     control,
     name: "test2"
   });
+
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      handleSubmit(submit)()
+    }
+  }));
+
+  function submit(value) {
+    submitCb()
+  }
 
   return (
     <form onSubmit={handleSubmit(data => console.log(data))}>
@@ -107,4 +118,6 @@ export default function BackEnd() {
       </div>
     </form>
   );
-}
+})
+
+export default BackEnd;

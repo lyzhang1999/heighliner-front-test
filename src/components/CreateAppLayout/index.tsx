@@ -2,6 +2,7 @@ import styles from './index.module.scss';
 import React, {ReactElement} from "react";
 import {Button} from "@mui/material";
 import {CommonProps} from '@/utils/commonType';
+import clsx from "clsx";
 
 const list = [
   'Select a stack',
@@ -64,7 +65,7 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
                         </span>
                     }
                   </div>
-                  <div className={styles.desc}>
+                  <div className={clsx(styles.desc, (i === (index - 1)) && styles.currentItem) }>
                     {item}
                   </div>
                 </div>

@@ -53,7 +53,7 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
           {
             list.map((item, i) => {
               return (
-                <div key={index} className={styles.countItem}>
+                <div key={i} className={styles.countItem}>
                   <div className={styles.count}>
                     {
                       (index - 1) > i ?
@@ -64,7 +64,6 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
                         </span>
                     }
                   </div>
-
                   <div className={styles.desc}>
                     {item}
                   </div>

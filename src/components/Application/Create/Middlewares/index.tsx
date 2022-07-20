@@ -1,8 +1,9 @@
-import {Controller, useForm, useFieldArray} from "react-hook-form";
+import {Controller, useForm, useFieldArray, ControllerProps} from "react-hook-form";
 import React, {useImperativeHandle, useRef, forwardRef} from "react";
 import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
+import {omit, without} from "lodash-es";
 
 const IconFocusStyle = {
   width: "115px",
@@ -21,10 +22,10 @@ export interface Props {
 
 const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
   const {submitCb} = props;
-  const {register, control, handleSubmit, reset, trigger, setError} = useForm({
+  const {register, control, handleSubmit, reset, trigger, setError, setValue} = useForm({
     defaultValues: {
       test: [{lastName: 'value'}],
-      test2: [{key: '', value: '', box: ''}]
+      test2: [{key: '', value: '', box: ["backend"]}]
     },
   });
 
@@ -46,6 +47,16 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
 
   function submit(value) {
     submitCb()
+  }
+
+  function clickFrondendAndBackend(key: string, filed: ControllerProps) {
+    let {value, name} = filed;
+    if (value.includes(key)) {
+      value = without(value, key)
+    } else {
+      value.push(key)
+    }
+    setValue(name, value);
   }
 
   return (
@@ -90,14 +101,16 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
                 control={control}
                 render={({field}) => {
                   console.warn(field);
-
+                  let {value} = field;
                   return (
                     <div className={styles.checkbox}>
-                      <div className={clsx(styles.checkItem, true && styles.selected)}>
+                      <div className={clsx(styles.checkItem, value.includes('backend') && styles.selected)}
+                           onClick={() => clickFrondendAndBackend('backend', field)}>
                         <span className={styles.icon}>√</span>
                         backend
                       </div>
-                      <div className={styles.checkItem}>
+                      <div className={clsx(styles.checkItem, value.includes('frontend') && styles.selected)}
+                           onClick={() => clickFrondendAndBackend('frontend', field)}>
                         <span className={styles.icon}>√</span>
                         frontend
                       </div>
@@ -114,7 +127,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
               }
             </div>
           ))}
-          <div className={styles.add} onClick={() => append2({key: "", value: '', box: 'a'})}>
+          <div className={styles.add} onClick={() => append2({key: "", value: '', box: []})}>
             <span className={styles.addIcon}>+</span>
             <span className={styles.addDesc}>Add one</span>
           </div>

@@ -7,8 +7,11 @@ import useStacks from "@/hooks/stacks";
 
 const IconFocusStyle = {
   width: "100px",
-  height: "36px",
-  background: "#fff",
+  // height: "36px",
+  // background: "#fff",
+  ".MuiOutlinedInput-notchedOutline": {
+    background: "#fff"
+  }
 }
 
 export interface Props {
@@ -238,7 +241,7 @@ const FrontEnd = forwardRef(function frontEnd(props: Props, ref) {
                 />
                 <span className={styles.equal}>
                  =
-              </span>
+                </span>
                 <Controller
                   name={`test2.${index}.value`}
                   control={control}

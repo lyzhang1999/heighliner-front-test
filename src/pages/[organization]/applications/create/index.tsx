@@ -30,11 +30,13 @@ export default function Create(): React.ReactElement {
 
 
   function nextCb() {
+    if(index === 5) return;
     nextIndex = index + 1;
     console.warn(ref.current.submit())
   }
 
   function backCb() {
+    if(index === 1) return;
     nextIndex = index - 1;
     console.warn(ref.current.submit())
   }

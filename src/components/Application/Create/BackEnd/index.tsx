@@ -105,7 +105,6 @@ export default function BackEnd() {
           </div>
         </div>
       </div>
-      {/*<input type="submit"/>*/}
     </form>
   );
 }

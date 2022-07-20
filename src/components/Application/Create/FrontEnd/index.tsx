@@ -9,10 +9,10 @@ const IconFocusStyle = {
 }
 
 interface Props {
-  ref: any
+  submitCb: () => void
 }
 
-const FrontEnd = forwardRef(function frontEnd(props, ref) {
+const FrontEnd = forwardRef(function frontEnd(props: Props, ref) {
   const {submitCb} = props;
   const {register, control, handleSubmit, reset, trigger, setError} = useForm({
     defaultValues: {

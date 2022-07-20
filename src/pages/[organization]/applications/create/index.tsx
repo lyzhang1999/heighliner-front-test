@@ -31,7 +31,7 @@ const DefaultFieldsValue = {
 type FieldsType = typeof DefaultFieldsValue;
 
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(3);
+  const [index, setIndex] = useState<number>(5);
   let nextIndex = 0;
 
 

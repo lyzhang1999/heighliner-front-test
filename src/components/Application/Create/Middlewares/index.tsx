@@ -1,11 +1,17 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
 import React, {useImperativeHandle, useRef, forwardRef} from "react";
 import styles from "./index.module.scss";
-import {TextField} from "@mui/material";
+import {TextField, Select, MenuItem} from "@mui/material";
 
 const IconFocusStyle = {
-  width: "200px",
-  height: "36px",
+  width: "115px",
+  // height: "36px",
+  marginRight: '16px'
+}
+
+const SelectStyle = {
+  // marginRight: '30px'
+  width: '184px'
 }
 
 export interface Props {
@@ -17,7 +23,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
   const {register, control, handleSubmit, reset, trigger, setError} = useForm({
     defaultValues: {
       test: [{lastName: 'value'}],
-      test2: [{key: '', value: ''}]
+      test2: [{key: '', value: '', box: ''}]
     },
   });
 
@@ -44,7 +50,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
   return (
     <form onSubmit={handleSubmit(submit)}>
       <div className={styles.item}>
-        <div className={styles.label}>Env Variables::</div>
+        {/*<div className={styles.label}>Env Variables::</div>*/}
         <div className={styles.content}>
           {fields2.map((item, index) => (
             <div key={item.id} className={styles.inputItem}>
@@ -60,21 +66,42 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
                   />
                 )}
               />
-              <span className={styles.equal}>
-                 =
-              </span>
               <Controller
                 name={`test2.${index}.value`}
                 control={control}
                 render={({field}) => (
-                  <TextField
-                    size="small"
-                    sx={IconFocusStyle}
+                  <Select
+                    id="demo-simple-select"
                     value={field.value}
                     onChange={field.onChange}
-                  />
+                    size="small"
+                    sx={SelectStyle}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
                 )}
               />
+              <div className={styles.line}></div>
+              <Controller
+                name={`test2.${index}.box`}
+                control={control}
+                render={({field}) => (
+                  <Select
+                    id="demo-simple-select"
+                    value={field.value}
+                    onChange={field.onChange}
+                    size="small"
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                )}
+              />
+              <img src="/img/application/editIcon.svg" alt="" onClick={() => remove2(index)}
+                   className={styles.deleteIcon}/>
               {
                 (fields2.length > 1) &&
                 <img src="/img/application/delete.svg" alt="" onClick={() => remove2(index)}
@@ -82,7 +109,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
               }
             </div>
           ))}
-          <div className={styles.add} onClick={() => append2({key: "", value: ''})}>
+          <div className={styles.add} onClick={() => append2({key: "", value: '', box: ''})}>
             <span className={styles.addIcon}>+</span>
             <span className={styles.addDesc}>Add one</span>
           </div>

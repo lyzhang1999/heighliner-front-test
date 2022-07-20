@@ -1,18 +1,19 @@
 
 .item {
   width: 100%;
-  display: flex;
+  //display: flex;
 
-  .label {
-    width: 200px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #000;
-  }
 
-  .content {
-    width: calc(100% - 200px);
-  }
+  //.label {
+  //  width: 200px;
+  //  font-size: 15px;
+  //  font-weight: 500;
+  //  color: #000;
+  //}
+
+  //.content {
+  //  width: calc(100% - 200px);
+  //}
 
   .add {
     width: 200px;
@@ -39,16 +40,28 @@
 }
 
 .inputItem {
-  margin-bottom: 20px;
+  border-radius: 9px;
+  background-color: rgba(228, 235, 242, 0.4);
+  padding: 6px 4px;
+  margin-bottom: 10px;
+  //vertical-align:middle;
+  display: flex;
+  align-items: center;
 
   .deleteIcon {
-    margin-left: 10px;
-    margin-top: 10px;
+    //margin-left: 10px;
+    //margin-top: 10px;
     cursor: pointer;
+    //margin: auto 10px;
+    margin-left: 10px;
   }
 
-  .equal{
-    font-size: 24px;
-    margin: 20px 10px 0px 10px;
+  .line {
+    margin: 0 30px;
+    display: inline-block;
+    width: 1px;
+    height: 37px;
+    background-color: #e1e3e6;
+    vertical-align:middle;
   }
 }

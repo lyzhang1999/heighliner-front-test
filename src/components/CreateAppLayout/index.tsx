@@ -1,6 +1,7 @@
 import styles from './index.module.scss';
 import {ReactElement} from "react";
 import {Button} from "@mui/material";
+import { CommonProps } from '@/utils/commonType';
 
 const list = [
   'Select a stack',
@@ -10,8 +11,7 @@ const list = [
   "Middlewares"
 ]
 
-interface Props {
-  children?: ReactElement
+interface Props extends CommonProps{
 }
 
 export default function CreateAppLayout({children}: Props) {

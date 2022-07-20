@@ -53,13 +53,13 @@ export default function Create(): React.ReactElement {
     submitCb
   }
 
-  const mapComponent = {
-    1: <SelectAStack {...props}/>,
-    2: <Provider {...props}/>,
-    3: <BackEnd {...props}/>,
-    4: <FrontEnd {...props}/>,
-    5: <Middlewares {...props}/>,
-  }
+  const mapComponent = [
+    <SelectAStack {...props}/>,
+    <Provider {...props}/>,
+    <BackEnd {...props}/>,
+    <FrontEnd {...props}/>,
+    <Middlewares {...props}/>
+  ]
 
   const {
     handleSubmit,
@@ -79,7 +79,7 @@ export default function Create(): React.ReactElement {
           goIndex
         }}
       >
-        {mapComponent[index]}
+        {mapComponent[index - 1]}
         {/*<SelectAStack*/}
         {/*  {...{*/}
         {/*    name: FieldsMap.name,*/}

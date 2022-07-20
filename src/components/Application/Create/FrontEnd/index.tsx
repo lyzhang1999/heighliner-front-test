@@ -1,7 +1,7 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
 import React, {useImperativeHandle, useRef, forwardRef, useEffect, useState} from "react";
 import styles from "./index.module.scss";
-import {TextField, Switch} from "@mui/material";
+import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import useStacks from "@/hooks/stacks";
 
@@ -43,9 +43,11 @@ const FrontEnd = forwardRef(function frontEnd(props: Props, ref) {
       test2: [{key: '', value: ''}],
       frontend: '',
       reWrite: false,
+      repo: '',
+      enterFile: '',
+      port: '',
     },
   });
-
 
   const {fields, append, remove} = useFieldArray({
     control,
@@ -108,6 +110,70 @@ const FrontEnd = forwardRef(function frontEnd(props: Props, ref) {
         </div>
       </div>
       <div className={styles.formWrapper}>
+        {
+          !isStack &&
+          <div className={styles.item}>
+            <div className={styles.label}>Repository*:</div>
+            <div className={styles.content}>
+              <Controller
+                name={`repo`}
+                control={control}
+                render={({field}) => (
+                  <Select
+                    value={field.value}
+                    onChange={field.onChange}
+                    size="small"
+                    sx={{width: "200px", background: "#fff"}}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                )}
+              />
+            </div>
+          </div>
+        }
+        {
+          !isStack &&
+          <div className={styles.item}>
+            <div className={styles.label}>Enter to file:</div>
+            <div className={styles.content}>
+              <Controller
+                name={`repo`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        }
+        {
+          !isStack &&
+          <div className={styles.item}>
+            <div className={styles.label}>Port:</div>
+            <div className={styles.content}>
+              <Controller
+                name={`repo`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        }
 
         <div className={styles.item}>
           <div className={styles.label}>Exposure Path:</div>

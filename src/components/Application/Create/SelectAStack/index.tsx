@@ -1,36 +1,51 @@
-import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
+import React from "react";
+import { Control, Controller, useForm } from "react-hook-form";
+
+import {
+  getClusterIcon,
+  GinIcon,
+  NextIcon,
+  PlusIcon,
+  RemixIcon,
+  SpringIcon,
+  VueIcon,
+} from "@/utils/CDN";
 import { FieldsMap } from "@/pages/[organization]/applications/create";
 import { FormControl, TextField } from "@mui/material";
-import React from "react";
-import { Control, Controller } from "react-hook-form";
+import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
 
 import styles from "./index.module.scss";
 
-interface Props {
-  control: Control;
-}
+interface Props {}
 
 const cardItems: CardItems = [
   {
-    icon: "",
+    icon: GinIcon,
     name: "Micro Service",
   },
   {
-    icon: "",
+    icon: NextIcon,
     name: "Machine Learning",
   },
   {
-    icon: "",
+    icon: RemixIcon,
     name: "Web Application",
   },
 ];
 
 export default function SelectAStack(props: Props): React.ReactElement {
+  const { control } = useForm({
+    defaultValues: {
+      [FieldsMap.name]: "",
+      [FieldsMap.stack]: "",
+    },
+  });
+
   return (
     <div className={styles.wrapper}>
       <Controller
         name={FieldsMap.name}
-        control={props.control}
+        control={control}
         render={({ field }) => (
           <FormControl className={styles.nameWrap}>
             <h1>
@@ -56,7 +71,7 @@ export default function SelectAStack(props: Props): React.ReactElement {
       <div className={styles.stackWrap}>
         <Controller
           name={FieldsMap.stack}
-          control={props.control}
+          control={control}
           render={({ field }) => (
             <FormControl>
               <h1>
@@ -66,7 +81,7 @@ export default function SelectAStack(props: Props): React.ReactElement {
               <CardSelect
                 {...{
                   cardItems,
-                  control: props.control,
+                  control: control,
                   name: FieldsMap.stack,
                 }}
               />

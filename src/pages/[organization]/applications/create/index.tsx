@@ -67,7 +67,7 @@ export default function Create(): React.ReactElement {
 
   const mapComponent = {
     1: <SelectAStack {...props}/>,
-    2: <GitProvider {...props}/>,
+    2: <Provider {...props}/>,
     3: <BackEnd {...props}/>,
     4: <FrontEnd {...props}/>,
     5: <Middlewares {...props}/>,

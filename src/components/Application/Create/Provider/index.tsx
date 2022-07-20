@@ -1,66 +1,118 @@
+import React from "react";
+import { Control, Controller, useForm } from "react-hook-form";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+import { ClusterProvider } from "@/api/cluster";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
 import { FieldsMap } from "@/pages/[organization]/applications/create";
+import { getClusterIcon } from "@/utils/CDN";
 import { CommonProps } from "@/utils/commonType";
-import React from "react";
-import { Control, Controller } from "react-hook-form";
 
 import styles from "./index.module.scss";
 
-interface Props extends CommonProps {
-  control: Control;
-}
+interface Props extends CommonProps {}
 
 const clusterCardItems: CardItems = [
   {
-    icon: "",
+    icon: getClusterIcon(ClusterProvider.AWS),
+    iconSettings: {
+      leftLayout: true,
+      width: 29,
+      height: 29,
+    },
     name: "AWS-Cluster1",
   },
   {
-    icon: "",
+    icon: getClusterIcon(ClusterProvider.Kubeconfig),
+    iconSettings: {
+      leftLayout: true,
+      width: 29,
+      height: 29,
+    },
     name: "AWS-Cluster2",
   },
   {
-    icon: "",
+    icon: getClusterIcon(ClusterProvider.Free),
+    iconSettings: {
+      leftLayout: true,
+      width: 29,
+      height: 29,
+    },
     name: "Office-RKE",
   },
   {
-    icon: "",
+    icon: getClusterIcon(ClusterProvider.AWS),
+    iconSettings: {
+      leftLayout: true,
+      width: 29,
+      height: 29,
+    },
     name: "Free-Cluster",
   },
 ];
 
 const gitCardItems: CardItems = [
   {
-    icon: "",
+    icon: <GitHubIcon />,
+    iconSettings: {
+      leftLayout: true,
+    },
     name: "Organization1",
   },
   {
-    icon: "",
+    icon: <GitHubIcon />,
+    iconSettings: {
+      leftLayout: true,
+    },
     name: "Organization2",
   },
   {
-    icon: "",
+    icon: <GitHubIcon />,
+    iconSettings: {
+      leftLayout: true,
+    },
     name: "Organization3",
   },
   {
-    icon: "",
+    icon: <GitHubIcon />,
+    iconSettings: {
+      leftLayout: true,
+    },
     name: "Organization4",
+  },
+  {
+    icon: <AddCircleOutlineIcon />,
+    iconSettings: {
+      leftLayout: true,
+    },
+    name: "Add Cluster",
+    customClick: (e) => {
+
+    }
   },
 ];
 
 export default function Provider(props: Props): React.ReactElement {
+  const { control } = useForm({
+    defaultValues: {
+      [FieldsMap.clusterProvider]: "",
+      [FieldsMap.gitProvider]: "",
+    },
+  });
+
   return (
     <>
       <Controller
         name={FieldsMap.clusterProvider}
-        control={props.control}
+        control={control}
         render={({ field }) => (
           <div className={styles.wrapper}>
             <h1>{FieldsMap.clusterProvider}</h1>
             <CardSelect
               {...{
                 cardItems: clusterCardItems,
-                control: props.control,
+                control: control,
                 name: FieldsMap.clusterProvider,
               }}
             />
@@ -69,14 +121,14 @@ export default function Provider(props: Props): React.ReactElement {
       />
       <Controller
         name={FieldsMap.gitProvider}
-        control={props.control}
+        control={control}
         render={({ field }) => (
           <div className={styles.wrapper}>
             <h1>{FieldsMap.gitProvider}</h1>
             <CardSelect
               {...{
                 cardItems: gitCardItems,
-                control: props.control,
+                control: control,
                 name: FieldsMap.clusterProvider,
               }}
             />

@@ -2,27 +2,33 @@
  * New Application Create page.
  */
 
+import { useForm } from "react-hook-form";
+
 import GitProvider from "@/components/Application/Create/GitProviderField";
 import SelectAStack from "@/components/Application/Create/SelectAStack";
 import FrontEnd from "@/components/Application/Create/FrontEnd";
 import BackEnd from "@/components/Application/Create/BackEnd";
 import Middlewares from "@/components/Application/Create/Middlewares";
+import CreateAppLayout from "@/components/CreateAppLayout";
 import Layout from "@/components/Layout";
 import React, {useRef, useState} from "react";
 
 import styles from "./index.module.scss";
-import CreateAppLayout from "@/components/CreateAppLayout";
+import Provider from "@/components/Application/Create/Provider";
 
 export const FieldsMap = {
-  stack: "stack",
-  name: "name",
-  gitProvider: "gitProvider",
+  stack: "Stack",
+  name: "Name",
+  gitProvider: "Git Provider",
+  clusterProvider: "Cluster Provider",
 };
 
 const DefaultFieldsValue = {
   [FieldsMap.gitProvider]: "",
 };
 
+
+type FieldsType = typeof DefaultFieldsValue;
 
 export default function Create(): React.ReactElement {
   const [index, setIndex] = useState<number>(4);
@@ -62,6 +68,15 @@ export default function Create(): React.ReactElement {
     5: <Middlewares {...props}/>,
   }
 
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+  } = useForm<FieldsType>({
+    defaultValues: DefaultFieldsValue,
+  });
+
 
   return (
     <Layout notStandardLayout>
@@ -73,6 +88,17 @@ export default function Create(): React.ReactElement {
         }}
       >
         {mapComponent[index]}
+        {/*<SelectAStack*/}
+        {/*  {...{*/}
+        {/*    name: FieldsMap.name,*/}
+        {/*    control,*/}
+        {/*  }}*/}
+        {/*/>*/}
+        {/*<Provider {*/}
+        {/*  ...{*/}
+        {/*    control*/}
+        {/*  }*/}
+        {/*} />*/}
       </CreateAppLayout>
     </Layout>
   );

@@ -36,14 +36,14 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
             <Button
               variant="outlined"
               onClick={backCb}
-              sx={(index === 0) && {cursor: "not-allowed"}}
+              sx={(index === 0) ? {cursor: "not-allowed"} : {}}
             >
               Back
             </Button>
             <Button
               variant="contained"
               onClick={nextCb}
-              sx={(index === 5) && {cursor: "not-allowed"}}
+              sx={(index === 5) ? {cursor: "not-allowed"} : {}}
             >
               Next
             </Button>

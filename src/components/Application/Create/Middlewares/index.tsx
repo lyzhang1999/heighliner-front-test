@@ -2,6 +2,7 @@ import {Controller, useForm, useFieldArray} from "react-hook-form";
 import React, {useImperativeHandle, useRef, forwardRef} from "react";
 import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
+import clsx from "clsx";
 
 const IconFocusStyle = {
   width: "115px",
@@ -87,20 +88,24 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
               <Controller
                 name={`test2.${index}.box`}
                 control={control}
-                render={({field}) => (
-                  <Select
-                    id="demo-simple-select"
-                    value={field.value}
-                    onChange={field.onChange}
-                    size="small"
-                  >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                )}
+                render={({field}) => {
+                  console.warn(field);
+
+                  return (
+                    <div className={styles.checkbox}>
+                      <div className={clsx(styles.checkItem, true && styles.selected)}>
+                        <span className={styles.icon}>√</span>
+                        backend
+                      </div>
+                      <div className={styles.checkItem}>
+                        <span className={styles.icon}>√</span>
+                        frontend
+                      </div>
+                    </div>
+                  )
+                }}
               />
-              <img src="/img/application/editIcon.svg" alt="" onClick={() => remove2(index)}
+              <img src="/img/application/editIcon.svg" alt="" onClick={() => (index)}
                    className={styles.deleteIcon}/>
               {
                 (fields2.length > 1) &&
@@ -109,7 +114,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
               }
             </div>
           ))}
-          <div className={styles.add} onClick={() => append2({key: "", value: '', box: ''})}>
+          <div className={styles.add} onClick={() => append2({key: "", value: '', box: 'a'})}>
             <span className={styles.addIcon}>+</span>
             <span className={styles.addDesc}>Add one</span>
           </div>

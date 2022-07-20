@@ -1,8 +1,8 @@
 
 .item {
-  width: 100%;
+  //width: 100%;
   //display: flex;
-
+  display: inline-block;
 
   //.label {
   //  width: 200px;
@@ -42,17 +42,13 @@
 .inputItem {
   border-radius: 9px;
   background-color: rgba(228, 235, 242, 0.4);
-  padding: 6px 4px;
+  padding: 6px 10px;
   margin-bottom: 10px;
-  //vertical-align:middle;
   display: flex;
   align-items: center;
 
   .deleteIcon {
-    //margin-left: 10px;
-    //margin-top: 10px;
     cursor: pointer;
-    //margin: auto 10px;
     margin-left: 10px;
   }
 
@@ -62,6 +58,37 @@
     width: 1px;
     height: 37px;
     background-color: #e1e3e6;
-    vertical-align:middle;
+  }
+
+  .checkbox {
+    display: flex;
+
+    .checkItem {
+      border-radius: 9px;
+      border: solid 1px #e1e3e6;
+      background-color: #eceef2;
+      width: 81px;
+      height: 22px;
+      font-size: 10px;
+      line-height: 20px;
+      text-align: center;
+      margin-right: 4px;
+      cursor: pointer;
+
+      .icon {
+        margin-right: 10px;
+        display: none;
+      }
+    }
+
+    .selected {
+      border: solid 1px #305ba2;
+      background-color: #dde8f9;
+      color: #345fa7;
+
+      .icon {
+        display: inline;
+      }
+    }
   }
 }

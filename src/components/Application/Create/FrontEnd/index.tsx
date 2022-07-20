@@ -13,7 +13,7 @@ interface Props {
 }
 
 const FrontEnd = forwardRef(function frontEnd(props, ref) {
-  const {setIndex, nextIndex, submitCb} = props;
+  const {submitCb} = props;
   const {register, control, handleSubmit, reset, trigger, setError} = useForm({
     defaultValues: {
       test: [{lastName: 'value'}],
@@ -31,11 +31,9 @@ const FrontEnd = forwardRef(function frontEnd(props, ref) {
     name: "test2"
   });
 
-  const inputRef: React.MutableRefObject<null> = useRef(null);
-
   useImperativeHandle(ref, () => ({
     submit: () => {
-      inputRef.current.click();
+      handleSubmit(submit)()
     }
   }));
 
@@ -123,7 +121,6 @@ const FrontEnd = forwardRef(function frontEnd(props, ref) {
           </div>
         </div>
       </div>
-      <input type="submit" ref={inputRef}/>
     </form>
   );
 })

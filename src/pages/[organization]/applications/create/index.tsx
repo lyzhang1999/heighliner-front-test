@@ -9,7 +9,6 @@ import BackEnd from "@/components/Application/Create/BackEnd";
 import Middlewares from "@/components/Application/Create/Middlewares";
 import Layout from "@/components/Layout";
 import React, {useRef, useState} from "react";
-import {useForm} from "react-hook-form";
 
 import styles from "./index.module.scss";
 import CreateAppLayout from "@/components/CreateAppLayout";
@@ -24,42 +23,24 @@ const DefaultFieldsValue = {
   [FieldsMap.gitProvider]: "",
 };
 
-type FieldsType = typeof DefaultFieldsValue;
-
 
 export default function Create(): React.ReactElement {
-  // const {
-  //   handleSubmit,
-  //   control,
-  //   formState: {errors},
-  //   setValue,
-  // } = useForm<FieldsType>({
-  //   defaultValues: DefaultFieldsValue,
-  // });
-
   const [index, setIndex] = useState<number>(4);
-  const [nextIndex, setNextIndex] = useState<number>(0);
+  let nextIndex = 0;
 
-  function setCurrentIndex(value: number) {
-    setIndex(index)
-  }
 
   function nextCb() {
-    console.warn('next')
-    setNextIndex(index + 1)
+    nextIndex = index + 1;
     console.warn(ref.current.submit())
   }
 
   function backCb() {
-    setNextIndex(index - 1)
-    console.warn('back')
+    nextIndex = index - 1;
     console.warn(ref.current.submit())
   }
 
   function submitCb() {
-    setInterval(() => {
-      console.warn(nextIndex)
-    }, 1000)
+    setIndex(nextIndex);
   }
 
   const ref = useRef(null);
@@ -82,7 +63,6 @@ export default function Create(): React.ReactElement {
 
   return (
     <Layout notStandardLayout>
-      {nextIndex} {index}
       <CreateAppLayout
         {...{
           backCb,
@@ -91,18 +71,7 @@ export default function Create(): React.ReactElement {
         }}
       >
         {mapComponent[index]}
-        {/*<FrontEnd></FrontEnd>*/}
       </CreateAppLayout>
-      {/*<div className={styles.panel}>*/}
-      {/*<GitProvider*/}
-      {/*  {...{*/}
-      {/*    name: FieldsMap.gitProvider,*/}
-      {/*    control,*/}
-      {/*    error: errors[FieldsMap.gitProvider],*/}
-      {/*    className: styles.gitProviderWrapper,*/}
-      {/*  }}*/}
-      {/*/>*/}
-      {/*</div>*/}
     </Layout>
   );
 }

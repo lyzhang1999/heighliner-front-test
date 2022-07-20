@@ -1,5 +1,5 @@
 import styles from './index.module.scss';
-import {ReactElement} from "react";
+import React, {ReactElement} from "react";
 import {Button} from "@mui/material";
 import {CommonProps} from '@/utils/commonType';
 
@@ -51,12 +51,20 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
         </div>
         <div className={styles.right}>
           {
-            list.map((item, index) => {
+            list.map((item, i) => {
               return (
                 <div key={index} className={styles.countItem}>
                   <div className={styles.count}>
-                    {index + 1}
+                    {
+                      (index - 1) > i ?
+                        <img src="/img/application/doneIcon.svg" alt=""/>
+                        :
+                        <span>
+                          {i + 1}
+                        </span>
+                    }
                   </div>
+
                   <div className={styles.desc}>
                     {item}
                   </div>

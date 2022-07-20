@@ -10,6 +10,7 @@ const IconFocusStyle = {
 }
 
 const BackEnd = forwardRef(function frontEnd(props: Props, ref) {
+  const {submitCb} = props;
   const {register, control, handleSubmit, reset, trigger, setError} = useForm({
     defaultValues: {
       test: [{lastName: 'value'}],

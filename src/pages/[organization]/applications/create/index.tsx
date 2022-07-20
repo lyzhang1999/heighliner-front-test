@@ -2,7 +2,7 @@
  * New Application Create page.
  */
 
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
 import GitProvider from "@/components/Application/Create/GitProviderField";
 import SelectAStack from "@/components/Application/Create/SelectAStack";
@@ -34,17 +34,22 @@ export default function Create(): React.ReactElement {
   const [index, setIndex] = useState<number>(5);
   let nextIndex = 0;
 
-
   function nextCb() {
-    if(index === 5) return;
+    if (index === 5) return;
     nextIndex = index + 1;
     console.warn(ref.current.submit())
   }
 
   function backCb() {
-    if(index === 1) return;
+    if (index === 1) return;
     nextIndex = index - 1;
     console.warn(ref.current.submit())
+  }
+
+  function goIndex(i) {
+    if (i === index) return;
+    if ((i > 5) || (i < 1)) return;
+
   }
 
   function submitCb() {
@@ -71,7 +76,7 @@ export default function Create(): React.ReactElement {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: {errors},
     setValue,
   } = useForm<FieldsType>({
     defaultValues: DefaultFieldsValue,

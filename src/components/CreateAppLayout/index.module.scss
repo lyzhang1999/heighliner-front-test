@@ -84,8 +84,12 @@
         color: #2d74cc;
       }
 
-      .currentItem {
-        font-weight: 600;
+    }
+
+    .currentItem {
+      .count {
+        background-color: #2e74cc;
+        color: #fff;
       }
     }
   }

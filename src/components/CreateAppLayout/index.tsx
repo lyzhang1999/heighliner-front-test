@@ -52,7 +52,7 @@ export default function CreateAppLayout({children, index, goIndex}: Props) {
           {
             list.map((item, i) => {
               return (
-                <div key={i} className={styles.countItem} onClick={() => goIndex(i + 1)}>
+                <div key={i} className={clsx(styles.countItem, (i === (index - 1)) && styles.currentItem)} onClick={() => goIndex(i + 1)}>
                   <div className={styles.count}>
                     {
                       (index - 1) > i ?
@@ -63,7 +63,7 @@ export default function CreateAppLayout({children, index, goIndex}: Props) {
                         </span>
                     }
                   </div>
-                  <div className={clsx(styles.desc, (i === (index - 1)) && styles.currentItem)}>
+                  <div className={clsx(styles.desc)}>
                     {item}
                   </div>
                 </div>

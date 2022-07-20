@@ -13,7 +13,7 @@ export const http = axios.create({
 
 const noDefaultErrMsgPath = [
   '/user/email_verification',
-  "/api/orgs"
+  "/orgs"
 ]
 
 http.interceptors.request.use((config: AxiosRequestConfig) => {

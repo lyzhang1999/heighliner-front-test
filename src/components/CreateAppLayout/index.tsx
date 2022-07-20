@@ -14,12 +14,11 @@ const list = [
 
 interface Props extends CommonProps {
   children?: ReactElement,
-  backCb: () => void,
-  nextCb: () => void,
-  index: number
+  index: number,
+  goIndex: (number: number) => void,
 }
 
-export default function CreateAppLayout({children, backCb, nextCb, index}: Props) {
+export default function CreateAppLayout({children, index, goIndex}: Props) {
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.wrapper}>
@@ -27,8 +26,7 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
           <div className={styles.header}>
             <span className={styles.name}>New application</span>
             <span className={styles.currentIndex}>({index} / 5)</span>
-            <span className={styles.currentName}>{list[index - 1]
-            }</span>
+            <span className={styles.currentName}>{list[index - 1]}</span>
           </div>
           <div className={styles.content}>
             {children}
@@ -36,14 +34,14 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
           <div className={styles.footer}>
             <Button
               variant="outlined"
-              onClick={backCb}
+              onClick={() => goIndex(index - 1)}
               sx={(index === 0) ? {cursor: "not-allowed"} : {}}
             >
               Back
             </Button>
             <Button
               variant="contained"
-              onClick={nextCb}
+              onClick={() => goIndex(index + 1)}
               sx={(index === 5) ? {cursor: "not-allowed"} : {}}
             >
               Next
@@ -54,7 +52,7 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
           {
             list.map((item, i) => {
               return (
-                <div key={i} className={styles.countItem}>
+                <div key={i} className={styles.countItem} onClick={() => goIndex(i + 1)}>
                   <div className={styles.count}>
                     {
                       (index - 1) > i ?
@@ -65,7 +63,7 @@ export default function CreateAppLayout({children, backCb, nextCb, index}: Props
                         </span>
                     }
                   </div>
-                  <div className={clsx(styles.desc, (i === (index - 1)) && styles.currentItem) }>
+                  <div className={clsx(styles.desc, (i === (index - 1)) && styles.currentItem)}>
                     {item}
                   </div>
                 </div>

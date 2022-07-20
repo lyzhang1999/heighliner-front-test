@@ -4,7 +4,6 @@
 
 import {useForm} from "react-hook-form";
 
-import GitProvider from "@/components/Application/Create/GitProviderField";
 import SelectAStack from "@/components/Application/Create/SelectAStack";
 import FrontEnd from "@/components/Application/Create/FrontEnd";
 import BackEnd from "@/components/Application/Create/BackEnd";
@@ -31,25 +30,14 @@ const DefaultFieldsValue = {
 type FieldsType = typeof DefaultFieldsValue;
 
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(5);
-  let nextIndex = 0;
-
-  function nextCb() {
-    if (index === 5) return;
-    nextIndex = index + 1;
-    console.warn(ref.current.submit())
-  }
-
-  function backCb() {
-    if (index === 1) return;
-    nextIndex = index - 1;
-    console.warn(ref.current.submit())
-  }
+  const [index, setIndex] = useState<number>(3);
+  let nextIndex = 1;
 
   function goIndex(i) {
     if (i === index) return;
     if ((i > 5) || (i < 1)) return;
-
+    nextIndex = i;
+    ref?.current?.submit();
   }
 
   function submitCb() {
@@ -87,9 +75,8 @@ export default function Create(): React.ReactElement {
     <Layout notStandardLayout>
       <CreateAppLayout
         {...{
-          backCb,
-          nextCb,
-          index
+          index,
+          goIndex
         }}
       >
         {mapComponent[index]}

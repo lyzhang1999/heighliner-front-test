@@ -31,7 +31,7 @@ const DefaultFieldsValue = {
 type FieldsType = typeof DefaultFieldsValue;
 
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(4);
+  const [index, setIndex] = useState<number>(2);
   let nextIndex = 0;
 
 
@@ -62,7 +62,7 @@ export default function Create(): React.ReactElement {
 
   const mapComponent = {
     1: <SelectAStack {...props}/>,
-    2: <GitProvider {...props}/>,
+    2: <Provider {...props}/>,
     3: <BackEnd {...props}/>,
     4: <FrontEnd {...props}/>,
     5: <Middlewares {...props}/>,

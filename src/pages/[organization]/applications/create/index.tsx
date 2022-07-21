@@ -26,7 +26,7 @@ import {
 } from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
-import {getTheRepoList} from "@/api/application";
+import {createApp, getTheRepoList} from "@/api/application";
 
 
 export interface FormStateType {
@@ -60,11 +60,14 @@ export default function Create(): React.ReactElement {
     // getGitProviderOrganizations().then(res => {
     //   // console.warn(res)
     // })
-    getTheRepoList(gitObj).then(res => {
-      setRepoList(res);
-      // console.warn(res)
-    })
+
   }, [])
+
+  function getRepoList(body) {
+    getTheRepoList(body).then(res => {
+      setRepoList(res);
+    })
+  }
 
   function goIndex(i) {
     if (i === index) return;
@@ -77,12 +80,19 @@ export default function Create(): React.ReactElement {
   }
 
   function create() {
-    console.warn(formState)
-    let body = getParams(formState)
+    let body = getParams(formState);
+    createApp(body).then(res => {
+      console.warn(res)
+    })
   }
 
   function submitCb(key: string, value: object) {
-    console.warn(value)
+    console.warn(value);
+    if (key === 'providers') {
+      let {git_config} = value;
+      let {git_provider_id, owner_name, owner_type} = git_config;
+      getRepoList({git_provider_id, owner_name, owner_type});
+    }
     setFormState({
       ...formState,
       [key]: cloneDeep(value),
@@ -100,7 +110,7 @@ export default function Create(): React.ReactElement {
   }
 
   const mapComponent = [
-    <SelectAStack {...props} key="SelectAStack" />,
+    <SelectAStack {...props} key="SelectAStack"/>,
     <Provider {...props} key="Provider"/>,
     <BackEnd {...props} key="BackEnd"/>,
     <FrontEnd {...props} key="FrontEnd"/>,

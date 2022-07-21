@@ -1,4 +1,6 @@
-import backEnd from "@/components/Application/Create/BackEnd";
+import backEnd, {backItem} from "@/components/Application/Create/BackEnd";
+import {find, map} from "lodash-es";
+import {frontItem} from "@/components/Application/Create/FrontEnd";
 
 export interface Git_config {
   git_org_name: string;
@@ -111,7 +113,7 @@ const testdate = {
         ],
         expose: [
           {
-            paths: [{ path: "/api" }],
+            paths: [{path: "/api"}],
             port: 8000,
             rewrite: true,
           },
@@ -143,7 +145,7 @@ const testdate = {
         ],
         expose: [
           {
-            paths: [{ path: "/" }],
+            paths: [{path: "/"}],
             port: 80,
             rewrite: false,
           },
@@ -231,7 +233,7 @@ export const FrameWorkInitState: BackendType = {
   repo_url: "",
   env: [],
   exposePort: "",
-  path: [{ v: "/" }],
+  path: [{v: "/"}],
   rewrite: false,
   entryFile: "",
 };
@@ -259,7 +261,84 @@ const initData = {
 export default initData;
 
 
-export function getParams(formState){
-  let {selectAStack, providers, backend, frontend, middleWares} = formState;
+function getService(key, value, item) {
+  let {
+    isRepo,
+    framework,
+    repo_url,
+    env,
+    exposePort,
+    path,
+    rewrite,
+    entryFile,
+  } = value;
+  let thisItem = find(item, {key: framework})
 
+  let obj = {
+    framework: {
+      name: framework,
+      version: thisItem.version,
+    },
+    language: {
+      name: thisItem.language,
+      version: thisItem.version,
+    },
+    name: "",
+    scaffold: isRepo,
+    setting: {
+      env: env,
+      expose: [
+        {
+          paths: map(path, i => {
+            return {path: i.v}
+          }),
+          port: exposePort,
+          rewrite: rewrite,
+        },
+      ],
+      extended_fields: {
+        entry_file: entryFile,
+      },
+      repo_url: repo_url,
+    },
+    type: key,
+  }
+  return obj;
+}
+
+
+export function getParams(formState) {
+  let {selectAStack, providers, backend, frontend, middleWares} = formState;
+  let {Name, Stack} = selectAStack;
+  let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}} = providers;
+  const body = {
+    name: Name,
+    stack: Stack,
+    git_config: {
+      git_org_name,
+      git_provider_id,
+    },
+    service: [
+      getService('backend', backend, backItem),
+      getService('frontedn', frontend, frontItem)],
+    middleware: map(middleWares, i => {
+      let {
+        name,
+        type,
+        injection,
+      } = i;
+      return {
+        Service: injection,
+        name: name,
+        password: "admin",
+        setting: {
+          storage: "10Gi",
+        },
+        type: type,
+        username: "admin",
+      }
+    })
+  }
+  console.warn(body)
+  return body;
 }

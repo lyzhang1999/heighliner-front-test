@@ -20,7 +20,7 @@ export interface Props {
   formState: FormStateType,
 }
 
-const frontItem = [
+export const frontItem = [
   // {
   //   img: "/img/application/vue.svg",
   //   name: 'Vue.js',
@@ -30,7 +30,8 @@ const frontItem = [
     img: "/img/application/next.svg",
     name: 'Next.js',
     key: "next",
-    version: "1.7.7"
+    version: "1.7.7",
+    language: 'typescript'
   },
   // {
   //   img: "/img/application/react.svg",

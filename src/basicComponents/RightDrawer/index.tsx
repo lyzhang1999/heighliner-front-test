@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, SyntheticEvent, useRef } from "react";
+import React, { Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useRef } from "react";
 import { Drawer } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -15,8 +15,9 @@ interface Props extends CommonProps {
 export default function RightDrawer(props: Props): React.ReactElement {
   const drawerEle = useRef(null);
 
-  const handleClose = () => {
+  const handleClose = (event: MouseEvent) => {
     props.setModalDisplay(false);
+    event.stopPropagation();
   };
 
   return (

@@ -1,3 +1,47 @@
+@mixin chosenStatus {
+  position: relative;
+  box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+  border-style: solid;
+  border-width: 2px;
+  border-image-source: linear-gradient(136deg, #194eb7 0%, #46a7e8 97%);
+  border-image-slice: 1;
+  border-radius: 5px;
+  background-image: linear-gradient(white, white),
+    linear-gradient(136deg, #194eb7 0%, #46a7e8 97%);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+  }
+  &::before {
+    width: 29px;
+    height: 27.6px;
+    background-image: linear-gradient(133deg, #286cc7 0%, #3c93dd 104%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+  &::after {
+    content: "";
+    display: block;
+    width: 0px;
+    height: 0px;
+    width: 6px;
+    height: 10px;
+    border-right: solid 2px white;
+    border-bottom: solid 2px white;
+    // background-color:transparent;
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    transform: rotate(45deg);
+  }
+}
+
 .wrapper {
   h1 {
     font-size: 15px;
@@ -5,6 +49,35 @@
 
     &::after {
       content: "*";
+    }
+  }
+
+  .clusterWrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    list-style-type: none;
+
+    li {
+      width: 169px;
+      min-height: 57px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+      border: solid 2px #e9eaef;
+      background-color: #fff;
+      display: flex;
+      flex-direction: row;
+      // justify-content: center;
+      gap: 16px;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      font-family: Jost;
+      font-size: 13px;
+    }
+
+    .chosen {
+      @include chosenStatus;
     }
   }
 }

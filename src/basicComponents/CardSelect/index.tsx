@@ -9,6 +9,7 @@ import Image from "next/image";
 
 export type CardItems = Array<{
   name: string;
+  value: string | number;
   icon: string | ReactElement;
   iconSettings?: {
     leftLayout?: boolean;
@@ -16,13 +17,14 @@ export type CardItems = Array<{
     height?: number | string;
   };
   customClick?: MouseEventHandler;
-  blueBackgroundItem: boolean;
 }>;
 
 interface Props extends CommonProps {
   cardItems: CardItems;
   control: Control;
+  onChange: (...event: any[]) => void;
   name: string;
+  customCardItems?: ReactElement[];
 }
 
 export default function CardSelect(props: Props): React.ReactElement {
@@ -39,6 +41,7 @@ export default function CardSelect(props: Props): React.ReactElement {
               card.customClick(e);
               return;
             }
+            props.onChange(card.value);
             setChosen(card.name);
           }}
           style={(() => {
@@ -68,6 +71,10 @@ export default function CardSelect(props: Props): React.ReactElement {
           <span className={styles.name}>{card.name}</span>
         </li>
       ))}
+      {props.customCardItems &&
+        props.customCardItems.map((customCardItem, index) => (
+          <li key={index}>{customCardItem}</li>
+        ))}
     </ul>
   );
 }

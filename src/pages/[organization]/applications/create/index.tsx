@@ -18,34 +18,26 @@ import {
   FrameWorkInitState,
   BackendType,
   MiddleWaresInitState,
-  MiddleWareType
+  MiddleWareType,
+  SelectAStackType,
+  SelectAStackInitState,
 } from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
 import {getTheRepoList} from "@/api/application";
 
-export const FieldsMap = {
-  stack: "Stack",
-  name: "Name",
-  gitProvider: "Git Provider",
-  clusterProvider: "Cluster Provider",
-};
-
-const DefaultFieldsValue = {
-  [FieldsMap.gitProvider]: "",
-};
-
-type FieldsType = typeof DefaultFieldsValue;
 
 export interface FormStateType {
+  selectAStack: SelectAStackType,
   backend: BackendType,
   frontend: BackendType,
   middleWares: MiddleWareType[],
 }
 
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(5);
+  const [index, setIndex] = useState<number>(1);
   const [formState, setFormState] = useState<FormStateType>({
+    selectAStack: cloneDeep(SelectAStackInitState),
     backend: cloneDeep(FrameWorkInitState),
     frontend: cloneDeep(FrameWorkInitState),
     middleWares: cloneDeep(MiddleWaresInitState)
@@ -108,15 +100,6 @@ export default function Create(): React.ReactElement {
     <FrontEnd {...props}/>,
     <Middlewares {...props}/>
   ]
-
-  const {
-    handleSubmit,
-    control,
-    formState: {errors},
-    setValue,
-  } = useForm<FieldsType>({
-    defaultValues: DefaultFieldsValue,
-  });
 
 
   return (

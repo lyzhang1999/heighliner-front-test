@@ -22,7 +22,7 @@ import {
   SelectAStackType,
   SelectAStackInitState,
   ProvidersType,
-  ProvidersInitState
+  ProvidersInitState, getParams
 } from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
@@ -77,7 +77,8 @@ export default function Create(): React.ReactElement {
   }
 
   function create() {
-
+    console.warn(formState)
+    let body = getParams(formState)
   }
 
   function submitCb(key: string, value: object) {

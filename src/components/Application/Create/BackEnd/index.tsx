@@ -7,10 +7,12 @@ import {FormStateType} from "@/pages/[organization]/applications/create";
 import {get, isEmpty} from "lodash-es";
 import {pathRule, portRule} from "@/utils/formRules";
 
+const widhtSx = {width: "250px"};
+
 export const IconFocusStyle = {
-  width: "100px",
   background: '#fff',
   borderRadius: '4px',
+  ...widhtSx
 }
 
 export interface Props {
@@ -77,6 +79,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
+      {JSON.stringify(errors)}
       <div className={styles.formItem}>
         <div className={styles.label}>
           Framework*
@@ -129,7 +132,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Repository*:</div>
+            <div className={styles.label}>Repository*</div>
             <div className={styles.content}>
               <Controller
                 name={`repo`}
@@ -139,7 +142,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                     value={field.value}
                     onChange={field.onChange}
                     size="small"
-                    sx={{width: "200px", background: "#fff"}}
+                    sx={{background: "#fff", width: "250px"}}
                   >
                     {
                       repoList.map(item => {
@@ -164,7 +167,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Enter to file:</div>
+            <div className={styles.label}>Enter to file*</div>
             <div className={styles.content}>
               <Controller
                 name={`enterFile`}
@@ -189,7 +192,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Port:</div>
+            <div className={styles.label}>Port*</div>
             <div className={styles.content}>
               <Controller
                 name={`port`}
@@ -213,7 +216,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
         }
 
         <div className={styles.item}>
-          <div className={styles.label}>Exposure Path:</div>
+          <div className={styles.label}>Exposure Path</div>
           <div className={styles.content}>
             {fields.map((item, index) => (
               <div key={item.id} className={styles.inputItem}>
@@ -244,13 +247,12 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
               </div>
             ))}
             <div className={styles.add} onClick={() => append({v: ''})}>
-              <span className={styles.addIcon}>+</span>
-              <span className={styles.addDesc}>Add one</span>
+              ADD ONE
             </div>
           </div>
         </div>
         <div className={styles.item}>
-          <div className={styles.label}>Path Rewrite:</div>
+          <div className={styles.label}>Path Rewrite</div>
           <div className={styles.content}>
             <Controller
               name={`reWrite`}
@@ -262,7 +264,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
           </div>
         </div>
         <div className={styles.item}>
-          <div className={styles.label}>Env Variables:</div>
+          <div className={styles.label}>Env Variables</div>
           <div className={styles.content}>
             {envFields.map((item, index) => (
               <div key={item.id} className={styles.inputItem}>
@@ -273,7 +275,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                     render={({field}) => (
                       <TextField
                         size="small"
-                        sx={IconFocusStyle}
+                        sx={{...IconFocusStyle, width: '150px'}}
                         value={field.value}
                         onChange={field.onChange}
                       />
@@ -295,7 +297,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                     render={({field}) => (
                       <TextField
                         size="small"
-                        sx={IconFocusStyle}
+                        sx={{...IconFocusStyle, width: '150px'}}
                         value={field.value}
                         onChange={field.onChange}
                       />
@@ -312,8 +314,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
               </div>
             ))}
             <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
-              <span className={styles.addIcon}>+</span>
-              <span className={styles.addDesc}>Add one</span>
+              ADD ONE
             </div>
           </div>
         </div>

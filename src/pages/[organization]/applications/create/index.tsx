@@ -98,11 +98,11 @@ export default function Create(): React.ReactElement {
   }
 
   const mapComponent = [
-    <SelectAStack {...props}/>,
-    <Provider {...props}/>,
-    <BackEnd {...props}/>,
-    <FrontEnd {...props}/>,
-    <Middlewares {...props}/>
+    <SelectAStack {...props} key="SelectAStack" />,
+    <Provider {...props} key="Provider"/>,
+    <BackEnd {...props} key="BackEnd"/>,
+    <FrontEnd {...props} key="FrontEnd"/>,
+    <Middlewares {...props} key="Middlewares"/>
   ]
 
 

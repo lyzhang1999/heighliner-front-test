@@ -8,10 +8,14 @@
   }
 
   .nameWrap {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 55px;
+    display: grid;
+    grid-template-columns: 21px auto;
+    grid-template-rows: auto auto;
+    column-gap: 55px;
     margin-top: 33px;
+  }
+
+  .stackWrap {
+    
   }
 }

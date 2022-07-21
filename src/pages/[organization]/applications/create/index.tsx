@@ -14,33 +14,23 @@ import React, {useEffect, useRef, useState} from "react";
 
 import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
-import {BackendInitState, BackendtType} from "@/pages/[organization]/applications/create/util";
+import {BackendInitState, BackendtType, SelectAStackInitState, SelectAStackType} from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
 
-export const FieldsMap = {
-  stack: "Stack",
-  name: "Name",
-  gitProvider: "Git Provider",
-  clusterProvider: "Cluster Provider",
-};
-
-const DefaultFieldsValue = {
-  [FieldsMap.gitProvider]: "",
-};
-
-type FieldsType = typeof DefaultFieldsValue;
 
 export interface FormStateType {
   backend: BackendtType,
   frontend: BackendtType,
+  selectAStack: SelectAStackType,
 }
 
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(3);
+  const [index, setIndex] = useState<number>(1);
   const [formState, setFormState] = useState<FormStateType>({
     backend: BackendInitState,
     frontend: BackendInitState,
+    selectAStack: SelectAStackInitState,
   });
   let nextIndex = 1;
 
@@ -86,15 +76,6 @@ export default function Create(): React.ReactElement {
     <FrontEnd {...props}/>,
     <Middlewares {...props}/>
   ]
-
-  const {
-    handleSubmit,
-    control,
-    formState: {errors},
-    setValue,
-  } = useForm<FieldsType>({
-    defaultValues: DefaultFieldsValue,
-  });
 
 
   return (

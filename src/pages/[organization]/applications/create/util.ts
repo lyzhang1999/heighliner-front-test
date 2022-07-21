@@ -178,6 +178,20 @@ const componentInitState2 = {
   }
 }
 
+export const FieldsMap = {
+  stack: "Stack",
+  name: "Name",
+  gitProvider: "Git Provider",
+  clusterProvider: "Cluster Provider",
+};
+
+export const SelectAStackInitState = {
+  [FieldsMap.name]: "",
+  [FieldsMap.stack]: "",
+}
+
+export type SelectAStackType = typeof SelectAStackInitState;
+
 export interface BackendtType{
   isRepo: boolean,
   framework: string,

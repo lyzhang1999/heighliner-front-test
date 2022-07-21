@@ -3,12 +3,11 @@ import React, {useImperativeHandle, useRef, forwardRef, useEffect, useState} fro
 import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
-import useStacks from "@/hooks/stacks";
 import {FormStateType} from "@/pages/[organization]/applications/create";
-import {isEmpty} from "lodash-es";
-import {getTheRepoList} from "@/api/application";
+import {get, isEmpty} from "lodash-es";
+import {pathRule, portRule} from "@/utils/formRules";
 
-const IconFocusStyle = {
+export const IconFocusStyle = {
   width: "100px",
   background: '#fff',
   borderRadius: '4px',
@@ -39,24 +38,15 @@ const frontItem = [
 ]
 
 const Backend = forwardRef(function frontEnd(props: Props, ref) {
-  const {submitCb, formState, gitObj} = props;
+  const {submitCb, formState, repoList} = props;
   let {backend} = formState;
   let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = backend;
   let [isRepo, setIsRepo] = useState<boolean>(repo);
 
-  const [repoList, setRepoList] = useState([]);
-
-  useEffect(() => {
-    getTheRepoList(gitObj).then(res => {
-      setRepoList(res);
-      console.warn(res)
-    })
-  }, [])
-
-  const {register, control, handleSubmit, formState: {errors},} = useForm({
+  const {control, handleSubmit, formState: {errors},} = useForm({
     defaultValues: {
       path: [{v: ''}],
-      env: [{name: '', value: ''}],
+      env: [],
       frontend: '',
       reWrite: rewrite,
       repo: '',
@@ -71,7 +61,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
     name: "path"
   });
 
-  const {fields: fields2, append: append2, remove: remove2} = useFieldArray({
+  const {fields: envFields, append: envAppend, remove: envRemove} = useFieldArray({
     control,
     name: "env"
   });
@@ -87,7 +77,6 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      {JSON.stringify(errors)}
       <div className={styles.formItem}>
         <div className={styles.label}>
           Framework*
@@ -115,7 +104,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
               </div>
             )}
             rules={{
-              required: "Please choose a framework.",
+              required: "Please choose a framework",
             }}
           />
           {
@@ -152,12 +141,23 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                     size="small"
                     sx={{width: "200px", background: "#fff"}}
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {
+                      repoList.map(item => {
+                        return (
+                          <MenuItem value={item.url} key={item.url}>{item.repo_name}</MenuItem>
+                        )
+                      })
+                    }
                   </Select>
                 )}
+                rules={{
+                  required: "Please select a repo",
+                }}
               />
+              {
+                errors.repo?.message &&
+                <div className={styles.error}>{errors.repo?.message}</div>
+              }
             </div>
           </div>
         }
@@ -177,7 +177,12 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                     onChange={field.onChange}
                   />
                 )}
+                rules={pathRule}
               />
+              {
+                errors.enterFile?.message &&
+                <div className={styles.error}>{errors.enterFile?.message}</div>
+              }
             </div>
           </div>
         }
@@ -197,7 +202,12 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                     onChange={field.onChange}
                   />
                 )}
+                rules={portRule}
               />
+              {
+                errors.port?.message &&
+                <div className={styles.error}>{errors.port?.message}</div>
+              }
             </div>
           </div>
         }
@@ -207,20 +217,30 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
           <div className={styles.content}>
             {fields.map((item, index) => (
               <div key={item.id} className={styles.inputItem}>
-                <Controller
-                  name={`path.${index}.v`}
-                  control={control}
-                  render={({field}) => (
-                    <TextField
-                      size="small"
-                      sx={IconFocusStyle}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-                <img src="/img/application/delete.svg" alt="" onClick={() => remove(index)}
-                     className={styles.deleteIcon}/>
+                <div className={styles.left}>
+                  <Controller
+                    name={`path.${index}.v`}
+                    control={control}
+                    render={({field}) => (
+                      <TextField
+                        size="small"
+                        sx={IconFocusStyle}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                    rules={pathRule}
+                  />
+                  {
+                    get(errors, `path.${index}.v.message`) &&
+                    <div className={styles.error}>{get(errors, `path.${index}.v.message`)}</div>
+                  }
+                </div>
+                {
+                  (fields.length > 1) &&
+                  <img src="/img/application/delete.svg" alt="" onClick={() => remove(index)}
+                       className={styles.deleteIcon}/>
+                }
               </div>
             ))}
             <div className={styles.add} onClick={() => append({v: ''})}>
@@ -241,47 +261,57 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
             />
           </div>
         </div>
-
         <div className={styles.item}>
           <div className={styles.label}>Env Variables:</div>
           <div className={styles.content}>
-            {fields2.map((item, index) => (
+            {envFields.map((item, index) => (
               <div key={item.id} className={styles.inputItem}>
-                <Controller
-                  name={`env.${index}.name`}
-                  control={control}
-                  render={({field}) => (
-                    <TextField
-                      size="small"
-                      sx={IconFocusStyle}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
+                <div className={styles.left}>
+                  <Controller
+                    name={`env.${index}.name`}
+                    control={control}
+                    render={({field}) => (
+                      <TextField
+                        size="small"
+                        sx={IconFocusStyle}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                    rules={{required: 'Please input env name'}}
+                  />
+                  {
+                    get(errors, `env.${index}.name.message`) &&
+                    <div className={styles.error}>{get(errors, `env.${index}.name.message`)}</div>
+                  }
+                </div>
                 <span className={styles.equal}>
                  =
-              </span>
-                <Controller
-                  name={`env.${index}.value`}
-                  control={control}
-                  render={({field}) => (
-                    <TextField
-                      size="small"
-                      sx={IconFocusStyle}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-                {
-                  (fields2.length > 1) &&
-                  <img src="/img/application/delete.svg" alt="" onClick={() => remove2(index)}
-                       className={styles.deleteIcon}/>
-                }
+                </span>
+                <div className={styles.right}>
+                  <Controller
+                    name={`env.${index}.value`}
+                    control={control}
+                    render={({field}) => (
+                      <TextField
+                        size="small"
+                        sx={IconFocusStyle}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                    rules={{required: 'Please input env value'}}
+                  />
+                  {
+                    get(errors, `env.${index}.value.message`) &&
+                    <div className={styles.error}>{get(errors, `env.${index}.value.message`)}</div>
+                  }
+                </div>
+                <img src="/img/application/delete.svg" alt="" onClick={() => envRemove(index)}
+                     className={styles.deleteIcon}/>
               </div>
             ))}
-            <div className={styles.add} onClick={() => append2({name: "", value: ''})}>
+            <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
               <span className={styles.addIcon}>+</span>
               <span className={styles.addDesc}>Add one</span>
             </div>

@@ -14,9 +14,10 @@ import React, {useEffect, useRef, useState} from "react";
 
 import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
-import {BackendInitState, BackendtType} from "@/pages/[organization]/applications/create/util";
+import {BackendInitState, BackendType} from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
+import {getTheRepoList} from "@/api/application";
 
 export const FieldsMap = {
   stack: "Stack",
@@ -32,8 +33,8 @@ const DefaultFieldsValue = {
 type FieldsType = typeof DefaultFieldsValue;
 
 export interface FormStateType {
-  backend: BackendtType,
-  frontend: BackendtType,
+  backend: BackendType,
+  frontend: BackendType,
 }
 
 export default function Create(): React.ReactElement {
@@ -42,6 +43,8 @@ export default function Create(): React.ReactElement {
     backend: BackendInitState,
     frontend: BackendInitState,
   });
+  const [repoList, setRepoList] = useState([]);
+
   let nextIndex = 1;
 
   const gitObj = {
@@ -51,7 +54,11 @@ export default function Create(): React.ReactElement {
   }
 
   useEffect(() => {
-    getGitProviderOrganizations().then(res => {
+    // getGitProviderOrganizations().then(res => {
+    //   // console.warn(res)
+    // })
+    getTheRepoList(gitObj).then(res => {
+      setRepoList(res);
       // console.warn(res)
     })
   }, [])
@@ -76,7 +83,8 @@ export default function Create(): React.ReactElement {
     ref,
     submitCb,
     formState,
-    gitObj
+    gitObj,
+    repoList
   }
 
   const mapComponent = [

@@ -192,24 +192,24 @@ export const SelectAStackInitState = {
 
 export type SelectAStackType = typeof SelectAStackInitState;
 
-export interface BackendtType{
+export interface BackendType {
   isRepo: boolean,
   framework: string,
   repo_url: string,
-  env: Array<{name: '', value: ""}>,
+  env: Array<{ name: string, value: string }>,
   exposePort: string,
-  path: Array<string>,
+  path: Array<{ v: string }>,
   rewrite: false,
   entryFile: string,
 }
 
-export const BackendInitState: BackendtType = {
-  isRepo: true,
+export const BackendInitState: BackendType = {
+  isRepo: false,
   framework: '',
   repo_url: '',
   env: [],
   exposePort: '',
-  path: [],
+  path: [{v: '/'}],
   rewrite: false,
   entryFile: '',
 }
@@ -217,9 +217,7 @@ export const BackendInitState: BackendtType = {
 const initData = {
   ...componentInitState1,
   ...componentInitState2,
-  service: [
-
-  ]
+  service: []
 };
 
 

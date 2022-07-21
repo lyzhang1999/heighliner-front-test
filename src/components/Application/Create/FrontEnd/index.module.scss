@@ -7,7 +7,7 @@
   .label {
     width: 100px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     color: #000;
   }
 
@@ -55,43 +55,6 @@
 
   .selected {
     @include chosenStatus;
-    //border-style: solid;
-    //border-width: 2px;
-    //background-clip: content-box, border-box;
-    //background-origin: border-box;
-    //border-image-source: linear-gradient(136deg, #194eb7 0%, #46a7e8 97%);
-    //background-image: linear-gradient(white, white), linear-gradient(136deg, #194eb7 0%, #46a7e8 97%);
-    //
-    //&::before,
-    //&::after {
-    //  content: "";
-    //  display: block;
-    //  position: absolute;
-    //  top: -1px;
-    //  right: -1px;
-    //}
-    //
-    //&::before {
-    //  width: 29px;
-    //  height: 27.6px;
-    //  background-image: linear-gradient(133deg, #286cc7 0%, #3c93dd 104%);
-    //  clip-path: polygon(0 0, 100% 0, 100% 100%);
-    //}
-    //
-    //&::after {
-    //  content: "";
-    //  display: block;
-    //  width: 0px;
-    //  height: 0px;
-    //  width: 6px;
-    //  height: 10px;
-    //  border-right: solid 2px white;
-    //  border-bottom: solid 2px white;
-    //  position: absolute;
-    //  top: 2px;
-    //  right: 6px;
-    //  transform: rotate(45deg);
-    //}
   }
 }
 
@@ -126,7 +89,7 @@
 }
 
 .error {
-  color: red;
+  color: #F85056;
   font-size: 12px;
   line-height: 20px;
 }
@@ -146,44 +109,43 @@
 
   .content {
     width: calc(100% - 110px);
-
   }
 
   .add {
-    width: 200px;
-    height: 36px;
-    background: #fff;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    padding-left: 25px;
+    border-radius: 4px;
+    background-color: rgba(155, 172, 185, 0.5);
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    color: #0a1a24;
     cursor: pointer;
-    margin-bottom: 20px;
-
-    .addIcon {
-      font-size: 15px;
-      margin-right: 5px;
-    }
-
-    .addDesc {
-      font-size: 15px;
-      color: #606479;
-    }
   }
 }
 
 .inputItem {
   margin-bottom: 20px;
+  display: flex;
+
+  .left {
+
+  }
+
+  .right {
+
+  }
 
   .deleteIcon {
     margin-left: 10px;
-    margin-top: 10px;
     cursor: pointer;
+    margin-top: 10px;
+    width: 20px;
+    height: 20px;
   }
 
   .equal {
-    font-size: 26px;
+    font-size: 20px;
     margin: 0 10px;
+    line-height: 40px;
   }
 }

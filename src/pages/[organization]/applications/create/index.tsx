@@ -14,24 +14,27 @@ import React, {useEffect, useRef, useState} from "react";
 
 import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
-import {BackendInitState, BackendtType, SelectAStackInitState, SelectAStackType} from "@/pages/[organization]/applications/create/util";
+import {BackendInitState, BackendType, SelectAStackInitState, SelectAStackType} from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
+import {getTheRepoList} from "@/api/application";
 
 
 export interface FormStateType {
-  backend: BackendtType,
-  frontend: BackendtType,
   selectAStack: SelectAStackType,
+  backend: BackendType,
+  frontend: BackendType,
 }
 
 export default function Create(): React.ReactElement {
   const [index, setIndex] = useState<number>(1);
   const [formState, setFormState] = useState<FormStateType>({
-    backend: BackendInitState,
-    frontend: BackendInitState,
-    selectAStack: SelectAStackInitState,
+    selectAStack: cloneDeep(SelectAStackInitState),
+    backend: cloneDeep(BackendInitState),
+    frontend: cloneDeep(BackendInitState),
   });
+  const [repoList, setRepoList] = useState([]);
+
   let nextIndex = 1;
 
   const gitObj = {
@@ -41,7 +44,11 @@ export default function Create(): React.ReactElement {
   }
 
   useEffect(() => {
-    getGitProviderOrganizations().then(res => {
+    // getGitProviderOrganizations().then(res => {
+    //   // console.warn(res)
+    // })
+    getTheRepoList(gitObj).then(res => {
+      setRepoList(res);
       // console.warn(res)
     })
   }, [])
@@ -54,11 +61,12 @@ export default function Create(): React.ReactElement {
   }
 
   function submitCb(key: string, value: object) {
+    console.warn(value)
     setFormState({
       ...formState,
       [key]: cloneDeep(value),
     })
-    // setIndex(nextIndex);
+    setIndex(nextIndex);
   }
 
   const ref = useRef(null);
@@ -66,7 +74,8 @@ export default function Create(): React.ReactElement {
     ref,
     submitCb,
     formState,
-    gitObj
+    gitObj,
+    repoList
   }
 
   const mapComponent = [

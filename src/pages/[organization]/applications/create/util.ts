@@ -71,178 +71,190 @@ export interface RootObject {
   service: Service[];
 }
 
-
 const testdate = {
-  "cluster_id": 4,
-  "git_config": {
-    "git_org_name": "ni9ht-org",
-    "git_provider_id": 1
+  cluster_id: 4,
+  git_config: {
+    git_org_name: "ni9ht-org",
+    git_provider_id: 1,
   },
-  "middleware": [
+  middleware: [
     {
-      "Service": [
-        "test-stack-ysz-11-backend"
-      ],
-      "name": "pg",
-      "password": "admin",
-      "setting": {
-        "storage": "10Gi"
+      Service: ["test-stack-ysz-11-backend"],
+      name: "pg",
+      password: "admin",
+      setting: {
+        storage: "10Gi",
       },
-      "type": "postgres",
-      "username": "admin"
-    }
+      type: "postgres",
+      username: "admin",
+    },
   ],
-  "name": "test-stack-ysz-11",
-  "service": [
+  name: "test-stack-ysz-11",
+  service: [
     {
-      "framework": {
-        "name": "gin",
-        "version": "1.7.7"
+      framework: {
+        name: "gin",
+        version: "1.7.7",
       },
-      "language": {
-        "name": "golang",
-        "version": "1.17"
+      language: {
+        name: "golang",
+        version: "1.17",
       },
-      "name": "",
-      "scaffold": true,
-      "setting": {
-        "env": [
+      name: "",
+      scaffold: true,
+      setting: {
+        env: [
           {
-            "name": "TEST_ENV_KEY",
-            "value": "vadf123"
-          }
+            name: "TEST_ENV_KEY",
+            value: "vadf123",
+          },
         ],
-        "expose": [
+        expose: [
           {
-            "paths": [
-              {"path": "/api"}
-            ],
-            "port": 8000,
-            "rewrite": true
-          }
+            paths: [{ path: "/api" }],
+            port: 8000,
+            rewrite: true,
+          },
         ],
-        "extended_fields": {
-          "entry_file": ""
+        extended_fields: {
+          entry_file: "",
         },
-        "repo_url": ""
+        repo_url: "",
       },
-      "type": "backend"
+      type: "backend",
     },
     {
-      "framework": {
-        "name": "nextjs",
-        "version": "1.7.7"
+      framework: {
+        name: "nextjs",
+        version: "1.7.7",
       },
-      "language": {
-        "name": "typescript",
-        "version": "1.8"
+      language: {
+        name: "typescript",
+        version: "1.8",
       },
-      "name": "",
-      "scaffold": true,
-      "setting": {
-        "env": [
+      name: "",
+      scaffold: true,
+      setting: {
+        env: [
           {
-            "name": "TEST_FRONTEND_ENV",
-            "value": "aadf34"
-          }
+            name: "TEST_FRONTEND_ENV",
+            value: "aadf34",
+          },
         ],
-        "expose": [
+        expose: [
           {
-            "paths": [
-              {"path": "/"}
-            ],
-            "port": 80,
-            "rewrite": false
-          }
+            paths: [{ path: "/" }],
+            port: 80,
+            rewrite: false,
+          },
         ],
-        "extended_fields": {
-          "entry_file": ""
+        extended_fields: {
+          entry_file: "",
         },
-        "repo_url": ""
+        repo_url: "",
       },
-      "type": "frontend"
-    }
-  ]
-}
+      type: "frontend",
+    },
+  ],
+};
 
 const componentInitState1 = {
-  name: '',
-  stack: 'web-application'
-}
+  name: "",
+  stack: "web-application",
+};
 
 const componentInitState2 = {
   cluster_id: "",
   git_config: {
-    git_org_name: '',
-    git_provider_id: '',
-  }
-}
+    git_org_name: "",
+    git_provider_id: "",
+  },
+};
 
 export const FieldsMap = {
   stack: "Stack",
   name: "Name",
   gitProvider: "Git Provider",
   clusterProvider: "Cluster Provider",
-};
+} as const;
 
-export const SelectAStackInitState = {
-  [FieldsMap.name]: "",
-  [FieldsMap.stack]: "",
+export interface SelectAStackType {
+  [FieldsMap.name]: string;
+  [FieldsMap.stack]: string;
+
 }
 
-export type SelectAStackType = typeof SelectAStackInitState;
+export const SelectAStackInitState: SelectAStackType = {
+  [FieldsMap.name]: "",
+  [FieldsMap.stack]: "",
+};
+
+export interface ProvidersType {
+  [FieldsMap.clusterProvider]: string,
+  [FieldsMap.gitProvider]: string,
+  cluster_id: string;
+  git_config: {
+    owner_name: string;
+    owner_type: string;
+    git_org_name: string;
+    git_provider_id: string;
+  };
+};
 
 export const ProvidersInitState = {
   [FieldsMap.clusterProvider]: "",
-  [FieldsMap.gitProvider]: ""
-}
+  [FieldsMap.gitProvider]: "",
+  cluster_id: "",
+  git_config: {
+    owner_name: "",
+    owner_type: "",
+    git_org_name: "",
+    git_provider_id: "",
+  },
+};
 
-export type ProvidersType = typeof ProvidersInitState;
 
 export interface BackendType {
-  isRepo: boolean,
-  framework: string,
-  repo_url: string,
-  env: Array<{ name: string, value: string }>,
-  exposePort: string,
-  path: Array<{ v: string }>,
-  rewrite: false,
-  entryFile: string,
+  isRepo: boolean;
+  framework: string;
+  repo_url: string;
+  env: Array<{ name: string; value: string }>;
+  exposePort: string;
+  path: Array<{ v: string }>;
+  rewrite: false;
+  entryFile: string;
 }
 
 export const FrameWorkInitState: BackendType = {
   isRepo: false,
-  framework: '',
-  repo_url: '',
+  framework: "",
+  repo_url: "",
   env: [],
-  exposePort: '',
-  path: [{v: '/'}],
+  exposePort: "",
+  path: [{ v: "/" }],
   rewrite: false,
-  entryFile: '',
-}
+  entryFile: "",
+};
 
 export interface MiddleWareType {
-  name: string,
-  type: string,
-  injection: Array<any>
+  name: string;
+  type: string;
+  injection: Array<any>;
 }
 
 export const InitMiddleWareItem = {
   name: "",
-  type:"",
-  injection: []
-}
+  type: "",
+  injection: [],
+};
 
-export const MiddleWaresInitState: MiddleWareType[] = [
-  InitMiddleWareItem
-]
+export const MiddleWaresInitState: MiddleWareType[] = [InitMiddleWareItem];
 
 const initData = {
   ...componentInitState1,
   ...componentInitState2,
-  service: []
+  service: [],
 };
-
 
 export default initData;
 

@@ -10,7 +10,12 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import clsx from "clsx";
 import Image from "next/image";
 
-import { ClusterProvider, createCluster } from "@/api/cluster";
+import {
+  ClusterProvider,
+  ClusterStatus,
+  createCluster,
+  getCluster,
+} from "@/api/cluster";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
 import { getClusterIcon } from "@/utils/CDN";
 import { CommonProps } from "@/utils/commonType";
@@ -27,6 +32,9 @@ import {
 import styles from "./index.module.scss";
 import { FormStateType } from "@/pages/[organization]/applications/create";
 import { FormControl, FormHelperText } from "@mui/material";
+import Spinner from "@/basicComponents/Loaders/Spinner";
+import { Message } from "@/utils/utils";
+import { cloneDeep } from "lodash-es";
 
 interface Props extends CommonProps {
   submitCb: Function;
@@ -54,8 +62,42 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     defaultValues: providersInitState,
   });
 
-  const submit = (data: ProvidersType) => {
-    props.submitCb("providers", data);
+  const submit = async (data: ProvidersType) => {
+    // Check the cluster status
+    const cluster_id = +data[FieldsMap.clusterProvider];
+    const cluster = clusterList.find((cluster) => cluster.id === cluster_id);
+    if (cluster!.status === ClusterStatus.Initializing) {
+      const res = await getCluster({
+        cluster_id: cluster_id,
+      });
+      // If the clsuter is initializing, forbid to create.
+      if (res.status === ClusterStatus.Initializing) {
+        Message.warning(
+          `The clsuter "${res.name}" is still initializing. Please wait 2 to 3 minutes.`
+        );
+        return;
+      }
+    }
+
+    // Transform data structure.
+    const gitProvider = gitProviderOrganizations.find(
+      (gitProvider) =>
+        gitProvider.git_owner_name === data[FieldsMap.gitProvider]
+    );
+
+    const providersSubmitState: ProvidersType = {
+      [FieldsMap.gitProvider]: gitProvider!.git_owner_name,
+      [FieldsMap.clusterProvider]: data[FieldsMap.clusterProvider],
+      cluster_id: data[FieldsMap.clusterProvider],
+      git_config: {
+        owner_name: gitProvider!.git_owner_name,
+        owner_type: gitProvider!.owner_type,
+        git_org_name: gitProvider!.git_owner_name,
+        git_provider_id: String(gitProvider!.git_provider_id),
+      },
+    };
+
+    props.submitCb("providers", providersSubmitState);
   };
 
   useImperativeHandle(ref, () => ({
@@ -96,8 +138,25 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     setGitProviderOrganizationsCardItems(cardItems);
   }, [gitProviderOrganizations]);
 
+  // Update initializing cluster status on time.
+  useEffect(() => {
+    const hasInitializingCluster = clusterList.some(
+      (cluster) => cluster.status === ClusterStatus.Initializing
+    );
+
+    let timer: ReturnType<typeof setTimeout>;
+    if (hasInitializingCluster) {
+      timer = setTimeout(() => {
+        getClusterList();
+        clearTimeout(timer);
+      }, 30000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [clusterList]);
+
   return (
-    <>
+    <div className={styles.layout}>
       <Controller
         name={FieldsMap.clusterProvider}
         control={control}
@@ -118,31 +177,43 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
             <ul className={styles.clusterWrap}>
               {clusterList.map((cluster) => (
                 <li
-                  key={cluster.id}
+                  key={cluster.name}
                   onClick={() => {
-                    field.onChange(cluster.id);
+                    // Cluster status must is active or initializing
+                    [ClusterStatus.Active, ClusterStatus.Initializing].includes(
+                      cluster.status
+                    ) && field.onChange(cluster.id);
                   }}
-                  className={clsx(cluster.id === +field.value && styles.chosen)}
+                  className={clsx(
+                    cluster.id === +field.value && styles.chosenCluster,
+                    ![
+                      ClusterStatus.Active,
+                      ClusterStatus.Initializing,
+                    ].includes(cluster.status) && styles.inactiveCluster
+                  )}
+                  title={cluster.status}
                 >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: 29,
-                      height: 29,
-                      marginLeft: 9,
-                    }}
-                  >
+                  <div className={styles.clusterIcon}>
                     <Image
-                      src={getClusterIcon(cluster.provider)}
+                      src={getClusterIcon(cluster.provider as ClusterProvider)}
                       alt=""
                       layout="fill"
                       objectFit="contain"
                     />
                   </div>
                   {cluster.name}
+                  {cluster.status === ClusterStatus.Initializing && (
+                    <div className={styles.spinner}>
+                      <Spinner spinnerColor="#6b6b6b" scale={"17%"} />
+                    </div>
+                  )}
                 </li>
               ))}
-              <AddCluster />
+              <AddCluster
+                addClusterSuccessCb={() => {
+                  getClusterList();
+                }}
+              />
               <AddFreeCluster />
             </ul>
             <FormHelperText>
@@ -184,11 +255,15 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
           required: "Please choose a git provider.",
         }}
       />
-    </>
+    </div>
   );
 });
 
-function AddCluster() {
+function AddCluster({
+  addClusterSuccessCb,
+}: {
+  addClusterSuccessCb: () => void;
+}) {
   const [openAddClusterDrawer, setOpenAddClusterDrawer] = useState(false);
 
   return (
@@ -213,7 +288,7 @@ function AddCluster() {
       <AddCircleOutlineIcon /> Add Cluster
       <NewClusterModal
         setModalDisplay={setOpenAddClusterDrawer}
-        // successCb={addClusterSuccessCb}
+        successCb={addClusterSuccessCb}
         modalDisplay={openAddClusterDrawer}
       />
     </li>

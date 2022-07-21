@@ -72,13 +72,18 @@ export const deleteGitProvider = (
   return http.delete(`/user/git_providers/${gitProviderId}`);
 };
 
+export enum OwnerType {
+  Org = "Org",
+  User = "User",
+}
+
 export type GitProviderOrganizations = Array<{
   created_at: number;
   created_by: number;
   created_by_name: string;
   git_owner_name: string;
   git_provider_id: number;
-  owner_type: string;
+  owner_type: OwnerType;
   provider: GitProvider;
   type: GitProviderType;
   user_id: number;

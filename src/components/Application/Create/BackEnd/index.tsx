@@ -4,7 +4,7 @@ import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/create";
-import {get, isEmpty} from "lodash-es";
+import {get, isEmpty, set} from "lodash-es";
 import {pathRule, portRule} from "@/utils/formRules";
 
 const widhtSx = {width: "250px"};
@@ -47,14 +47,13 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
 
   const {control, handleSubmit, formState: {errors},} = useForm({
     defaultValues: {
-      path: [{v: ''}],
-      env: [],
-      frontend: '',
-      reWrite: rewrite,
-      repo: '',
-      enterFile: '',
-      port: '',
-      framework: ''
+      path: path,
+      env: env,
+      rewrite: rewrite,
+      repo_url: repo_url,
+      entryFile: entryFile,
+      exposePort: exposePort,
+      framework: framework
     },
   });
 
@@ -74,6 +73,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
 
   function submit(value) {
     console.warn(value)
+    set(value, 'isRepo', isRepo);
     submitCb('backend', value)
   }
 
@@ -134,7 +134,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
             <div className={styles.label}>Repository*</div>
             <div className={styles.content}>
               <Controller
-                name={`repo`}
+                name={`repo_url`}
                 control={control}
                 render={({field}) => (
                   <Select
@@ -157,8 +157,8 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                 }}
               />
               {
-                errors.repo?.message &&
-                <div className={styles.error}>{errors.repo?.message}</div>
+                errors.repo_url?.message &&
+                <div className={styles.error}>{errors.repo_url?.message}</div>
               }
             </div>
           </div>
@@ -169,7 +169,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
             <div className={styles.label}>Enter to file*</div>
             <div className={styles.content}>
               <Controller
-                name={`enterFile`}
+                name={`entryFile`}
                 control={control}
                 render={({field}) => (
                   <TextField
@@ -182,8 +182,8 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                 rules={pathRule}
               />
               {
-                errors.enterFile?.message &&
-                <div className={styles.error}>{errors.enterFile?.message}</div>
+                errors.entryFile?.message &&
+                <div className={styles.error}>{errors.entryFile?.message}</div>
               }
             </div>
           </div>
@@ -194,7 +194,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
             <div className={styles.label}>Port*</div>
             <div className={styles.content}>
               <Controller
-                name={`port`}
+                name={`exposePort`}
                 control={control}
                 render={({field}) => (
                   <TextField
@@ -207,15 +207,15 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                 rules={portRule}
               />
               {
-                errors.port?.message &&
-                <div className={styles.error}>{errors.port?.message}</div>
+                errors.exposePort?.message &&
+                <div className={styles.error}>{errors.exposePort?.message}</div>
               }
             </div>
           </div>
         }
 
         <div className={styles.item}>
-          <div className={styles.label}>Exposure Path</div>
+          <div className={styles.label}>Exposure Path*</div>
           <div className={styles.content}>
             {fields.map((item, index) => (
               <div key={item.id} className={styles.inputItem}>
@@ -254,7 +254,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
           <div className={styles.label}>Path Rewrite</div>
           <div className={styles.content}>
             <Controller
-              name={`reWrite`}
+              name={`rewrite`}
               control={control}
               render={({field}) => (
                 <Switch value={field.value} onChange={field.onChange}/>

@@ -190,7 +190,7 @@ export interface BackendType {
 }
 
 export const BackendInitState: BackendType = {
-  isRepo: true,
+  isRepo: false,
   framework: '',
   repo_url: '',
   env: [],

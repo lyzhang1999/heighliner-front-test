@@ -40,8 +40,8 @@ export interface FormStateType {
 export default function Create(): React.ReactElement {
   const [index, setIndex] = useState<number>(3);
   const [formState, setFormState] = useState<FormStateType>({
-    backend: BackendInitState,
-    frontend: BackendInitState,
+    backend: cloneDeep(BackendInitState),
+    frontend: cloneDeep(BackendInitState),
   });
   const [repoList, setRepoList] = useState([]);
 
@@ -71,11 +71,12 @@ export default function Create(): React.ReactElement {
   }
 
   function submitCb(key: string, value: object) {
+    console.warn(value)
     setFormState({
       ...formState,
       [key]: cloneDeep(value),
     })
-    // setIndex(nextIndex);
+    setIndex(nextIndex);
   }
 
   const ref = useRef(null);

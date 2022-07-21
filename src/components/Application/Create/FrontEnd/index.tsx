@@ -4,8 +4,8 @@ import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/create";
-import {get, isEmpty, set} from "lodash-es";
-import {pathRule, portRule} from "@/utils/formRules";
+import {filter, find, get, set} from "lodash-es";
+import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 
 const widhtSx = {width: "250px"};
 
@@ -41,11 +41,11 @@ const frontItem = [
 
 const Frontend = forwardRef(function frontEnd(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
-  let {frontend} = formState;
+  let {frontend, backend} = formState;
   let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = frontend;
   let [isRepo, setIsRepo] = useState<boolean>(repo);
 
-  const {control, handleSubmit, formState: {errors},} = useForm({
+  const {control, handleSubmit, formState: {errors}, getValues} = useForm({
     defaultValues: {
       path: path,
       env: env,
@@ -72,7 +72,7 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
   }));
 
   function submit(value) {
-    console.warn(value)
+    set(value, 'isRepo', isRepo);
     submitCb('frontend', value)
   }
 
@@ -178,7 +178,7 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
                     onChange={field.onChange}
                   />
                 )}
-                rules={pathRule}
+                rules={entryPathRule}
               />
               {
                 errors.entryFile?.message &&
@@ -230,7 +230,19 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
                         onChange={field.onChange}
                       />
                     )}
-                    rules={pathRule}
+                    rules={{
+                      ...pathRule,
+                      validate: {
+                        unconformity: (value) => {
+                          if ((
+                            filter(getValues('path'), item => item.v === value).length +
+                            filter(backend.env, item => item.v === value).length
+                          ) > 1) {
+                            return "There can be same values";
+                          }
+                        }
+                      }
+                    }}
                   />
                   {
                     get(errors, `path.${index}.v.message`) &&
@@ -278,7 +290,16 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
                         onChange={field.onChange}
                       />
                     )}
-                    rules={{required: 'Please input env name'}}
+                    rules={{
+                      required: 'Please input env name',
+                      validate: {
+                        unconformity: (value) => {
+                          if (filter(getValues('env'), item => item.name === value).length > 1) {
+                            return "There can be same env key";
+                          }
+                        }
+                      }
+                    }}
                   />
                   {
                     get(errors, `env.${index}.name.message`) &&

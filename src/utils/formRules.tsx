@@ -59,3 +59,7 @@ export const portRule = {
   },
 }
 
+export const entryPathRule = {
+  required: 'Please input entry path'
+}
+

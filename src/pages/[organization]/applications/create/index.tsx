@@ -69,14 +69,15 @@ export default function Create(): React.ReactElement {
   function goIndex(i) {
     if (i === index) return;
     if (i < 1) return;
-    if (i <= 6) {
-      nextIndex = i;
-      ref?.current?.submit();
-    } else {
-      setTimeout(() => {
-        console.warn(formState)
-      }, 1000)
+    nextIndex = i;
+    ref?.current?.submit();
+    if (i === 6) {
+      setTimeout(create, 0)
     }
+  }
+
+  function create() {
+
   }
 
   function submitCb(key: string, value: object) {
@@ -105,7 +106,6 @@ export default function Create(): React.ReactElement {
     <Middlewares {...props}/>
   ]
 
-
   return (
     <Layout notStandardLayout>
       <CreateAppLayout
@@ -115,17 +115,6 @@ export default function Create(): React.ReactElement {
         }}
       >
         {mapComponent[index - 1]}
-        {/*<SelectAStack*/}
-        {/*  {...{*/}
-        {/*    name: FieldsMap.name,*/}
-        {/*    control,*/}
-        {/*  }}*/}
-        {/*/>*/}
-        {/*<Provider {*/}
-        {/*  ...{*/}
-        {/*    control*/}
-        {/*  }*/}
-        {/*} />*/}
       </CreateAppLayout>
     </Layout>
   );

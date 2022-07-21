@@ -192,6 +192,13 @@ export const SelectAStackInitState = {
 
 export type SelectAStackType = typeof SelectAStackInitState;
 
+export const ProvidersInitState = {
+  [FieldsMap.clusterProvider]: "",
+  [FieldsMap.gitProvider]: ""
+}
+
+export type ProvidersType = typeof ProvidersInitState;
+
 export interface BackendType {
   isRepo: boolean,
   framework: string,

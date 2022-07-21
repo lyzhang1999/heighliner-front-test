@@ -18,6 +18,7 @@ export interface GitProviderItem extends CreativeApiReturnField {
   git_provider_id: number;
   provider: string;
   type: string;
+  reason: string;
   user_id: number;
   status: number;
 }

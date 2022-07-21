@@ -8,23 +8,29 @@ import { Control, Controller, useForm } from "react-hook-form";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import clsx from "clsx";
+import Image from "next/image";
 
 import { ClusterProvider, createCluster } from "@/api/cluster";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
-import { FieldsMap } from "@/pages/[organization]/applications/create";
 import { getClusterIcon } from "@/utils/CDN";
 import { CommonProps } from "@/utils/commonType";
 import AddFreeClusterSVG from "/public/img/application/create/addFreeCluster.svg";
-
-import styles from "./index.module.scss";
 import { useClusterList } from "@/hooks/cluster";
 import useGitProviderOrganizations from "@/hooks/gitProvidersOrganizations";
 import NewClusterModal from "@/components/NewClusterModal";
-import Image from "next/image";
 import AddGitProvider from "@/components/AddGitProvider";
+import {
+  FieldsMap,
+  ProvidersType,
+} from "@/pages/[organization]/applications/create/util";
+
+import styles from "./index.module.scss";
+import { FormStateType } from "@/pages/[organization]/applications/create";
+import { FormControl, FormHelperText } from "@mui/material";
 
 interface Props extends CommonProps {
   submitCb: Function;
+  formState: FormStateType;
 }
 
 const Provider = forwardRef(function Provider(props: Props, ref) {
@@ -38,16 +44,18 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     setGitProviderOrganizationsCardItems,
   ] = useState<CardItems>([]);
 
-  const FormDefaultValues = {
-    [FieldsMap.clusterProvider]: "",
-    [FieldsMap.gitProvider]: "",
-  };
-  const { control, handleSubmit } = useForm({
-    defaultValues: FormDefaultValues,
+  const { providers: providersInitState } = props.formState;
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: providersInitState,
   });
 
-  const submit = (data: typeof FormDefaultValues) => {
-    props.submitCb();
+  const submit = (data: ProvidersType) => {
+    props.submitCb("providers", data);
   };
 
   useImperativeHandle(ref, () => ({
@@ -67,6 +75,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
           width: 29,
           height: 29,
         },
+        value: cluster.id,
       });
     });
     setClusterCardItems(cardItems);
@@ -81,6 +90,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
         iconSettings: {
           leftLayout: true,
         },
+        value: gitProviderOrganization.git_owner_name,
       });
     });
     setGitProviderOrganizationsCardItems(cardItems);
@@ -92,7 +102,10 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
         name={FieldsMap.clusterProvider}
         control={control}
         render={({ field }) => (
-          <div className={styles.wrapper}>
+          <FormControl
+            className={styles.wrapper}
+            error={errors[FieldsMap.clusterProvider] !== undefined}
+          >
             <h1>{FieldsMap.clusterProvider}</h1>
             {/* <CardSelect
               {...{
@@ -132,14 +145,24 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
               <AddCluster />
               <AddFreeCluster />
             </ul>
-          </div>
+            <FormHelperText>
+              {errors[FieldsMap.clusterProvider] &&
+                errors[FieldsMap.clusterProvider].message}
+            </FormHelperText>
+          </FormControl>
         )}
+        rules={{
+          required: "Please choose a cluster.",
+        }}
       />
       <Controller
         name={FieldsMap.gitProvider}
         control={control}
         render={({ field }) => (
-          <div className={styles.wrapper}>
+          <FormControl
+            className={styles.wrapper}
+            error={errors[FieldsMap.gitProvider] !== undefined}
+          >
             <h1>{FieldsMap.gitProvider}</h1>
             <CardSelect
               {...{
@@ -147,10 +170,19 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
                 control: control,
                 name: FieldsMap.clusterProvider,
                 customCardItems: [<AddGitProviderItem key="AddGitProvider" />],
+                onChange: field.onChange,
+                defaultChosenValue: providersInitState[FieldsMap.gitProvider],
               }}
             />
-          </div>
+            <FormHelperText>
+              {errors[FieldsMap.gitProvider] &&
+                errors[FieldsMap.gitProvider].message}
+            </FormHelperText>
+          </FormControl>
         )}
+        rules={{
+          required: "Please choose a git provider.",
+        }}
       />
     </>
   );
@@ -232,7 +264,7 @@ function AddGitProviderItem() {
         justifyContent: "center",
         height: "100%",
         width: "100%",
-        borderRadius: 3
+        borderRadius: 3,
       }}
       onClick={() => {
         setOpenAddGitProviderDrawer(true);

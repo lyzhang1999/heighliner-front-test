@@ -79,7 +79,6 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      {JSON.stringify(errors)}
       <div className={styles.formItem}>
         <div className={styles.label}>
           Framework*

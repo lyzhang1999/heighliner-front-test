@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {MouseEvent, useState} from "react";
 import { Drawer, Tab } from '@mui/material';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
@@ -31,8 +31,9 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
     setClusterType(n)
   }
 
-  function closeDialog() {
-    setModalDisplay(false)
+  function closeDialog(event: MouseEvent) {
+    setModalDisplay(false);
+    event.stopPropagation();
   }
 
   return (

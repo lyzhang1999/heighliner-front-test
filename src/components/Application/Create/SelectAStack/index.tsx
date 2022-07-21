@@ -1,4 +1,10 @@
-import React from "react";
+import React, {
+  forwardRef,
+  ForwardRefRenderFunction,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { Control, Controller, useForm } from "react-hook-form";
 
 import {
@@ -15,8 +21,11 @@ import { FormControl, TextField } from "@mui/material";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
 
 import styles from "./index.module.scss";
+import useStacks from "@/hooks/stacks";
 
-interface Props {}
+interface Props {
+  submitCb: Function;
+}
 
 const cardItems: CardItems = [
   {
@@ -33,13 +42,41 @@ const cardItems: CardItems = [
   },
 ];
 
-export default function SelectAStack(props: Props): React.ReactElement {
-  const { control } = useForm({
-    defaultValues: {
-      [FieldsMap.name]: "",
-      [FieldsMap.stack]: "",
-    },
+const SelectAStack = forwardRef(function SelectAStack(
+  props: Props,
+  ref
+): React.ReactElement {
+  const [stackList, getStackList] = useStacks();
+  const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
+
+  const FormDefaultValues = {
+    [FieldsMap.name]: "",
+    [FieldsMap.stack]: "",
+  };
+  const { control, handleSubmit } = useForm({
+    defaultValues: FormDefaultValues,
   });
+
+  useEffect(() => {
+    const cardItems: CardItems = [];
+    stackList.map((stack, index) => {
+      cardItems.push({
+        icon: stack.icon_urls[0],
+        name: stack.name,
+      });
+    });
+    setStackCardItems(cardItems);
+  }, [stackList]);
+
+  const submit = (data: typeof FormDefaultValues) => {
+    props.submitCb();
+  };
+
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      handleSubmit(submit)();
+    },
+  }));
 
   return (
     <div className={styles.wrapper}>
@@ -80,7 +117,7 @@ export default function SelectAStack(props: Props): React.ReactElement {
               </h1>
               <CardSelect
                 {...{
-                  cardItems,
+                  cardItems: stackCardItems,
                   control: control,
                   name: FieldsMap.stack,
                 }}
@@ -91,4 +128,6 @@ export default function SelectAStack(props: Props): React.ReactElement {
       </div>
     </div>
   );
-}
+});
+
+export default SelectAStack;

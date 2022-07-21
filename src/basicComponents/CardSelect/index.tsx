@@ -16,13 +16,13 @@ export type CardItems = Array<{
     height?: number | string;
   };
   customClick?: MouseEventHandler;
-  blueBackgroundItem: boolean;
 }>;
 
 interface Props extends CommonProps {
   cardItems: CardItems;
   control: Control;
   name: string;
+  customCardItems?: ReactElement[];
 }
 
 export default function CardSelect(props: Props): React.ReactElement {
@@ -68,6 +68,10 @@ export default function CardSelect(props: Props): React.ReactElement {
           <span className={styles.name}>{card.name}</span>
         </li>
       ))}
+      {props.customCardItems &&
+        props.customCardItems.map((customCardItem, index) => (
+          <li key={index}>{customCardItem}</li>
+        ))}
     </ul>
   );
 }

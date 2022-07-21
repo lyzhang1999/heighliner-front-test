@@ -10,10 +10,13 @@ import BackEnd from "@/components/Application/Create/BackEnd";
 import Middlewares from "@/components/Application/Create/Middlewares";
 import CreateAppLayout from "@/components/CreateAppLayout";
 import Layout from "@/components/Layout";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
+import {BackendInitState, BackendtType} from "@/pages/[organization]/applications/create/util";
+import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
+import {cloneDeep} from "lodash-es";
 
 export const FieldsMap = {
   stack: "Stack",
@@ -26,12 +29,32 @@ const DefaultFieldsValue = {
   [FieldsMap.gitProvider]: "",
 };
 
-
 type FieldsType = typeof DefaultFieldsValue;
 
+export interface FormStateType {
+  backend: BackendtType,
+  frontend: BackendtType,
+}
+
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(4);
+  const [index, setIndex] = useState<number>(3);
+  const [formState, setFormState] = useState<FormStateType>({
+    backend: BackendInitState,
+    frontend: BackendInitState,
+  });
   let nextIndex = 1;
+
+  const gitObj = {
+    owner_name: "ni9ht-org",
+    git_provider_id: 2,
+    owner_type: "Org"
+  }
+
+  useEffect(() => {
+    getGitProviderOrganizations().then(res => {
+      // console.warn(res)
+    })
+  }, [])
 
   function goIndex(i) {
     if (i === index) return;
@@ -40,17 +63,20 @@ export default function Create(): React.ReactElement {
     ref?.current?.submit();
   }
 
-  function submitCb() {
-    setIndex(nextIndex);
+  function submitCb(key: string, value: object) {
+    setFormState({
+      ...formState,
+      [key]: cloneDeep(value),
+    })
+    // setIndex(nextIndex);
   }
 
   const ref = useRef(null);
   const props = {
     ref,
-    setIndex,
-    index,
-    nextIndex,
-    submitCb
+    submitCb,
+    formState,
+    gitObj
   }
 
   const mapComponent = [

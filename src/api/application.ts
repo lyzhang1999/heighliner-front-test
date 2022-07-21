@@ -1,6 +1,6 @@
 import http from "../utils/axios";
-import { CreativeApiReturnField } from "../utils/commonType";
-import { getOriIdByContext } from "../utils/utils";
+import {CreativeApiReturnField} from "../utils/commonType";
+import {getOriIdByContext} from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -101,7 +101,7 @@ export interface getAppListReq {
 export function getApplicationList(
   params: getAppListReq = {}
 ): Promise<ApplicationObject[]> {
-  let { cluster_ids = [], owner_ids = [], stack_ids = [] } = params;
+  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
   let url = `/orgs/${getOriIdByContext()}/applications?`;
   cluster_ids.forEach((item) => {
     url += `cluster_ids=${item}&`;
@@ -213,4 +213,24 @@ export function getRepoList(appId: string): Promise<GetRepoListRes> {
 
 export function deleteApplication(appId: number): Promise<any> {
   return http.delete(`/orgs/${getOriIdByContext()}/applications/${appId}`);
+}
+
+
+interface getRepoListReq {
+  owner_name: string,
+  owner_type: string,
+  git_provider_id: number
+}
+
+interface getRepoListRes {
+
+}
+
+export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRepoListReq): Promise<getRepoListRes[]> {
+  return http.get(`/user/git_providers/${git_provider_id}/repo`, {
+    params: {
+      owner_type,
+      owner_name
+    }
+  })
 }

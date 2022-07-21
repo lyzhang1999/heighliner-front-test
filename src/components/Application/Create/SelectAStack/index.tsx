@@ -26,14 +26,14 @@ const SelectAStack = forwardRef(function SelectAStack(
 ): React.ReactElement {
   const [stackList, getStackList] = useStacks();
   const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
-  const { selectAStack } = props.formState;
+  const { selectAStack: selectAStackInitState } = props.formState;
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: selectAStack,
+    defaultValues: selectAStackInitState,
   });
 
   useEffect(() => {
@@ -136,6 +136,7 @@ const SelectAStack = forwardRef(function SelectAStack(
                 control: control,
                 name: FieldsMap.stack,
                 onChange: field.onChange,
+                defaultChosenValue: selectAStackInitState[FieldsMap.stack]
               }}
             />
             <FormHelperText>

@@ -1,4 +1,9 @@
-import React, { MouseEventHandler, ReactElement, useState } from "react";
+import React, {
+  MouseEventHandler,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
 import { Control } from "react-hook-form";
 import clsx from "clsx";
 
@@ -25,24 +30,31 @@ interface Props extends CommonProps {
   onChange: (...event: any[]) => void;
   name: string;
   customCardItems?: ReactElement[];
+  defaultChosenValue?: string;
 }
 
 export default function CardSelect(props: Props): React.ReactElement {
   const [chosen, setChosen] = useState("");
+
+  useEffect(() => {
+    if (props.defaultChosenValue) {
+      setChosen(String(props.defaultChosenValue));
+    }
+  }, [props.defaultChosenValue]);
 
   return (
     <ul className={styles.wrapper}>
       {props.cardItems.map((card) => (
         <li
           key={card.name}
-          className={clsx(card.name === chosen && styles.chosen)}
+          className={clsx(String(card.value) === chosen && styles.chosen)}
           onClick={(e) => {
             if (card.customClick) {
               card.customClick(e);
               return;
             }
             props.onChange(card.value);
-            setChosen(card.name);
+            setChosen(String(card.value));
           }}
           style={(() => {
             const style = {};

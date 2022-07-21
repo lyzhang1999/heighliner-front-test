@@ -14,7 +14,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
-import {BackendInitState, BackendType, SelectAStackInitState, SelectAStackType} from "@/pages/[organization]/applications/create/util";
+import {BackendInitState, BackendType, ProvidersInitState, ProvidersType, SelectAStackInitState, SelectAStackType} from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
 import {getTheRepoList} from "@/api/application";
@@ -22,6 +22,7 @@ import {getTheRepoList} from "@/api/application";
 
 export interface FormStateType {
   selectAStack: SelectAStackType,
+  providers: ProvidersType,
   backend: BackendType,
   frontend: BackendType,
 }
@@ -30,6 +31,7 @@ export default function Create(): React.ReactElement {
   const [index, setIndex] = useState<number>(1);
   const [formState, setFormState] = useState<FormStateType>({
     selectAStack: cloneDeep(SelectAStackInitState),
+    providers: cloneDeep(ProvidersInitState),
     backend: cloneDeep(BackendInitState),
     frontend: cloneDeep(BackendInitState),
   });

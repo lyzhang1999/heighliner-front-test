@@ -3,50 +3,45 @@ import React, {useImperativeHandle, useRef, forwardRef} from "react";
 import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
-import {omit, without} from "lodash-es";
+import {get, without} from "lodash-es";
+import {InitMiddleWareItem} from "@/pages/[organization]/applications/create/util";
 
-const IconFocusStyle = {
-  width: "115px",
-  // height: "36px",
-  marginRight: '16px'
-}
+const IconFocusStyle = {}
 
-const SelectStyle = {
-  // marginRight: '30px'
-  width: '184px'
-}
+const SelectStyle = {}
 
 export interface Props {
   submitCb: () => void
 }
 
+export const Middles = [
+  {
+    key: "postgres",
+    name: 'Postgres'
+  }
+]
+
 const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
-  const {submitCb} = props;
-  const {register, control, handleSubmit, reset, trigger, setError, setValue} = useForm({
+  const {submitCb, formState, repoList} = props;
+  let {middleWares} = formState;
+
+  const {control, handleSubmit, setValue, formState: {errors}} = useForm({
     defaultValues: {
-      test: [{lastName: 'value'}],
-      test2: [{key: '', value: '', box: ["backend"]}]
+      middle: middleWares
     },
   });
 
   const {fields, append, remove} = useFieldArray({
     control,
-    name: "test"
-  });
-
-  const {fields: fields2, append: append2, remove: remove2} = useFieldArray({
-    control,
-    name: "test2"
+    name: "middle"
   });
 
   useImperativeHandle(ref, () => ({
-    submit: () => {
-      handleSubmit(submit)()
-    }
+    submit: () => handleSubmit(submit)()
   }));
 
   function submit(value) {
-    submitCb()
+    submitCb("middleWares", value)
   }
 
   function clickFrondendAndBackend(key: string, filed: ControllerProps) {
@@ -61,13 +56,19 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
+      <div className={clsx(styles.header, styles.inputItem)}>
+        <div className={styles.left}>Name</div>
+        <div className={styles.center}>Type</div>
+        <div className={styles.line}></div>
+
+        <div className={styles.right}>Connection info injection</div>
+      </div>
       <div className={styles.item}>
-        {/*<div className={styles.label}>Env Variables::</div>*/}
-        <div className={styles.content}>
-          {fields2.map((item, index) => (
-            <div key={item.id} className={styles.inputItem}>
+        {fields.map((item, index) => (
+          <div key={item.id} className={styles.inputItem}>
+            <div className={styles.left}>
               <Controller
-                name={`test2.${index}.key`}
+                name={`middle.${index}.name`}
                 control={control}
                 render={({field}) => (
                   <TextField
@@ -75,32 +76,48 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
                     sx={IconFocusStyle}
                     value={field.value}
                     onChange={field.onChange}
+                    fullWidth
                   />
                 )}
+                rules={{required: 'Please input name'}}
               />
+              {
+                get(errors, `middle.${index}.name.message`) &&
+                <div className={styles.error}>{get(errors, `middle.${index}.name.message`)}</div>
+              }
+            </div>
+            <div className={styles.center}>
               <Controller
-                name={`test2.${index}.value`}
+                name={`middle.${index}.type`}
                 control={control}
                 render={({field}) => (
                   <Select
-                    id="demo-simple-select"
                     value={field.value}
                     onChange={field.onChange}
                     size="small"
                     sx={SelectStyle}
+                    fullWidth
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {
+                      Middles.map(item => {
+                        return <MenuItem value={item.key} key={item.key}>{item.name}</MenuItem>
+                      })
+                    }
                   </Select>
                 )}
+                rules={{required: 'Please select a middleware'}}
               />
-              <div className={styles.line}></div>
+              {
+                get(errors, `middle.${index}.type.message`) &&
+                <div className={styles.error}>{get(errors, `middle.${index}.type.message`)}</div>
+              }
+            </div>
+            <div className={styles.line}></div>
+            <div className={styles.right}>
               <Controller
-                name={`test2.${index}.box`}
+                name={`middle.${index}.injection`}
                 control={control}
                 render={({field}) => {
-                  console.warn(field);
                   let {value} = field;
                   return (
                     <div className={styles.checkbox}>
@@ -117,21 +134,28 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
                     </div>
                   )
                 }}
+                rules={{required: 'Please select injection'}}
               />
-              <img src="/img/application/editIcon.svg" alt="" onClick={() => (index)}
-                   className={styles.deleteIcon}/>
               {
-                (fields2.length > 1) &&
-                <img src="/img/application/delete.svg" alt="" onClick={() => remove2(index)}
-                     className={styles.deleteIcon}/>
+                get(errors, `middle.${index}.injection.message`, "") &&
+                <div className={styles.error}>{get(errors, `middle.${index}.injection.message`, "")}</div>
               }
+              <img src="/img/application/delete.svg" alt="" onClick={() => remove(index)}
+                   className={styles.deleteIcon}/>
             </div>
-          ))}
-          <div className={styles.add} onClick={() => append2({key: "", value: '', box: []})}>
-            <span className={styles.addIcon}>+</span>
-            <span className={styles.addDesc}>Add one</span>
+
+
+            {/*<img src="/img/application/editIcon.svg" alt="" onClick={() => (index)}*/}
+            {/*     className={styles.deleteIcon}/>*/}
+            {/*{*/}
+            {/*  (fields.length > 1) &&*/}
+
+            {/*}*/}
           </div>
-        </div>
+        ))}
+      </div>
+      <div className={styles.add} onClick={() => append(InitMiddleWareItem)}>
+        <span className={styles.addDesc}>ADD ONE</span>
       </div>
     </form>
   );

@@ -165,7 +165,7 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Enter to file*</div>
+            <div className={styles.label}>Entry file*</div>
             <div className={styles.content}>
               <Controller
                 name={`entryFile`}

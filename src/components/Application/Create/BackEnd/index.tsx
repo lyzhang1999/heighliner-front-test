@@ -4,8 +4,9 @@ import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/create";
-import {get, isEmpty, set} from "lodash-es";
+import {cloneDeep, get, isEmpty, set} from "lodash-es";
 import {pathRule, portRule} from "@/utils/formRules";
+import {InitMiddleWareItem} from "@/pages/[organization]/applications/create/util";
 
 const widhtSx = {width: "250px"};
 
@@ -72,7 +73,6 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
   }));
 
   function submit(value) {
-    console.warn(value)
     set(value, 'isRepo', isRepo);
     submitCb('backend', value)
   }
@@ -166,7 +166,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Enter to file*</div>
+            <div className={styles.label}>Entry file*</div>
             <div className={styles.content}>
               <Controller
                 name={`entryFile`}
@@ -312,7 +312,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                      className={styles.deleteIcon}/>
               </div>
             ))}
-            <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
+            <div className={styles.add} onClick={() => envAppend(cloneDeep(InitMiddleWareItem))}>
               ADD ONE
             </div>
           </div>

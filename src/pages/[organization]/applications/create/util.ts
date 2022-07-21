@@ -189,7 +189,7 @@ export interface BackendType {
   entryFile: string,
 }
 
-export const BackendInitState: BackendType = {
+export const FrameWorkInitState: BackendType = {
   isRepo: false,
   framework: '',
   repo_url: '',
@@ -199,6 +199,22 @@ export const BackendInitState: BackendType = {
   rewrite: false,
   entryFile: '',
 }
+
+export interface MiddleWareType {
+  name: string,
+  type: string,
+  injection: Array<any>
+}
+
+export const InitMiddleWareItem = {
+  name: "",
+  type:"",
+  injection: []
+}
+
+export const MiddleWaresInitState: MiddleWareType[] = [
+  InitMiddleWareItem
+]
 
 const initData = {
   ...componentInitState1,

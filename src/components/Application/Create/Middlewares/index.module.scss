@@ -1,43 +1,8 @@
 
 .item {
-  //width: 100%;
-  //display: flex;
   display: inline-block;
-
-  //.label {
-  //  width: 200px;
-  //  font-size: 15px;
-  //  font-weight: 500;
-  //  color: #000;
-  //}
-
-  //.content {
-  //  width: calc(100% - 200px);
-  //}
-
-  .add {
-    width: 200px;
-    height: 36px;
-    background: #fff;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    padding-left: 25px;
-    cursor: pointer;
-    margin-bottom: 20px;
-
-    .addIcon {
-      font-size: 15px;
-      margin-right: 5px;
-    }
-
-    .addDesc {
-      font-size: 15px;
-      color: #606479;
-    }
-  }
 }
+
 
 .inputItem {
   border-radius: 9px;
@@ -45,11 +10,28 @@
   padding: 6px 10px;
   margin-bottom: 10px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+
+  .left {
+    width: 120px;
+    margin-right: 20px;
+  }
+
+  .center {
+    width: 150px;
+  }
+
+  .right {
+    width: 200px;
+    position: relative;
+  }
 
   .deleteIcon {
     cursor: pointer;
     margin-left: 10px;
+    position: absolute;
+    top: 10px;
+    right: 0px;
   }
 
   .line {
@@ -62,6 +44,8 @@
 
   .checkbox {
     display: flex;
+    height: 40px;
+    align-items: center;
 
     .checkItem {
       border-radius: 9px;
@@ -92,3 +76,34 @@
     }
   }
 }
+
+.header {
+  background-color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  height: 30px;
+
+  .line {
+    background-color: #fff;
+  }
+}
+
+.error {
+  color: #F85056;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.add {
+  border-radius: 4px;
+  background-color: rgba(155, 172, 185, 0.5);
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #0a1a24;
+  cursor: pointer;
+}
+
+

@@ -14,7 +14,12 @@ import React, {useEffect, useRef, useState} from "react";
 
 import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
-import {BackendInitState, BackendType} from "@/pages/[organization]/applications/create/util";
+import {
+  FrameWorkInitState,
+  BackendType,
+  MiddleWaresInitState,
+  MiddleWareType
+} from "@/pages/[organization]/applications/create/util";
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
 import {getTheRepoList} from "@/api/application";
@@ -35,13 +40,15 @@ type FieldsType = typeof DefaultFieldsValue;
 export interface FormStateType {
   backend: BackendType,
   frontend: BackendType,
+  middleWares: MiddleWareType[],
 }
 
 export default function Create(): React.ReactElement {
-  const [index, setIndex] = useState<number>(3);
+  const [index, setIndex] = useState<number>(5);
   const [formState, setFormState] = useState<FormStateType>({
-    backend: cloneDeep(BackendInitState),
-    frontend: cloneDeep(BackendInitState),
+    backend: cloneDeep(FrameWorkInitState),
+    frontend: cloneDeep(FrameWorkInitState),
+    middleWares: cloneDeep(MiddleWaresInitState)
   });
   const [repoList, setRepoList] = useState([]);
 
@@ -65,9 +72,15 @@ export default function Create(): React.ReactElement {
 
   function goIndex(i) {
     if (i === index) return;
-    if ((i > 5) || (i < 1)) return;
-    nextIndex = i;
-    ref?.current?.submit();
+    if (i < 1) return;
+    if (i <= 6) {
+      nextIndex = i;
+      ref?.current?.submit();
+    } else {
+      setTimeout(() => {
+        console.warn(formState)
+      }, 1000)
+    }
   }
 
   function submitCb(key: string, value: object) {

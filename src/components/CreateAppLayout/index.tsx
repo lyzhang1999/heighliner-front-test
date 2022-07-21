@@ -42,10 +42,13 @@ export default function CreateAppLayout({children, index, goIndex}: Props) {
             <Button
               variant="contained"
               onClick={() => goIndex(index + 1)}
-              sx={(index === 5) ? {cursor: "not-allowed"} : {}}
+              // sx={(index === 5) ? {cursor: "not-allowed"} : {}}
             >
-              Next
+              {
+                index === 5 ? "Submit" : "Next"
+              }
             </Button>
+
           </div>
         </div>
         <div className={styles.right}>

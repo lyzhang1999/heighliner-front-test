@@ -4,7 +4,7 @@ import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/create";
-import {cloneDeep, get, set} from "lodash-es";
+import {cloneDeep, get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 
 const widhtSx = {width: "250px"};
@@ -20,12 +20,13 @@ export interface Props {
   formState: FormStateType,
 }
 
-const frontItem = [
+export const backItem = [
   {
     img: "/img/application/gin.svg",
     name: 'Gin',
     key: "gin",
-    version: "1.7.7"
+    version: "1.7.7",
+    language: 'golang'
   },
   // {
   //   img: "/img/application/spring.svg",
@@ -89,7 +90,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
             render={({field}) => (
               <div className={styles.selectWrapper}>
                 {
-                  frontItem.map(i => {
+                  backItem.map(i => {
                     return (
                       <div key={i.name} className={clsx(styles.selectItem, (field.value === i.key) && styles.selected)}
                            onClick={() => {
@@ -236,7 +237,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                         unconformity: (value) => {
                           if ((
                             filter(getValues('path'), item => item.v === value).length +
-                            filter(backend.env, item => item.v === value).length
+                            filter(backend.path, item => item.v === value).length
                           ) > 1) {
                             return "There can be same values";
                           }

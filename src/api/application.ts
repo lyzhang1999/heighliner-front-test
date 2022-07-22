@@ -234,3 +234,8 @@ export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRep
     }
   })
 }
+
+
+export function createApp(body): Promise<any>{
+  return http.post(`/orgs/${getOriIdByContext()}/applications`, body)
+}

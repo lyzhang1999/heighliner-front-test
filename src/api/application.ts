@@ -216,14 +216,17 @@ export function deleteApplication(appId: number): Promise<any> {
 }
 
 
-interface getRepoListReq {
+export interface getRepoListReq {
   owner_name: string,
   owner_type: string,
   git_provider_id: number
 }
 
-interface getRepoListRes {
-
+export interface getRepoListRes {
+  language: string,
+  provider: string,
+  repo_name: string,
+  url: string,
 }
 
 export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRepoListReq): Promise<getRepoListRes[]> {
@@ -312,6 +315,6 @@ export interface EnvList {
   setting: Setting;
 }
 
-export function getEnvs(appId: string): Promise<EnvList[]>{
+export function getEnvs(appId: string): Promise<EnvList[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
 }

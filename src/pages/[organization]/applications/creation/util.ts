@@ -216,7 +216,7 @@ export const ProvidersInitState = {
 };
 
 
-export interface BackendType {
+export interface FrameworkType {
   isRepo: boolean;
   framework: string;
   repo_url: string;
@@ -227,7 +227,7 @@ export interface BackendType {
   entryFile: string;
 }
 
-export const FrameWorkInitState: BackendType = {
+export const FrameWorkInitState: FrameworkType = {
   isRepo: false,
   framework: "",
   repo_url: "",

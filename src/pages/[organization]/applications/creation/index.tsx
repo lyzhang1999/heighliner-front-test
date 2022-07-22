@@ -9,7 +9,7 @@ import React, {useRef, useState} from "react";
 import Provider from "@/components/Application/Create/Provider";
 import {
   FrameWorkInitState,
-  BackendType,
+  FrameworkType,
   MiddleWaresInitState,
   MiddleWareType,
   SelectAStackType,
@@ -18,15 +18,15 @@ import {
   ProvidersInitState, getParams
 } from "@/pages/[organization]/applications/creation/util";
 import {cloneDeep} from "lodash-es";
-import {createApp, getTheRepoList} from "@/api/application";
+import {createApp, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
 import {getUrlEncodeName, Message} from "@/utils/utils";
 import {useRouter} from "next/router";
 
 export interface FormStateType {
   selectAStack: SelectAStackType,
   providers: ProvidersType,
-  backend: BackendType,
-  frontend: BackendType,
+  backend: FrameworkType,
+  frontend: FrameworkType,
   middleWares: MiddleWareType[],
 }
 
@@ -40,7 +40,7 @@ export default function Create(): React.ReactElement {
     frontend: cloneDeep(FrameWorkInitState),
     middleWares: cloneDeep(MiddleWaresInitState)
   });
-  const [repoList, setRepoList] = useState([]);
+  const [repoList, setRepoList] = useState<getRepoListRes[]>([]);
 
   let nextIndex = 1;
 
@@ -50,7 +50,7 @@ export default function Create(): React.ReactElement {
     owner_type: "Org"
   }
 
-  function getRepoList(body) {
+  function getRepoList(body: getRepoListReq) {
     getTheRepoList(body).then(res => {
       setRepoList(res);
     })

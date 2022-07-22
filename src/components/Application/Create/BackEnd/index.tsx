@@ -1,11 +1,13 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React, {useImperativeHandle, useRef, forwardRef, useEffect, useState} from "react";
+import React, {useImperativeHandle, forwardRef, useState} from "react";
 import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
-import {cloneDeep, get, set, filter} from "lodash-es";
+import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
+import {getRepoListRes} from "@/api/application";
+import {FrameworkType} from "@/pages/[organization]/applications/creation/util";
 
 const widhtSx = {width: "250px"};
 
@@ -18,6 +20,7 @@ export const IconFocusStyle = {
 export interface Props {
   submitCb: (key: string, value: object) => void,
   formState: FormStateType,
+  repoList: getRepoListRes[]
 }
 
 export const backItem = [
@@ -72,7 +75,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
     submit: () => handleSubmit(submit)()
   }));
 
-  function submit(value) {
+  function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);
     submitCb('backend', value)
   }

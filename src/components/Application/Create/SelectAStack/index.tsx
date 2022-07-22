@@ -5,14 +5,18 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { Control, Controller, useForm } from "react-hook-form";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import Image from "next/image";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 import { FormControl, FormHelperText, TextField } from "@mui/material";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
 import { FormStateType } from "@/pages/[organization]/applications/create";
 import useStacks from "@/hooks/stacks";
-import { FieldsMap, SelectAStackType } from "@/pages/[organization]/applications/create/util";
+import {
+  FieldsMap,
+  SelectAStackType,
+} from "@/pages/[organization]/applications/create/util";
 
 import styles from "./index.module.scss";
 interface Props {
@@ -28,12 +32,16 @@ const SelectAStack = forwardRef(function SelectAStack(
   const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
   const { selectAStack: selectAStackInitState } = props.formState;
 
+  const DefaultFormValue: FieldValues = {
+    [FieldsMap.name]: selectAStackInitState[FieldsMap.name],
+    [FieldsMap.stack]: selectAStackInitState[FieldsMap.stack],
+  };
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: selectAStackInitState,
+    defaultValues: DefaultFormValue,
   });
 
   useEffect(() => {
@@ -48,7 +56,7 @@ const SelectAStack = forwardRef(function SelectAStack(
     setStackCardItems(cardItems);
   }, [stackList]);
 
-  const submit = (data: SelectAStackType) => {
+  const submit = (data: typeof DefaultFormValue) => {
     props.submitCb("selectAStack", data);
   };
 
@@ -78,20 +86,51 @@ const SelectAStack = forwardRef(function SelectAStack(
               sx={{
                 boxSizing: "border-box",
                 fontSize: 15,
-                "& .MuiOutlinedInput-input.MuiInputBase-input": {
-                  boxSizing: "inherit",
-                  height: 36,
-                  paddingLeft: "27px",
-                },
-                "& .MuiOutlinedInput-input.MuiInputBase-input, & .MuiOutlinedInput-notchedOutline":
-                  {
+                "& .MuiOutlinedInput-root.MuiInputBase-root": {
+                  paddingLeft: 0,
+                  ".MuiSvgIcon-root": {
+                    display: "none",
+                  },
+                  ".MuiOutlinedInput-input.MuiInputBase-input": {
+                    width: 204,
+                    boxSizing: "inherit",
+                    height: 36,
+                    paddingLeft: "26px",
+                  },
+                  ".MuiOutlinedInput-notchedOutline": {
                     width: 204,
                   },
+                  "&.Mui-error": {
+                    paddingLeft: "19px",
+                    ".MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#f56c6c",
+                    },
+                    ".MuiSvgIcon-root": {
+                      display: "block",
+                    },
+                    ".MuiOutlinedInput-input.MuiInputBase-input": {
+                      paddingLeft: "9px",
+                    },
+                  },
+                },
+              }}
+              error={errors[FieldsMap.name] !== undefined}
+              // helperText={errors[FieldsMap.name] && errors[FieldsMap.name].message}
+              InputProps={{
+                startAdornment: (
+                  <ErrorOutlineIcon
+                    sx={{
+                      color: "#ff5252",
+                    }}
+                    fontSize="small"
+                  />
+                ),
               }}
             />
             <FormHelperText
               style={{
                 gridColumn: "2 / 3",
+                color: "#F85056",
               }}
             >
               {errors[FieldsMap.name] && errors[FieldsMap.name].message}
@@ -136,7 +175,7 @@ const SelectAStack = forwardRef(function SelectAStack(
                 control: control,
                 name: FieldsMap.stack,
                 onChange: field.onChange,
-                defaultChosenValue: selectAStackInitState[FieldsMap.stack]
+                defaultChosenValue: selectAStackInitState[FieldsMap.stack],
               }}
             />
             <FormHelperText>

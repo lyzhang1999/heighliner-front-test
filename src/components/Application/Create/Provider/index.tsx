@@ -231,7 +231,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
             </ul>
             <FormHelperText>
               {errors[FieldsMap.clusterProvider] &&
-                errors[FieldsMap.clusterProvider]!.message}
+                errors[FieldsMap.clusterProvider].message}
             </FormHelperText>
           </FormControl>
         )}
@@ -267,7 +267,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
             />
             <FormHelperText>
               {errors[FieldsMap.gitProvider] &&
-                errors[FieldsMap.gitProvider]!.message}
+                errors[FieldsMap.gitProvider].message}
             </FormHelperText>
           </FormControl>
         )}

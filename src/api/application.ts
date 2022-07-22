@@ -235,7 +235,12 @@ export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRep
   })
 }
 
+interface createAppRes {
+  application_env_id: number
+  application_id: number
+  application_release_id: number
+}
 
-export function createApp(body): Promise<any>{
+export function createApp(body): Promise<createAppRes> {
   return http.post(`/orgs/${getOriIdByContext()}/applications`, body)
 }

@@ -5,13 +5,15 @@ import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {get, without} from "lodash-es";
 import {InitMiddleWareItem} from "@/pages/[organization]/applications/create/util";
+import {FormStateType} from "@/pages/[organization]/applications/create";
 
 const IconFocusStyle = {}
 
 const SelectStyle = {}
 
 export interface Props {
-  submitCb: () => void
+  submitCb: (key: string, value: object) => void,
+  formState: FormStateType,
 }
 
 export const Middles = [
@@ -41,7 +43,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
   }));
 
   function submit(value) {
-    submitCb("middleWares", value)
+    submitCb("middleWares", value.middle)
   }
 
   function clickFrondendAndBackend(key: string, filed: ControllerProps) {
@@ -51,6 +53,7 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
     } else {
       value.push(key)
     }
+    console.warn(name, value)
     setValue(name, value);
   }
 
@@ -143,8 +146,6 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
               <img src="/img/application/delete.svg" alt="" onClick={() => remove(index)}
                    className={styles.deleteIcon}/>
             </div>
-
-
             {/*<img src="/img/application/editIcon.svg" alt="" onClick={() => (index)}*/}
             {/*     className={styles.deleteIcon}/>*/}
             {/*{*/}

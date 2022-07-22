@@ -1,4 +1,4 @@
-import backEnd, {backItem} from "@/components/Application/Create/BackEnd";
+import {backItem} from "@/components/Application/Create/BackEnd";
 import {find, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
 
@@ -250,7 +250,7 @@ export const InitMiddleWareItem = {
   injection: [],
 };
 
-export const MiddleWaresInitState: MiddleWareType[] = [InitMiddleWareItem];
+export const MiddleWaresInitState: MiddleWareType[] = [];
 
 const initData = {
   ...componentInitState1,
@@ -261,7 +261,7 @@ const initData = {
 export default initData;
 
 
-function getService(key, value, item) {
+function getService(key, value, item, repoList, appName) {
   let {
     isRepo,
     framework,
@@ -272,7 +272,21 @@ function getService(key, value, item) {
     rewrite,
     entryFile,
   } = value;
-  let thisItem = find(item, {key: framework})
+  let thisItem = find(item, {key: framework});
+  let name = ''
+
+  if (isRepo) {
+    if (key === 'backend') {
+      exposePort = 8000;
+    } else if (key === 'frontend') {
+      exposePort = 80;
+    }
+    let thisRepo = find(repoList, {url: repo_url});
+    name = thisRepo.repo_name;
+  } else {
+    name = key + '-' + appName;
+  }
+
 
   let obj = {
     framework: {
@@ -283,8 +297,8 @@ function getService(key, value, item) {
       name: thisItem.language,
       version: thisItem.version,
     },
-    name: "",
-    scaffold: isRepo,
+    name,
+    scaffold: !isRepo,
     setting: {
       env: env,
       expose: [
@@ -292,7 +306,7 @@ function getService(key, value, item) {
           paths: map(path, i => {
             return {path: i.v}
           }),
-          port: exposePort,
+          port: Number(exposePort),
           rewrite: rewrite,
         },
       ],
@@ -307,28 +321,39 @@ function getService(key, value, item) {
 }
 
 
-export function getParams(formState) {
+export function getParams(formState, repoList) {
   let {selectAStack, providers, backend, frontend, middleWares} = formState;
   let {Name, Stack} = selectAStack;
-  let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}} = providers;
+  let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}, cluster_id} = providers;
+  const service = [
+    getService('backend', backend, backItem, repoList, Name),
+    getService('frontend', frontend, frontItem, repoList, Name)
+  ]
   const body = {
     name: Name,
     stack: Stack,
+    cluster_id,
     git_config: {
       git_org_name,
-      git_provider_id,
+      git_provider_id: Number(git_provider_id),
     },
-    service: [
-      getService('backend', backend, backItem),
-      getService('frontedn', frontend, frontItem)],
-    middleware: map(middleWares, i => {
+    service: [],
+    middleware: middleWares.map(i => {
       let {
         name,
         type,
         injection,
       } = i;
+      let nameArr = injection.map((item) => {
+        if (item === 'backend') {
+          return service[0].name;
+        }
+        if (item === 'frontend') {
+          return service[1].name;
+        }
+      })
       return {
-        Service: injection,
+        service: nameArr,
         name: name,
         password: "admin",
         setting: {
@@ -339,6 +364,5 @@ export function getParams(formState) {
       }
     })
   }
-  console.warn(body)
   return body;
 }

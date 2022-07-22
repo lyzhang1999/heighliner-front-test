@@ -1,9 +1,3 @@
-/**
- * New Application Create page.
- */
-
-import {useForm} from "react-hook-form";
-
 import SelectAStack from "@/components/Application/Create/SelectAStack";
 import FrontEnd from "@/components/Application/Create/FrontEnd";
 import BackEnd from "@/components/Application/Create/BackEnd";
@@ -12,7 +6,6 @@ import CreateAppLayout from "@/components/CreateAppLayout";
 import Layout from "@/components/Layout";
 import React, {useEffect, useRef, useState} from "react";
 
-import styles from "./index.module.scss";
 import Provider from "@/components/Application/Create/Provider";
 import {
   FrameWorkInitState,
@@ -27,6 +20,8 @@ import {
 import {getGitProviderList, getGitProviderOrganizations} from "@/api/gitProviders";
 import {cloneDeep} from "lodash-es";
 import {createApp, getTheRepoList} from "@/api/application";
+import {getUrlEncodeName, Message} from "@/utils/utils";
+import {useRouter} from "next/router";
 
 
 export interface FormStateType {
@@ -38,6 +33,7 @@ export interface FormStateType {
 }
 
 export default function Create(): React.ReactElement {
+  const router = useRouter();
   const [index, setIndex] = useState<number>(1);
   const [formState, setFormState] = useState<FormStateType>({
     selectAStack: cloneDeep(SelectAStackInitState),
@@ -65,18 +61,24 @@ export default function Create(): React.ReactElement {
   function goIndex(i) {
     if (i === index) return;
     if (i < 1) return;
-    nextIndex = i;
     ref?.current?.submit();
-    if (i === 6) {
-      setTimeout(create, 0)
-    }
+    nextIndex = i;
   }
 
-  function create() {
-    let body = getParams(formState);
+  function create(value) {
+    let body = getParams(value, repoList);
     createApp(body).then(res => {
-      console.warn(res)
+      goDashboard(res)
     })
+  }
+
+  function goDashboard(res) {
+    let {
+      application_id,
+      application_release_id
+    } = res
+    Message.success('Creat Success');
+    router.replace(`/${getUrlEncodeName()}/applications/creating?app_id=${application_id}&release_id=${application_release_id}`)
   }
 
   function submitCb(key: string, value: object) {
@@ -89,7 +91,14 @@ export default function Create(): React.ReactElement {
       ...formState,
       [key]: cloneDeep(value),
     })
-    setIndex(nextIndex);
+    if (nextIndex === 6) {
+      create({
+        ...formState,
+        [key]: cloneDeep(value),
+      })
+    } else {
+      setIndex(nextIndex);
+    }
   }
 
   const ref = useRef(null);

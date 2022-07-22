@@ -306,7 +306,7 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     } else if (key === 'frontend') {
       port = 80;
     }
-    name = key + '-' + appName;
+    name = appName + '-' + key;
   }
 
   let obj = {

@@ -244,7 +244,7 @@ interface createAppRes {
   application_release_id: number
 }
 
-export function createApp(body): Promise<createAppRes> {
+export function createApp(body: any): Promise<createAppRes> {
   return http.post(`/orgs/${getOriIdByContext()}/applications`, body)
 }
 
@@ -317,4 +317,12 @@ export interface EnvList {
 
 export function getEnvs(appId: string): Promise<EnvList[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
+}
+
+export interface AppRepoRes{
+
+}
+
+export function getApplicationRepos(appid: string): Promise<AppRepoRes[]>{
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`)
 }

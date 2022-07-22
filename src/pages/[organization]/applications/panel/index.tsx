@@ -7,7 +7,7 @@ import Canvas from "@/pages/[organization]/applications/panel/canvas";
 import EnvList, {itemClass} from "@/components/Panel/EnvList";
 import {reduce} from "lodash-es";
 import {getQuery} from "@/utils/utils";
-import {getEnvs} from "@/api/application";
+import {AppRepoRes, getApplicationRepos, getEnvs} from "@/api/application";
 
 // http://localhost/zhangze-294c2/applications/panel?app_id=6&release_id=6
 
@@ -16,12 +16,17 @@ export default function Newpanel() {
   let appId = getQuery("app_id")
 
   const [envlist, setEnvList] = useState([]);
+  const [repoList, setRepoList] = useState<AppRepoRes[]>([]);
+
   useEffect(() => {
     getEnvs(appId).then(res => {
       setEnvList(res);
       setTimeout(() => {
         getPosition()
       }, 0)
+    })
+    getApplicationRepos(appId).then(res => {
+      setRepoList(res)
     })
   }, [])
 
@@ -48,10 +53,15 @@ export default function Newpanel() {
       <div className={styles.wrapper}>
         {/*<div className={styles.left}>*/}
         <Canvas arrList={arrList}/>
-        <EnvList spreadCb={spreadCb} envlist={envlist}/>
+        <EnvList
+          {...{
+            spreadCb,
+            envlist
+          }}
+        />
         {/*</div>*/}
         {/*<div className={styles.right}>*/}
-        {/*<RepoList/>*/}
+        <RepoList {...{repoList}}/>
         {/*</div>*/}
       </div>
     </Layout>

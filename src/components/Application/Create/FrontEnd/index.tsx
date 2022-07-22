@@ -6,6 +6,7 @@ import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {filter, find, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
+import {getRepoListRes} from "@/api/application";
 
 const widhtSx = {width: "250px"};
 
@@ -18,6 +19,7 @@ export const IconFocusStyle = {
 export interface Props {
   submitCb: (key: string, value: object) => void,
   formState: FormStateType,
+  repoList: getRepoListRes[]
 }
 
 export const frontItem = [
@@ -29,7 +31,7 @@ export const frontItem = [
   {
     img: "/img/application/next.svg",
     name: 'Next.js',
-    key: "next",
+    key: "nextjs",
     version: "1.7.7",
     language: 'typescript'
   },

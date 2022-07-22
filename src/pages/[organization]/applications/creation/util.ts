@@ -276,14 +276,16 @@ function getService(key, value, item, repoList, appName) {
   let name = ''
 
   if (isRepo) {
+    let thisRepo = find(repoList, {url: repo_url});
+    name = thisRepo.repo_name;
+  } else {
+    entryFile = '';
+    repo_url = '';
     if (key === 'backend') {
       exposePort = 8000;
     } else if (key === 'frontend') {
       exposePort = 80;
     }
-    let thisRepo = find(repoList, {url: repo_url});
-    name = thisRepo.repo_name;
-  } else {
     name = key + '-' + appName;
   }
 
@@ -337,7 +339,7 @@ export function getParams(formState, repoList) {
       git_org_name,
       git_provider_id: Number(git_provider_id),
     },
-    service: [],
+    service,
     middleware: middleWares.map(i => {
       let {
         name,

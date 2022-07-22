@@ -185,7 +185,6 @@ export const FieldsMap = {
 export interface SelectAStackType {
   [FieldsMap.name]: string;
   [FieldsMap.stack]: string;
-
 }
 
 export const SelectAStackInitState: SelectAStackType = {

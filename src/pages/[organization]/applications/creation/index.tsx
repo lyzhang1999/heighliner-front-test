@@ -15,7 +15,7 @@ import {
   SelectAStackType,
   SelectAStackInitState,
   ProvidersType,
-  ProvidersInitState, getParams
+  ProvidersInitState, getParams, BackendFrameWorkInitState, FrontendFrameWorkInitState
 } from "@/components/Application/Create/util";
 import {cloneDeep} from "lodash-es";
 import {createApp, createAppRes, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
@@ -36,8 +36,8 @@ export default function Create(): React.ReactElement {
   const [formState, setFormState] = useState<FormStateType>({
     selectAStack: cloneDeep(SelectAStackInitState),
     providers: cloneDeep(ProvidersInitState),
-    backend: cloneDeep(FrameWorkInitState),
-    frontend: cloneDeep(FrameWorkInitState),
+    backend: cloneDeep(BackendFrameWorkInitState),
+    frontend: cloneDeep(FrontendFrameWorkInitState),
     middleWares: cloneDeep(MiddleWaresInitState)
   });
   const [repoList, setRepoList] = useState<getRepoListRes[]>([]);

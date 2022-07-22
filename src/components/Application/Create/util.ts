@@ -225,17 +225,28 @@ export interface FrameworkType {
   env: Array<{ name: string; value: string }>;
   exposePort: string;
   path: Array<{ v: string }>;
-  rewrite: false;
+  rewrite: boolean;
   entryFile: string;
 }
 
-export const FrameWorkInitState: FrameworkType = {
+export const BackendFrameWorkInitState: FrameworkType = {
   isRepo: false,
   framework: "",
   repo_url: "",
   env: [],
   exposePort: "",
-  path: [{v: ""}],
+  path: [{v: "/api"}],
+  rewrite: true,
+  entryFile: "",
+};
+
+export const FrontendFrameWorkInitState: FrameworkType = {
+  isRepo: false,
+  framework: "",
+  repo_url: "",
+  env: [],
+  exposePort: "",
+  path: [{v: "/"}],
   rewrite: false,
   entryFile: "",
 };

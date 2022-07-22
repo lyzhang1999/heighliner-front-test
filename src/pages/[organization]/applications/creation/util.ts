@@ -1,6 +1,8 @@
-import backEnd, {backItem} from "@/components/Application/Create/BackEnd";
-import {find, map} from "lodash-es";
+import {backItem} from "@/components/Application/Create/BackEnd";
+import {find, get, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
+import {FormStateType} from "@/pages/[organization]/applications/creation/index";
+import {getRepoListRes} from "@/api/application";
 
 export interface Git_config {
   git_org_name: string;
@@ -215,7 +217,7 @@ export const ProvidersInitState = {
 };
 
 
-export interface BackendType {
+export interface FrameworkType {
   isRepo: boolean;
   framework: string;
   repo_url: string;
@@ -226,7 +228,7 @@ export interface BackendType {
   entryFile: string;
 }
 
-export const FrameWorkInitState: BackendType = {
+export const FrameWorkInitState: FrameworkType = {
   isRepo: false,
   framework: "",
   repo_url: "",
@@ -249,7 +251,7 @@ export const InitMiddleWareItem = {
   injection: [],
 };
 
-export const MiddleWaresInitState: MiddleWareType[] = [InitMiddleWareItem];
+export const MiddleWaresInitState: MiddleWareType[] = [];
 
 const initData = {
   ...componentInitState1,
@@ -259,8 +261,15 @@ const initData = {
 
 export default initData;
 
+export interface FrameItemType {
+  img: string,
+  name: string,
+  key: string,
+  version: string,
+  language: string
+}
 
-function getService(key, value, item) {
+function getService(key: string, value: FrameworkType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string) {
   let {
     isRepo,
     framework,
@@ -271,19 +280,34 @@ function getService(key, value, item) {
     rewrite,
     entryFile,
   } = value;
-  let thisItem = find(item, {key: framework})
+  let thisItem = find(frameList, {key: framework});
+  let name = '';
+  let port = Number(exposePort);
+  if (isRepo) {
+    let thisRepo = find(repoList, {url: repo_url});
+    name = get(thisRepo, 'repo_name', '');
+  } else {
+    entryFile = '';
+    repo_url = '';
+    if (key === 'backend') {
+      port = 8000;
+    } else if (key === 'frontend') {
+      port = 80;
+    }
+    name = key + '-' + appName;
+  }
 
   let obj = {
     framework: {
       name: framework,
-      version: thisItem.version,
+      version: get(thisItem, 'version', ''),
     },
     language: {
-      name: thisItem.language,
-      version: thisItem.version,
+      name: get(thisItem, 'language', ''),
+      version: get(thisItem, 'version', ''),
     },
-    name: "",
-    scaffold: isRepo,
+    name,
+    scaffold: !isRepo,
     setting: {
       env: env,
       expose: [
@@ -291,7 +315,7 @@ function getService(key, value, item) {
           paths: map(path, i => {
             return {path: i.v}
           }),
-          port: exposePort,
+          port: port,
           rewrite: rewrite,
         },
       ],
@@ -305,29 +329,39 @@ function getService(key, value, item) {
   return obj;
 }
 
-
-export function getParams(formState) {
+export function getParams(formState: FormStateType, repoList: getRepoListRes[]) {
   let {selectAStack, providers, backend, frontend, middleWares} = formState;
   let {Name, Stack} = selectAStack;
-  let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}} = providers;
+  let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}, cluster_id} = providers;
+  const service = [
+    getService('backend', backend, backItem, repoList, Name),
+    getService('frontend', frontend, frontItem, repoList, Name)
+  ]
   const body = {
     name: Name,
     stack: Stack,
+    cluster_id,
     git_config: {
       git_org_name,
-      git_provider_id,
+      git_provider_id: Number(git_provider_id),
     },
-    service: [
-      getService('backend', backend, backItem),
-      getService('frontedn', frontend, frontItem)],
-    middleware: map(middleWares, i => {
+    service,
+    middleware: middleWares.map(i => {
       let {
         name,
         type,
         injection,
       } = i;
+      let nameArr = injection.map((item: string) => {
+        if (item === 'backend') {
+          return service[0].name;
+        }
+        if (item === 'frontend') {
+          return service[1].name;
+        }
+      })
       return {
-        Service: injection,
+        service: nameArr,
         name: name,
         password: "admin",
         setting: {
@@ -338,6 +372,5 @@ export function getParams(formState) {
       }
     })
   }
-  console.warn(body)
   return body;
 }

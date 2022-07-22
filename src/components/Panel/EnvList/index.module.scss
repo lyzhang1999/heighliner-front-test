@@ -2,6 +2,7 @@
 
 .wrapper {
   .item {
+    min-width: 500px;
     padding: 8px 10px 8px 8px;
     border-radius: 8px;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
@@ -11,8 +12,6 @@
     position: relative;
     margin: 50px 0px;
     transition: all 0.3s linear;
-    //height: 145px;
-    //overflow: hidden;
 
     .prevewWrapper {
       position: absolute;
@@ -99,6 +98,8 @@
         background-color: #60e3ac;
         border-radius: 50%;
         margin-right: 5px;
+        margin-top: 2px;
+        vertical-align: center;
       }
 
       .statusValue {

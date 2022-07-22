@@ -7,6 +7,7 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {filter, find, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
+import {FrameItemType} from "@/pages/[organization]/applications/creation/util";
 
 const widhtSx = {width: "250px"};
 
@@ -22,7 +23,7 @@ export interface Props {
   repoList: getRepoListRes[]
 }
 
-export const frontItem = [
+export const frontItem: FrameItemType[] = [
   // {
   //   img: "/img/application/vue.svg",
   //   name: 'Vue.js',

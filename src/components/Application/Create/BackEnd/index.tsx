@@ -7,7 +7,7 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameworkType} from "@/pages/[organization]/applications/creation/util";
+import {FrameItemType, FrameworkType} from "@/pages/[organization]/applications/creation/util";
 
 const widhtSx = {width: "250px"};
 
@@ -23,7 +23,7 @@ export interface Props {
   repoList: getRepoListRes[]
 }
 
-export const backItem = [
+export const backItem: FrameItemType[] = [
   {
     img: "/img/application/gin.svg",
     name: 'Gin',

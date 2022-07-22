@@ -1,6 +1,8 @@
 import {backItem} from "@/components/Application/Create/BackEnd";
-import {find, map} from "lodash-es";
+import {find, get, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
+import {FormStateType} from "@/pages/[organization]/applications/creation/index";
+import {getRepoListRes} from "@/api/application";
 
 export interface Git_config {
   git_org_name: string;
@@ -260,8 +262,15 @@ const initData = {
 
 export default initData;
 
+export interface FrameItemType {
+  img: string,
+  name: string,
+  key: string,
+  version: string,
+  language: string
+}
 
-function getService(key, value, item, repoList, appName) {
+function getService(key: string, value: FrameworkType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string) {
   let {
     isRepo,
     framework,
@@ -272,32 +281,31 @@ function getService(key, value, item, repoList, appName) {
     rewrite,
     entryFile,
   } = value;
-  let thisItem = find(item, {key: framework});
-  let name = ''
-
+  let thisItem = find(frameList, {key: framework});
+  let name = '';
+  let port = Number(exposePort);
   if (isRepo) {
     let thisRepo = find(repoList, {url: repo_url});
-    name = thisRepo.repo_name;
+    name = get(thisRepo, 'repo_name', '');
   } else {
     entryFile = '';
     repo_url = '';
     if (key === 'backend') {
-      exposePort = 8000;
+      port = 8000;
     } else if (key === 'frontend') {
-      exposePort = 80;
+      port = 80;
     }
     name = key + '-' + appName;
   }
 
-
   let obj = {
     framework: {
       name: framework,
-      version: thisItem.version,
+      version: get(thisItem, 'version', ''),
     },
     language: {
-      name: thisItem.language,
-      version: thisItem.version,
+      name: get(thisItem, 'language', ''),
+      version: get(thisItem, 'version', ''),
     },
     name,
     scaffold: !isRepo,
@@ -308,7 +316,7 @@ function getService(key, value, item, repoList, appName) {
           paths: map(path, i => {
             return {path: i.v}
           }),
-          port: Number(exposePort),
+          port: port,
           rewrite: rewrite,
         },
       ],
@@ -322,8 +330,7 @@ function getService(key, value, item, repoList, appName) {
   return obj;
 }
 
-
-export function getParams(formState, repoList) {
+export function getParams(formState: FormStateType, repoList: getRepoListRes[]) {
   let {selectAStack, providers, backend, frontend, middleWares} = formState;
   let {Name, Stack} = selectAStack;
   let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}, cluster_id} = providers;
@@ -346,7 +353,7 @@ export function getParams(formState, repoList) {
         type,
         injection,
       } = i;
-      let nameArr = injection.map((item) => {
+      let nameArr = injection.map((item: string) => {
         if (item === 'backend') {
           return service[0].name;
         }

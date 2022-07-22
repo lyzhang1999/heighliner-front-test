@@ -35,8 +35,14 @@ import styles from "./index.module.scss";
 import { FormStateType } from "@/pages/[organization]/applications/create";
 import { FormControl, FormHelperText } from "@mui/material";
 import Spinner from "@/basicComponents/Loaders/Spinner";
-import { Message } from "@/utils/utils";
+import { isProduct, Message } from "@/utils/utils";
 import { cloneDeep } from "lodash-es";
+import GlobalLoading from "@/basicComponents/GlobalLoading";
+import {
+  GitHubOAuthAppTemporaryStorage,
+  openGitHubOAuthWindow,
+  PostAuthAction,
+} from "@/pages/distributor/post-auth-github";
 
 interface Props extends CommonProps {
   submitCb: Function;
@@ -341,8 +347,36 @@ function AddGitProviderItem({
 }: {
   addGitProviderSuccessCb?: AddGitProviderSuccessCb;
 }) {
-  const [openAddGitProviderDrawer, setOpenAddGitProviderDrawer] =
-    useState(false);
+  const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
+
+  const clickHandler = () => {
+    window.localStorage.setItem(
+      GitHubOAuthAppTemporaryStorage.postAuthAction,
+      PostAuthAction.AddGitProvider
+    );
+
+    let domain: string = isProduct()
+      ? process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_REPO_URL_PROD!
+      : process.env.NEXT_PUBLIC_GITHUB_OAUTH_APP_REPO_URL!;
+
+    openGitHubOAuthWindow(
+      new URL(domain),
+      setOpenGlobalLoading,
+      function successCb() {
+        // Get the createGitProvideRes and execute the successCb.
+        const rowCreateGitProvideRes = window.localStorage.getItem(
+          GitHubOAuthAppTemporaryStorage.createGitProviderRes
+        );
+        window.localStorage.removeItem(
+          GitHubOAuthAppTemporaryStorage.createGitProviderRes
+        );
+        const createGitProvideRes = rowCreateGitProvideRes
+          ? JSON.parse(rowCreateGitProvideRes)
+          : {};
+        addGitProviderSuccessCb && addGitProviderSuccessCb(createGitProvideRes);
+      }
+    );
+  };
 
   return (
     <div
@@ -358,15 +392,15 @@ function AddGitProviderItem({
         width: "100%",
         borderRadius: 3,
       }}
-      onClick={() => {
-        setOpenAddGitProviderDrawer(true);
-      }}
+      onClick={clickHandler}
     >
       Add GitHub Account
-      <AddGitProvider
-        setModalDisplay={setOpenAddGitProviderDrawer}
-        modalDisplay={openAddGitProviderDrawer}
-        successCb={addGitProviderSuccessCb}
+      <GlobalLoading
+        {...{
+          openGlobalLoading,
+          title: "Processing",
+          description: `Please approval authentication to in GitHub`,
+        }}
       />
     </div>
   );

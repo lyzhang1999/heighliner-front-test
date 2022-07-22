@@ -43,6 +43,7 @@ import {
   openGitHubOAuthWindow,
   PostAuthAction,
 } from "@/pages/distributor/post-auth-github";
+import { useGlobalLoading } from "@/hooks/GlobalLoading";
 
 interface Props extends CommonProps {
   submitCb: Function;
@@ -347,7 +348,7 @@ function AddGitProviderItem({
 }: {
   addGitProviderSuccessCb?: AddGitProviderSuccessCb;
 }) {
-  const [openGlobalLoading, setOpenGlobalLoading] = useState(false);
+  const { setGlobalLoading } = useGlobalLoading();
 
   const clickHandler = () => {
     window.localStorage.setItem(
@@ -361,7 +362,7 @@ function AddGitProviderItem({
 
     openGitHubOAuthWindow(
       new URL(domain),
-      setOpenGlobalLoading,
+      setGlobalLoading,
       function successCb() {
         // Get the createGitProvideRes and execute the successCb.
         const rowCreateGitProvideRes = window.localStorage.getItem(
@@ -395,13 +396,6 @@ function AddGitProviderItem({
       onClick={clickHandler}
     >
       Add GitHub Account
-      <GlobalLoading
-        {...{
-          openGlobalLoading,
-          title: "Processing",
-          description: `Please approval authentication to in GitHub`,
-        }}
-      />
     </div>
   );
 }

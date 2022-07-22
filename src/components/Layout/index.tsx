@@ -40,7 +40,7 @@ const Layout = (props: HomeProps): react.ReactElement => {
           </div>
           <div className={clsx(
             styles.right,
-            styles.horizontalFadeIn
+            // styles.horizontalFadeIn
           )}>
             <div className={
               clsx(

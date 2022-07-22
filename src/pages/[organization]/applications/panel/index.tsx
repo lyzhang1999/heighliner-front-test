@@ -9,6 +9,7 @@ import {reduce} from "lodash-es";
 import {getQuery} from "@/utils/utils";
 import {getEnvs} from "@/api/application";
 
+// http://localhost/zhangze-294c2/applications/panel?app_id=6&release_id=6
 
 export default function Newpanel() {
   const [arrList, setArrList] = useState([]);
@@ -17,15 +18,12 @@ export default function Newpanel() {
   const [envlist, setEnvList] = useState([]);
   useEffect(() => {
     getEnvs(appId).then(res => {
-      console.warn(res)
       setEnvList(res);
+      setTimeout(() => {
+        getPosition()
+      }, 0)
     })
   }, [])
-  useEffect(() => {
-    setTimeout(() => {
-      getPosition()
-    }, 1000)
-  }, []);
 
   function getPosition() {
     var item = document.querySelectorAll(`.${itemClass}`);
@@ -53,7 +51,7 @@ export default function Newpanel() {
         <EnvList spreadCb={spreadCb} envlist={envlist}/>
         {/*</div>*/}
         {/*<div className={styles.right}>*/}
-        <RepoList/>
+        {/*<RepoList/>*/}
         {/*</div>*/}
       </div>
     </Layout>

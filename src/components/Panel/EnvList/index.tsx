@@ -26,7 +26,6 @@ interface Props {
 
 export default function EnvList({spreadCb, envlist}: Props) {
   const [sepredIndex, setSepredIndex] = useState<number>(-1);
-
   const spread = (index: number) => {
     spreadCb();
     if (sepredIndex === index) {
@@ -38,23 +37,25 @@ export default function EnvList({spreadCb, envlist}: Props) {
   return (
     <div className={styles.wrapper}>
       {
-        envList.map((i, index) => {
+        envlist.map((i, index) => {
           return (
             <Fragment key={index}>
               <div key={index} className={clsx(styles.item, itemClass,
                 (index === sepredIndex) && styles.spreadItem
               )}>
-                <div className={styles.prevewWrapper}>
+                <div className={styles.prevewWrapper} onClick={() => {
+                  window.open("http://" + i.domain)
+                }}>
                   <img src="/img/application/panel/preview.svg" alt=""/>
                   <span className={styles.preview}>
                   Preview
                 </span>
                 </div>
                 <div className={styles.star}></div>
-                <img src="/img/application/panel/spreadItem.svg" alt="" className={styles.spreadIcon}
-                     onClick={() => spread(index)}/>
+                {/*<img src="/img/application/panel/spreadItem.svg" alt="" className={styles.spreadIcon}*/}
+                {/*     onClick={() => spread(index)}/>*/}
                 <div className={styles.header}>
-                  <div className={styles.envName}>{i.envName}</div>
+                  <div className={styles.envName}>{i.name}</div>
                   <div className={styles.iconWrapper}>
                     <img src="/img/cluster/aws.webp" alt=""/>
                   </div>
@@ -63,24 +64,22 @@ export default function EnvList({spreadCb, envlist}: Props) {
                   PUBLIC URL:
                 </div>
                 <div className={styles.url}>
-                  {i.pubulicUrl}
+                  {i.domain}
                 </div>
                 <div className={styles.infoWrapper}>
                   <div className={styles.statusWrapper}>
                   <span className={styles.key}>
                       Status:
                   </span>
-                    <span className={styles.value}>
-                    <span className={styles.circle}>
-
-                    </span>
+                  <span className={styles.value}>
+                    <span className={styles.circle}></span>
                     <span className={styles.statusValue}>Creating</span>
                   </span>
                   </div>
                   <div className={styles.configWrapper}>
                    <span className={styles.key}>
                       Configs:
-                  </span>
+                   </span>
                     <span className={styles.configValue}>
                     main/values.yaml
                   </span>
@@ -95,24 +94,24 @@ export default function EnvList({spreadCb, envlist}: Props) {
                   </div>
                 </div>
 
-                <div className={styles.hiddenWrapper}>
-                  <div className={styles.urlTitle}>
-                    Pull requests:
-                  </div>
-                  {
-                    i.pr.map((item) => {
-                      return <div key={item} className={styles.prItem}>{item}</div>
-                    })
-                  }
-                  <div className={styles.urlTitle}>
-                    Releases:
-                  </div>
-                  {
-                    i.issue.map((item) => {
-                      return <div key={item} className={styles.issueItem}>{item}</div>
-                    })
-                  }
-                </div>
+                {/*<div className={styles.hiddenWrapper}>*/}
+                {/*  <div className={styles.urlTitle}>*/}
+                {/*    Pull requests:*/}
+                {/*  </div>*/}
+                {/*  {*/}
+                {/*    i.pr.map((item) => {*/}
+                {/*      return <div key={item} className={styles.prItem}>{item}</div>*/}
+                {/*    })*/}
+                {/*  }*/}
+                {/*  <div className={styles.urlTitle}>*/}
+                {/*    Releases:*/}
+                {/*  </div>*/}
+                {/*  {*/}
+                {/*    i.issue.map((item) => {*/}
+                {/*      return <div key={item} className={styles.issueItem}>{item}</div>*/}
+                {/*    })*/}
+                {/*  }*/}
+                {/*</div>*/}
               </div>
               {
                 index === 0 &&

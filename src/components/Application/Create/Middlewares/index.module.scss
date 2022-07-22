@@ -1,0 +1,109 @@
+
+.item {
+  display: inline-block;
+}
+
+
+.inputItem {
+  border-radius: 9px;
+  background-color: rgba(228, 235, 242, 0.4);
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+
+  .left {
+    width: 120px;
+    margin-right: 20px;
+  }
+
+  .center {
+    width: 150px;
+  }
+
+  .right {
+    width: 200px;
+    position: relative;
+  }
+
+  .deleteIcon {
+    cursor: pointer;
+    margin-left: 10px;
+    position: absolute;
+    top: 10px;
+    right: 0px;
+  }
+
+  .line {
+    margin: 0 30px;
+    display: inline-block;
+    width: 1px;
+    height: 37px;
+    background-color: #e1e3e6;
+  }
+
+  .checkbox {
+    display: flex;
+    height: 40px;
+    align-items: center;
+
+    .checkItem {
+      border-radius: 9px;
+      border: solid 1px #e1e3e6;
+      background-color: #eceef2;
+      width: 81px;
+      height: 22px;
+      font-size: 10px;
+      line-height: 20px;
+      text-align: center;
+      margin-right: 4px;
+      cursor: pointer;
+
+      .icon {
+        margin-right: 10px;
+        display: none;
+      }
+    }
+
+    .selected {
+      border: solid 1px #305ba2;
+      background-color: #dde8f9;
+      color: #345fa7;
+
+      .icon {
+        display: inline;
+      }
+    }
+  }
+}
+
+.header {
+  background-color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  height: 30px;
+
+  .line {
+    background-color: #fff;
+  }
+}
+
+.error {
+  color: #F85056;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.add {
+  border-radius: 4px;
+  background-color: rgba(155, 172, 185, 0.5);
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #0a1a24;
+  cursor: pointer;
+}
+
+

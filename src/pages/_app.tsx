@@ -15,6 +15,7 @@ import {getOrgList} from "@/api/org";
 import {CssBaseline} from "@mui/material";
 import {find, get} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
+import { GlobalLoadingProvider } from "@/basicComponents/GlobalLoadingProvider";
 
 const noCheckLoginPage = [
   '/sign-in',
@@ -135,7 +136,11 @@ function App({Component, pageProps}: AppProps) {
         <Context.Provider value={{state, dispatch}}>
           <Notice/>
           <GlobalContxt/>
-          {render && <Component {...pageProps} />}
+          <GlobalLoadingProvider>
+            <>
+              {render && <Component {...pageProps} />}
+            </>
+          </GlobalLoadingProvider>
         </Context.Provider>
       </ThemeProvider>
     </div>

@@ -1,0 +1,101 @@
+
+.pageWrapper {
+  padding: 20px;
+}
+
+.wrapper {
+  border-radius: 14px;
+  max-width: 1300px;
+  min-width: 800px;
+  background: #fff;
+  margin: 0px auto;
+  height: calc(100vh - 40px);
+  display: flex;
+  justify-content: space-between;
+
+  .left {
+    padding: 30px 0 30px 30px;
+    width: calc(100% - 260px);
+
+    .header {
+      margin-bottom: 20px;
+
+      .name {
+        font-size: 25px;
+        letter-spacing: 0.46px;
+        color: #262626;
+        margin-right: 10px;
+      }
+
+      .currentIndex {
+        font-size: 21px;
+        color: #606479;
+        margin-right: 10px;
+      }
+
+      .currentName {
+        padding: 2px 12px;
+        border-radius: 7px;
+        border: solid 1.6px #5b7587;
+        font-size: 17px;
+        font-weight: 600;
+        color: #5b7587;
+      }
+    }
+
+    .content {
+      height: calc(100% - 124px);
+      overflow-y: scroll;
+      padding-top: 10px;
+      padding-right: 30px;
+      padding-bottom: 10px;
+    }
+
+    .footer {
+      padding: 30px 0;
+      border-top: solid 1px #ecf3ff;;
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
+  }
+
+  .right {
+    border-left: solid 1px #e9eaef;
+    padding-top: 70px;
+    padding-left: 25px;
+    width: 260px;
+
+    .countItem {
+      display: flex;
+      align-items: center;
+      //cursor: pointer;
+      margin-bottom: 18px;
+
+      .count {
+        width: 30px;
+        height: 30px;
+        background-color: #dae7ff;
+        border-radius: 50%;
+        color: #2c73cb;
+        text-align: center;
+        line-height: 30px;
+        margin-right: 10px;
+      }
+
+      .desc {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2d74cc;
+      }
+
+    }
+
+    .currentItem {
+      .count {
+        background-color: #2e74cc;
+        color: #fff;
+      }
+    }
+  }
+}

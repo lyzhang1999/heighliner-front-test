@@ -42,3 +42,24 @@ export const passportRule = {
       "Passport must contain uppercase, lowercase, and numbers",
   },
 }
+
+export const pathRule = {
+  required: 'Please input a path',
+  pattern: {
+    value: /^(\/|(\/[\w\-\.]*)+\/?)$/,
+    message: "Pleact input a correct path",
+  },
+}
+
+export const portRule = {
+  required: 'Please input a port',
+  pattern: {
+    value: /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/,
+    message: "Pleact input a correct port",
+  },
+}
+
+export const entryPathRule = {
+  required: 'Please input entry path'
+}
+

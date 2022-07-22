@@ -18,6 +18,7 @@ export interface GitProviderItem extends CreativeApiReturnField {
   git_provider_id: number;
   provider: string;
   type: string;
+  reason: string;
   user_id: number;
   status: number;
 }
@@ -71,15 +72,19 @@ export const deleteGitProvider = (
   return http.delete(`/user/git_providers/${gitProviderId}`);
 };
 
+export enum OwnerType {
+  Org = "Org",
+  User = "User",
+}
+
 export type GitProviderOrganizations = Array<{
   created_at: number;
   created_by: number;
   created_by_name: string;
-  git_org_name: string;
+  git_owner_name: string;
   git_provider_id: number;
+  owner_type: OwnerType;
   provider: GitProvider;
-  reason: string;
-  status: string;
   type: GitProviderType;
   user_id: number;
 }>;

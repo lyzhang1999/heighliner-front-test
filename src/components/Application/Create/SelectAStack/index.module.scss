@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .nameWrap {
+    display: grid;
+    grid-template-columns: 21px auto;
+    grid-template-rows: auto auto;
+    column-gap: 55px;
+    margin-top: 33px;
+    align-items: center;
+  }
+
+  .stackWrap {
+    
+  }
+}

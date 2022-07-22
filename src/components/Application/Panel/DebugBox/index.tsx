@@ -12,7 +12,7 @@ import Set from "/public/img/application/panel/set.svg";
 import { GetAppEnvironmentsRes, WorkloadType } from "@/api/application";
 
 import styles from "./index.module.scss";
-import { ApplicationInfoContext } from "@/pages/[organization]/applications/panel";
+import { ApplicationInfoContext } from "@/pages/[organization]/applications/oldpanel";
 
 interface Props {
   appEnvironment: GetAppEnvironmentsRes[number];

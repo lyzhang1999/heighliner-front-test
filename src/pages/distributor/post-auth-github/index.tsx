@@ -79,6 +79,10 @@ export const openGitHubOAuthWindow = (
 
 export default function PostAuthGitHub(): React.ReactElement {
   const [result, setResult] = useState<Result>();
+  const [errInfo, setErrInfo] = useState({
+    title: "Network Error",
+    msg: "Please try again.",
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -137,6 +141,11 @@ export default function PostAuthGitHub(): React.ReactElement {
       .catch((error) => {
         console.error(error);
         setResult(Result.Error);
+        const err_msg = error.response.data.err_msg;
+        setErrInfo({
+          title: "Authorization Error",
+          msg: err_msg,
+        });
       });
   };
 
@@ -161,9 +170,14 @@ export default function PostAuthGitHub(): React.ReactElement {
           JSON.stringify(res)
         );
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        console.error(error);
         setResult(Result.Error);
+        const err_msg = error.response.data.err_msg;
+        setErrInfo({
+          title: "Add GitHub Provider Error",
+          msg: err_msg,
+        });
       });
   };
 
@@ -192,8 +206,8 @@ export default function PostAuthGitHub(): React.ReactElement {
         )}
         {result === Result.Error && (
           <Alert severity="error">
-            <AlertTitle>Network Error</AlertTitle>
-            Please try again.
+            <AlertTitle>{errInfo.title}</AlertTitle>
+            {errInfo.msg}
           </Alert>
         )}
       </>

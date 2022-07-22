@@ -1,6 +1,6 @@
 import http from "../utils/axios";
-import { CreativeApiReturnField } from "../utils/commonType";
-import { getOriIdByContext } from "../utils/utils";
+import {CreativeApiReturnField} from "../utils/commonType";
+import {getOriIdByContext} from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -101,7 +101,7 @@ export interface getAppListReq {
 export function getApplicationList(
   params: getAppListReq = {}
 ): Promise<ApplicationObject[]> {
-  let { cluster_ids = [], owner_ids = [], stack_ids = [] } = params;
+  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
   let url = `/orgs/${getOriIdByContext()}/applications?`;
   cluster_ids.forEach((item) => {
     url += `cluster_ids=${item}&`;
@@ -213,4 +213,119 @@ export function getRepoList(appId: string): Promise<GetRepoListRes> {
 
 export function deleteApplication(appId: number): Promise<any> {
   return http.delete(`/orgs/${getOriIdByContext()}/applications/${appId}`);
+}
+
+
+export interface getRepoListReq {
+  owner_name: string,
+  owner_type: string,
+  git_provider_id: number
+}
+
+export interface getRepoListRes {
+  language: string,
+  provider: string,
+  repo_name: string,
+  url: string,
+}
+
+export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRepoListReq): Promise<getRepoListRes[]> {
+  return http.get(`/user/git_providers/${git_provider_id}/repo`, {
+    params: {
+      owner_type,
+      owner_name
+    }
+  })
+}
+
+export interface createAppRes {
+  application_env_id: number
+  application_id: number
+  application_release_id: number
+}
+
+export function createApp(body: any): Promise<createAppRes> {
+  return http.post(`/orgs/${getOriIdByContext()}/applications`, body)
+}
+
+export interface Last_release {
+  id: number;
+  created_at: number;
+  created_by: number;
+  updated_at: number;
+  updated_by: number;
+  application_id: number;
+  application_env_id: number;
+  name: string;
+  namespace: string;
+  cluster_id: number;
+  job_namespace: string;
+  start_time: number;
+  completion_time: number;
+  status: string;
+}
+
+export interface Deploy {
+  name: string;
+  url: string;
+  visibility: string;
+  path: string;
+  values_file: string;
+}
+
+export interface Application {
+  name: string;
+  domain: string;
+  namespace: string;
+  deploy: Deploy;
+  service: any[];
+}
+
+export interface Scm {
+  name: string;
+  type: string;
+  organization: string;
+}
+
+export interface Image {
+  name: string;
+  registry: string;
+  username: string;
+  password: string;
+}
+
+export interface Setting {
+  is_update: boolean;
+  application: Application;
+  scm: Scm;
+  image: Image;
+  middleware: any[];
+}
+
+export interface EnvList {
+  application_env_id: number;
+  application_id: number;
+  owner_id: number;
+  owner_name: string;
+  name: string;
+  domain: string;
+  env_type: string;
+  namespace: string;
+  last_release: Last_release;
+  setting: Setting;
+}
+
+export function getEnvs(appId: string): Promise<EnvList[]> {
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
+}
+
+export interface AppRepoRes {
+  "git_organization": string,
+  "provider": string,
+  "repo_name": string,
+  "repo_url": string,
+}
+
+export function getApplicationRepos(appid: string): Promise<AppRepoRes[]> {
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`)
 }

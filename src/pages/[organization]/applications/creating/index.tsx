@@ -49,7 +49,9 @@ const CreatingApplication = () => {
         }
         getStatusInterval && clearInterval(getStatusInterval);
         durationTimeInterval && clearInterval(durationTimeInterval)
-        setSkipTime(5);
+        if(!getQuery('foromPane')){
+          setSkipTime(5);
+        }
       }
       if (status === ApplicationStatus.FAILED) {
         if (completion_time && start_time) {

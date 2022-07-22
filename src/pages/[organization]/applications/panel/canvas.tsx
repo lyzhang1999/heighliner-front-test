@@ -24,8 +24,6 @@ export default function Canvas({arrList}: Props) {
     if (!dom.getContext) return;
     ctx = dom.getContext("2d");
     // ctx.scale(2, 2)
-
-
   }, [arrList])
 
 
@@ -35,7 +33,6 @@ export default function Canvas({arrList}: Props) {
     }
     var w = dom.width;
     var h = dom.height;
-    console.warn(w, h)
     ctx.clearRect(0, 0, w, h);
 
     // setHeight(Math.max(...arrList) + 100)

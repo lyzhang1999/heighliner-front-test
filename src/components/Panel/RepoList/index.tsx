@@ -41,7 +41,7 @@ const item = {
 
 const list = [item, item, item, item];
 
-interface Props{
+interface Props {
   repoList: AppRepoRes[]
 }
 
@@ -68,7 +68,7 @@ export default function RepoList({repoList}: Props) {
               <div className={styles.header} onClick={() => spread(index)}>
                 <img src="/img/gitprovider/GITHUB.svg" alt="" className={styles.githubIcon}/>
                 <div className={styles.name}>
-                  {item.repoName}
+                  {item.repo_name}
                 </div>
                 <img src="/img/application/panel/spread.svg" alt=""
                      className={clsx(styles.spreadIcon)}

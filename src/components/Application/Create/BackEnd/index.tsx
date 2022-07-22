@@ -43,7 +43,7 @@ export const backItem: FrameItemType[] = [
   // }
 ]
 
-const Backend = forwardRef(function frontEnd(props: Props, ref) {
+const Backend = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
   let {backend, frontend} = formState;
   let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = backend;

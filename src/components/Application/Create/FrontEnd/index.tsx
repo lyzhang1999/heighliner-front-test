@@ -1,10 +1,10 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React, {useImperativeHandle, useRef, forwardRef, useEffect, useState} from "react";
+import React, {useImperativeHandle, forwardRef, useState} from "react";
 import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
-import {filter, find, get, set} from "lodash-es";
+import {filter, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {FrameItemType} from "@/pages/[organization]/applications/creation/util";
@@ -43,7 +43,7 @@ export const frontItem: FrameItemType[] = [
   // }
 ]
 
-const Frontend = forwardRef(function frontEnd(props: Props, ref) {
+const Frontend = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
   let {frontend, backend} = formState;
   let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = frontend;

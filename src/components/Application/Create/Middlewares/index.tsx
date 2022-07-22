@@ -23,7 +23,7 @@ export const Middles = [
   }
 ]
 
-const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
+const Middlewares = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
   let {middleWares} = formState;
 

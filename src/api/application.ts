@@ -319,10 +319,13 @@ export function getEnvs(appId: string): Promise<EnvList[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
 }
 
-export interface AppRepoRes{
-
+export interface AppRepoRes {
+  "git_organization": string,
+  "provider": string,
+  "repo_name": string,
+  "repo_url": string,
 }
 
-export function getApplicationRepos(appid: string): Promise<AppRepoRes[]>{
+export function getApplicationRepos(appid: string): Promise<AppRepoRes[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`)
 }

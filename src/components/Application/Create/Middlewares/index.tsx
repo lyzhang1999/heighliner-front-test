@@ -4,8 +4,8 @@ import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {get, without} from "lodash-es";
-import {InitMiddleWareItem} from "@/pages/[organization]/applications/create/util";
-import {FormStateType} from "@/pages/[organization]/applications/create";
+import {InitMiddleWareItem} from "@/pages/[organization]/applications/creation/util";
+import {FormStateType} from "@/pages/[organization]/applications/creation";
 
 const IconFocusStyle = {}
 

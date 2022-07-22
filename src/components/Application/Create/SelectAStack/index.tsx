@@ -10,9 +10,9 @@ import Image from "next/image";
 
 import { FormControl, FormHelperText, TextField } from "@mui/material";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
-import { FormStateType } from "@/pages/[organization]/applications/create";
+import { FormStateType } from "@/pages/[organization]/applications/creation";
 import useStacks from "@/hooks/stacks";
-import { FieldsMap, SelectAStackType } from "@/pages/[organization]/applications/create/util";
+import { FieldsMap, SelectAStackType } from "@/pages/[organization]/applications/creation/util";
 
 import styles from "./index.module.scss";
 interface Props {

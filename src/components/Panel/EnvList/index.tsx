@@ -1,6 +1,7 @@
 import styles from './index.module.scss';
 import {Fragment, useState} from "react";
 import clsx from "clsx";
+import {EnvList as IEnvList} from "@/api/application";
 
 const item =
   {
@@ -18,11 +19,12 @@ export const itemClass = "CANVASITME";
 
 const envList = [item, item, item, item];
 
-interface Props{
-  spreadCb: () => void
+interface Props {
+  spreadCb: () => void,
+  envlist: IEnvList[],
 }
 
-export default function EnvList({spreadCb}: Props) {
+export default function EnvList({spreadCb, envlist}: Props) {
   const [sepredIndex, setSepredIndex] = useState<number>(-1);
 
   const spread = (index: number) => {

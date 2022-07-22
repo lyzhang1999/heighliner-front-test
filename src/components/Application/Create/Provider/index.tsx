@@ -27,10 +27,10 @@ import AddGitProvider from "@/components/AddGitProvider";
 import {
   FieldsMap,
   ProvidersType,
-} from "@/pages/[organization]/applications/create/util";
+} from "@/pages/[organization]/applications/creation/util";
 
 import styles from "./index.module.scss";
-import { FormStateType } from "@/pages/[organization]/applications/create";
+import { FormStateType } from "@/pages/[organization]/applications/creation";
 import { FormControl, FormHelperText } from "@mui/material";
 import Spinner from "@/basicComponents/Loaders/Spinner";
 import { Message } from "@/utils/utils";

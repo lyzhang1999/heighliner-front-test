@@ -3,7 +3,7 @@ import React, {useImperativeHandle, useRef, forwardRef, useEffect, useState} fro
 import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
-import {FormStateType} from "@/pages/[organization]/applications/create";
+import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {cloneDeep, get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 

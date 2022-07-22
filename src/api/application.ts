@@ -244,3 +244,74 @@ interface createAppRes {
 export function createApp(body): Promise<createAppRes> {
   return http.post(`/orgs/${getOriIdByContext()}/applications`, body)
 }
+
+export interface Last_release {
+  id: number;
+  created_at: number;
+  created_by: number;
+  updated_at: number;
+  updated_by: number;
+  application_id: number;
+  application_env_id: number;
+  name: string;
+  namespace: string;
+  cluster_id: number;
+  job_namespace: string;
+  start_time: number;
+  completion_time: number;
+  status: string;
+}
+
+export interface Deploy {
+  name: string;
+  url: string;
+  visibility: string;
+  path: string;
+  values_file: string;
+}
+
+export interface Application {
+  name: string;
+  domain: string;
+  namespace: string;
+  deploy: Deploy;
+  service: any[];
+}
+
+export interface Scm {
+  name: string;
+  type: string;
+  organization: string;
+}
+
+export interface Image {
+  name: string;
+  registry: string;
+  username: string;
+  password: string;
+}
+
+export interface Setting {
+  is_update: boolean;
+  application: Application;
+  scm: Scm;
+  image: Image;
+  middleware: any[];
+}
+
+export interface EnvList {
+  application_env_id: number;
+  application_id: number;
+  owner_id: number;
+  owner_name: string;
+  name: string;
+  domain: string;
+  env_type: string;
+  namespace: string;
+  last_release: Last_release;
+  setting: Setting;
+}
+
+export function getEnvs(appId: string): Promise<EnvList[]>{
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
+}

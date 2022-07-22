@@ -73,27 +73,30 @@ export default function EnvList({spreadCb, envlist}: Props) {
                   </span>
                   <span className={styles.value}>
                     <span className={styles.circle}></span>
-                    <span className={styles.statusValue}>Creating</span>
+                    <span className={styles.statusValue}>Running</span>
                   </span>
                   </div>
-                  <div className={styles.configWrapper}>
-                   <span className={styles.key}>
-                      Configs:
-                   </span>
-                    <span className={styles.configValue}>
-                    main/values.yaml
-                  </span>
-                  </div>
+                  {/*<div className={styles.configWrapper}>*/}
+                  {/* <span className={styles.key}>*/}
+                  {/*    Configs:*/}
+                  {/* </span>*/}
+                  {/*  <span className={styles.configValue}>*/}
+                  {/*  main/values.yaml*/}
+                  {/*</span>*/}
+                  {/*</div>*/}
                   <div className={styles.logsWrapper}>
                    <span className={styles.key}>
                       Logs:
                   </span>
-                    <span className={styles.logsValue}>
+                    <span className={styles.logsValue}
+                          onClick={() => {
+                            window.open(location.href.replace('panel', 'creating') + '&foromPane=true')
+                          }}
+                    >
                     Deploy
                   </span>
                   </div>
                 </div>
-
                 {/*<div className={styles.hiddenWrapper}>*/}
                 {/*  <div className={styles.urlTitle}>*/}
                 {/*    Pull requests:*/}

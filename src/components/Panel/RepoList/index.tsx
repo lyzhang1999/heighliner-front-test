@@ -65,16 +65,19 @@ export default function RepoList({repoList}: Props) {
               // styles.reopItem
               clsx(styles.reopItem, (sepredIndex === index) && styles.spreadItem)
             } key={index}>
-              <div className={styles.header} onClick={() => spread(index)}>
+              <div className={styles.header} onClick={() => {
+                window.open(item.repo_url)
+                // spread(index)
+              }}>
                 <img src="/img/gitprovider/GITHUB.svg" alt="" className={styles.githubIcon}/>
                 <div className={styles.name}>
                   {item.repo_name}
                 </div>
-                <img src="/img/application/panel/spread.svg" alt=""
-                     className={clsx(styles.spreadIcon)}
-                />
+                {/*<img src="/img/application/panel/spread.svg" alt=""*/}
+                {/*     className={clsx(styles.spreadIcon)}*/}
+                {/*/>*/}
               </div>
-              <div className={clsx(styles.content, (sepredIndex === index) && styles.spreadContent)}>
+              {/*<div className={clsx(styles.content, (sepredIndex === index) && styles.spreadContent)}>*/}
                 {/*<div className={styles.title}>*/}
                 {/*  Pull Requests*/}
                 {/*</div>*/}
@@ -129,7 +132,7 @@ export default function RepoList({repoList}: Props) {
                 {/*    )*/}
                 {/*  })*/}
                 {/*}*/}
-              </div>
+              {/*</div>*/}
             </div>
           )
         })

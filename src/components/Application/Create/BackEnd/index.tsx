@@ -237,7 +237,7 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
                         unconformity: (value) => {
                           if ((
                             filter(getValues('path'), item => item.v === value).length +
-                            filter(backend.env, item => item.v === value).length
+                            filter(backend.path, item => item.v === value).length
                           ) > 1) {
                             return "There can be same values";
                           }

@@ -56,13 +56,6 @@ export default function Create(): React.ReactElement {
     owner_type: "Org"
   }
 
-  useEffect(() => {
-    // getGitProviderOrganizations().then(res => {
-    //   // console.warn(res)
-    // })
-
-  }, [])
-
   function getRepoList(body) {
     getTheRepoList(body).then(res => {
       setRepoList(res);
@@ -87,7 +80,6 @@ export default function Create(): React.ReactElement {
   }
 
   function submitCb(key: string, value: object) {
-    console.warn(value);
     if (key === 'providers') {
       let {git_config} = value;
       let {git_provider_id, owner_name, owner_type} = git_config;

@@ -233,7 +233,7 @@ export const FrameWorkInitState: BackendType = {
   repo_url: "",
   env: [],
   exposePort: "",
-  path: [{v: "/"}],
+  path: [{v: ""}],
   rewrite: false,
   entryFile: "",
 };

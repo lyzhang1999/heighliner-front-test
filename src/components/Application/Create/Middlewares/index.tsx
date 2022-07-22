@@ -4,8 +4,9 @@ import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {get, without} from "lodash-es";
-import {InitMiddleWareItem} from "@/pages/[organization]/applications/creation/util";
+import {InitMiddleWareItem} from "@/components/Application/Create/util";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
+import {getRepoListRes} from "@/api/application";
 
 const IconFocusStyle = {}
 
@@ -14,6 +15,7 @@ const SelectStyle = {}
 export interface Props {
   submitCb: (key: string, value: object) => void,
   formState: FormStateType,
+  repoList: getRepoListRes[]
 }
 
 export const Middles = [
@@ -46,14 +48,13 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
     submitCb("middleWares", value.middle)
   }
 
-  function clickFrondendAndBackend(key: string, filed: ControllerProps) {
+  function clickFrondendAndBackend(key: string, filed: any) {
     let {value, name} = filed;
     if (value.includes(key)) {
       value = without(value, key)
     } else {
       value.push(key)
     }
-    console.warn(name, value)
     setValue(name, value);
   }
 

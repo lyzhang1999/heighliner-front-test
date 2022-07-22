@@ -16,9 +16,9 @@ import {
   SelectAStackInitState,
   ProvidersType,
   ProvidersInitState, getParams
-} from "@/pages/[organization]/applications/creation/util";
+} from "@/components/Application/Create/util";
 import {cloneDeep} from "lodash-es";
-import {createApp, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
+import {createApp, createAppRes, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
 import {getUrlEncodeName, Message} from "@/utils/utils";
 import {useRouter} from "next/router";
 
@@ -56,21 +56,21 @@ export default function Create(): React.ReactElement {
     })
   }
 
-  function goIndex(i) {
+  function goIndex(i: number) {
     if (i === index) return;
     if (i < 1) return;
     ref?.current?.submit();
     nextIndex = i;
   }
 
-  function create(value) {
+  function create(value: FormStateType) {
     let body = getParams(value, repoList);
     createApp(body).then(res => {
       goDashboard(res)
     })
   }
 
-  function goDashboard(res) {
+  function goDashboard(res: createAppRes) {
     let {
       application_id,
       application_release_id

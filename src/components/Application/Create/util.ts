@@ -1,7 +1,7 @@
 import {backItem} from "@/components/Application/Create/BackEnd";
 import {find, get, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
-import {FormStateType} from "@/pages/[organization]/applications/creation/index";
+import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
 
 export interface Git_config {

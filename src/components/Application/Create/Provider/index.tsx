@@ -29,7 +29,7 @@ import AddGitProvider, {
 import {
   FieldsMap,
   ProvidersType,
-} from "@/pages/[organization]/applications/creation/util";
+} from "@/components/Application/Create/util";
 
 import styles from "./index.module.scss";
 import { FormStateType } from "@/pages/[organization]/applications/creation";

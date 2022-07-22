@@ -7,7 +7,7 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameItemType, FrameworkType} from "@/pages/[organization]/applications/creation/util";
+import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 
 const widhtSx = {width: "250px"};
 

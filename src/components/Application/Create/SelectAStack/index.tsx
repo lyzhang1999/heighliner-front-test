@@ -8,6 +8,7 @@ import React, {
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import Image from "next/image";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import clsx from "clsx";
 
 import { FormControl, FormHelperText, TextField } from "@mui/material";
 import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
@@ -24,12 +25,25 @@ interface Props {
   formState: FormStateType;
 }
 
+const StackCardItems = [
+  {
+    name: "Micro service",
+    url: "/img/application/create/MachineLearning@3x.webp",
+  },
+  {
+    name: "Machine Learning",
+    url: "/img/application/create/MicroService@3x.webp",
+  },
+  {
+    name: "Web Application",
+    url: "/img/application/create/WebApplication@3x.webp",
+  },
+];
+
 const SelectAStack = forwardRef(function SelectAStack(
   props: Props,
   ref
 ): React.ReactElement {
-  const [stackList, getStackList] = useStacks();
-  const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
   const { selectAStack: selectAStackInitState } = props.formState;
 
   const DefaultFormValue: FieldValues = {
@@ -43,18 +57,6 @@ const SelectAStack = forwardRef(function SelectAStack(
   } = useForm({
     defaultValues: DefaultFormValue,
   });
-
-  useEffect(() => {
-    const cardItems: CardItems = [];
-    stackList.map((stack, index) => {
-      cardItems.push({
-        icon: getIcons(stack.icon_urls),
-        value: stack.id,
-        name: stack.name,
-      });
-    });
-    setStackCardItems(cardItems);
-  }, [stackList]);
 
   const submit = (data: typeof DefaultFormValue) => {
     props.submitCb("selectAStack", data);
@@ -169,15 +171,29 @@ const SelectAStack = forwardRef(function SelectAStack(
               {FieldsMap.stack}
               <span>*</span>
             </h1>
-            <CardSelect
-              {...{
-                cardItems: stackCardItems,
-                control: control,
-                name: FieldsMap.stack,
-                onChange: field.onChange,
-                defaultChosenValue: selectAStackInitState[FieldsMap.stack],
-              }}
-            />
+            <ul>
+              {StackCardItems.map((stackCardItems, index) => (
+                <li
+                  key={stackCardItems.name}
+                  onClick={() => {
+                    field.onChange(stackCardItems.name);
+                  }}
+                  className={clsx(
+                    field.value === stackCardItems.name && styles.chosen
+                  )}
+                >
+                  <div>
+                    <Image
+                      src={stackCardItems.url}
+                      alt=""
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </div>
+                  <span>{stackCardItems.name}</span>
+                </li>
+              ))}
+            </ul>
             <FormHelperText>
               {errors[FieldsMap.stack] && errors[FieldsMap.stack].message}
             </FormHelperText>
@@ -214,6 +230,21 @@ function getIcons(icons: string[]) {
           <Image src={icon} alt="" layout="fill" objectFit="contain" />
         </div>
       ))}
+    </div>
+  );
+}
+
+function getIcon(url: string) {
+  return (
+    <div
+      style={{
+        height: 54,
+        width: 50,
+        position: "relative",
+        marginTop: "9px",
+      }}
+    >
+      <Image src={url} alt="" layout="fill" objectFit="contain" />
     </div>
   );
 }

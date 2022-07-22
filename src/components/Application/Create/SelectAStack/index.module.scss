@@ -1,3 +1,6 @@
+@import "/src/styles/components/cardBorder";
+@import "/src/styles/components/chosenStatus";
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -17,6 +20,42 @@
   }
 
   .stackWrap {
-    
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style-type: none;
+    }
+
+    li {
+      @include cardBoxShadow;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 98.7px;
+
+      div:nth-child(1) {
+        height: 54px;
+        width: 50px;
+        position: relative;
+        margin-top: 9px;
+      }
+      span:nth-child(2) {
+        margin-top: 5px;
+        font-family: "Jost";
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 140%;
+        background: linear-gradient(89.93deg, #1754ba -0.66%, #0297e0 105.62%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+      }
+    }
+
+    .chosen {
+      @include chosenStatus;
+    }
   }
 }

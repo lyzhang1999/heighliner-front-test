@@ -13,7 +13,7 @@ import {FormControl, FormHelperText, TextField} from "@mui/material";
 import CardSelect, {CardItems} from "@/basicComponents/CardSelect";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import useStacks from "@/hooks/stacks";
-import {FieldsMap, SelectAStackType} from "@/components/Application/Create/util";
+import {FieldsMap} from "@/components/Application/Create/util";
 
 import styles from "./index.module.scss";
 

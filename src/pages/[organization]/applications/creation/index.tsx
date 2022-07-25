@@ -58,8 +58,7 @@ export default function Create(): React.ReactElement {
   function goIndex(i: number) {
     if (i === index) return;
     if (i < 1) return;
-    get(ref, 'current.submit', () => {
-    }).submit();
+    get(ref, 'current.submit', () => null)();
     nextIndex = i;
   }
 

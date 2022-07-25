@@ -262,7 +262,7 @@ export interface Last_release {
   job_namespace: string;
   start_time: number;
   completion_time: number;
-  status: string;
+  status: ApplicationStatus;
 }
 
 export interface Deploy {

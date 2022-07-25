@@ -8,7 +8,6 @@ import React, {useRef, useState} from "react";
 
 import Provider from "@/components/Application/Create/Provider";
 import {
-  FrameWorkInitState,
   FrameworkType,
   MiddleWaresInitState,
   MiddleWareType,
@@ -17,7 +16,7 @@ import {
   ProvidersType,
   ProvidersInitState, getParams, BackendFrameWorkInitState, FrontendFrameWorkInitState
 } from "@/components/Application/Create/util";
-import {cloneDeep} from "lodash-es";
+import {cloneDeep, get} from "lodash-es";
 import {createApp, createAppRes, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
 import {getUrlEncodeName, Message} from "@/utils/utils";
 import {useRouter} from "next/router";
@@ -59,7 +58,8 @@ export default function Create(): React.ReactElement {
   function goIndex(i: number) {
     if (i === index) return;
     if (i < 1) return;
-    ref?.current?.submit();
+    get(ref, 'current.submit', () => {})
+      .submit();
     nextIndex = i;
   }
 
@@ -81,8 +81,7 @@ export default function Create(): React.ReactElement {
 
   function submitCb(key: string, value: object) {
     if (key === 'providers') {
-      let {git_config} = value;
-      let {git_provider_id, owner_name, owner_type} = git_config;
+      let {git_provider_id, owner_name, owner_type} = get(value, 'git_config', {});
       getRepoList({git_provider_id, owner_name, owner_type});
     }
     setFormState({

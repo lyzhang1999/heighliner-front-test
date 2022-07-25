@@ -1,10 +1,10 @@
-import {Controller, useForm, useFieldArray, ControllerProps} from "react-hook-form";
-import React, {useImperativeHandle, useRef, forwardRef} from "react";
+import {Controller, useForm, useFieldArray} from "react-hook-form";
+import React, {useImperativeHandle, forwardRef} from "react";
 import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {get, without} from "lodash-es";
-import {InitMiddleWareItem} from "@/components/Application/Create/util";
+import {InitMiddleWareItem, MiddleWareType} from "@/components/Application/Create/util";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
 
@@ -26,7 +26,7 @@ export const Middles = [
 ]
 
 const Middlewares = forwardRef(function Component(props: Props, ref) {
-  const {submitCb, formState, repoList} = props;
+  const {submitCb, formState} = props;
   let {middleWares} = formState;
 
   const {control, handleSubmit, setValue, formState: {errors}} = useForm({
@@ -44,7 +44,7 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
     submit: () => handleSubmit(submit)()
   }));
 
-  function submit(value) {
+  function submit(value: {middle: MiddleWareType[]}) {
     submitCb("middleWares", value.middle)
   }
 

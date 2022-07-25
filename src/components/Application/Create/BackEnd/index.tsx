@@ -57,7 +57,8 @@ const Backend = forwardRef(function Component(props: Props, ref) {
       repo_url: repo_url,
       entryFile: entryFile,
       exposePort: exposePort,
-      framework: framework
+      framework: framework,
+      isRepo: repo
     },
   });
 

@@ -7,7 +7,7 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {filter, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameItemType} from "@/components/Application/Create/util";
+import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 
 const widhtSx = {width: "250px"};
 
@@ -57,7 +57,8 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
       repo_url: repo_url,
       entryFile: entryFile,
       exposePort: exposePort,
-      framework: framework
+      framework: framework,
+      isRepo: repo
     },
   });
 
@@ -75,7 +76,7 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
     submit: () => handleSubmit(submit)()
   }));
 
-  function submit(value) {
+  function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);
     submitCb('frontend', value)
   }

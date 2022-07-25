@@ -1,21 +1,20 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import styles from './index.module.scss';
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
 import Canvas from "@/pages/[organization]/applications/panel/canvas";
 import EnvList, {itemClass} from "@/components/Panel/EnvList";
-import {reduce} from "lodash-es";
 import {getQuery} from "@/utils/utils";
-import {AppRepoRes, getApplicationRepos, getEnvs} from "@/api/application";
+import {AppRepoRes, EnvListRes, getApplicationRepos, getEnvs} from "@/api/application";
 
 // http://localhost/zhangze-294c2/applications/panel?app_id=6&release_id=6
 
 export default function Newpanel() {
-  const [arrList, setArrList] = useState([]);
+  const [arrList, setArrList] = useState<number[]>([]);
   let appId = getQuery("app_id")
 
-  const [envlist, setEnvList] = useState([]);
+  const [envlist, setEnvList] = useState<EnvListRes[]>([]);
   const [repoList, setRepoList] = useState<AppRepoRes[]>([]);
 
   useEffect(() => {

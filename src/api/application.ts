@@ -302,7 +302,7 @@ export interface Setting {
   middleware: any[];
 }
 
-export interface EnvList {
+export interface EnvListRes {
   application_env_id: number;
   application_id: number;
   owner_id: number;
@@ -315,7 +315,7 @@ export interface EnvList {
   setting: Setting;
 }
 
-export function getEnvs(appId: string): Promise<EnvList[]> {
+export function getEnvs(appId: string): Promise<EnvListRes[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
 }
 

@@ -5,17 +5,18 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { Controller, FieldValues, useForm } from "react-hook-form";
+import {Controller, FieldValues, useForm} from "react-hook-form";
 import Image from "next/image";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-import { FormControl, FormHelperText, TextField } from "@mui/material";
-import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
-import { FormStateType } from "@/pages/[organization]/applications/creation";
+import {FormControl, FormHelperText, TextField} from "@mui/material";
+import CardSelect, {CardItems} from "@/basicComponents/CardSelect";
+import {FormStateType} from "@/pages/[organization]/applications/creation";
 import useStacks from "@/hooks/stacks";
-import { FieldsMap, SelectAStackType } from "@/components/Application/Create/util";
+import {FieldsMap, SelectAStackType} from "@/components/Application/Create/util";
 
 import styles from "./index.module.scss";
+
 interface Props {
   submitCb: Function;
   formState: FormStateType;
@@ -27,7 +28,7 @@ const SelectAStack = forwardRef(function SelectAStack(
 ): React.ReactElement {
   const [stackList, getStackList] = useStacks();
   const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
-  const { selectAStack: selectAStackInitState } = props.formState;
+  const {selectAStack: selectAStackInitState} = props.formState;
 
   const DefaultFormValue: FieldValues = {
     [FieldsMap.name]: selectAStackInitState[FieldsMap.name],
@@ -36,7 +37,7 @@ const SelectAStack = forwardRef(function SelectAStack(
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
   } = useForm({
     defaultValues: DefaultFormValue,
   });
@@ -68,7 +69,7 @@ const SelectAStack = forwardRef(function SelectAStack(
       <Controller
         name={FieldsMap.name}
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <FormControl
             className={styles.nameWrap}
             error={errors[FieldsMap.name] !== undefined}
@@ -157,7 +158,7 @@ const SelectAStack = forwardRef(function SelectAStack(
       <Controller
         name={FieldsMap.stack}
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
           <FormControl
             className={styles.stackWrap}
             error={errors[FieldsMap.stack] !== undefined}
@@ -208,7 +209,7 @@ function getIcons(icons: string[]) {
             width: 45,
           }}
         >
-          <Image src={icon} alt="" layout="fill" objectFit="contain" />
+          <Image src={icon} alt="" layout="fill" objectFit="contain"/>
         </div>
       ))}
     </div>

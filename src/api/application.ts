@@ -215,7 +215,6 @@ export function deleteApplication(appId: number): Promise<any> {
   return http.delete(`/orgs/${getOriIdByContext()}/applications/${appId}`);
 }
 
-
 export interface getRepoListReq {
   owner_name: string,
   owner_type: string,

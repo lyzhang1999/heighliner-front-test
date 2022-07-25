@@ -1,7 +1,7 @@
 import styles from './index.module.scss';
 import {Fragment, useState} from "react";
 import clsx from "clsx";
-import {EnvList as IEnvList} from "@/api/application";
+import {EnvListRes} from "@/api/application";
 import {get} from "lodash-es";
 
 const item =
@@ -22,7 +22,7 @@ const envList = [item, item, item, item];
 
 interface Props {
   spreadCb: () => void,
-  envlist: IEnvList[],
+  envlist: EnvListRes[],
 }
 
 export default function EnvList({spreadCb, envlist}: Props) {
@@ -86,7 +86,7 @@ export default function EnvList({spreadCb, envlist}: Props) {
                       let valueName = get(i, 'setting.application.deploy.values_file', '');
                       let name = i.name;
                       let path = get(i, 'setting.application.deploy.path', '');
-                      window.open(`${url}/tree/${name}/${path}/${valueName}`)
+                      window.open(`${url}/tree/main/${path}/${valueName}`)
                     }}>
                       {
                         get(i, 'setting.application.deploy.values_file', '')

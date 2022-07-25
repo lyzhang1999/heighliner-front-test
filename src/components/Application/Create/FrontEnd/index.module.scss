@@ -1,4 +1,5 @@
 @import "../../../../pages/[organization]/applications/oldcreation/index.module.scss";
+@import "@/styles/globalVar.scss";
 
 .formItem {
   display: flex;
@@ -89,9 +90,7 @@
 }
 
 .error {
-  color: #F85056;
-  font-size: 12px;
-  line-height: 20px;
+  @include errorStyle;
 }
 
 .item {

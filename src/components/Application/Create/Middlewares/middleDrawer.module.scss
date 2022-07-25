@@ -1,0 +1,58 @@
+@import "@/styles/globalVar.scss";
+
+.drawerWrap {
+
+  .formItem {
+    display: flex;
+    margin-top: 20px;
+
+    .left {
+      font-size: 15px;
+      font-weight: 500;
+      color: #303133;
+      line-height: 40px;
+      margin-right: 10px;
+      width: 160px;
+    }
+
+    .right {
+
+    }
+  }
+
+  .content {
+    height: calc(100vh - 200px);
+    overflow-y: scroll;
+  }
+
+  .actionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+}
+
+.add {
+  @include globalAddBtn;
+}
+
+.error {
+  @include errorStyle;
+}
+
+
+.nameInputItem {
+  display: flex;
+  margin-bottom: 10px;
+
+  .input {
+    margin-right: 10px;
+  }
+
+  .deleteIcon {
+    margin-top: 10px;
+    width: 20px;
+    height: 20px;
+  }
+}
+

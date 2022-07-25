@@ -3,6 +3,7 @@ import {find, get, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
+import {PgTypes} from "@/components/Application/Create/Middlewares/MiddleDrawer";
 
 export interface Git_config {
   git_org_name: string;
@@ -250,16 +251,24 @@ export const FrontendFrameWorkInitState: FrameworkType = {
   entryFile: "",
 };
 
+
 export interface MiddleWareType {
   name: string;
   type: string;
   injection: Array<any>;
+  otherValue: PgTypes
 }
 
 export const InitMiddleWareItem = {
   name: "",
   type: "",
   injection: [],
+  otherValue: {
+    names: [{v: ''}],
+    username: 'admin',
+    password: "password",
+    storage: '10'
+  },
 };
 
 export const MiddleWaresInitState: MiddleWareType[] = [];

@@ -1,9 +1,9 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React, {useImperativeHandle, forwardRef, useRef} from "react";
+import React, {useImperativeHandle, forwardRef, useRef, useEffect, useState} from "react";
 import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
-import {get, without} from "lodash-es";
+import {find, findIndex, get, without} from "lodash-es";
 import {InitMiddleWareItem, MiddleWareType} from "@/components/Application/Create/util";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
@@ -29,11 +29,18 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState} = props;
   let {middleWares} = formState;
 
-  const {control, handleSubmit, setValue, formState: {errors}} = useForm({
+  const {control, handleSubmit, setValue, formState: {errors}, getValues, watch} = useForm({
     defaultValues: {
       middle: middleWares
     },
   });
+
+  let [reload, setReload] = useState(null);
+
+  // force reload the component, beceuse the select component can`t get new disable value
+  useEffect(() => {
+    setReload(null);
+  }, [watch()])
 
   const {fields, append, remove} = useFieldArray({
     control,
@@ -44,7 +51,7 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
     submit: () => handleSubmit(submit)()
   }));
 
-  function submit(value: {middle: MiddleWareType[]}) {
+  function submit(value: { middle: MiddleWareType[] }) {
     submitCb("middleWares", value.middle)
   }
 
@@ -56,6 +63,25 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
       value.push(key)
     }
     setValue(name, value);
+  }
+
+  function getDisableValue(value: string, key: string, index: number) {
+    let formData = getValues('middle');
+    let thisItem = find(formData, {type: key});
+    if (value === '') {
+      return Boolean(thisItem);
+    } else {
+      if (Boolean(thisItem)) {
+        let i = findIndex(formData, {type: key});
+        if (i === index) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    }
   }
 
   return (
@@ -104,7 +130,9 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
                   >
                     {
                       Middles.map(item => {
-                        return <MenuItem value={item.key} key={item.key}>{item.name}</MenuItem>
+                        return <MenuItem value={item.key} key={item.key}
+                                         disabled={getDisableValue(field.value, item.key, index)}
+                        >{item.name}</MenuItem>
                       })
                     }
                   </Select>

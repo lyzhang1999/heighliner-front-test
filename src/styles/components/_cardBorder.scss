@@ -1,0 +1,5 @@
+@mixin cardBoxShadow {
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+  border: solid 2px #e9eaef;
+}

@@ -1,6 +1,8 @@
-import styles from './index.module.scss';
-import {Fragment, useState} from "react";
+import styles from "./index.module.scss";
+import { Fragment, useState } from "react";
 import clsx from "clsx";
+import RightDrawer from "@/basicComponents/RightDrawer";
+import ForkNewEnv from "./ForkNewEnv";
 import {EnvListRes} from "@/api/application";
 import {get} from "lodash-es";
 
@@ -17,24 +19,27 @@ const item =
 
 export const itemClass = "CANVASITME";
 
-
-const envList = [item, item, item, item];
-
 interface Props {
   spreadCb: () => void,
   envlist: EnvListRes[],
 }
 
-export default function EnvList({spreadCb, envlist}: Props) {
-  const [sepredIndex, setSepredIndex] = useState<number>(-1);
+export default function EnvList({ spreadCb, envlist }: Props) {
+  const [spreadIndex, setSpreadIndex] = useState<number>(-1);
+  const [modalDisplay, setModalDisplay] = useState(false);
+
   const spread = (index: number) => {
     spreadCb();
-    if (sepredIndex === index) {
-      setSepredIndex(-1)
+    if (spreadIndex === index) {
+      setSpreadIndex(-1);
     } else {
-      setSepredIndex(index);
+      setSpreadIndex(index);
     }
-  }
+  };
+
+  const openForkNewEnvDrawer = () => {
+    setModalDisplay(true);
+  };
   return (
     <div className={styles.wrapper}>
       {
@@ -42,7 +47,7 @@ export default function EnvList({spreadCb, envlist}: Props) {
           return (
             <Fragment key={index}>
               <div key={index} className={clsx(styles.item, itemClass,
-                (index === sepredIndex) && styles.spreadItem
+                (index === spreadIndex) && styles.spreadItem
               )}>
                 <div className={styles.prevewWrapper} onClick={() => {
                   window.open("http://" + i.domain)
@@ -106,39 +111,29 @@ export default function EnvList({spreadCb, envlist}: Props) {
                   </span>
                   </div>
                 </div>
-                {/*<div className={styles.hiddenWrapper}>*/}
-                {/*  <div className={styles.urlTitle}>*/}
-                {/*    Pull requests:*/}
-                {/*  </div>*/}
-                {/*  {*/}
-                {/*    i.pr.map((item) => {*/}
-                {/*      return <div key={item} className={styles.prItem}>{item}</div>*/}
-                {/*    })*/}
-                {/*  }*/}
-                {/*  <div className={styles.urlTitle}>*/}
-                {/*    Releases:*/}
-                {/*  </div>*/}
-                {/*  {*/}
-                {/*    i.issue.map((item) => {*/}
-                {/*      return <div key={item} className={styles.issueItem}>{item}</div>*/}
-                {/*    })*/}
-                {/*  }*/}
-                {/*</div>*/}
               </div>
-              {
-                index === 0 &&
-                <div className={clsx(styles.forkEnv, itemClass)}>
-                  <div className={styles.star}></div>
-                  <img src="/img/application/panel/forkenv.svg" alt=""/>
-                  <span className={styles.desc}>
-                      Fork a new environment
-                    </span>
-                </div>
-              }
-            </Fragment>
-          )
-        })
-      }
+            {index === 0 && (
+              <div
+                className={clsx(styles.forkEnv, itemClass)}
+                onClick={openForkNewEnvDrawer}
+              >
+                <div className={styles.star}></div>
+                <img src="/img/application/panel/forkenv.svg" alt="" />
+                <span className={styles.desc}>Fork a new environment</span>
+                <RightDrawer
+                  {...{
+                    title: "Fork an Environment From Main",
+                    modalDisplay,
+                    setModalDisplay,
+                  }}
+                >
+                  <ForkNewEnv />
+                </RightDrawer>
+              </div>
+            )}
+          </Fragment>
+        );
+      })}
     </div>
-  )
+  );
 }

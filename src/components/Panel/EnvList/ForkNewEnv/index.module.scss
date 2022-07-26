@@ -1,0 +1,34 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .nameWrap {
+    display: grid;
+    grid-template-columns: 107.5px auto;
+    align-items: center;
+  }
+
+  .switchWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > span {
+      color: #f56c6c;
+      margin-right: 2px;
+    }
+  }
+
+  .startPointWrap {
+    display: grid;
+    grid-template-columns: 113px auto;
+
+    & > div {
+      display: grid;
+      grid-template-columns: 75px auto;
+      grid-template-rows: auto auto;
+      row-gap: 20px;
+    }
+  }
+}

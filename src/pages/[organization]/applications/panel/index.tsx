@@ -93,17 +93,24 @@ export default function Newpanel() {
   const [repoList, setRepoList] = useState<AppRepoRes[]>([]);
 
   useEffect(() => {
-    getEnvs(appId).then(res => {
-      setEnvList(res);
-      // setEnvList([item, item, item, item])
-      setTimeout(() => {
-        getPosition()
-      }, 0)
-    })
+    getEnvList();
     getApplicationRepos(appId).then(res => {
       setRepoList(res)
     })
   }, [])
+
+  function getEnvList() {
+    getEnvs(appId).then(res => {
+      setEnvList(res);
+      setTimeout(() => {
+        getPosition()
+      }, 0)
+    })
+  }
+
+  function forkEnvCb(){
+    getEnvList();
+  }
 
   function getPosition() {
     var item = document.querySelectorAll(`.${itemClass}`);

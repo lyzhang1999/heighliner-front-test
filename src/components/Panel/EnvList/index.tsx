@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Fragment, useState } from "react";
+import {Fragment, useState} from "react";
 import clsx from "clsx";
 import RightDrawer from "@/basicComponents/RightDrawer";
 import ForkNewEnv from "./ForkNewEnv";
@@ -24,7 +24,7 @@ interface Props {
   envlist: EnvListRes[],
 }
 
-export default function EnvList({ spreadCb, envlist }: Props) {
+export default function EnvList({spreadCb, envlist}: Props) {
   const [spreadIndex, setSpreadIndex] = useState<number>(-1);
   const [modalDisplay, setModalDisplay] = useState(false);
 
@@ -112,28 +112,28 @@ export default function EnvList({ spreadCb, envlist }: Props) {
                   </div>
                 </div>
               </div>
-            {index === 0 && (
-              <div
-                className={clsx(styles.forkEnv, itemClass)}
-                onClick={openForkNewEnvDrawer}
-              >
-                <div className={styles.star}></div>
-                <img src="/img/application/panel/forkenv.svg" alt="" />
-                <span className={styles.desc}>Fork a new environment</span>
-                <RightDrawer
-                  {...{
-                    title: "Fork an Environment From Main",
-                    modalDisplay,
-                    setModalDisplay,
-                  }}
+              {index === 0 && (
+                <div
+                  className={clsx(styles.forkEnv, itemClass)}
+                  onClick={openForkNewEnvDrawer}
                 >
-                  <ForkNewEnv />
-                </RightDrawer>
-              </div>
-            )}
-          </Fragment>
-        );
-      })}
+                  <div className={styles.star}></div>
+                  <img src="/img/application/panel/forkenv.svg" alt=""/>
+                  <span className={styles.desc}>Fork a new environment</span>
+                  <RightDrawer
+                    {...{
+                      title: "Fork an Environment From Main",
+                      modalDisplay,
+                      setModalDisplay,
+                    }}
+                  >
+                    <ForkNewEnv/>
+                  </RightDrawer>
+                </div>
+              )}
+            </Fragment>
+          );
+        })}
     </div>
   );
 }

@@ -14,8 +14,8 @@ interface Props {
 }
 
 export default function Canvas({arrList}: Props) {
-  var ctx = null;
-  var dom = null
+  var ctx: any = null;
+  var dom: any = null
   const [height, setHeight] = useState(0);
 
   useEffect(() => {

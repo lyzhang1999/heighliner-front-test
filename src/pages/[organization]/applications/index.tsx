@@ -1,5 +1,5 @@
 import React, {useState, useEffect, ReactNode} from "react";
-import {Select, MenuItem, InputLabel, FormControl, FormHelperText} from "@mui/material";
+import {Select, MenuItem} from "@mui/material";
 import Layout from "@/components/Layout";
 import styles from "./index.module.scss";
 import {useRouter} from "next/router";
@@ -113,7 +113,7 @@ const Applications = () => {
               <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
               {
                 mumber.map(item => {
-                  return <MenuItem value={item.user_id} key={item.user_id}>{item.username}</MenuItem>
+                  return <MenuItem value={item.user_id} key={item.user_id}>{item.nickname}</MenuItem>
                 })
               }
             </Select>

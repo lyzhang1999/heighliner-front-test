@@ -1,11 +1,12 @@
-import {Controller, useForm, useFieldArray, ControllerProps} from "react-hook-form";
-import React, {useImperativeHandle, useRef, forwardRef} from "react";
+import {Controller, useForm, useFieldArray} from "react-hook-form";
+import React, {useImperativeHandle, forwardRef, useRef} from "react";
 import styles from "./index.module.scss";
 import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {get, without} from "lodash-es";
-import {InitMiddleWareItem} from "@/pages/[organization]/applications/creation/util";
+import {InitMiddleWareItem, MiddleWareType} from "@/components/Application/Create/util";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
+import {getRepoListRes} from "@/api/application";
 
 const IconFocusStyle = {}
 
@@ -14,6 +15,7 @@ const SelectStyle = {}
 export interface Props {
   submitCb: (key: string, value: object) => void,
   formState: FormStateType,
+  repoList: getRepoListRes[]
 }
 
 export const Middles = [
@@ -23,8 +25,8 @@ export const Middles = [
   }
 ]
 
-const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
-  const {submitCb, formState, repoList} = props;
+const Middlewares = forwardRef(function Component(props: Props, ref) {
+  const {submitCb, formState} = props;
   let {middleWares} = formState;
 
   const {control, handleSubmit, setValue, formState: {errors}} = useForm({
@@ -42,18 +44,17 @@ const Middlewares = forwardRef(function frontEnd(props: Props, ref) {
     submit: () => handleSubmit(submit)()
   }));
 
-  function submit(value) {
+  function submit(value: {middle: MiddleWareType[]}) {
     submitCb("middleWares", value.middle)
   }
 
-  function clickFrondendAndBackend(key: string, filed: ControllerProps) {
+  function clickFrondendAndBackend(key: string, filed: any) {
     let {value, name} = filed;
     if (value.includes(key)) {
       value = without(value, key)
     } else {
       value.push(key)
     }
-    console.warn(name, value)
     setValue(name, value);
   }
 

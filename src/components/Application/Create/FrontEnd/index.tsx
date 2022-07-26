@@ -1,13 +1,13 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React, {useImperativeHandle, useRef, forwardRef, useEffect, useState} from "react";
+import React, {useImperativeHandle, forwardRef, useState} from "react";
 import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
-import {filter, find, get, set} from "lodash-es";
+import {filter, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameItemType} from "@/pages/[organization]/applications/creation/util";
+import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 
 const widhtSx = {width: "250px"};
 
@@ -43,7 +43,7 @@ export const frontItem: FrameItemType[] = [
   // }
 ]
 
-const Frontend = forwardRef(function frontEnd(props: Props, ref) {
+const Frontend = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
   let {frontend, backend} = formState;
   let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = frontend;
@@ -57,7 +57,8 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
       repo_url: repo_url,
       entryFile: entryFile,
       exposePort: exposePort,
-      framework: framework
+      framework: framework,
+      isRepo: repo
     },
   });
 
@@ -75,7 +76,7 @@ const Frontend = forwardRef(function frontEnd(props: Props, ref) {
     submit: () => handleSubmit(submit)()
   }));
 
-  function submit(value) {
+  function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);
     submitCb('frontend', value)
   }

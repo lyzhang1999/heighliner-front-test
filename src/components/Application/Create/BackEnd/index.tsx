@@ -7,7 +7,7 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameItemType, FrameworkType} from "@/pages/[organization]/applications/creation/util";
+import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 
 const widhtSx = {width: "250px"};
 
@@ -43,7 +43,7 @@ export const backItem: FrameItemType[] = [
   // }
 ]
 
-const Backend = forwardRef(function frontEnd(props: Props, ref) {
+const Backend = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
   let {backend, frontend} = formState;
   let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = backend;
@@ -57,7 +57,8 @@ const Backend = forwardRef(function frontEnd(props: Props, ref) {
       repo_url: repo_url,
       entryFile: entryFile,
       exposePort: exposePort,
-      framework: framework
+      framework: framework,
+      isRepo: repo
     },
   });
 

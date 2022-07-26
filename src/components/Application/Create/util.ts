@@ -1,7 +1,7 @@
 import {backItem} from "@/components/Application/Create/BackEnd";
 import {find, get, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
-import {FormStateType} from "@/pages/[organization]/applications/creation/index";
+import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
 
 export interface Git_config {
@@ -224,17 +224,28 @@ export interface FrameworkType {
   env: Array<{ name: string; value: string }>;
   exposePort: string;
   path: Array<{ v: string }>;
-  rewrite: false;
+  rewrite: boolean;
   entryFile: string;
 }
 
-export const FrameWorkInitState: FrameworkType = {
+export const BackendFrameWorkInitState: FrameworkType = {
   isRepo: false,
   framework: "",
   repo_url: "",
   env: [],
   exposePort: "",
-  path: [{v: ""}],
+  path: [{v: "/api"}],
+  rewrite: true,
+  entryFile: "",
+};
+
+export const FrontendFrameWorkInitState: FrameworkType = {
+  isRepo: false,
+  framework: "",
+  repo_url: "",
+  env: [],
+  exposePort: "",
+  path: [{v: "/"}],
   rewrite: false,
   entryFile: "",
 };
@@ -294,7 +305,7 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     } else if (key === 'frontend') {
       port = 80;
     }
-    name = key + '-' + appName;
+    name = appName + '-' + key;
   }
 
   let obj = {

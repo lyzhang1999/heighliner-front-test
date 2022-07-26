@@ -215,7 +215,6 @@ export function deleteApplication(appId: number): Promise<any> {
   return http.delete(`/orgs/${getOriIdByContext()}/applications/${appId}`);
 }
 
-
 export interface getRepoListReq {
   owner_name: string,
   owner_type: string,
@@ -238,7 +237,7 @@ export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRep
   })
 }
 
-interface createAppRes {
+export interface createAppRes {
   application_env_id: number
   application_id: number
   application_release_id: number
@@ -262,7 +261,7 @@ export interface Last_release {
   job_namespace: string;
   start_time: number;
   completion_time: number;
-  status: string;
+  status: ApplicationStatus;
 }
 
 export interface Deploy {
@@ -302,7 +301,7 @@ export interface Setting {
   middleware: any[];
 }
 
-export interface EnvList {
+export interface EnvListRes {
   application_env_id: number;
   application_id: number;
   owner_id: number;
@@ -315,14 +314,17 @@ export interface EnvList {
   setting: Setting;
 }
 
-export function getEnvs(appId: string): Promise<EnvList[]> {
+export function getEnvs(appId: string): Promise<EnvListRes[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
 }
 
-export interface AppRepoRes{
-
+export interface AppRepoRes {
+  "git_organization": string,
+  "provider": string,
+  "repo_name": string,
+  "repo_url": string,
 }
 
-export function getApplicationRepos(appid: string): Promise<AppRepoRes[]>{
+export function getApplicationRepos(appid: string): Promise<AppRepoRes[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`)
 }

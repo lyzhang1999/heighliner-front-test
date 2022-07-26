@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, {createContext, useEffect, useState} from "react";
 
 import styles from "./index.module.scss";
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
 import Canvas from "@/pages/[organization]/applications/panel/canvas";
-import EnvList, { itemClass } from "@/components/Panel/EnvList";
-import { getOriIdByContext, getQuery } from "@/utils/utils";
+import EnvList, {itemClass} from "@/components/Panel/EnvList";
+import {getOriIdByContext, getQuery} from "@/utils/utils";
 import {
   AppRepoRes,
   EnvListRes,
@@ -13,6 +13,7 @@ import {
   getEnvs,
   getProdEnv,
 } from "@/api/application";
+import {get} from "lodash-es";
 
 // http://localhost/zhangze-294c2/applications/panel?app_id=6&release_id=6
 
@@ -142,7 +143,7 @@ export default function Newpanel() {
     })
   }
 
-  function forkEnvCb(){
+  function forkEnvCb() {
     getEnvList();
   }
 
@@ -167,11 +168,11 @@ export default function Newpanel() {
   }
 
   return (
-    <Layout notStandardLayout pageHeader="applications/my shop">
+    <Layout notStandardLayout pageHeader={`Applications/${get(envlist, '0.setting.application.name', '')}`}>
       <PanelContext.Provider value={panelContextValue}>
         <div className={styles.wrapper}>
           {/*<div className={styles.left}>*/}
-          <Canvas arrList={arrList} />
+          <Canvas arrList={arrList}/>
           <EnvList
             {...{
               spreadCb,
@@ -181,7 +182,7 @@ export default function Newpanel() {
           />
           {/*</div>*/}
           {/*<div className={styles.right}>*/}
-          <RepoList {...{ repoList }} />
+          <RepoList {...{repoList}} />
           {/*</div>*/}
         </div>
       </PanelContext.Provider>

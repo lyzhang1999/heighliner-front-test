@@ -33,7 +33,7 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
 
   function getDefaultValue(): MiddleWareType {
     let defaultValue = cloneDeep(InitMiddleWareItem);
-    set(defaultValue, 'otherValue.names.0.v', name.toLowerCase().replace('-', '_'));
+    set(defaultValue, 'otherValue.names.0.v', name.toLowerCase().replace(/-/g, '_'));
     // set(defaultValue, 'otherValue.names.0.v', '123');
     return defaultValue;
   }

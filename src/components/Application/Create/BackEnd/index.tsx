@@ -29,7 +29,8 @@ export const backItem: FrameItemType[] = [
     name: 'Gin',
     key: "gin",
     version: "1.7.7",
-    language: 'golang'
+    language: 'golang',
+    languageVersion: '1.18',
   },
   // {
   //   img: "/img/application/spring.svg",

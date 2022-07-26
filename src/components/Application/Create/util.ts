@@ -1,5 +1,5 @@
 import {backItem} from "@/components/Application/Create/BackEnd";
-import {find, get, map} from "lodash-es";
+import {assign, find, get, isEmpty, map} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
@@ -286,10 +286,11 @@ export interface FrameItemType {
   name: string,
   key: string,
   version: string,
-  language: string
+  language: string,
+  languageVersion: string,
 }
 
-function getService(key: string, value: FrameworkType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string) {
+function getService(key: string, value: FrameworkType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string, middleWares: MiddleWareType[]) {
   let {
     isRepo,
     framework,
@@ -317,6 +318,21 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     name = appName + '-' + key;
   }
 
+  if (!isEmpty(middleWares)) {
+    let injection = get(middleWares, '0.injection', []);
+    let {names, username, password} = get(middleWares, '0.otherValue', {});
+    if (injection.includes(key)) {
+      env = [...env, ...
+        [
+          {name: 'DatabaseHost', value: appName + '-postgresql'},
+          {name: 'DatabaseUser', value: username},
+          {name: 'DatabasePassword', value: password},
+          {name: 'DatabaseName', value: get(names, '0.v', '')},
+        ]
+      ]
+    }
+  }
+
   let obj = {
     framework: {
       name: framework,
@@ -324,7 +340,7 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     },
     language: {
       name: get(thisItem, 'language', ''),
-      version: get(thisItem, 'version', ''),
+      version: get(thisItem, 'languageVersion', ''),
     },
     name,
     scaffold: !isRepo,
@@ -354,8 +370,8 @@ export function getParams(formState: FormStateType, repoList: getRepoListRes[]) 
   let {Name, Stack} = selectAStack;
   let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}, cluster_id} = providers;
   const service = [
-    getService('backend', backend, backItem, repoList, Name),
-    getService('frontend', frontend, frontItem, repoList, Name)
+    getService('backend', backend, backItem, repoList, Name, middleWares),
+    getService('frontend', frontend, frontItem, repoList, Name, middleWares)
   ]
   const body = {
     name: Name,
@@ -392,6 +408,7 @@ export function getParams(formState: FormStateType, repoList: getRepoListRes[]) 
           storage: storage + 'Gi',
         },
         type: type,
+        url: Name + '-postgresql',
         username: username,
       }
     })

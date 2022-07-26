@@ -121,12 +121,7 @@ export default function Newpanel() {
         };
       });
     });
-    getEnvs(appId).then((res) => {
-      setEnvList(res);
-      setTimeout(() => {
-        getPosition();
-      }, 0);
-    });
+    getEnvList();
     getApplicationRepos(appId).then((res) => {
       setRepoList(res);
       setPanelContextValue((preState) => {
@@ -137,6 +132,19 @@ export default function Newpanel() {
       });
     });
   }, []);
+
+  function getEnvList() {
+    getEnvs(appId).then(res => {
+      setEnvList(res);
+      setTimeout(() => {
+        getPosition()
+      }, 0)
+    })
+  }
+
+  function forkEnvCb(){
+    getEnvList();
+  }
 
   function getPosition() {
     var item = document.querySelectorAll(`.${itemClass}`);
@@ -168,6 +176,7 @@ export default function Newpanel() {
             {...{
               spreadCb,
               envlist,
+              forkSuccessCb: forkEnvCb
             }}
           />
           {/*</div>*/}

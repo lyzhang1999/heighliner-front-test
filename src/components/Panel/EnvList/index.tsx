@@ -3,7 +3,7 @@ import {Fragment, useState} from "react";
 import clsx from "clsx";
 import RightDrawer from "@/basicComponents/RightDrawer";
 import ForkNewEnv from "./ForkNewEnv";
-import {EnvListRes} from "@/api/application";
+import {EnvListRes, ForkRes} from "@/api/application";
 import {get} from "lodash-es";
 
 const item =
@@ -22,9 +22,10 @@ export const itemClass = "CANVASITME";
 interface Props {
   spreadCb: () => void,
   envlist: EnvListRes[],
+  forkSuccessCb?: (res: ForkRes) => void;
 }
 
-export default function EnvList({spreadCb, envlist}: Props) {
+export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
   const [spreadIndex, setSpreadIndex] = useState<number>(-1);
   const [modalDisplay, setModalDisplay] = useState(false);
 
@@ -128,7 +129,10 @@ export default function EnvList({spreadCb, envlist}: Props) {
                     width: "550px",
                   }}
                 >
-                    <ForkNewEnv/>
+                    <ForkNewEnv {...{forkSuccessCb: (res) => {
+                      setModalDisplay(false);
+                      forkSuccessCb && forkSuccessCb(res);
+                    }}}/>
                   </RightDrawer>
                 </div>
               )}

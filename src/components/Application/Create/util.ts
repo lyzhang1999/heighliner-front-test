@@ -380,15 +380,19 @@ export function getParams(formState: FormStateType, repoList: getRepoListRes[]) 
           return service[1].name;
         }
       })
+      let {names, username, password, storage} = i.otherValue;
       return {
         service: nameArr,
         name: name,
-        password: "admin",
+        database: names.map(i => {
+          return {name: i.v}
+        }),
+        password: password,
         setting: {
-          storage: "10Gi",
+          storage: storage + 'Gi',
         },
         type: type,
-        username: "admin",
+        username: username,
       }
     })
   }

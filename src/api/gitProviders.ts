@@ -93,3 +93,25 @@ export const getGitProviderOrganizations =
   (): Promise<GitProviderOrganizations> => {
     return http.get(`/user/git_providers/organizations`);
   };
+
+export interface GetBranchesReq {
+  git_provider_id: number;
+  owner_name: string;
+  repo_name: string;
+}
+
+export type GetBranchesRes = Array<{
+  commit_sha: string;
+  commit_url: string;
+  name: string;
+  protected: true;
+}>;
+
+export function getBranches(req: GetBranchesReq): Promise<GetBranchesRes> {
+  return http.get(`/user/git_providers/${req.git_provider_id}/repo/branches`, {
+    params: {
+      owner_name: req.owner_name,
+      repo_name: req.repo_name,
+    },
+  });
+}

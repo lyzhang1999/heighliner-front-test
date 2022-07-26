@@ -1,4 +1,10 @@
-import React, { Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useRef } from "react";
+import React, {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  SyntheticEvent,
+  useRef,
+} from "react";
 import { Drawer } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -10,6 +16,7 @@ interface Props extends CommonProps {
   modalDisplay: boolean;
   setModalDisplay: Dispatch<SetStateAction<boolean>>;
   title?: string;
+  width?: number | string;
 }
 
 export default function RightDrawer(props: Props): React.ReactElement {
@@ -28,7 +35,13 @@ export default function RightDrawer(props: Props): React.ReactElement {
         root: { borderTopLeftRadius: "14px", border: "1px solid black" },
       }}
     >
-      <div className={styles.drawerWrap} ref={drawerEle}>
+      <div
+        className={styles.drawerWrap}
+        ref={drawerEle}
+        style={{
+          width: props.width || "500px",
+        }}
+      >
         <div className={styles.closeIcon} title="Close">
           <CloseIcon onClick={handleClose} />
         </div>

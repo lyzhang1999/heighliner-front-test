@@ -3,7 +3,7 @@ import {Fragment, useState} from "react";
 import clsx from "clsx";
 import RightDrawer from "@/basicComponents/RightDrawer";
 import ForkNewEnv from "./ForkNewEnv";
-import {EnvListRes} from "@/api/application";
+import {EnvListRes, ForkRes} from "@/api/application";
 import {get} from "lodash-es";
 
 const item =
@@ -22,9 +22,10 @@ export const itemClass = "CANVASITME";
 interface Props {
   spreadCb: () => void,
   envlist: EnvListRes[],
+  forkSuccessCb?: (res: ForkRes) => void;
 }
 
-export default function EnvList({spreadCb, envlist}: Props) {
+export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
   const [spreadIndex, setSpreadIndex] = useState<number>(-1);
   const [modalDisplay, setModalDisplay] = useState(false);
 
@@ -112,22 +113,26 @@ export default function EnvList({spreadCb, envlist}: Props) {
                   </div>
                 </div>
               </div>
-              {index === 0 && (
-                <div
-                  className={clsx(styles.forkEnv, itemClass)}
-                  onClick={openForkNewEnvDrawer}
+            {index === 0 && (
+              <div
+                className={clsx(styles.forkEnv, itemClass)}
+                onClick={openForkNewEnvDrawer}
+              >
+                <div className={styles.star}></div>
+                <img src="/img/application/panel/forkenv.svg" alt="" />
+                <span className={styles.desc}>Fork a new environment</span>
+                <RightDrawer
+                  {...{
+                    title: "Fork an Environment From Main",
+                    modalDisplay,
+                    setModalDisplay,
+                    width: "550px",
+                  }}
                 >
-                  <div className={styles.star}></div>
-                  <img src="/img/application/panel/forkenv.svg" alt=""/>
-                  <span className={styles.desc}>Fork a new environment</span>
-                  <RightDrawer
-                    {...{
-                      title: "Fork an Environment From Main",
-                      modalDisplay,
-                      setModalDisplay,
-                    }}
-                  >
-                    <ForkNewEnv/>
+                    <ForkNewEnv {...{forkSuccessCb: (res) => {
+                      setModalDisplay(false);
+                      forkSuccessCb && forkSuccessCb(res);
+                    }}}/>
                   </RightDrawer>
                 </div>
               )}

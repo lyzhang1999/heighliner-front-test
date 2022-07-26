@@ -1,14 +1,29 @@
-import React, {useEffect, useState} from "react";
+import React, { createContext, useEffect, useState } from "react";
 
-import styles from './index.module.scss';
+import styles from "./index.module.scss";
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
 import Canvas from "@/pages/[organization]/applications/panel/canvas";
-import EnvList, {itemClass} from "@/components/Panel/EnvList";
-import {getQuery} from "@/utils/utils";
-import {AppRepoRes, EnvListRes, getApplicationRepos, getEnvs} from "@/api/application";
+import EnvList, { itemClass } from "@/components/Panel/EnvList";
+import { getOriIdByContext, getQuery } from "@/utils/utils";
+import {
+  AppRepoRes,
+  EnvListRes,
+  getApplicationRepos,
+  getEnvs,
+  getProdEnv,
+} from "@/api/application";
 
 // http://localhost/zhangze-294c2/applications/panel?app_id=6&release_id=6
+
+interface PanelContextValue {
+  git_provider_id?: number;
+  git_org_name?: string;
+  owner_id?: number;
+  repos?: AppRepoRes[];
+}
+
+export const PanelContext = createContext<PanelContextValue>({});
 
 const item = {
   "application_env_id": 20,
@@ -86,18 +101,37 @@ const item = {
 }
 
 export default function Newpanel() {
+  const [panelContextValue, setPanelContextValue] = useState<PanelContextValue>(
+    {}
+  );
   const [arrList, setArrList] = useState<number[]>([]);
-  let appId = getQuery("app_id")
+  let appId = getQuery("app_id");
 
   const [envlist, setEnvList] = useState<EnvListRes[]>([]);
   const [repoList, setRepoList] = useState<AppRepoRes[]>([]);
 
   useEffect(() => {
+    getProdEnv(appId).then((res) => {
+      setPanelContextValue((preState) => {
+        return {
+          ...preState,
+          git_org_name: res.git_org_name,
+          git_provider_id: res.git_provider_id,
+          owner_id: res.owner_id,
+        };
+      });
+    });
     getEnvList();
-    getApplicationRepos(appId).then(res => {
-      setRepoList(res)
-    })
-  }, [])
+    getApplicationRepos(appId).then((res) => {
+      setRepoList(res);
+      setPanelContextValue((preState) => {
+        return {
+          ...preState,
+          repos: res,
+        };
+      });
+    });
+  }, []);
 
   function getEnvList() {
     getEnvs(appId).then(res => {
@@ -119,35 +153,40 @@ export default function Newpanel() {
       if (index === 0) {
         return;
       }
-      arr.push(i.getBoundingClientRect().top - item[0].getBoundingClientRect().top)
-    })
-    setArrList(arr)
+      arr.push(
+        i.getBoundingClientRect().top - item[0].getBoundingClientRect().top
+      );
+    });
+    setArrList(arr);
   }
 
   function spreadCb() {
     setTimeout(() => {
       getPosition();
-    }, 0)
+    }, 0);
   }
 
   return (
     <Layout notStandardLayout pageHeader="applications/my shop">
-      <div className={styles.wrapper}>
-        {/*<div className={styles.left}>*/}
-        <Canvas arrList={arrList}/>
-        <EnvList
-          {...{
-            spreadCb,
-            envlist
-          }}
-        />
-        {/*</div>*/}
-        {/*<div className={styles.right}>*/}
-        <RepoList {...{repoList}}/>
-        {/*</div>*/}
-      </div>
+      <PanelContext.Provider value={panelContextValue}>
+        <div className={styles.wrapper}>
+          {/*<div className={styles.left}>*/}
+          <Canvas arrList={arrList} />
+          <EnvList
+            {...{
+              spreadCb,
+              envlist,
+              forkSuccessCb: forkEnvCb
+            }}
+          />
+          {/*</div>*/}
+          {/*<div className={styles.right}>*/}
+          <RepoList {...{ repoList }} />
+          {/*</div>*/}
+        </div>
+      </PanelContext.Provider>
     </Layout>
-  )
+  );
 }
 
 // http://localhost/zhangze-9n6qd/applications/newpanel

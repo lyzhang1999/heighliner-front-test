@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Fragment, useState } from "react";
+import {Fragment, useState} from "react";
 import clsx from "clsx";
 import RightDrawer from "@/basicComponents/RightDrawer";
 import ForkNewEnv from "./ForkNewEnv";
@@ -24,7 +24,7 @@ interface Props {
   envlist: EnvListRes[],
 }
 
-export default function EnvList({ spreadCb, envlist }: Props) {
+export default function EnvList({spreadCb, envlist}: Props) {
   const [spreadIndex, setSpreadIndex] = useState<number>(-1);
   const [modalDisplay, setModalDisplay] = useState(false);
 
@@ -125,15 +125,16 @@ export default function EnvList({ spreadCb, envlist }: Props) {
                     title: "Fork an Environment From Main",
                     modalDisplay,
                     setModalDisplay,
+                    width: "550px",
                   }}
                 >
-                  <ForkNewEnv />
-                </RightDrawer>
-              </div>
-            )}
-          </Fragment>
-        );
-      })}
+                    <ForkNewEnv/>
+                  </RightDrawer>
+                </div>
+              )}
+            </Fragment>
+          );
+        })}
     </div>
   );
 }

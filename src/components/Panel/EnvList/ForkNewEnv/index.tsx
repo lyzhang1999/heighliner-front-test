@@ -1,11 +1,7 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { useRouter } from "next/router";
 import clsx from "clsx";
-import {
-  Controller,
-  SubmitHandler,
-  useForm,
-  useFieldArray,
-} from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
@@ -23,14 +19,30 @@ import {
   TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { cloneDeep, filter, get } from "lodash-es";
 import * as yup from "yup";
+import {
+  EnvType,
+  EnvVariables,
+  fork,
+  ForkReq,
+  ForkRes,
+  ForkType,
+  ServiceType,
+} from "@/api/application";
+import { useBranches } from "@/hooks/branches";
+import { CommonProps } from "@/utils/commonType";
+import { GetBranchesReq } from "@/api/gitProviders";
+import { PanelContext } from "@/pages/[organization]/applications/panel";
+import { getQuery } from "@/utils/utils";
 
 import styles from "./index.module.scss";
+import AddEnvVariables, {
+  schema as backendVariableSchema,
+} from "../AddEnvVariables";
+import { schema as frontendVariableSchema } from "../AddEnvVariables";
 
-enum EnvType {
-  Testing = "Testing",
-  Development = "Development",
+interface Props extends CommonProps {
+  forkSuccessCb?: (res: ForkRes) => void;
 }
 
 enum FieldsMap {
@@ -49,27 +61,30 @@ interface FieldsValue {
     [FieldsMap.Backend]: string;
     [FieldsMap.Frontend]: string;
   };
-  [FieldsMap.EnvVariables]: Array<{
-    key: string;
-    value: string;
-  }>;
+  [FieldsMap.EnvVariables]: {
+    [FieldsMap.Backend]: EnvVariables;
+    [FieldsMap.Frontend]: EnvVariables;
+  };
 }
 
+const defaultBranches = "main";
 const DefaultFields: FieldsValue = {
   [FieldsMap.EnvType]: EnvType.Development,
   [FieldsMap.Name]: "",
   [FieldsMap.StartPoint]: {
-    [FieldsMap.Backend]: "",
-    [FieldsMap.Frontend]: "",
+    [FieldsMap.Backend]: defaultBranches,
+    [FieldsMap.Frontend]: defaultBranches,
   },
-  [FieldsMap.EnvVariables]: [],
+  [FieldsMap.EnvVariables]: {
+    [FieldsMap.Backend]: [],
+    [FieldsMap.Frontend]: [],
+  },
 };
 
 const schema = yup.object().shape({
   [FieldsMap.EnvType]: yup
     .string()
     .oneOf(Object.values(EnvType))
-    .default(EnvType.Development)
     .required("Please enter the forked environment name."),
   [FieldsMap.Name]: yup
     .string()
@@ -80,45 +95,82 @@ const schema = yup.object().shape({
       .string()
       .required("Please choose backend branch."),
   }),
-  [FieldsMap.EnvVariables]: yup.array().of(
-    yup.object().shape({
-      key: yup.string(),
-      value: yup.string(),
-    })
-  ),
+  [FieldsMap.EnvVariables]: yup.object().shape({
+    [FieldsMap.Backend]: backendVariableSchema,
+    [FieldsMap.Frontend]: frontendVariableSchema,
+  }),
 });
 
-// interface FieldsValue extends yup.InferType<typeof schema>{}
+export default function ForkNewEnv(props: Props): React.ReactElement {
+  let appId = getQuery("app_id");
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
-const branches = [
-  "default branch(main)",
-  "Feat-1",
-  "Feat-2",
-  "BugFix-1",
-  "BugFix-2",
-];
+  const panelContext = useContext(PanelContext);
+  const [frontendBranches, flushFrontendBranches] = useBranches({
+    git_provider_id: panelContext.git_provider_id!,
+    owner_name: panelContext.git_org_name!,
+    repo_name: panelContext.repos![1].repo_name,
+  });
+  const [backendBranches, flushBackendBranches] = useBranches({
+    git_provider_id: panelContext.git_provider_id!,
+    owner_name: panelContext.git_org_name!,
+    repo_name: panelContext.repos![0]!.repo_name,
+  });
 
-export default function ForkNewEnv(): React.ReactElement {
   const {
     control,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm({
     defaultValues: DefaultFields,
     resolver: yupResolver(schema),
   });
 
-  const {
-    fields: envVariables,
-    append: envVariablesAppend,
-    remove: envVariablesRemove,
-  } = useFieldArray({
-    control,
-    name: FieldsMap.EnvVariables,
-  });
+  const switchChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowAdvancedSettings(event.target.checked);
+  };
 
-  const submitHandler: SubmitHandler<FieldsValue> = (data) => {};
+  const submitHandler: SubmitHandler<FieldsValue> = (data) => {
+    console.log(data);
+    const [backendRepo, frontendRepo] = panelContext.repos!;
+    const backendService = {
+      name: backendRepo.repo_name,
+      repo_url: backendRepo.repo_url,
+      setting: {
+        env: data[FieldsMap.EnvVariables][FieldsMap.Backend],
+        fork: {
+          from: data[FieldsMap.StartPoint][FieldsMap.Backend],
+          type: ForkType.branch,
+        },
+      },
+      type: ServiceType.backend,
+    };
+    const frontendService = {
+      name: frontendRepo.repo_name,
+      repo_url: frontendRepo.repo_url,
+      setting: {
+        env: data[FieldsMap.EnvVariables][FieldsMap.Frontend],
+        fork: {
+          from: data[FieldsMap.StartPoint][FieldsMap.Frontend],
+          type: ForkType.branch,
+        },
+      },
+      type: ServiceType.frontend,
+    };
+
+    const req: ForkReq = {
+      app_id: +appId,
+      body: {
+        env_name: data[FieldsMap.Name],
+        env_type: data[FieldsMap.EnvType],
+        service: [backendService, frontendService],
+      },
+    };
+
+    fork(req).then((res) => {
+      props.forkSuccessCb && props.forkSuccessCb(res);
+    });
+  };
 
   return (
     <form className={styles.wrapper} onSubmit={handleSubmit(submitHandler)}>
@@ -136,9 +188,9 @@ export default function ForkNewEnv(): React.ReactElement {
             <HeadlineOne>{FieldsMap.EnvType}</HeadlineOne>
             <RadioGroup row name={FieldsMap.EnvType} value={field.value}>
               <FormControlLabel
-                value={EnvType.Testing}
+                value={EnvType.Test}
                 control={<Radio />}
-                label={EnvType.Testing}
+                label={EnvType.Test}
               />
               <FormControlLabel
                 value={EnvType.Development}
@@ -170,161 +222,110 @@ export default function ForkNewEnv(): React.ReactElement {
       <Box className={styles.switchWrap}>
         <span>*</span>
         Show Advanced Options
-        <Switch />
+        <Switch checked={showAdvancedSettings} onChange={switchChangeHandler} />
       </Box>
-      <div className={styles.startPointWrap}>
-        <HeadlineOne>{FieldsMap.StartPoint}:</HeadlineOne>
-        <div>
-          <HeadlineTwo>{FieldsMap.Backend}</HeadlineTwo>
-          <Controller
-            name={`${FieldsMap.StartPoint}.${FieldsMap.Frontend}`}
-            control={control}
-            render={({ field, fieldState, formState }) => (
-              <FormControl
-                error={
-                  errors[FieldsMap.StartPoint] &&
-                  errors[FieldsMap.StartPoint]![FieldsMap.Backend] !== undefined
-                }
-              >
-                <Select
-                  size="small"
-                  value={field.value[FieldsMap.Backend]}
-                  onChange={field.onChange}
-                >
-                  {branches.map((branch) => (
-                    <MenuItem key={branch} value={branch}>
-                      {branch}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>
-                  {errors[FieldsMap.StartPoint] &&
-                    errors[FieldsMap.StartPoint]![FieldsMap.Backend]?.message}
-                </FormHelperText>
-              </FormControl>
-            )}
-          />
-          <HeadlineTwo>{FieldsMap.Frontend}</HeadlineTwo>
-          <Controller
-            name={`${FieldsMap.StartPoint}.${FieldsMap.Frontend}`}
-            control={control}
-            render={({ field }) => (
-              <FormControl
-                error={
-                  errors[FieldsMap.StartPoint] &&
-                  errors[FieldsMap.StartPoint]![FieldsMap.Frontend] !==
-                    undefined
-                }
-              >
-                <Select
-                  size="small"
-                  value={field.value[FieldsMap.Frontend]}
-                  onChange={field.onChange}
-                >
-                  {branches.map((branch) => (
-                    <MenuItem key={branch} value={branch}>
-                      {branch}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>
-                  {errors[FieldsMap.StartPoint] &&
-                    errors[FieldsMap.StartPoint]![FieldsMap.Frontend]?.message}
-                </FormHelperText>
-              </FormControl>
-            )}
-          />
-        </div>
-      </div>
-      <Controller
-        name={FieldsMap.EnvVariables}
-        control={control}
-        render={({ field }) => (
-          <FormControl>
-            {envVariables.map((envVariable, index) => (
-              <div key={index} className={styles.inputItem}>
-                <div className={styles.left}>
-                  <Controller
-                    name={`${FieldsMap.EnvVariables}.${index}.key`}
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        size="small"
-                        sx={{ ...IconFocusStyle, width: "150px" }}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                    rules={{
-                      required: "Please input env name",
-                      validate: {
-                        unconformity: (key) => {
-                          if (
-                            filter(
-                              getValues(FieldsMap.EnvVariables),
-                              (item) => item.key === key
-                            ).length > 1
-                          ) {
-                            return "There can be same env key";
-                          }
-                        },
-                      },
-                    }}
-                  />
-                  {get(errors, `env.${index}.name.message`) && (
-                    <div className={styles.error}>
-                      {get(errors, `env.${index}.name.message`)}
-                    </div>
-                  )}
-                </div>
-                <span className={styles.equal}>=</span>
-                <div className={styles.right}>
-                  <Controller
-                    name={`${FieldsMap.EnvVariables}.${index}.value`}
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        size="small"
-                        sx={{ ...IconFocusStyle, width: "150px" }}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                    rules={{ required: "Please input env value" }}
-                  />
-                  {get(errors, `env.${index}.value.message`) && (
-                    <div className={styles.error}>
-                      {get(errors, `env.${index}.value.message`)}
-                    </div>
-                  )}
-                </div>
-                <img
-                  src="/img/application/delete.svg"
-                  alt=""
-                  onClick={() => envVariablesRemove(index)}
-                  className={styles.deleteIcon}
-                />
-              </div>
-            ))}
-            <div
-              className={styles.add}
-              onClick={() => envVariablesAppend({ key: "", value: "" })}
-            >
-              ADD ONE
+      {showAdvancedSettings && (
+        <>
+          <div className={styles.startPointWrap}>
+            <HeadlineOne>{FieldsMap.StartPoint}:</HeadlineOne>
+            <div>
+              <HeadlineTwo>{FieldsMap.Backend}</HeadlineTwo>
+              <Controller
+                name={`${FieldsMap.StartPoint}.${FieldsMap.Backend}`}
+                control={control}
+                render={({ field, fieldState, formState }) => (
+                  <FormControl
+                    error={
+                      errors[FieldsMap.StartPoint] &&
+                      errors[FieldsMap.StartPoint]![FieldsMap.Backend] !==
+                        undefined
+                    }
+                  >
+                    <Select
+                      size="small"
+                      value={field.value}
+                      onChange={field.onChange}
+                    >
+                      {backendBranches.map((branch) => (
+                        <MenuItem key={branch.name} value={branch.name}>
+                          {branch.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>
+                      {errors[FieldsMap.StartPoint] &&
+                        errors[FieldsMap.StartPoint]![FieldsMap.Backend]
+                          ?.message}
+                    </FormHelperText>
+                  </FormControl>
+                )}
+              />
+              <HeadlineTwo>{FieldsMap.Frontend}</HeadlineTwo>
+              <Controller
+                name={`${FieldsMap.StartPoint}.${FieldsMap.Frontend}`}
+                control={control}
+                render={({ field }) => (
+                  <FormControl
+                    error={
+                      errors[FieldsMap.StartPoint] &&
+                      errors[FieldsMap.StartPoint]![FieldsMap.Frontend] !==
+                        undefined
+                    }
+                  >
+                    <Select
+                      size="small"
+                      value={field.value}
+                      onChange={field.onChange}
+                    >
+                      {frontendBranches.map((branch) => (
+                        <MenuItem key={branch.name} value={branch.name}>
+                          {branch.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>
+                      {errors[FieldsMap.StartPoint] &&
+                        errors[FieldsMap.StartPoint]![FieldsMap.Frontend]
+                          ?.message}
+                    </FormHelperText>
+                  </FormControl>
+                )}
+              />
             </div>
-          </FormControl>
-        )}
-      />
+          </div>
+          <div className={styles.envVariablesWrap}>
+            <HeadlineOne>{FieldsMap.EnvVariables}:</HeadlineOne>
+            <div className={styles.backendEnvVariablesWrap}>
+              <HeadlineTwo>{FieldsMap.Backend}</HeadlineTwo>
+              <AddEnvVariables
+                {...{
+                  control,
+                  name: `${FieldsMap.EnvVariables}.${FieldsMap.Backend}`,
+                  error:
+                    errors[FieldsMap.EnvVariables] &&
+                    errors[FieldsMap.EnvVariables]![FieldsMap.Backend],
+                }}
+              />
+              <HeadlineTwo>{FieldsMap.Frontend}</HeadlineTwo>
+              <AddEnvVariables
+                {...{
+                  control,
+                  name: `${FieldsMap.EnvVariables}.${FieldsMap.Frontend}`,
+                  error:
+                    errors[FieldsMap.EnvVariables] &&
+                    errors[FieldsMap.EnvVariables]![FieldsMap.Frontend],
+                }}
+              />
+            </div>
+          </div>
+        </>
+      )}
       <Button variant="contained" type="submit">
         Fork
       </Button>
       <Button
-        onClick={() => {
-          console.group(">>>>>errors<<<<<<");
-          console.log(errors);
-          console.log();
-          console.groupEnd();
-        }}
+        variant="outlined"
+        onClick={(e) => console.warn(frontendBranches)}
       >
         test
       </Button>

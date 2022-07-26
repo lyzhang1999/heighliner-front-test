@@ -31,4 +31,23 @@
       row-gap: 20px;
     }
   }
+
+  .envVariablesWrap {
+    display: grid;
+    grid-template-columns: 113px auto;
+
+    .backendEnvVariablesWrap {
+      display: grid;
+      grid-template-columns: 75px auto;
+      row-gap: 21px;
+
+      .backendEnvVariables {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        align-items: center;
+        column-gap: 11px;
+        row-gap: 19px;
+      }
+    }
+  }
 }

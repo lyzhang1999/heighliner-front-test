@@ -19,7 +19,6 @@ export default function Canvas({arrList}: Props) {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-
     dom = document.getElementById('tutorial');
     if (!dom.getContext) return;
     ctx = dom.getContext("2d");
@@ -28,26 +27,32 @@ export default function Canvas({arrList}: Props) {
 
 
   useEffect(() => {
+    console.warn(arrList)
+    setHeight(Math.max(...arrList) + 100)
     if (isEmpty(arrList)) {
       return;
     }
-    var w = dom.width;
-    var h = dom.height;
-    ctx.clearRect(0, 0, w, h);
 
-    // setHeight(Math.max(...arrList) + 100)
-    arrList.forEach(item => {
-      ctx.beginPath();
-      ctx.moveTo(50, 0);           // 创建起始点
-      ctx.lineTo(10, 0);          // 创建水平线
-      ctx.arcTo(0, 0, 0, 10, 10); // 创建弧
-      ctx.lineTo(0, item - 10);         // 创建垂直线
-      ctx.arcTo(0, item, 10, item, 10); // 创建弧
-      ctx.lineTo(50, item);         // 创建垂直线
-      ctx.strokeStyle = "#aab7ea";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    })
+    setTimeout(() => {
+      var w = dom.width;
+      var h = dom.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // setHeight(Math.max(...arrList) + 100)
+      arrList.forEach(item => {
+        ctx.beginPath();
+        ctx.moveTo(50, 0);           // 创建起始点
+        ctx.lineTo(10, 0);          // 创建水平线
+        ctx.arcTo(0, 0, 0, 10, 10); // 创建弧
+        ctx.lineTo(0, item - 10);         // 创建垂直线
+        ctx.arcTo(0, item, 10, item, 10); // 创建弧
+        ctx.lineTo(50, item);         // 创建垂直线
+        ctx.strokeStyle = "#aab7ea";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      })
+    }, 0)
+
   }, [arrList])
 
 

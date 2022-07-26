@@ -1,6 +1,6 @@
 import http from "../utils/axios";
-import {CreativeApiReturnField} from "../utils/commonType";
-import {getOriIdByContext} from "../utils/utils";
+import { CreativeApiReturnField } from "../utils/commonType";
+import { getOriIdByContext } from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -101,7 +101,7 @@ export interface getAppListReq {
 export function getApplicationList(
   params: getAppListReq = {}
 ): Promise<ApplicationObject[]> {
-  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
+  let { cluster_ids = [], owner_ids = [], stack_ids = [] } = params;
   let url = `/orgs/${getOriIdByContext()}/applications?`;
   cluster_ids.forEach((item) => {
     url += `cluster_ids=${item}&`;
@@ -216,35 +216,39 @@ export function deleteApplication(appId: number): Promise<any> {
 }
 
 export interface getRepoListReq {
-  owner_name: string,
-  owner_type: string,
-  git_provider_id: number
+  owner_name: string;
+  owner_type: string;
+  git_provider_id: number;
 }
 
 export interface getRepoListRes {
-  language: string,
-  provider: string,
-  repo_name: string,
-  url: string,
+  language: string;
+  provider: string;
+  repo_name: string;
+  url: string;
 }
 
-export function getTheRepoList({owner_name, owner_type, git_provider_id}: getRepoListReq): Promise<getRepoListRes[]> {
+export function getTheRepoList({
+  owner_name,
+  owner_type,
+  git_provider_id,
+}: getRepoListReq): Promise<getRepoListRes[]> {
   return http.get(`/user/git_providers/${git_provider_id}/repo`, {
     params: {
       owner_type,
-      owner_name
-    }
-  })
+      owner_name,
+    },
+  });
 }
 
 export interface createAppRes {
-  application_env_id: number
-  application_id: number
-  application_release_id: number
+  application_env_id: number;
+  application_id: number;
+  application_release_id: number;
 }
 
 export function createApp(body: any): Promise<createAppRes> {
-  return http.post(`/orgs/${getOriIdByContext()}/applications`, body)
+  return http.post(`/orgs/${getOriIdByContext()}/applications`, body);
 }
 
 export interface Last_release {
@@ -315,16 +319,87 @@ export interface EnvListRes {
 }
 
 export function getEnvs(appId: string): Promise<EnvListRes[]> {
-  return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`)
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`);
 }
 
 export interface AppRepoRes {
-  "git_organization": string,
-  "provider": string,
-  "repo_name": string,
-  "repo_url": string,
+  git_organization: string;
+  provider: string;
+  repo_name: string;
+  repo_url: string;
 }
 
 export function getApplicationRepos(appid: string): Promise<AppRepoRes[]> {
-  return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`)
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`);
+}
+
+export enum ServiceType {
+  backend = "backend",
+  frontend = "frontend",
+}
+
+export enum ForkType {
+  branch = "branch",
+}
+
+export enum EnvType {
+  Test = "Test",
+  Development = "Development",
+}
+
+export enum EnvVariableMap {
+  name = "name",
+  value = "value",
+}
+
+export type EnvVariables = Array<{
+  [EnvVariableMap.name]: string;
+  [EnvVariableMap.value]: string;
+}>;
+
+export interface ForkReq {
+  app_id: number;
+  body: {
+    env_name: string;
+    env_type: EnvType;
+
+    service: Array<{
+      name: string;
+      repo_url: string;
+      setting: {
+        env: EnvVariables;
+        fork: {
+          from: string;
+          type: ForkType;
+        };
+      };
+      type: ServiceType;
+    }>;
+  };
+}
+
+export interface ForkRes extends createAppRes {}
+
+export function fork(req: ForkReq): Promise<ForkRes> {
+  return http.post(
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/fork`,
+    req.body
+  );
+}
+
+interface GetProdEnvRes extends CreativeApiReturnField {
+  application_id: number;
+  domain: string;
+  env_type: EnvType;
+  git_org_name: string;
+  git_provider_id: number;
+  id: number;
+  name: string;
+  namespace: string;
+  owner_id: number;
+  setting_content: string;
+}
+
+export function getProdEnv(app_id: string): Promise<GetProdEnvRes> {
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${app_id}/envs/prod`);
 }

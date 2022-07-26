@@ -33,3 +33,21 @@ $theme-color: #6002ee;
   }
 }
 
+
+@mixin globalAddBtn {
+  border-radius: 4px;
+  background-color: rgba(155, 172, 185, 0.5);
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #0a1a24;
+  cursor: pointer;
+}
+
+@mixin errorStyle {
+  color: #F85056;
+  font-size: 12px;
+  line-height: 20px;
+}
+

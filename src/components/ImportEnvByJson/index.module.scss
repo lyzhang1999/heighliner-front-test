@@ -1,0 +1,15 @@
+
+.header {
+  color: blue;
+
+}
+
+.textField {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s linear;
+}
+
+.spread {
+  max-height: 200px;
+}

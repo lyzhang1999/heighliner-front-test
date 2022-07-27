@@ -8,6 +8,7 @@ import {filter, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import ImportEnvByJson from "@/components/ImportEnvByJson";
 
 const widhtSx = {width: "250px"};
 
@@ -34,7 +35,8 @@ export const frontItem: FrameItemType[] = [
     name: 'Next.js',
     key: "nextjs",
     version: "1.7.7",
-    language: 'typescript'
+    language: 'typescript',
+    languageVersion: '1.7.7'
   },
   // {
   //   img: "/img/application/react.svg",

@@ -8,6 +8,7 @@ import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import ImportEnvByJson from "@/components/ImportEnvByJson";
 
 const widhtSx = {width: "250px"};
 
@@ -341,6 +342,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
             <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
               ADD ONE
             </div>
+            <ImportEnvByJson></ImportEnvByJson>
           </div>
         </div>
       </div>

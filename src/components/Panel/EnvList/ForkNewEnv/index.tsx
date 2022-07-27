@@ -48,7 +48,7 @@ interface Props extends CommonProps {
 enum FieldsMap {
   EnvType = "Env Type",
   Name = "Name",
-  StartPoint = "Start point",
+  StartPoint = "Start Point",
   Backend = "Backend",
   Frontend = "Frontend",
   EnvVariables = "Env Variables",

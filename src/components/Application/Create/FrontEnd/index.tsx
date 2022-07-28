@@ -34,7 +34,8 @@ export const frontItem: FrameItemType[] = [
     name: 'Next.js',
     key: "nextjs",
     version: "1.7.7",
-    language: 'typescript'
+    language: 'typescript',
+    languageVersion: "1.7.7"
   },
   // {
   //   img: "/img/application/react.svg",

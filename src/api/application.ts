@@ -128,6 +128,14 @@ export type WorkloadType =
   | "CronJob"
   | "Pod";
 
+export type ResourceType =
+  | "All"
+  | "Deployment"
+  | "StatefulSet"
+  | "DaemonSet"
+  | "Job"
+  | "CronJob";
+
 export type GetAppEnvironmentsRes = Array<{
   cluster: {
     created_at: number;
@@ -146,7 +154,7 @@ export type GetAppEnvironmentsRes = Array<{
     namespace: string;
     ready_total: number;
     total: number;
-    type: WorkloadType;
+    type: ResourceType;
   }>;
   space: {
     access: {
@@ -251,12 +259,8 @@ export function createApp(body: any): Promise<createAppRes> {
   return http.post(`/orgs/${getOriIdByContext()}/applications`, body);
 }
 
-export interface Last_release {
+export interface Last_release extends CreativeApiReturnField {
   id: number;
-  created_at: number;
-  created_by: number;
-  updated_at: number;
-  updated_by: number;
   application_id: number;
   application_env_id: number;
   name: string;
@@ -305,7 +309,7 @@ export interface Setting {
   middleware: any[];
 }
 
-export interface EnvListRes {
+export interface EnvItemRes {
   application_env_id: number;
   application_id: number;
   owner_id: number;
@@ -318,8 +322,56 @@ export interface EnvListRes {
   setting: Setting;
 }
 
-export function getEnvs(appId: string): Promise<EnvListRes[]> {
+export function getEnvs(appId: string): Promise<EnvItemRes[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`);
+}
+
+export interface GetEnvReq {
+  app_id: number;
+  env_id: number;
+}
+
+export type GetEnvRes = EnvItemRes;
+
+export function getEnv({ app_id, env_id }: GetEnvReq): Promise<GetEnvRes> {
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}`
+  );
+}
+
+export interface GetEnvResourcesReq {
+  app_id: number;
+  env_id: number;
+  resource_type?: ResourceType;
+}
+
+export type GetEnvResourcesRes = Array<{
+  container: Array<{
+    image: string;
+    name: string;
+  }>;
+  name: string;
+  namespace: string;
+  status: {
+    ready_replicas: number;
+    replicas: number;
+  };
+  type: ResourceType;
+}>;
+
+export function getEnvResources({
+  app_id,
+  env_id,
+  resource_type,
+}: GetEnvResourcesReq): Promise<GetEnvResourcesRes> {
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}/resources`,
+    {
+      params: {
+        resource_type: resource_type || "All",
+      },
+    }
+  );
 }
 
 export interface AppRepoRes {
@@ -401,5 +453,7 @@ interface GetProdEnvRes extends CreativeApiReturnField {
 }
 
 export function getProdEnv(app_id: string): Promise<GetProdEnvRes> {
-  return http.get(`/orgs/${getOriIdByContext()}/applications/${app_id}/envs/prod`);
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/prod`
+  );
 }

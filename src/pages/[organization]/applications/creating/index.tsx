@@ -181,13 +181,13 @@ const CreatingApplication = () => {
         <div className={styles.infoWrapper}>
           <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
           {
-            status === ApplicationStatus.FAILED &&
+            (status === ApplicationStatus.FAILED) && (!getQuery('foromPane')) &&
             <Alert severity="error">
               The Application Filed!
             </Alert>
           }
           {
-            status === ApplicationStatus.COMPLETED &&
+            status === ApplicationStatus.COMPLETED && (!getQuery('foromPane')) &&
             <Alert severity="success">
               Success, auto go panel page after {skipTime}s
             </Alert>

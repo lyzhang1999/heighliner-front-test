@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import clsx from "clsx";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -31,7 +31,7 @@ import {
 } from "@/api/application";
 import { useBranches } from "@/hooks/branches";
 import { CommonProps } from "@/utils/commonType";
-import { GetBranchesReq } from "@/api/gitProviders";
+import { GetBranchesReq, GetBranchesRes } from "@/api/gitProviders";
 import { PanelContext } from "@/pages/[organization]/applications/panel";
 import { getQuery } from "@/utils/utils";
 
@@ -45,14 +45,14 @@ interface Props extends CommonProps {
   forkSuccessCb?: (res: ForkRes) => void;
 }
 
-enum FieldsMap {
-  EnvType = "Env Type",
-  Name = "Name",
-  StartPoint = "Start point",
-  Backend = "Backend",
-  Frontend = "Frontend",
-  EnvVariables = "Env Variables",
-}
+const FieldsMap = {
+  EnvType: "Env Type",
+  Name: "Name",
+  StartPoint: "Start Point",
+  Backend: "Backend",
+  Frontend: "Frontend",
+  EnvVariables: "Env Variables",
+} as const;
 
 interface FieldsValue {
   [FieldsMap.EnvType]: EnvType;
@@ -67,13 +67,12 @@ interface FieldsValue {
   };
 }
 
-const defaultBranches = "main";
 const DefaultFields: FieldsValue = {
   [FieldsMap.EnvType]: EnvType.Development,
   [FieldsMap.Name]: "",
   [FieldsMap.StartPoint]: {
-    [FieldsMap.Backend]: defaultBranches,
-    [FieldsMap.Frontend]: defaultBranches,
+    [FieldsMap.Backend]: "",
+    [FieldsMap.Frontend]: "",
   },
   [FieldsMap.EnvVariables]: {
     [FieldsMap.Backend]: [],
@@ -84,15 +83,21 @@ const DefaultFields: FieldsValue = {
 const schema = yup.object().shape({
   [FieldsMap.EnvType]: yup
     .string()
+    .default("")
     .oneOf(Object.values(EnvType))
     .required("Please enter the forked environment name."),
   [FieldsMap.Name]: yup
     .string()
+    .default("")
     .required("Please enter the forked environment name."),
   [FieldsMap.StartPoint]: yup.object().shape({
-    [FieldsMap.Backend]: yup.string().required("Please choose backend branch."),
+    [FieldsMap.Backend]: yup
+      .string()
+      .default("")
+      .required("Please choose backend branch."),
     [FieldsMap.Frontend]: yup
       .string()
+      .default("")
       .required("Please choose backend branch."),
   }),
   [FieldsMap.EnvVariables]: yup.object().shape({
@@ -106,25 +111,48 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const panelContext = useContext(PanelContext);
-  const [frontendBranches, flushFrontendBranches] = useBranches({
-    git_provider_id: panelContext.git_provider_id!,
-    owner_name: panelContext.git_org_name!,
-    repo_name: panelContext.repos![1].repo_name,
-  });
-  const [backendBranches, flushBackendBranches] = useBranches({
-    git_provider_id: panelContext.git_provider_id!,
-    owner_name: panelContext.git_org_name!,
-    repo_name: panelContext.repos![0]!.repo_name,
-  });
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+    setValue,
+  } = useForm<FieldsValue>({
     defaultValues: DefaultFields,
     resolver: yupResolver(schema),
   });
+
+  const [frontendBranches] = useBranches({
+    git_provider_id: panelContext.git_provider_id!,
+    owner_name: panelContext.git_org_name!,
+    repo_name: panelContext.repos![1].repo_name,
+  });
+  const [backendBranches] = useBranches({
+    git_provider_id: panelContext.git_provider_id!,
+    owner_name: panelContext.git_org_name!,
+    repo_name: panelContext.repos![0]!.repo_name,
+  });
+
+  // Set the default branch to "main" or "master".
+  useEffect(() => {
+    if (frontendBranches.length > 0) {
+      const frontendDefaultBranchName =
+        parseDefaultBranchName(frontendBranches);
+      setValue(
+        `${FieldsMap.StartPoint}.${FieldsMap.Frontend}` as const,
+        frontendDefaultBranchName
+      );
+    }
+  }, [frontendBranches]);
+  useEffect(() => {
+    if (backendBranches.length > 0) {
+      const backendDefaultBranchName = parseDefaultBranchName(backendBranches);
+      setValue(
+        `${FieldsMap.StartPoint}.${FieldsMap.Backend}`,
+        backendDefaultBranchName
+      );
+    }
+  }, [backendBranches]);
 
   const switchChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowAdvancedSettings(event.target.checked);
@@ -320,15 +348,17 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
           </div>
         </>
       )}
-      <Button variant="contained" type="submit">
-        Fork
-      </Button>
-      <Button
-        variant="outlined"
-        onClick={(e) => console.warn(frontendBranches)}
-      >
-        test
-      </Button>
+      <div>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            width: 94,
+          }}
+        >
+          Fork
+        </Button>
+      </div>
     </form>
   );
 }
@@ -352,3 +382,12 @@ export const IconFocusStyle = {
   borderRadius: "4px",
   ...widthSx,
 };
+
+function parseDefaultBranchName(data: GetBranchesRes) {
+  const defaultBranches = ["main", "master"];
+  const result = data.filter((datum) => {
+    return defaultBranches.includes(datum.name.toLowerCase());
+  });
+
+  return result[0].name;
+}

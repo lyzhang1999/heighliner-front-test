@@ -27,7 +27,6 @@ export default function Canvas({arrList}: Props) {
 
 
   useEffect(() => {
-    console.warn(arrList)
     setHeight(Math.max(...arrList) + 100)
     if (isEmpty(arrList)) {
       return;

@@ -7,7 +7,8 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {filter, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import ImportEnvByJson from "@/components/ImportEnvByJson";
 
 const widhtSx = {width: "250px"};
 
@@ -35,7 +36,7 @@ export const frontItem: FrameItemType[] = [
     key: "nextjs",
     version: "1.7.7",
     language: 'typescript',
-    languageVersion: "1.7.7"
+    languageVersion: '1.7.7'
   },
   // {
   //   img: "/img/application/react.svg",
@@ -80,6 +81,10 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
   function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);
     submitCb('frontend', value)
+  }
+
+  function addEnvByJson(obj: EnvType[]){
+    envAppend(obj);
   }
 
   return (
@@ -341,6 +346,7 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
             <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
               ADD ONE
             </div>
+            <ImportEnvByJson addEnvByJson={addEnvByJson}/>
           </div>
         </div>
       </div>

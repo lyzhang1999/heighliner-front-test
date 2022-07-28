@@ -46,4 +46,3 @@ export const Context = createContext<{
   dispatch: () => null,
   state: initState,
 });
-

@@ -220,7 +220,7 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
         }
 
         <div className={styles.item}>
-          <div className={styles.label}>Exposure Path*</div>
+          <div className={styles.label}>HTTP Routes*</div>
           <div className={styles.content}>
             {fields.map((item, index) => (
               <div key={item.id} className={styles.inputItem}>

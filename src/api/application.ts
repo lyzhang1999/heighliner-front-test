@@ -183,7 +183,7 @@ export function getAppEnvironments(
 }
 
 export interface GetApplicationInfoReq {
-  org_id: number;
+  org_id?: number;
   app_id: number;
 }
 
@@ -202,7 +202,8 @@ export interface GetApplicationInfoRes extends CreativeApiReturnField {
 export function getApplicationInfo(
   req: GetApplicationInfoReq
 ): Promise<GetApplicationInfoRes> {
-  return http.get(`/orgs/${req.org_id}/applications/${req.app_id}`);
+  const org_id = req.org_id !== undefined ? req.org_id : getOriIdByContext();
+  return http.get(`/orgs/${org_id}/applications/${req.app_id}`);
 }
 
 export type GetRepoListRes = Array<{

@@ -2,11 +2,11 @@ import {get} from "lodash-es";
 import clsx from "clsx";
 import {Fragment, useState} from "react";
 import LinkIcon from '@mui/icons-material/Link';
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 
 import RightDrawer from "@/basicComponents/RightDrawer";
 import {EnvItemRes, ForkRes} from "@/api/application";
-import { getQuery, getUrlEncodeName } from "@/utils/utils";
+import {getQuery, getUrlEncodeName} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import ForkNewEnv from "./ForkNewEnv";
@@ -57,21 +57,21 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                 (index === spreadIndex) && styles.spreadItem
               )}>
                 <div className={styles.prevewWrapper}
-                  style={{
-                    right: '110px',
-                    top: '-31px',
-                    color: "#1b51b9",
-                  }}
-                  onClick={() => {
-                    const app_id = getQuery("app_id");
-                    const release_id = getQuery("release_id");
-                    const env_id = i.application_env_id;
-                    router.push(
-                      `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-                    );
-                  }}
+                     style={{
+                       right: '110px',
+                       top: '-31px',
+                       color: "#1b51b9",
+                     }}
+                     onClick={() => {
+                       const app_id = getQuery("app_id");
+                       const release_id = getQuery("release_id");
+                       const env_id = i.application_env_id;
+                       router.push(
+                         `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+                       );
+                     }}
                 >
-                  <LinkIcon />
+                  <LinkIcon/>
                   <span className={styles.preview}>
                     &nbsp;Details
                   </span>
@@ -131,7 +131,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   </span>
                     <span className={styles.logsValue}
                           onClick={() => {
-                            window.open(location.href.replace('panel', 'creating') + '&foromPane=true')
+                            router.push(`/${getUrlEncodeName()}/applications/creating?app_id=${getQuery('app_id')}&release_id=${get(i, 'last_release.id', '')}&foromPane=true`);
                           }}
                     >
                     Deploy
@@ -139,26 +139,28 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   </div>
                 </div>
               </div>
-            {index === 0 && (
-              <div
-                className={clsx(styles.forkEnv, itemClass)}
-                onClick={openForkNewEnvDrawer}
-              >
-                <div className={styles.star}></div>
-                <img src="/img/application/panel/forkenv.svg" alt="" />
-                <span className={styles.desc}>Fork a new environment</span>
-                <RightDrawer
-                  {...{
-                    title: "Fork an Environment From Main",
-                    modalDisplay,
-                    setModalDisplay,
-                    width: "550px",
-                  }}
+              {index === 0 && (
+                <div
+                  className={clsx(styles.forkEnv, itemClass)}
+                  onClick={openForkNewEnvDrawer}
                 >
-                    <ForkNewEnv {...{forkSuccessCb: (res) => {
-                      setModalDisplay(false);
-                      forkSuccessCb && forkSuccessCb(res);
-                    }}}/>
+                  <div className={styles.star}></div>
+                  <img src="/img/application/panel/forkenv.svg" alt=""/>
+                  <span className={styles.desc}>Fork a new environment</span>
+                  <RightDrawer
+                    {...{
+                      title: "Fork an Environment From Main",
+                      modalDisplay,
+                      setModalDisplay,
+                      width: "550px",
+                    }}
+                  >
+                    <ForkNewEnv {...{
+                      forkSuccessCb: (res) => {
+                        setModalDisplay(false);
+                        forkSuccessCb && forkSuccessCb(res);
+                      }
+                    }}/>
                   </RightDrawer>
                 </div>
               )}

@@ -217,12 +217,16 @@ export const ProvidersInitState = {
   },
 };
 
+export interface EnvType{
+  name: string,
+  value: string
+}
 
 export interface FrameworkType {
   isRepo: boolean;
   framework: string;
   repo_url: string;
-  env: Array<{ name: string; value: string }>;
+  env: Array<EnvType>;
   exposePort: string;
   path: Array<{ v: string }>;
   rewrite: boolean;

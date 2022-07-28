@@ -4,14 +4,18 @@ import styles from './index.module.scss';
 import {useState} from "react";
 import clsx from "clsx";
 import {Message} from "@/utils/utils";
+import {EnvType} from "@/components/Application/Create/util";
 
 const difaultValue =
   `{
-    "name": "value"
+    "env": "value"
 }`
 
+interface Props {
+  addEnvByJson: (arr: EnvType[]) => void
+}
 
-export default function ImportEnvByJson() {
+export default function ImportEnvByJson({addEnvByJson}: Props) {
   const [spread, setSpread] = useState<boolean>(false);
   const [value, setValue] = useState<string>(difaultValue);
 
@@ -41,8 +45,11 @@ export default function ImportEnvByJson() {
         Message.error('Parse Json Error');
         return;
       }
-      console.warn(obj)
-
+      let arr: EnvType[] = Object.entries(obj).map(item => {
+        return {name: item[0], value: item[1] as string}
+      })
+      addEnvByJson(arr);
+      setSpread(false);
     }
   }
 

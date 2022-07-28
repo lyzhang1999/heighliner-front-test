@@ -7,7 +7,7 @@ import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 
 const widhtSx = {width: "250px"};
@@ -81,6 +81,10 @@ const Backend = forwardRef(function Component(props: Props, ref) {
   function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);
     submitCb('backend', value)
+  }
+
+  function addEnvByJson(obj: EnvType[]){
+    envAppend(obj);
   }
 
   return (
@@ -342,7 +346,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
             <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
               ADD ONE
             </div>
-            <ImportEnvByJson></ImportEnvByJson>
+            <ImportEnvByJson addEnvByJson={addEnvByJson}/>
           </div>
         </div>
       </div>

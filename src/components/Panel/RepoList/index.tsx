@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import clsx from "clsx";
-import {AppRepoRes} from "@/api/application";
-
+import {AppRepoRes, getPrList, GetPrRes} from "@/api/application";
+import {get, isEmpty} from "lodash-es";
 
 const item = {
   repoName: 'h8r-dev/StackHub-Backend43214321432143241oy324u321hu4o3214',
@@ -42,11 +42,13 @@ const item = {
 const list = [item, item, item, item];
 
 interface Props {
-  repoList: AppRepoRes[]
+  repoList: AppRepoRes[],
+  git_provider_id: string
 }
 
-export default function RepoList({repoList}: Props) {
-  const [sepredIndex, setSepredIndex] = useState<number>(-1);
+export default function RepoList({repoList, git_provider_id}: Props) {
+  const [sepredIndex, setSepredIndex] = useState<number>(0);
+  let [prList, setPrList] = useState<GetPrRes[]>([]);
 
   const spread = (index: number) => {
     if (sepredIndex === index) {
@@ -56,43 +58,76 @@ export default function RepoList({repoList}: Props) {
     }
   }
 
+  useEffect(() => {
+    let arr: Promise<any>[] = [];
+    repoList.map(item => {
+      let params = {
+        owner_name: item.git_organization,
+        git_provider_id: git_provider_id,
+        repo_name: item.repo_name
+      }
+      arr.push(getPrList(params));
+    })
+    Promise.all(arr).then(res => {
+      setPrList(res);
+    })
+  }, [])
+
   return (
     <div className={styles.repolist}>
       {
         repoList.map((item, index) => {
           return (
             <div className={
-              // styles.reopItem
               clsx(styles.reopItem, (sepredIndex === index) && styles.spreadItem)
             } key={index}>
               <div className={styles.header} onClick={() => {
-                window.open(item.repo_url)
-                // spread(index)
+                // window.open(item.repo_url)
+                spread(index)
               }}>
-                <img src="/img/gitprovider/GITHUB.svg" alt="" className={styles.githubIcon}/>
-                <div className={styles.name}>
+                <img src="/img/gitprovider/GITHUB.svg" alt="" className={styles.githubIcon}
+                />
+                <div className={styles.name}
+                >
                   {item.repo_name}
                 </div>
-                {/*<img src="/img/application/panel/spread.svg" alt=""*/}
-                {/*     className={clsx(styles.spreadIcon)}*/}
-                {/*/>*/}
+                <img src="/img/application/panel/link4.svg" alt=""
+                     onClick={(e) => {
+                       window.open(item.repo_url);
+                       e.stopPropagation()
+                     }}
+                />
+                {/*<OpenInNewIcon onClick={(e) => {*/}
+                {/*  window.open(item.repo_url);*/}
+                {/*  e.stopPropagation()*/}
+                {/*}}/>*/}
+                <img src="/img/application/panel/spread.svg" alt=""
+                     className={clsx(styles.spreadIcon)}
+                />
               </div>
-              {/*<div className={clsx(styles.content, (sepredIndex === index) && styles.spreadContent)}>*/}
-                {/*<div className={styles.title}>*/}
-                {/*  Pull Requests*/}
-                {/*</div>*/}
-                {/*{*/}
-                {/*  item.pr.map((v, i) => {*/}
-                {/*    return (*/}
-                {/*      <div className={styles.list} key={i}>*/}
-                {/*        <span className={styles.key}>&lt;/&gt;{v.key}</span>*/}
-                {/*        <span className={styles.value}>*/}
-                {/*          {v.value}*/}
-                {/*        </span>*/}
-                {/*      </div>*/}
-                {/*    )*/}
-                {/*  })*/}
-                {/*}*/}
+              <div className={clsx(styles.content, (sepredIndex === index) && styles.spreadContent)}>
+                <div className={styles.title}>
+                  Pull Requests
+                </div>
+                {
+                  isEmpty(get(prList, index, [])) &&
+                  <div className={styles.empty}>No Pull Request</div>
+                }
+                {
+                  ((get(prList, index, [])) as Array<GetPrRes>).map((v, i) => {
+                    return (
+                      <div className={styles.list} key={i} onClick={() => {
+                        window.open(v.html_url)
+                      }}>
+                        <span className={styles.key}
+                              title={get(v, 'head.ref', '')}>#{v.number} {get(v, 'head.ref', '')}</span>
+                        <span className={styles.value} title={v.title}>
+                           {v.title}
+                        </span>
+                      </div>
+                    )
+                  })
+                }
                 {/*<div className={styles.title}>*/}
                 {/*  Commits(main)*/}
                 {/*</div>*/}
@@ -132,7 +167,7 @@ export default function RepoList({repoList}: Props) {
                 {/*    )*/}
                 {/*  })*/}
                 {/*}*/}
-              {/*</div>*/}
+              </div>
             </div>
           )
         })

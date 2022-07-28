@@ -8,7 +8,7 @@ import EnvList, {itemClass} from "@/components/Panel/EnvList";
 import {getOriIdByContext, getQuery} from "@/utils/utils";
 import {
   AppRepoRes,
-  EnvListRes,
+  EnvItemRes,
   getApplicationRepos,
   getEnvs,
   getProdEnv,
@@ -108,7 +108,7 @@ export default function Newpanel() {
   const [arrList, setArrList] = useState<number[]>([]);
   let appId = getQuery("app_id");
 
-  const [envlist, setEnvList] = useState<EnvListRes[]>([]);
+  const [envlist, setEnvList] = useState<EnvItemRes[]>([]);
   const [repoList, setRepoList] = useState<AppRepoRes[]>([]);
 
   useEffect(() => {

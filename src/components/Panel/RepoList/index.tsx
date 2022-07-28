@@ -26,7 +26,7 @@ const item = {
       value: "(fix: update nocalhost version2)"
     }
   ],
-  branchs: [
+  branches: [
     {
       key: "v0.2.0 ",
       value: "1c7af26 2022/3/27"

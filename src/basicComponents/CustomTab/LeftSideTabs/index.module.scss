@@ -1,0 +1,42 @@
+.wrapper {
+  .hoverTools {
+    visibility: hidden;
+  }
+
+  &:hover .hoverTools {
+    visibility: visible;
+  }
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.02);
+  border: solid 1px #c9d5eb;
+  position: relative;
+
+  .leftSide {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 10px 0 rgba(201, 213, 235, 0.8);
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+    // justify-content: space-around;
+
+    & > li {
+      cursor: pointer;
+    }
+
+    .selected {
+      filter: contrast(200%);
+      // background-color: #e9ecf3;
+      // border-top-right-radius: 13px;
+      // border-bottom-right-radius: 13px;
+    }
+  }
+}

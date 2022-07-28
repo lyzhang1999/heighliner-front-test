@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  gap: 15px;
+  flex-direction: row;
+  justify-content: flex-end;
+  list-style-type: none;
+  padding-bottom: 10.5px;
+
+  & > li {
+    width: 17px;
+    height: 17px;
+    position: relative;
+    cursor: pointer;
+  }
+}

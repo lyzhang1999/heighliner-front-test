@@ -20,7 +20,7 @@ export const userNameRule = {
 export const emailRule = {
   required: 'Please input email',
   pattern: {
-    value: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+    value: /^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/,
     message:
       "Pleact input a correct email",
   },

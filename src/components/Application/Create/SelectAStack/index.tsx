@@ -42,8 +42,8 @@ const SelectAStack = forwardRef(function SelectAStack(
   props: Props,
   ref
 ): React.ReactElement {
-  const [stackList, getStackList] = useStacks();
-  const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
+  // const [stackList, getStackList] = useStacks();
+  // const [stackCardItems, setStackCardItems] = useState<CardItems>([]);
   const {selectAStack: selectAStackInitState} = props.formState;
 
   const DefaultFormValue: FieldValues = {
@@ -179,7 +179,8 @@ const SelectAStack = forwardRef(function SelectAStack(
                     field.onChange(stackCardItems.name);
                   }}
                   className={clsx(
-                    field.value === stackCardItems.name && styles.chosen
+                    field.value === stackCardItems.name && styles.chosen,
+                    stackCardItems.name !== "Web Application" && styles.disabled
                   )}
                 >
                   <div>
@@ -206,47 +207,5 @@ const SelectAStack = forwardRef(function SelectAStack(
     </div>
   );
 });
-
-function getIcons(icons: string[]) {
-  if (icons.length === 1) {
-    return icons[0];
-  }
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-      }}
-    >
-      {icons.map((icon, index) => (
-        <div
-          key={index}
-          style={{
-            position: "relative",
-            height: 45,
-            width: 45,
-          }}
-        >
-          <Image src={icon} alt="" layout="fill" objectFit="contain"/>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function getIcon(url: string) {
-  return (
-    <div
-      style={{
-        height: 54,
-        width: 50,
-        position: "relative",
-        marginTop: "9px",
-      }}
-    >
-      <Image src={url} alt="" layout="fill" objectFit="contain" />
-    </div>
-  );
-}
 
 export default SelectAStack;

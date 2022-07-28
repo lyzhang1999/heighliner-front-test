@@ -190,7 +190,7 @@ export interface SelectAStackType {
 
 export const SelectAStackInitState: SelectAStackType = {
   [FieldsMap.name]: "",
-  [FieldsMap.stack]: "",
+  [FieldsMap.stack]: "Web Application",
 };
 
 export interface ProvidersType {

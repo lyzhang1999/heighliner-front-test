@@ -15,6 +15,7 @@ import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 import styles from './index.module.scss';
 import popStyles from "@/components/PopSelect/index.module.scss";
 import clsx from "clsx";
+import {Message} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -64,6 +65,20 @@ const Clusters = () => {
 
   function openDeleteDialog() {
     setDialogVisible(true);
+  }
+
+  function copy() {
+    let thisCluster = find(clusterList, {id: deleteItemID});
+    if (thisCluster) {
+      let {kubeconfig} = thisCluster;
+      navigator.clipboard.writeText(kubeconfig).then(res => {
+        Message.success('Copy KubeConfig Success');
+        setAnchorEl(null);
+      }).catch(err => {
+        Message.error('Copy KubeConfig Error');
+        setAnchorEl(null);
+      })
+    }
   }
 
   if (isEmpty(clusterList)) {
@@ -123,8 +138,9 @@ const Clusters = () => {
           horizontal: 'left',
         }}
       >
-        <div className={popStyles.selectWrapper} onClick={openDeleteDialog}>
-          <span className={clsx(popStyles.selectItem, popStyles.redItem)}>Delete</span>
+        <div className={popStyles.selectWrapper}>
+          <div className={clsx(popStyles.selectItem, popStyles.redItem)} onClick={openDeleteDialog}>Delete</div>
+          <div className={clsx(popStyles.selectItem)} onClick={copy}>Copy KubeConfig</div>
         </div>
       </Popover>
       <div className={styles.wrapper}>

@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import * as yup from "yup";
+
 import {
   EnvType,
   EnvVariables,
@@ -34,12 +35,14 @@ import { CommonProps } from "@/utils/commonType";
 import { GetBranchesReq, GetBranchesRes } from "@/api/gitProviders";
 import { PanelContext } from "@/pages/[organization]/applications/panel";
 import { getQuery } from "@/utils/utils";
+import useEnvSetting from "@/hooks/envSetting";
 
 import styles from "./index.module.scss";
 import AddEnvVariables, {
   schema as backendVariableSchema,
 } from "../AddEnvVariables";
 import { schema as frontendVariableSchema } from "../AddEnvVariables";
+import { has } from "lodash-es";
 
 interface Props extends CommonProps {
   forkSuccessCb?: (res: ForkRes) => void;
@@ -107,9 +110,8 @@ const schema = yup.object().shape({
 });
 
 export default function ForkNewEnv(props: Props): React.ReactElement {
-  let appId = getQuery("app_id");
+  let app_id = +getQuery("app_id");
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
-
   const panelContext = useContext(PanelContext);
 
   const {
@@ -154,12 +156,39 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
     }
   }, [backendBranches]);
 
+  // Set the default env variable.
+  const [envSetting] = useEnvSetting({
+    app_id: app_id,
+    env_id: panelContext.prodEnvId!,
+  });
+  useEffect(() => {
+    if (
+      envSetting &&
+      envSetting.application &&
+      envSetting.application.service &&
+      envSetting.application.service.length > 0
+    ) {
+      envSetting.application.service.map((service) => {
+        if (
+          service.setting &&
+          service.setting.env &&
+          service.setting.env.length > 0
+        ) {
+          const type =
+            service.type === ServiceType.backend
+              ? FieldsMap.Backend
+              : FieldsMap.Frontend;
+          setValue(`${FieldsMap.EnvVariables}.${type}`, service.setting.env);
+        }
+      });
+    }
+  }, [envSetting]);
+
   const switchChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowAdvancedSettings(event.target.checked);
   };
 
   const submitHandler: SubmitHandler<FieldsValue> = (data) => {
-    console.log(data);
     const [backendRepo, frontendRepo] = panelContext.repos!;
     const backendService = {
       name: backendRepo.repo_name,
@@ -187,7 +216,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
     };
 
     const req: ForkReq = {
-      app_id: +appId,
+      app_id: app_id,
       body: {
         env_name: data[FieldsMap.Name],
         env_type: data[FieldsMap.EnvType],

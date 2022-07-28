@@ -68,13 +68,6 @@ export interface Service {
   type: string;
 }
 
-export interface RootObject {
-  cluster_id: number;
-  git_config: Git_config;
-  middleware: Middleware[];
-  name: string;
-  service: Service[];
-}
 
 const testdate = {
   cluster_id: 4,

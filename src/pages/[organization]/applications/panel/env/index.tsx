@@ -66,7 +66,7 @@ export default function Env(): React.ReactElement {
   }, [application]);
 
   return (
-    <Layout notStandardLayout pageHeader="applications/my shop">
+    <Layout notStandardLayout pageHeader={`Applications / ${application?.name || "" }`}>
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>
           <div className={styles.main}>

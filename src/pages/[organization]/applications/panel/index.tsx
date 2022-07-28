@@ -20,6 +20,7 @@ interface PanelContextValue {
   git_org_name?: string;
   owner_id?: number;
   repos?: AppRepoRes[];
+  prodEnvId?: number;
 }
 
 export const PanelContext = createContext<PanelContextValue>({});
@@ -44,6 +45,7 @@ export default function Newpanel() {
           git_org_name: res.git_org_name,
           git_provider_id: res.git_provider_id,
           owner_id: res.owner_id,
+          prodEnvId: res.id
         };
       });
     });

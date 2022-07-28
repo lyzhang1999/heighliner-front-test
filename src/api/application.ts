@@ -375,6 +375,89 @@ export function getEnvResources({
   );
 }
 
+export type GetEnvSettingReq = GetEnvReq;
+
+interface Middleware {
+  database: {
+    name: string;
+  }[];
+  name: string;
+  password: string;
+  service: string[];
+  setting: {
+    storage: string;
+  };
+  type: string;
+  url: string;
+  username: string;
+}
+
+interface Service {
+  framework: string;
+  image: {
+    repository: string;
+    tag: string;
+  };
+  language: {
+    name: string;
+    version: string;
+  };
+  name: string;
+  repo: {
+    url: string;
+    visibility: string;
+  };
+  scaffold: boolean;
+  setting: {
+    env: {
+      name: string;
+      value: string;
+    }[];
+    expose: Array<{
+      paths: {
+        path: string;
+      }[];
+      port: number;
+      rewrite: boolean;
+    }>;
+    extension: {
+      entry_file: string;
+    };
+    fork: {
+      from: string;
+      type: string;
+    };
+  };
+  type: ServiceType;
+}
+
+export interface GetEnvSettingRes {
+  application: {
+    deploy: Deploy;
+    domain: string;
+    name: string;
+    namespace: string;
+    service: Service[];
+  };
+  fork_env: {
+    cluster: string;
+    name: string;
+  };
+  image: Image;
+  is_update: true;
+  middleware: Middleware[];
+  scm: Scm;
+}
+
+export function getEnvSetting({
+  app_id,
+  env_id,
+}: GetEnvSettingReq): Promise<GetEnvSettingRes> {
+  return http.get(
+    `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}/setting`
+  );
+}
+
 export interface AppRepoRes {
   git_organization: string;
   provider: string;

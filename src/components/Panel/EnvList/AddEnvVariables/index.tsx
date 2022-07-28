@@ -13,16 +13,38 @@ import Image from "next/image";
 import * as yup from "yup";
 
 import { CommonProps } from "@/utils/commonType";
-import { EnvVariableMap } from "@/api/application";
+import { EnvVariableMap, EnvVariables } from "@/api/application";
 
 import styles from "./index.module.scss";
 
-export const schema = yup.array().of(
-  yup.object().shape({
-    [EnvVariableMap.name]: yup.string().required("Please enter key."),
-    [EnvVariableMap.value]: yup.string().required("Please enter value."),
-  })
-);
+// declare module "yup" {
+//   // tslint:disable-next-line
+//   interface ArraySchema<T> {
+//     uniqueName(mapper: (a: T) => T, message?: any): ArraySchema<T>;
+//   }
+// }
+
+// // https://github.com/jquense/yup/issues/345
+// yup.addMethod(
+//   yup.array,
+//   "uniqueName",
+//   function (message, mapper = (a: any) => a) {
+//     return this.test("uniqueName", message, function (list) {
+//       if (!list || list.length <= 1) return true;
+//       return list.length === new Set(list.map(mapper)).size;
+//     });
+//   }
+// );
+
+// export const schema = yup
+//   .array()
+//   .of(
+//     yup.object().shape({
+//       [EnvVariableMap.name]: yup.string().required("Please enter key."),
+//       [EnvVariableMap.value]: yup.string().required("Please enter value."),
+//     })
+//   )
+//   .uniqueName((s) => s);
 
 interface Props extends CommonProps {
   control: Control<FieldValue<FieldValues>, any>;
@@ -33,6 +55,7 @@ interface Props extends CommonProps {
         [EnvVariableMap.value]?: FieldError;
       }>
     | undefined;
+  // emitAppend: (envVariables: EnvVariables) => void;
 }
 
 export default function AddEnvVariables(props: Props): React.ReactElement {
@@ -48,7 +71,7 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
   return (
     <div className={styles.wrapper}>
       {variables.map((variable, index) => (
-        <div key={index} className={styles.wrap}>
+        <div key={variable.id} className={styles.wrap}>
           <Controller
             name={`${props.name}.${index}.${EnvVariableMap.name}`}
             control={props.control}

@@ -1,6 +1,6 @@
 import http from "../utils/axios";
-import { CreativeApiReturnField } from "../utils/commonType";
-import { getOriIdByContext } from "../utils/utils";
+import {CreativeApiReturnField} from "../utils/commonType";
+import {getOriIdByContext} from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -101,7 +101,7 @@ export interface getAppListReq {
 export function getApplicationList(
   params: getAppListReq = {}
 ): Promise<ApplicationObject[]> {
-  let { cluster_ids = [], owner_ids = [], stack_ids = [] } = params;
+  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
   let url = `/orgs/${getOriIdByContext()}/applications?`;
   cluster_ids.forEach((item) => {
     url += `cluster_ids=${item}&`;
@@ -238,10 +238,10 @@ export interface getRepoListRes {
 }
 
 export function getTheRepoList({
-  owner_name,
-  owner_type,
-  git_provider_id,
-}: getRepoListReq): Promise<getRepoListRes[]> {
+                                 owner_name,
+                                 owner_type,
+                                 git_provider_id,
+                               }: getRepoListReq): Promise<getRepoListRes[]> {
   return http.get(`/user/git_providers/${git_provider_id}/repo`, {
     params: {
       owner_type,
@@ -334,7 +334,7 @@ export interface GetEnvReq {
 
 export type GetEnvRes = EnvItemRes;
 
-export function getEnv({ app_id, env_id }: GetEnvReq): Promise<GetEnvRes> {
+export function getEnv({app_id, env_id}: GetEnvReq): Promise<GetEnvRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}`
   );
@@ -457,4 +457,33 @@ export function getProdEnv(app_id: string): Promise<GetProdEnvRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/prod`
   );
+}
+
+interface getPrReq {
+  owner_name: string,
+  repo_name: string,
+  git_provider_id: string,
+}
+
+export interface Head {
+  label: string;
+  ref: string;
+}
+
+export interface Base {
+  label: string;
+  ref: string;
+}
+
+export interface GetPrRes {
+  number: number;
+  title: string;
+  html_url: string;
+  state: string;
+  head: Head;
+  base: Base;
+}
+
+export function getPrList({owner_name, repo_name, git_provider_id}: getPrReq): Promise<GetPrRes[]> {
+  return http.get(`/user/git_providers/${git_provider_id}/repo/pulls?owner_name=${owner_name}&repo_name=${repo_name}`)
 }

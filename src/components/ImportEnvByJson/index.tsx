@@ -3,6 +3,7 @@ import {TextField} from "@mui/material";
 import styles from './index.module.scss';
 import {useState} from "react";
 import clsx from "clsx";
+import {Message} from "@/utils/utils";
 
 const difaultValue =
   `{
@@ -19,37 +20,54 @@ export default function ImportEnvByJson() {
     setSpread(!spread)
   }
 
-  function getError(){
-    try{
+  function getError() {
+    try {
       JSON.parse(value);
       return false;
-    }catch (e){
+    } catch (e) {
       return true;
     }
   }
 
+  function handleOk() {
+    if (!spread) {
+      setSpread(true);
+      return;
+    } else {
+      let obj = null;
+      try {
+        obj = JSON.parse(value);
+      } catch (e) {
+        Message.error('Parse Json Error');
+        return;
+      }
+      console.warn(obj)
+
+    }
+  }
 
   return (
     <div>
-      test
-      <div className={styles.header} onClick={spreadFun}>
-        ADD BY JSON
+      <div className={styles.header}>
+        <div className={styles.btn} onClick={() => handleOk()}>
+          {
+            spread ? "ADD" : "ADD BY JSON"
+          }
+        </div>
+        {
+          spread &&
+          <div className={styles.btn} onClick={spreadFun}>
+            Cancel
+          </div>
+        }
       </div>
-
-
       <div className={clsx(styles.textField, spread && styles.spread)}>
         <TextField
           multiline
           rows={4}
           value={value}
           onChange={(e) => {
-            if (e.keyCode === 9) {
-              // if (!this.textareValue) this.textareValue= ''
-              // this.textareValue+= '\t'
-              // 阻止默认切换元素的行为
-                e.preventDefault()
-            }
-            setValue(e.target.value)
+            setValue(e.target.value);
           }}
           sx={{width: "100%", height: '100%'}}
           error={getError()}

@@ -1,10 +1,23 @@
 
 .header {
-  color: blue;
+  display: flex;
+  margin-top: 10px;
 
+  .btn {
+    border-radius: 4px;
+    background-color: rgba(155, 172, 185, 0.5);
+    width: 120px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    color: #0a1a24;
+    cursor: pointer;
+    margin-right: 20px;
+  }
 }
 
 .textField {
+  margin-top: 10px;
   max-height: 0;
   overflow: hidden;
   transition: all 0.3s linear;

@@ -29,7 +29,7 @@ const Notice = (): ReactElement => {
   const [type, setType] = useState<AlertColor>("info");
   const [origin, setOrigin] = useState<SnackbarOrigin>({
     vertical: "top",
-    horizontal: "right",
+    horizontal: "center",
   });
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const Notice = (): ReactElement => {
               }}
     >
       <Alert onClose={close} severity={type}>
-          {message}
+        {message}
       </Alert>
     </Snackbar>
   );

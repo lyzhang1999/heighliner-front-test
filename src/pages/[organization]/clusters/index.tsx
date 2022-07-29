@@ -15,7 +15,7 @@ import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 import styles from './index.module.scss';
 import popStyles from "@/components/PopSelect/index.module.scss";
 import clsx from "clsx";
-import {Message} from "@/utils/utils";
+import {copyFile, Message, copyTextToClipboard} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -71,13 +71,8 @@ const Clusters = () => {
     let thisCluster = find(clusterList, {id: deleteItemID});
     if (thisCluster) {
       let {kubeconfig} = thisCluster;
-      navigator.clipboard.writeText(kubeconfig).then(res => {
-        Message.success('Copy KubeConfig Success');
-        setAnchorEl(null);
-      }).catch(err => {
-        Message.error('Copy KubeConfig Error');
-        setAnchorEl(null);
-      })
+      copyTextToClipboard(kubeconfig, 'Copy KubeConfig Success');
+      setAnchorEl(null);
     }
   }
 

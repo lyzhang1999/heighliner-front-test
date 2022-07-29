@@ -45,7 +45,9 @@ http.interceptors.response.use((res: AxiosResponse) => {
 }, (err) => {
   let url = get(err, ['config', 'url'], '');
   url = url.split('?')[0];
-  let {status, data} = err.response;
+  let status = get(err, 'response.status', '');
+  let data = get(err, 'response.data', {});
+
   if (status === 401) {
     cookie.delCookie('token');
   }

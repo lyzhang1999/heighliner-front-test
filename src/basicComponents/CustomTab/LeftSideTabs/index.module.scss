@@ -3,7 +3,10 @@
     visibility: hidden;
   }
 
-  &:hover .hoverTools {
+  // &:hover .hoverTools {
+  //   visibility: visible;
+  // }
+  .hoverTools {
     visibility: visible;
   }
 }

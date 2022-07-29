@@ -47,6 +47,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
   const openForkNewEnvDrawer = () => {
     setModalDisplay(true);
   };
+
   return (
     <div className={styles.wrapper}>
       {

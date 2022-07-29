@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
@@ -11,8 +11,12 @@ import Resources from "@/components/Panel/Env/Resources";
 import styles from "./index.module.scss";
 import { ResourceType } from "@/api/application";
 import useApplication from "@/hooks/application";
-import { getQuery } from "@/utils/utils";
 import { getCluster } from "@/api/cluster";
+
+import useEnv from "@/hooks/env";
+import { getQuery } from "@/utils/utils";
+
+import { IEnvContext, EnvContext } from '@/utils/contexts';
 
 const tabItems: Array<{
   label: ResourceType;
@@ -37,16 +41,14 @@ const tabItems: Array<{
   },
 ];
 
-interface IEnvContext {
-  cluster_id?: number;
-  kubeconfig?: string;
-}
-
-export const EnvContext = createContext<IEnvContext>({});
 
 export default function Env(): React.ReactElement {
   const [selectedTab, setSelectedTab] = useState(tabItems[0].label);
   const [envContext, setEnvContext] = useState<IEnvContext>({});
+  const [env] = useEnv({
+    app_id: +getQuery("app_id"),
+    env_id: +getQuery("env_id"),
+  });
 
   // Get the kubeconfig
   const app_id = +getQuery("app_id");
@@ -70,11 +72,12 @@ export default function Env(): React.ReactElement {
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>
           <div className={styles.main}>
-            <Main />
+            <Main env={env} />
             <SlideTabs {...{ tabItems, selectedTab, setSelectedTab }} />
             {/* <Projects /> */}
             <Resources
               {...{
+                env,
                 selectedResourceType: selectedTab as ResourceType,
               }}
             />

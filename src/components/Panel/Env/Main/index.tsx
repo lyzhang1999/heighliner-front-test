@@ -3,20 +3,15 @@ import React from "react";
 import { get } from "lodash-es";
 
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { getQuery } from "@/utils/utils";
 import { GetEnvRes } from "@/api/application";
-import useEnv from "@/hooks/env";
 import Link from "/public/img/application/panel/env/link.svg";
 import Config from "/public/img/application/panel/env/config.svg";
 import Gear from "/public/img/application/panel/env/gear.svg";
 
 import styles from "./index.module.scss";
 
-export default function Main(): React.ReactElement {
-  const [env] = useEnv({
-    app_id: +getQuery("app_id"),
-    env_id: +getQuery("env_id"),
-  });
+export default function Main(props: any): React.ReactElement {
+  const { env } = props;
 
   return (
     <div className={styles.wrapper}>

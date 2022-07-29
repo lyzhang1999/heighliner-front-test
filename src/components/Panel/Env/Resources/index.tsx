@@ -25,6 +25,7 @@ import { Typography } from "@mui/material";
 import { ResourceType } from "@/api/application";
 
 interface Props extends CommonProps {
+  env: any;
   selectedResourceType: ResourceType;
 }
 
@@ -95,7 +96,7 @@ export default function Resources(props: Props): React.ReactElement {
               ),
             },
           ]}
-          hoverTools={<HoverTools />}
+          hoverTools={<HoverTools env={props.env} resource={envResource} />}
         />
       ))}
     </ul>

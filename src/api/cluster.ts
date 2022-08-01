@@ -42,7 +42,8 @@ export const getCluster = (req: GetClusterReq): Promise<ClusterItem> => {
 export interface CreateClusterReq {
   kubeconfig: string;
   name: string;
-  provider: string;
+  provider?: string;
+  ingress_lb_address?: string;
 }
 
 export const createCluster = (req: CreateClusterReq): Promise<null> => {

@@ -5,7 +5,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import {useRouter} from "next/router";
 
 import RightDrawer from "@/basicComponents/RightDrawer";
-import {EnvItemRes, ForkRes} from "@/api/application";
+import {EnvItemRes, ForkRes, StatusColor} from "@/api/application";
 import {getQuery, getUrlEncodeName} from "@/utils/utils";
 
 import styles from "./index.module.scss";
@@ -106,8 +106,10 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                       Status:
                   </span>
                     <span className={styles.value}>
-                    <span className={styles.circle}></span>
-                    <span className={styles.statusValue}>Running</span>
+                    <span className={styles.circle}
+                          style={{backgroundColor: get(StatusColor, get(i, 'last_release.status', ''), 'red')}}
+                    ></span>
+                    <span className={styles.statusValue}>{get(i, 'last_release.status', '')}</span>
                   </span>
                   </div>
                   <div className={styles.configWrapper}>

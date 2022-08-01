@@ -3,7 +3,7 @@ import React, {useImperativeHandle, forwardRef, useState} from "react";
 import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
-import {FormStateType} from "@/pages/[organization]/applications/creation";
+import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
 import {filter, get, set} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
@@ -19,17 +19,12 @@ export const IconFocusStyle = {
 }
 
 export interface Props {
-  submitCb: (key: string, value: object) => void,
+  submitCb: (key: string, value: object, flag?: boolean) => void,
   formState: FormStateType,
   repoList: getRepoListRes[]
 }
 
 export const frontItem: FrameItemType[] = [
-  // {
-  //   img: "/img/application/vue.svg",
-  //   name: 'Vue.js',
-  //   key: "vue",
-  // },
   {
     img: "/img/application/next.svg",
     name: 'Next.js',
@@ -38,11 +33,6 @@ export const frontItem: FrameItemType[] = [
     language: 'typescript',
     languageVersion: '1.7.7'
   },
-  // {
-  //   img: "/img/application/react.svg",
-  //   name: 'React.js',
-  //   key: "react",
-  // }
 ]
 
 const Frontend = forwardRef(function Component(props: Props, ref) {
@@ -75,8 +65,20 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
   });
 
   useImperativeHandle(ref, () => ({
-    submit: () => handleSubmit(submit)()
+    submit: (flag: LinkMethod) => {
+      if (flag === LinkMethod.BACK) {
+        backCb();
+      } else {
+        handleSubmit(submit)()
+      }
+    }
   }));
+
+  function backCb() {
+    let value = getValues();
+    set(value, 'isRepo', isRepo);
+    submitCb('frontend', value, true)
+  }
 
   function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);

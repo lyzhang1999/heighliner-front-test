@@ -44,15 +44,15 @@ export default function ApplicationList({
   const router = useRouter();
 
   function goPanel(appId: number, releaseId: number, stauts: any) {
-    if (stauts === ApplicationStatus.COMPLETED) {
+    // if (stauts === ApplicationStatus.COMPLETED) {
       router.push(
         `/${getUrlEncodeName()}/applications/panel?app_id=${appId}&release_id=${releaseId}`
       );
-    } else {
-      router.push(
-        `/${getUrlEncodeName()}/applications/creating?app_id=${appId}&release_id=${releaseId}`
-      );
-    }
+    // } else {
+    //   router.push(
+    //     `/${getUrlEncodeName()}/applications/creating?app_id=${appId}&release_id=${releaseId}`
+    //   );
+    // }
   }
 
   return (

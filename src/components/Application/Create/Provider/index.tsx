@@ -32,7 +32,7 @@ import {
 } from "@/components/Application/Create/util";
 
 import styles from "./index.module.scss";
-import {FormStateType} from "@/pages/[organization]/applications/creation";
+import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
 import {FormControl, FormHelperText} from "@mui/material";
 import Spinner from "@/basicComponents/Loaders/Spinner";
 import {isProduct, Message} from "@/utils/utils";
@@ -49,6 +49,7 @@ interface Props extends CommonProps {
 }
 
 const Provider = forwardRef(function Provider(props: Props, ref) {
+  const {submitCb} = props;
   const [clusterList, getClusterList] = useClusterList();
   const [gitProviderOrganizations, updateGitProviderOrganizations] =
     useGitProviderOrganizations();
@@ -69,9 +70,24 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     control,
     handleSubmit,
     formState: {errors},
+    getValues
   } = useForm({
     defaultValues: DefaultFormValue,
   });
+
+  useImperativeHandle(ref, () => ({
+    submit: (flag: LinkMethod) => {
+      if (flag === LinkMethod.BACK) {
+        backCb();
+      } else {
+        handleSubmit(submit)()
+      }
+    }
+  }));
+
+  function backCb() {
+    submitCb('providers', getValues(), true)
+  }
 
   const submit = async (data: typeof DefaultFormValue) => {
     // Check the cluster status
@@ -110,12 +126,6 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
 
     props.submitCb("providers", providersSubmitState);
   };
-
-  useImperativeHandle(ref, () => ({
-    submit: () => {
-      handleSubmit(submit)();
-    },
-  }));
 
   useEffect(() => {
     const cardItems: CardItems = [];

@@ -40,6 +40,13 @@ export enum ApplicationStatus {
   FAILED = "Failed",
 }
 
+export const StatusColor = {
+  Completed: '#60e3ac',
+  Processing: "yellow",
+  Failed: "red",
+}
+
+
 export interface GetApplicationStatusRes extends CreativeApiReturnField {
   id: number;
   application_id: number;
@@ -361,10 +368,10 @@ export type GetEnvResourcesRes = Array<{
 }>;
 
 export function getEnvResources({
-  app_id,
-  env_id,
-  resource_type,
-}: GetEnvResourcesReq): Promise<GetEnvResourcesRes> {
+                                  app_id,
+                                  env_id,
+                                  resource_type,
+                                }: GetEnvResourcesReq): Promise<GetEnvResourcesRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}/resources`,
     {

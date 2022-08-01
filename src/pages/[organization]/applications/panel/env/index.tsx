@@ -17,6 +17,7 @@ import useEnv from "@/hooks/env";
 import { getQuery } from "@/utils/utils";
 
 import { IEnvContext, EnvContext } from '@/utils/contexts';
+import {get} from "lodash-es";
 
 const tabItems: Array<{
   label: ResourceType;
@@ -68,7 +69,7 @@ export default function Env(): React.ReactElement {
   }, [application]);
 
   return (
-    <Layout notStandardLayout pageHeader={`Applications / ${application?.name || "" }`}>
+    <Layout notStandardLayout pageHeader={`Applications / ${application?.name || "" } / ${get(env, 'name', '')}`}>
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>
           <div className={styles.main}>

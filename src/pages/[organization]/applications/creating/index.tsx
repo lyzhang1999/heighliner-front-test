@@ -8,6 +8,7 @@ import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/api/application";
 import {Alert} from "@mui/material";
+import clsx from "clsx";
 import {
   Timeline,
   TimelineItem,
@@ -21,12 +22,29 @@ import {get} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
 
+
+const list = [
+  {
+    desc: 'Createing 1'
+  },
+  {
+    desc: 'Createing 2'
+  },
+  {
+    desc: 'Createing 3'
+  },
+  {
+    desc: 'Createing 4'
+  },
+]
+
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
   const [durationTime, setDurationTime] = useState<number>(0);
   const [skipTime, setSkipTime] = useState<number>(-1);
   const router = useRouter();
+  const [number, setNumber] = useState(1);
 
   let app_id: string = getQuery('app_id');
   let release_id: string = getQuery('release_id');
@@ -211,7 +229,31 @@ const CreatingApplication = () => {
         {/*  </TimelineItem>*/}
         {/*</Timeline>*/}
 
-
+        {/*<div className={styles.timeLine}>*/}
+        {/*  {*/}
+        {/*    list.map((item, index) => {*/}
+        {/*      return (*/}
+        {/*        <div key={index} className={styles.lineItem}>*/}
+        {/*          <div className={clsx(styles.line)}>*/}
+        {/*            {*/}
+        {/*              (number >= index) &&*/}
+        {/*              <div className={styles.activeLine}></div>*/}
+        {/*            }*/}
+        {/*          </div>*/}
+        {/*          <div className={styles.circleWrapper}>*/}
+        {/*            <div className={clsx(styles.circlePoint, (number >= index) && styles.circlePointDone)}></div>*/}
+        {/*            <div*/}
+        {/*              className={clsx(styles.circle, (number === index) && styles.circleDoing, (number > index) && styles.circleDone)}>*/}
+        {/*            </div>*/}
+        {/*            <div className={styles.desc}>*/}
+        {/*              <div>{item.desc}...</div>*/}
+        {/*            </div>*/}
+        {/*          </div>*/}
+        {/*        </div>*/}
+        {/*      )*/}
+        {/*    })*/}
+        {/*  }*/}
+        {/*</div>*/}
 
         <div className={styles.infoWrapper}>
           <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>

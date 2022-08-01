@@ -8,6 +8,15 @@ import {EventSourcePolyfill} from "event-source-polyfill";
 import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/api/application";
 import {Alert} from "@mui/material";
+import {
+  Timeline,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot
+} from "@mui/lab";
+
 import {get} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
@@ -49,7 +58,7 @@ const CreatingApplication = () => {
         }
         getStatusInterval && clearInterval(getStatusInterval);
         durationTimeInterval && clearInterval(durationTimeInterval)
-        if(!getQuery('foromPane')){
+        if (!getQuery('foromPane')) {
           setSkipTime(5);
         }
       }
@@ -178,6 +187,32 @@ const CreatingApplication = () => {
             notStandardLayout
     >
       <div className={styles.wrapper} id="TERMIANLWRAPPER">
+
+        {/*<Timeline>*/}
+        {/*  <TimelineItem>*/}
+        {/*    <TimelineSeparator>*/}
+        {/*      <TimelineDot/>*/}
+        {/*      <TimelineConnector/>*/}
+        {/*    </TimelineSeparator>*/}
+        {/*    <TimelineContent>Eat</TimelineContent>*/}
+        {/*  </TimelineItem>*/}
+        {/*  <TimelineItem>*/}
+        {/*    <TimelineSeparator>*/}
+        {/*      <TimelineDot/>*/}
+        {/*      <TimelineConnector/>*/}
+        {/*    </TimelineSeparator>*/}
+        {/*    <TimelineContent>Code</TimelineContent>*/}
+        {/*  </TimelineItem>*/}
+        {/*  <TimelineItem>*/}
+        {/*    <TimelineSeparator>*/}
+        {/*      <TimelineDot/>*/}
+        {/*    </TimelineSeparator>*/}
+        {/*    <TimelineContent>Sleep</TimelineContent>*/}
+        {/*  </TimelineItem>*/}
+        {/*</Timeline>*/}
+
+
+
         <div className={styles.infoWrapper}>
           <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
           {

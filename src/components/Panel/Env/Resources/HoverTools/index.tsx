@@ -120,7 +120,8 @@ export default function HoverTools(props: any) {
       {
         devState === DevStatus.RUNNING ? (
           <li onClick={handleStopDev} title="Stop">
-            <CancelIcon />
+            {/*<CancelIcon />*/}
+            <img src="/img/application/panel/env/delete.svg" alt=""/>
           </li>
         ) : (
           <div style={{ display: 'flex' }}>

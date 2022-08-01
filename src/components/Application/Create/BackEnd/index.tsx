@@ -3,12 +3,13 @@ import React, {useImperativeHandle, forwardRef, useState} from "react";
 import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
-import {FormStateType} from "@/pages/[organization]/applications/creation";
+import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
 import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
+import {CommonProps} from "@/utils/commonType";
 
 const widhtSx = {width: "250px"};
 
@@ -19,7 +20,7 @@ export const IconFocusStyle = {
 }
 
 export interface Props {
-  submitCb: (key: string, value: object) => void,
+  submitCb: Function,
   formState: FormStateType,
   repoList: getRepoListRes[]
 }
@@ -75,15 +76,27 @@ const Backend = forwardRef(function Component(props: Props, ref) {
   });
 
   useImperativeHandle(ref, () => ({
-    submit: () => handleSubmit(submit)()
+    submit: (flag: LinkMethod) => {
+      if (flag === LinkMethod.BACK) {
+        backCb();
+      } else {
+        handleSubmit(submit)()
+      }
+    }
   }));
+
+  function backCb() {
+    let value = getValues();
+    set(value, 'isRepo', isRepo);
+    submitCb('backend', value, true)
+  }
 
   function submit(value: FrameworkType) {
     set(value, 'isRepo', isRepo);
     submitCb('backend', value)
   }
 
-  function addEnvByJson(obj: EnvType[]){
+  function addEnvByJson(obj: EnvType[]) {
     envAppend(obj);
   }
 

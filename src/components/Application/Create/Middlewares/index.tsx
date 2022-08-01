@@ -5,7 +5,7 @@ import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {cloneDeep, find, findIndex, get, set, without} from "lodash-es";
 import {FieldsMap, InitMiddleWareItem, MiddleWareType} from "@/components/Application/Create/util";
-import {FormStateType} from "@/pages/[organization]/applications/creation";
+import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
 import MiddleDrawer, {PgTypes} from "@/components/Application/Create/Middlewares/MiddleDrawer";
 
@@ -14,7 +14,7 @@ const IconFocusStyle = {}
 const SelectStyle = {}
 
 export interface Props {
-  submitCb: (key: string, value: object) => void,
+  submitCb: Function,
   formState: FormStateType,
   repoList: getRepoListRes[]
 }
@@ -71,6 +71,20 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
     console.warn(value)
     // let v = getValues(`middle.${editIndex}.otherValue`);
     setValue(`middle.${editIndex as number}.otherValue`, value)
+  }
+
+  useImperativeHandle(ref, () => ({
+    submit: (flag: LinkMethod) => {
+      if (flag === LinkMethod.BACK) {
+        backCb();
+      } else {
+        handleSubmit(submit)()
+      }
+    }
+  }));
+
+  function backCb() {
+    submitCb('middleWares', getValues('middle'), true)
   }
 
   function clickFrondendAndBackend(key: string, filed: any) {

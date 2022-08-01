@@ -5,7 +5,6 @@ import Middlewares from "@/components/Application/Create/Middlewares";
 import CreateAppLayout from "@/components/CreateAppLayout";
 import Layout from "@/components/Layout";
 import React, {useRef, useState} from "react";
-
 import Provider from "@/components/Application/Create/Provider";
 import {
   FrameworkType,
@@ -27,6 +26,11 @@ export interface FormStateType {
   backend: FrameworkType,
   frontend: FrameworkType,
   middleWares: MiddleWareType[],
+}
+
+export enum LinkMethod {
+  BACK = 'back',
+  NEXT = 'next',
 }
 
 export default function Create(): React.ReactElement {
@@ -58,7 +62,11 @@ export default function Create(): React.ReactElement {
   function goIndex(i: number) {
     if (i === index) return;
     if (i < 1) return;
-    get(ref, 'current.submit', () => null)();
+    if (i < index) {
+      get(ref, 'current.submit', () => null)(LinkMethod.BACK);
+    } else {
+      get(ref, 'current.submit', () => null)(LinkMethod.NEXT);
+    }
     nextIndex = i;
   }
 
@@ -78,8 +86,8 @@ export default function Create(): React.ReactElement {
     router.replace(`/${getUrlEncodeName()}/applications/creating?app_id=${application_id}&release_id=${application_release_id}`)
   }
 
-  function submitCb(key: string, value: object) {
-    if (key === 'providers') {
+  function submitCb(key: string, value: object, isBack?: boolean) {
+    if ((key === 'providers') && !isBack) {
       let {git_provider_id, owner_name, owner_type} = get(value, 'git_config', {});
       getRepoList({git_provider_id, owner_name, owner_type});
     }
@@ -93,7 +101,9 @@ export default function Create(): React.ReactElement {
         [key]: cloneDeep(value),
       })
     } else {
-      setIndex(nextIndex);
+      setTimeout(() => {
+        setIndex(nextIndex);
+      }, 0)
     }
   }
 
@@ -103,7 +113,7 @@ export default function Create(): React.ReactElement {
     submitCb,
     formState,
     gitObj,
-    repoList
+    repoList,
   }
 
   const mapComponent = [

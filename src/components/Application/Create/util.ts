@@ -310,7 +310,7 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     if (key === 'backend') {
       port = 8000;
     } else if (key === 'frontend') {
-      port = 80;
+      port = 3000;
     }
     name = appName + '-' + key;
   }

@@ -95,7 +95,7 @@ export default function Newpanel() {
   }
 
   return (
-    <Layout notStandardLayout pageHeader={`Applications/${get(envlist, '0.setting.application.name', '')}`}>
+    <Layout notStandardLayout pageHeader={`Applications / ${get(envlist, '0.setting.application.name', '')}`}>
       <PanelContext.Provider value={panelContextValue}>
         <div className={styles.wrapper}>
           {/*<div className={styles.left}>*/}

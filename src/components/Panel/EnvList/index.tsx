@@ -1,6 +1,6 @@
 import {get} from "lodash-es";
 import clsx from "clsx";
-import {Fragment, useState} from "react";
+import React, {Fragment, useState} from "react";
 import LinkIcon from '@mui/icons-material/Link';
 import {useRouter} from "next/router";
 
@@ -10,6 +10,7 @@ import {getQuery, getUrlEncodeName} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import ForkNewEnv from "./ForkNewEnv";
+import Link from "/public/img/application/panel/env/link.svg";
 
 const item =
   {
@@ -34,6 +35,8 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
   const [spreadIndex, setSpreadIndex] = useState<number>(-1);
   const [modalDisplay, setModalDisplay] = useState(false);
   const router = useRouter();
+  const app_id = getQuery("app_id");
+  const release_id = getQuery("release_id");
 
   const spread = (index: number) => {
     spreadCb();
@@ -64,8 +67,6 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                        color: "#1b51b9",
                      }}
                      onClick={() => {
-                       const app_id = getQuery("app_id");
-                       const release_id = getQuery("release_id");
                        const env_id = i.application_env_id;
                        router.push(
                          `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
@@ -89,7 +90,14 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                 {/*<img src="/img/application/panel/spreadItem.svg" alt="" className={styles.spreadIcon}*/}
                 {/*     onClick={() => spread(index)}/>*/}
                 <div className={styles.header}>
-                  <div className={styles.envName}>{i.name}</div>
+                  <div className={styles.envName}
+                       onClick={() => {
+                         const env_id = i.application_env_id;
+                         router.push(
+                           `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+                         );
+                       }}
+                  >{i.name}</div>
                   {/*<div className={styles.iconWrapper}>*/}
                   {/*  <img src="/img/cluster/aws.webp" alt=""/>*/}
                   {/*</div>*/}
@@ -98,7 +106,15 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   PUBLIC URL:
                 </div>
                 <div className={styles.url}>
-                  {i.domain}
+                  http://{i.domain}
+                  <span
+                    className={styles.linkIcon}
+                    onClick={() => {
+                      window.open("http://" + i?.domain);
+                    }}
+                  >
+                    <Link/>
+                  </span>
                 </div>
                 <div className={styles.infoWrapper}>
                   <div className={styles.statusWrapper}>

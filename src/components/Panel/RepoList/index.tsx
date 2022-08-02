@@ -2,44 +2,7 @@ import styles from "./index.module.scss";
 import {useEffect, useState} from "react";
 import clsx from "clsx";
 import {AppRepoRes, getPrList, GetPrRes} from "@/api/application";
-import {get, isEmpty} from "lodash-es";
-
-const item = {
-  repoName: 'h8r-dev/StackHub-Backend43214321432143241oy324u321hu4o3214',
-  pr: [
-    {
-      key: "Env-001",
-      value: "#269 refactor: push code to github.."
-    },
-    {
-      key: "Env-002",
-      value: "#269 refactor: use base image.."
-    }
-  ],
-  commits: [
-    {
-      key: "1c7af26 ",
-      value: "(fix: update nocalhost version)"
-    },
-    {
-      key: "1c7af27",
-      value: "(fix: update nocalhost version2)"
-    }
-  ],
-  branches: [
-    {
-      key: "v0.2.0 ",
-      value: "1c7af26 2022/3/27"
-    },
-    {
-      key: "v0.2.1",
-      value: "1c7af26 2022/3/28"
-    }
-  ]
-}
-
-
-const list = [item, item, item, item];
+import {get, isEmpty, without} from "lodash-es";
 
 interface Props {
   repoList: AppRepoRes[],
@@ -47,14 +10,14 @@ interface Props {
 }
 
 export default function RepoList({repoList, git_provider_id}: Props) {
-  const [sepredIndex, setSepredIndex] = useState<number>(0);
+  const [sepredIndex, setSepredIndex] = useState<number[]>([0]);
   let [prList, setPrList] = useState<GetPrRes[]>([]);
 
   const spread = (index: number) => {
-    if (sepredIndex === index) {
-      setSepredIndex(-1)
+    if (sepredIndex.includes(index)) {
+      setSepredIndex(without(sepredIndex, index))
     } else {
-      setSepredIndex(index);
+      setSepredIndex([...sepredIndex, index]);
     }
   }
 
@@ -79,7 +42,7 @@ export default function RepoList({repoList, git_provider_id}: Props) {
         repoList.map((item, index) => {
           return (
             <div className={
-              clsx(styles.reopItem, (sepredIndex === index) && styles.spreadItem)
+              clsx(styles.reopItem, (sepredIndex.includes(index)) && styles.spreadItem)
             } key={index}>
               <div className={styles.header} onClick={() => {
                 // window.open(item.repo_url)
@@ -105,7 +68,7 @@ export default function RepoList({repoList, git_provider_id}: Props) {
                      className={clsx(styles.spreadIcon)}
                 />
               </div>
-              <div className={clsx(styles.content, (sepredIndex === index) && styles.spreadContent)}>
+              <div className={clsx(styles.content, (sepredIndex.includes(index)) && styles.spreadContent)}>
                 <div className={styles.title}>
                   Pull Requests
                 </div>

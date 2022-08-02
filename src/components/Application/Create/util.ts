@@ -210,7 +210,7 @@ export const ProvidersInitState = {
   },
 };
 
-export interface EnvType{
+export interface EnvType {
   name: string,
   value: string
 }
@@ -310,7 +310,7 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     if (key === 'backend') {
       port = 8000;
     } else if (key === 'frontend') {
-      port = 80;
+      port = 3000;
     }
     name = appName + '-' + key;
   }
@@ -321,7 +321,7 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     if (injection.includes(key)) {
       env = [...env, ...
         [
-          {name: 'DatabaseHost', value: appName + '-postgresql'},
+          {name: 'DatabaseHost', value: 'postgresql'},
           {name: 'DatabaseUser', value: username},
           {name: 'DatabasePassword', value: password},
           {name: 'DatabaseName', value: get(names, '0.v', '')},
@@ -405,7 +405,7 @@ export function getParams(formState: FormStateType, repoList: getRepoListRes[]) 
           storage: storage + 'Gi',
         },
         type: type,
-        url: Name + '-postgresql',
+        url: 'postgresql',
         username: username,
       }
     })

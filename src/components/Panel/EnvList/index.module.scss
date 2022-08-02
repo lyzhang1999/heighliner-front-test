@@ -49,6 +49,7 @@
         font-size: 20px;
         font-weight: 600;
         color: #1b51b9;
+        cursor: pointer;
       }
 
       .iconWrapper {
@@ -74,6 +75,11 @@
       text-align: left;
       color: #000;
       @include overflowEllipsis;
+
+      .linkIcon {
+        margin-left: 4px;
+        cursor: pointer;
+      }
     }
 
     .infoWrapper {
@@ -97,8 +103,9 @@
         height: 10px;
         border-radius: 50%;
         margin-right: 5px;
-        margin-top: 2px;
-        vertical-align: center;
+        margin-top: 5px;
+        //vertical-align: center;
+        margin-bottom: -1px;
       }
 
       .statusValue {

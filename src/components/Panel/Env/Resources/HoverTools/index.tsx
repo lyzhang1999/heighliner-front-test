@@ -10,6 +10,7 @@ import { IEnvContext, EnvContext } from '@/utils/contexts';
 import { CommonProps } from "@/utils/commonType";
 
 import styles from "./index.module.scss";
+import {getToken} from "@/utils/token";
 
 interface Props extends CommonProps {}
 
@@ -40,7 +41,7 @@ export default function HoverTools(props: any) {
   console.log(resource)
 
   function getParameters() {
-    const token = getToken()
+    const token = getToken();
     if (!token) {
       console.error('Error: No token found, exit.')
       return
@@ -68,18 +69,18 @@ export default function HoverTools(props: any) {
     return parameters;
   }
 
-  function getToken() {
-    let cookeiStr: string = window.document.cookie;
-    const cookies: string[] = cookeiStr.split('; ')
-    let token = ''
-    for (let cookie of cookies) {
-      if (cookie.startsWith('token=')) {
-        token = cookie.replace(/^token=/, '')
-        break
-      }
-    }
-    return token
-  }
+  // function getToken() {
+  //   let cookeiStr: string = window.document.cookie;
+  //   const cookies: string[] = cookeiStr.split('; ')
+  //   let token = ''
+  //   for (let cookie of cookies) {
+  //     if (cookie.startsWith('token=')) {
+  //       token = cookie.replace(/^token=/, '')
+  //       break
+  //     }
+  //   }
+  //   return token
+  // }
 
   function wakeUpVSCode(qsObj: any): void {
     const searchParams = new URLSearchParams(qsObj)

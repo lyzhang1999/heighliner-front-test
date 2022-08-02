@@ -6,6 +6,7 @@ import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
 import {UserInfo} from "@/api/profile";
 import dayjs from "dayjs";
+import {setToken} from "@/utils/token";
 
 export function isBrowser() {
   return process.title === "browser";
@@ -82,8 +83,8 @@ export function setLoginToken(value: string, expiration?: number) {
     const delta = expiration - Date.now();
     delta >= 0 && (exTime = delta);
   }
-
-  cookie.setCookie('token', value, exTime);
+  setToken(value);
+  // cookie.setCookie('token', value, exTime);
 }
 
 export function formatDate(d: number) {

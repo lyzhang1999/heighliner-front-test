@@ -163,7 +163,7 @@ export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
 }
 
 export function isProduct() {
-  return location.host === "forkmain.com";
+  return !["localhost", "heighliner-cloud.heighliner.cloud"].includes(location.hostname)
 }
 
 export function copyFile(value: string, successText: string) {

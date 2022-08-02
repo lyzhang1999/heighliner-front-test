@@ -1,6 +1,7 @@
+import { string } from "yup/lib/locale";
 import http from "../utils/axios";
-import {CreativeApiReturnField} from "../utils/commonType";
-import {getOriIdByContext} from "../utils/utils";
+import { CreativeApiReturnField } from "../utils/commonType";
+import { getOriIdByContext } from "../utils/utils";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -41,11 +42,10 @@ export enum ApplicationStatus {
 }
 
 export const StatusColor = {
-  Completed: '#60e3ac',
+  Completed: "#60e3ac",
   Processing: "yellow",
   Failed: "red",
-}
-
+};
 
 export interface GetApplicationStatusRes extends CreativeApiReturnField {
   id: number;
@@ -108,7 +108,7 @@ export interface getAppListReq {
 export function getApplicationList(
   params: getAppListReq = {}
 ): Promise<ApplicationObject[]> {
-  let {cluster_ids = [], owner_ids = [], stack_ids = []} = params;
+  let { cluster_ids = [], owner_ids = [], stack_ids = [] } = params;
   let url = `/orgs/${getOriIdByContext()}/applications?`;
   cluster_ids.forEach((item) => {
     url += `cluster_ids=${item}&`;
@@ -245,10 +245,10 @@ export interface getRepoListRes {
 }
 
 export function getTheRepoList({
-                                 owner_name,
-                                 owner_type,
-                                 git_provider_id,
-                               }: getRepoListReq): Promise<getRepoListRes[]> {
+  owner_name,
+  owner_type,
+  git_provider_id,
+}: getRepoListReq): Promise<getRepoListRes[]> {
   return http.get(`/user/git_providers/${git_provider_id}/repo`, {
     params: {
       owner_type,
@@ -341,7 +341,7 @@ export interface GetEnvReq {
 
 export type GetEnvRes = EnvItemRes;
 
-export function getEnv({app_id, env_id}: GetEnvReq): Promise<GetEnvRes> {
+export function getEnv({ app_id, env_id }: GetEnvReq): Promise<GetEnvRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}`
   );
@@ -368,10 +368,10 @@ export type GetEnvResourcesRes = Array<{
 }>;
 
 export function getEnvResources({
-                                  app_id,
-                                  env_id,
-                                  resource_type,
-                                }: GetEnvResourcesReq): Promise<GetEnvResourcesRes> {
+  app_id,
+  env_id,
+  resource_type,
+}: GetEnvResourcesReq): Promise<GetEnvResourcesRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}/resources`,
     {
@@ -549,10 +549,22 @@ export function getProdEnv(app_id: string): Promise<GetProdEnvRes> {
   );
 }
 
+export function deleteEnv({
+  app_id,
+  env_id,
+}: {
+  app_id: number | string;
+  env_id: number | string;
+}) {
+  return http.delete(
+    `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}`
+  );
+}
+
 interface getPrReq {
-  owner_name: string,
-  repo_name: string,
-  git_provider_id: string,
+  owner_name: string;
+  repo_name: string;
+  git_provider_id: string;
 }
 
 export interface Head {
@@ -574,6 +586,12 @@ export interface GetPrRes {
   base: Base;
 }
 
-export function getPrList({owner_name, repo_name, git_provider_id}: getPrReq): Promise<GetPrRes[]> {
-  return http.get(`/user/git_providers/${git_provider_id}/repo/pulls?owner_name=${owner_name}&repo_name=${repo_name}`)
+export function getPrList({
+  owner_name,
+  repo_name,
+  git_provider_id,
+}: getPrReq): Promise<GetPrRes[]> {
+  return http.get(
+    `/user/git_providers/${git_provider_id}/repo/pulls?owner_name=${owner_name}&repo_name=${repo_name}`
+  );
 }

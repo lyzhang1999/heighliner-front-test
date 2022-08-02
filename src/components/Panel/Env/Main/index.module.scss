@@ -50,9 +50,9 @@
       cursor: pointer;
     }
 
-    & > span:nth-child(2) {
-      cursor: not-allowed;
-    }
+    // & > span:nth-child(2) {
+    //   cursor: not-allowed;
+    // }
   }
 
   .publicUrlWrap {

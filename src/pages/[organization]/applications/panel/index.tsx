@@ -1,4 +1,5 @@
 import React, {createContext, useEffect, useState} from "react";
+import {get, isEmpty} from "lodash-es";
 
 import styles from "./index.module.scss";
 import Layout from "@/components/Layout";
@@ -13,7 +14,6 @@ import {
   getEnvs,
   getProdEnv,
 } from "@/api/application";
-import {get, isEmpty} from "lodash-es";
 
 interface PanelContextValue {
   git_provider_id?: number;

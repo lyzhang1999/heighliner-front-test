@@ -42,7 +42,6 @@ const tabItems: Array<{
   },
 ];
 
-
 export default function Env(): React.ReactElement {
   const [selectedTab, setSelectedTab] = useState(tabItems[0].label);
   const [envContext, setEnvContext] = useState<IEnvContext>({});
@@ -74,7 +73,9 @@ export default function Env(): React.ReactElement {
         <div className={styles.wrapper}>
           <div className={styles.main}>
             <Main env={env} />
-            <SlideTabs {...{ tabItems, selectedTab, setSelectedTab }} />
+            <SlideTabs<ResourceType>
+              {...{ tabItems, selectedTab, setSelectedTab }}
+            />
             {/* <Projects /> */}
             <Resources
               {...{

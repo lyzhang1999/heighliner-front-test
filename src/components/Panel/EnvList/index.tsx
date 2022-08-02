@@ -3,6 +3,7 @@ import clsx from "clsx";
 import React, {Fragment, useState} from "react";
 import LinkIcon from '@mui/icons-material/Link';
 import {useRouter} from "next/router";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import RightDrawer from "@/basicComponents/RightDrawer";
 import {EnvItemRes, ForkRes, StatusColor} from "@/api/application";
@@ -51,6 +52,16 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
     setModalDisplay(true);
   };
 
+  const goEnvDetailPage = function (env_id: string | number) {
+    return () => {
+      const app_id = getQuery("app_id");
+      const release_id = getQuery("release_id");
+      router.push(
+        `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+      );
+    }
+  }
+
   return (
     <div className={styles.wrapper}>
       {
@@ -62,16 +73,29 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
               )}>
                 <div className={styles.prevewWrapper}
                      style={{
-                       right: '110px',
+                       right: '175px',
                        top: '-31px',
                        color: "#1b51b9",
                      }}
                      onClick={() => {
                        const env_id = i.application_env_id;
                        router.push(
-                         `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+                         `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
                        );
                      }}
+                >
+                  <SettingsIcon />
+                  <span className={styles.preview}>
+                    &nbsp;Settings
+                  </span>
+                </div>
+                <div className={styles.prevewWrapper}
+                     style={{
+                       right: '91px',
+                       top: '-31px',
+                       color: "#1b51b9",
+                     }}
+                     onClick={goEnvDetailPage(i.application_env_id)}
                 >
                   <LinkIcon/>
                   <span className={styles.preview}>
@@ -89,14 +113,10 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                 <div className={styles.star}></div>
                 {/*<img src="/img/application/panel/spreadItem.svg" alt="" className={styles.spreadIcon}*/}
                 {/*     onClick={() => spread(index)}/>*/}
-                <div className={styles.header}>
-                  <div className={styles.envName}
-                       onClick={() => {
-                         const env_id = i.application_env_id;
-                         router.push(
-                           `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-                         );
-                       }}
+                <div className={styles.header} >
+                  <div 
+                    className={styles.envName}
+                    onClick={goEnvDetailPage(i.application_env_id)}
                   >{i.name}</div>
                   {/*<div className={styles.iconWrapper}>*/}
                   {/*  <img src="/img/cluster/aws.webp" alt=""/>*/}

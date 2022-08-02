@@ -4,7 +4,7 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import {Controller, FieldValues, useForm} from "react-hook-form";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import clsx from "clsx";
@@ -16,32 +16,30 @@ import {
   createCluster,
   getCluster,
 } from "@/api/cluster";
-import CardSelect, {CardItems} from "@/basicComponents/CardSelect";
-import {getClusterIcon} from "@/utils/CDN";
-import {CommonProps} from "@/utils/commonType";
+import CardSelect, { CardItems } from "@/basicComponents/CardSelect";
+import { getClusterIcon } from "@/utils/CDN";
+import { CommonProps } from "@/utils/commonType";
 import AddFreeClusterSVG from "/public/img/application/create/addFreeCluster.svg";
-import {useClusterList} from "@/hooks/cluster";
+import { useClusterList } from "@/hooks/cluster";
 import useGitProviderOrganizations from "@/hooks/gitProvidersOrganizations";
 import NewClusterModal from "@/components/NewClusterModal";
+import { AddGitProviderSuccessCb } from "@/components/AddGitProvider";
+import { FieldsMap, ProvidersType } from "@/components/Application/Create/util";
 import {
-  AddGitProviderSuccessCb,
-} from "@/components/AddGitProvider";
-import {
-  FieldsMap,
-  ProvidersType,
-} from "@/components/Application/Create/util";
-
-import styles from "./index.module.scss";
-import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
-import {FormControl, FormHelperText} from "@mui/material";
+  FormStateType,
+  LinkMethod,
+} from "@/pages/[organization]/applications/creation";
+import { FormControl, FormHelperText } from "@mui/material";
 import Spinner from "@/basicComponents/Loaders/Spinner";
-import {isProduct, Message} from "@/utils/utils";
+import { isProduct, Message } from "@/utils/utils";
 import {
   GitHubOAuthAppTemporaryStorage,
   openGitHubOAuthWindow,
   PostAuthAction,
 } from "@/pages/distributor/post-auth-github";
-import {useGlobalLoading} from "@/hooks/GlobalLoading";
+import { useGlobalLoading } from "@/hooks/GlobalLoading";
+
+import styles from "./index.module.scss";
 
 interface Props extends CommonProps {
   submitCb: Function;
@@ -49,18 +47,18 @@ interface Props extends CommonProps {
 }
 
 const Provider = forwardRef(function Provider(props: Props, ref) {
-  const {submitCb} = props;
+  const { submitCb } = props;
   const [clusterList, getClusterList] = useClusterList();
   const [gitProviderOrganizations, updateGitProviderOrganizations] =
     useGitProviderOrganizations();
 
-  const [clusterCardItems, setClusterCardItems] = useState<CardItems>([]);
-  const [
-    gitProviderOrganizationsCardItems,
-    setGitProviderOrganizationsCardItems,
-  ] = useState<CardItems>([]);
+  // const [clusterCardItems, setClusterCardItems] = useState<CardItems>([]);
+  // const [
+  //   gitProviderOrganizationsCardItems,
+  //   setGitProviderOrganizationsCardItems,
+  // ] = useState<CardItems>([]);
 
-  const {providers: providersInitState} = props.formState;
+  const { providers: providersInitState } = props.formState;
 
   const DefaultFormValue: FieldValues = {
     [FieldsMap.gitProvider]: providersInitState[FieldsMap.gitProvider],
@@ -69,8 +67,8 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
   const {
     control,
     handleSubmit,
-    formState: {errors},
-    getValues
+    formState: { errors },
+    getValues,
   } = useForm({
     defaultValues: DefaultFormValue,
   });
@@ -80,13 +78,13 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
       if (flag === LinkMethod.BACK) {
         backCb();
       } else {
-        handleSubmit(submit)()
+        handleSubmit(submit)();
       }
-    }
+    },
   }));
 
   function backCb() {
-    submitCb('providers', getValues(), true)
+    submitCb("providers", getValues(), true);
   }
 
   const submit = async (data: typeof DefaultFormValue) => {
@@ -127,37 +125,37 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     props.submitCb("providers", providersSubmitState);
   };
 
-  useEffect(() => {
-    const cardItems: CardItems = [];
-    clusterList.map((cluster) => {
-      cardItems.push({
-        icon: getClusterIcon(cluster.provider),
-        name: cluster.name,
-        iconSettings: {
-          leftLayout: true,
-          width: 29,
-          height: 29,
-        },
-        value: cluster.id,
-      });
-    });
-    setClusterCardItems(cardItems);
-  }, [clusterList]);
+  // useEffect(() => {
+  //   const cardItems: CardItems = [];
+  //   clusterList.map((cluster) => {
+  //     cardItems.push({
+  //       icon: getClusterIcon(cluster.provider),
+  //       name: cluster.name,
+  //       iconSettings: {
+  //         leftLayout: true,
+  //         width: 29,
+  //         height: 29,
+  //       },
+  //       value: cluster.id,
+  //     });
+  //   });
+  //   setClusterCardItems(cardItems);
+  // }, [clusterList]);
 
-  useEffect(() => {
-    const cardItems: CardItems = [];
-    gitProviderOrganizations.map((gitProviderOrganization) => {
-      cardItems.push({
-        name: gitProviderOrganization.git_owner_name,
-        icon: <GitHubIcon/>,
-        iconSettings: {
-          leftLayout: true,
-        },
-        value: gitProviderOrganization.git_owner_name,
-      });
-    });
-    setGitProviderOrganizationsCardItems(cardItems);
-  }, [gitProviderOrganizations]);
+  // useEffect(() => {
+  //   const cardItems: CardItems = [];
+  //   gitProviderOrganizations.map((gitProviderOrganization) => {
+  //     cardItems.push({
+  //       name: gitProviderOrganization.git_owner_name,
+  //       icon: <GitHubIcon />,
+  //       iconSettings: {
+  //         leftLayout: true,
+  //       },
+  //       value: gitProviderOrganization.git_owner_name,
+  //     });
+  //   });
+  //   setGitProviderOrganizationsCardItems(cardItems);
+  // }, [gitProviderOrganizations]);
 
   // Update initializing cluster status on time.
   useEffect(() => {
@@ -181,20 +179,12 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
       <Controller
         name={FieldsMap.clusterProvider}
         control={control}
-        render={({field}) => (
+        render={({ field }) => (
           <FormControl
             className={styles.wrapper}
             error={errors[FieldsMap.clusterProvider] !== undefined}
           >
             <h1>{FieldsMap.clusterProvider}</h1>
-            {/* <CardSelect
-              {...{
-                cardItems: clusterCardItems,
-                control,
-                name: FieldsMap.clusterProvider,
-                customCardItems: [<AddCluster key="Add Cluster" />],
-              }}
-            /> */}
             <ul className={styles.clusterWrap}>
               {clusterList.map((cluster) => (
                 <li
@@ -222,10 +212,10 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
                       objectFit="contain"
                     />
                   </div>
-                  {cluster.name}
+                  <span title={cluster.name}>{cluster.name}</span>
                   {cluster.status === ClusterStatus.Initializing && (
                     <div className={styles.spinner}>
-                      <Spinner spinnerColor="#6b6b6b" scale={"17%"}/>
+                      <Spinner spinnerColor="#6b6b6b" scale={"17%"} />
                     </div>
                   )}
                 </li>
@@ -235,7 +225,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
                   getClusterList();
                 }}
               />
-              <AddFreeCluster/>
+              <AddFreeCluster />
             </ul>
             <FormHelperText>
               {errors[FieldsMap.clusterProvider] &&
@@ -250,13 +240,43 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
       <Controller
         name={FieldsMap.gitProvider}
         control={control}
-        render={({field}) => (
+        render={({ field }) => (
           <FormControl
             className={styles.wrapper}
             error={errors[FieldsMap.gitProvider] !== undefined}
           >
             <h1>{FieldsMap.gitProvider}</h1>
-            <CardSelect
+            <ul className={styles.gitWrap}>
+              {gitProviderOrganizations.map((gitProviderOrganization) => (
+                <li
+                  key={gitProviderOrganization.git_provider_id}
+                  onClick={() => {
+                    field.onChange(gitProviderOrganization.git_owner_name);
+                  }}
+                  className={clsx(
+                    field.value === gitProviderOrganization.git_owner_name &&
+                      styles.chosenGit
+                  )}
+                >
+                  <span>
+                    <GitHubIcon />
+                  </span>
+                  <span title={gitProviderOrganization.git_owner_name}>
+                    {gitProviderOrganization.git_owner_name}
+                  </span>
+                  <span>{gitProviderOrganization.owner_type}</span>
+                </li>
+              ))}
+              <li style={{}}>
+                <AddGitProviderItem
+                  key="AddGitProvider"
+                  addGitProviderSuccessCb={(data) => {
+                    updateGitProviderOrganizations();
+                  }}
+                />
+              </li>
+            </ul>
+            {/* <CardSelect
               {...{
                 cardItems: gitProviderOrganizationsCardItems,
                 control: control,
@@ -272,7 +292,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
                 onChange: field.onChange,
                 defaultChosenValue: providersInitState[FieldsMap.gitProvider],
               }}
-            />
+            /> */}
             <FormHelperText>
               {errors[FieldsMap.gitProvider] &&
                 errors[FieldsMap.gitProvider].message}
@@ -288,8 +308,8 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
 });
 
 function AddCluster({
-                      addClusterSuccessCb,
-                    }: {
+  addClusterSuccessCb,
+}: {
   addClusterSuccessCb: () => void;
 }) {
   const [openAddClusterDrawer, setOpenAddClusterDrawer] = useState(false);
@@ -313,7 +333,7 @@ function AddCluster({
       }}
       key={"AddCluster"}
     >
-      <AddCircleOutlineIcon/> Add Cluster
+      <AddCircleOutlineIcon /> Add Cluster
       <NewClusterModal
         setModalDisplay={setOpenAddClusterDrawer}
         successCb={addClusterSuccessCb}
@@ -323,7 +343,7 @@ function AddCluster({
   );
 }
 
-function AddFreeCluster({successCb}: { successCb?: () => void }) {
+function AddFreeCluster({ successCb }: { successCb?: () => void }) {
   const clickHandler = () => {
     createCluster({
       kubeconfig: "",
@@ -345,16 +365,18 @@ function AddFreeCluster({successCb}: { successCb?: () => void }) {
       }}
       onClick={clickHandler}
     >
-      <AddFreeClusterSVG/>
+      <AddFreeClusterSVG />
       Get Free Cluster
     </li>
   );
 }
 
-function AddGitProviderItem({addGitProviderSuccessCb,}: {
+function AddGitProviderItem({
+  addGitProviderSuccessCb,
+}: {
   addGitProviderSuccessCb?: AddGitProviderSuccessCb;
 }) {
-  const {setGlobalLoading} = useGlobalLoading();
+  const { setGlobalLoading } = useGlobalLoading();
 
   const clickHandler = () => {
     window.localStorage.setItem(

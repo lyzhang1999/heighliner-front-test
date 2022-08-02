@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { get } from "lodash-es";
 
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
 import Main from "@/components/Panel/Env/Main";
-
 import SlideTabs from "@/basicComponents/CustomTab/SlideTabs";
-// import Projects from "@/components/Panel/Env/Projects";
 import Resources from "@/components/Panel/Env/Resources";
-
-import styles from "./index.module.scss";
 import { ResourceType } from "@/api/application";
 import useApplication from "@/hooks/application";
 import { getCluster } from "@/api/cluster";
-
 import useEnv from "@/hooks/env";
 import { getQuery } from "@/utils/utils";
+import { IEnvContext, EnvContext } from "@/utils/contexts";
+import PRAccordion from "@/components/Panel/Env/PRAccordion";
 
-import { IEnvContext, EnvContext } from '@/utils/contexts';
-import {get} from "lodash-es";
+import styles from "./index.module.scss";
+import { PanelContext } from "..";
+import { useApplicationRepos } from "@/hooks/applicationRepos";
+import { useEnvProd } from "@/hooks/envProd";
 
 const tabItems: Array<{
   label: ResourceType;
@@ -45,14 +45,20 @@ const tabItems: Array<{
 export default function Env(): React.ReactElement {
   const [selectedTab, setSelectedTab] = useState(tabItems[0].label);
   const [envContext, setEnvContext] = useState<IEnvContext>({});
+
+  const app_id = getQuery("app_id");
+  const env_id = getQuery("env_id");
+
+  const [repos] = useApplicationRepos(getQuery("app_id"));
+  const [envProd] = useEnvProd(+app_id);
+
   const [env] = useEnv({
-    app_id: +getQuery("app_id"),
-    env_id: +getQuery("env_id"),
+    app_id: +app_id,
+    env_id: +env_id,
   });
 
   // Get the kubeconfig
-  const app_id = +getQuery("app_id");
-  const [application] = useApplication({ app_id });
+  const [application] = useApplication({ app_id: +app_id });
   useEffect(() => {
     if (application && application.cluster_id > 0) {
       getCluster({
@@ -68,7 +74,14 @@ export default function Env(): React.ReactElement {
   }, [application]);
 
   return (
-    <Layout notStandardLayout pageHeader={`Applications / ${application?.name || "" } / ${get(env, 'name', '')}`}>
+    <Layout
+      notStandardLayout
+      pageHeader={`Applications / ${application?.name || ""} / ${get(
+        env,
+        "name",
+        ""
+      )}`}
+    >
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>
           <div className={styles.main}>
@@ -84,7 +97,18 @@ export default function Env(): React.ReactElement {
               }}
             />
           </div>
-          {/* <RepoList /> */}
+          <div>
+            {/* <PRAccordion /> */}
+            {repos && repos.length > 0 && envProd && envProd.git_provider_id && (
+              <RepoList
+                {...{
+                  repoList: repos,
+                  git_provider_id: envProd.git_provider_id,
+                  base_name: env?.name,
+                }}
+              />
+            )}
+          </div>
         </div>
       </EnvContext.Provider>
     </Layout>

@@ -1,17 +1,21 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from "./index.module.scss";
 import {useEffect, useState} from "react";
 import clsx from "clsx";
-import {AppRepoRes, getPrList, GetPrRes} from "@/api/application";
+import {AppRepoRes} from "@/api/application";
 import {get, isEmpty, without} from "lodash-es";
+import { getPrList, GetPrListRes } from "@/api/gitProviders";
 
 interface Props {
   repoList: AppRepoRes[],
-  git_provider_id: string
+  git_provider_id: number,
+  base_name?: string;
+  head_name?: string;
 }
 
-export default function RepoList({repoList, git_provider_id}: Props) {
+export default function RepoList({repoList, git_provider_id, base_name, head_name}: Props) {
   const [sepredIndex, setSepredIndex] = useState<number[]>([0]);
-  let [prList, setPrList] = useState<GetPrRes[]>([]);
+  let [prList, setPrList] = useState<GetPrListRes>([]);
 
   const spread = (index: number) => {
     if (sepredIndex.includes(index)) {
@@ -26,8 +30,10 @@ export default function RepoList({repoList, git_provider_id}: Props) {
     repoList.map(item => {
       let params = {
         owner_name: item.git_organization,
-        git_provider_id: git_provider_id,
-        repo_name: item.repo_name
+        repo_name: item.repo_name,
+        git_provider_id,
+        base_name,
+        head_name,
       }
       arr.push(getPrList(params));
     })
@@ -77,7 +83,7 @@ export default function RepoList({repoList, git_provider_id}: Props) {
                   <div className={styles.empty}>No Pull Request</div>
                 }
                 {
-                  ((get(prList, index, [])) as Array<GetPrRes>).map((v, i) => {
+                  ((get(prList, index, [])) as GetPrListRes).map((v, i) => {
                     return (
                       <div className={styles.list} key={i} onClick={() => {
                         window.open(v.html_url)

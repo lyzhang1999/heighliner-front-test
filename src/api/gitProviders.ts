@@ -115,3 +115,57 @@ export function getBranches(req: GetBranchesReq): Promise<GetBranchesRes> {
     },
   });
 }
+
+export interface GetPrListReq {
+  owner_name: string;
+  repo_name: string;
+  git_provider_id: number;
+  base_name?: string;
+  head_name?: string;
+}
+export interface Head {
+  label: string;
+  ref: string;
+}
+
+export interface Base {
+  label: string;
+  ref: string;
+}
+
+export type GetPrListRes  = Array<{
+  number: number;
+  title: string;
+  html_url: string;
+  state: string;
+  head: Head;
+  base: Base;
+}>
+
+
+export function getPrList(req: GetPrListReq): Promise<GetPrListRes> {
+    return http.get(`/user/git_providers/${req.git_provider_id}/repo/pulls`, {
+    params: {
+      owner_name: req.owner_name,
+      repo_name: req.repo_name,
+      base_name: req.base_name,
+      head_name: req.head_name,
+    }
+  })
+}
+
+// export interface getPrReq extends getPrListReq {
+//   base_name: string;
+//   head_name?: string;
+// }
+
+// export function getPr(req: getPrReq): Promise<GetPrListRes[]>  {
+//   return http.get(`/user/git_providers/${req.git_provider_id}/repo/pulls`, {
+//     params: {
+//       owner_name: req.owner_name,
+//       repo_name: req.repo_name,
+//       base_name: req.base_name,
+//       head_name: req.head_name,
+//     }
+//   })
+// }

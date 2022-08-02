@@ -110,8 +110,15 @@ export default function Newpanel() {
           {/*</div>*/}
           {/*<div className={styles.right}>*/}
           {
-            git_provider_id && !isEmpty((repoList)) &&
-            <RepoList {...{repoList, git_provider_id}} />
+            git_provider_id && !isEmpty((repoList)) && (
+               <div 
+                style={{   
+                  marginLeft: '20px',
+                  marginTop: '50px'
+                }}>
+                <RepoList {...{repoList, git_provider_id: +git_provider_id}} />
+              </div>
+            )
           }
           {/*</div>*/}
         </div>

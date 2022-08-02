@@ -530,7 +530,7 @@ export function fork(req: ForkReq): Promise<ForkRes> {
   );
 }
 
-interface GetProdEnvRes extends CreativeApiReturnField {
+export interface GetProdEnvRes extends CreativeApiReturnField {
   application_id: number;
   domain: string;
   env_type: EnvType;
@@ -558,40 +558,5 @@ export function deleteEnv({
 }) {
   return http.delete(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}`
-  );
-}
-
-interface getPrReq {
-  owner_name: string;
-  repo_name: string;
-  git_provider_id: string;
-}
-
-export interface Head {
-  label: string;
-  ref: string;
-}
-
-export interface Base {
-  label: string;
-  ref: string;
-}
-
-export interface GetPrRes {
-  number: number;
-  title: string;
-  html_url: string;
-  state: string;
-  head: Head;
-  base: Base;
-}
-
-export function getPrList({
-  owner_name,
-  repo_name,
-  git_provider_id,
-}: getPrReq): Promise<GetPrRes[]> {
-  return http.get(
-    `/user/git_providers/${git_provider_id}/repo/pulls?owner_name=${owner_name}&repo_name=${repo_name}`
   );
 }

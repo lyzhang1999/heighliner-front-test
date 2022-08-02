@@ -21,6 +21,7 @@ import {
 import {get} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
+import {getToken} from "@/utils/token";
 
 
 const list = [
@@ -141,7 +142,7 @@ const CreatingApplication = () => {
   function getLogEventSource() {
     console.warn('getLogEventSource')
     const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
-    const token = cookie.getCookie('token');
+    const token = getToken();
     var eventSource = new EventSourcePolyfill(url, {
       headers: {Authorization: `Bearer ${token}`},
       heartbeatTimeout: 1000 * 60 * 5

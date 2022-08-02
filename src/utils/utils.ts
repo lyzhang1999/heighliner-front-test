@@ -6,6 +6,7 @@ import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
 import {UserInfo} from "@/api/profile";
 import dayjs from "dayjs";
+import {setToken} from "@/utils/token";
 
 export function isBrowser() {
   return process.title === "browser";
@@ -82,8 +83,8 @@ export function setLoginToken(value: string, expiration?: number) {
     const delta = expiration - Date.now();
     delta >= 0 && (exTime = delta);
   }
-
-  cookie.setCookie('token', value, exTime);
+  setToken(value);
+  // cookie.setCookie('token', value, exTime);
 }
 
 export function formatDate(d: number) {
@@ -163,7 +164,7 @@ export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
 }
 
 export function isProduct() {
-  return location.host === "forkmain.com";
+  return !["localhost", "heighliner-cloud.heighliner.cloud"].includes(location.hostname)
 }
 
 export function copyFile(value: string, successText: string) {

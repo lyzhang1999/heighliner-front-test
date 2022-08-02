@@ -2,6 +2,7 @@ import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axi
 import cookie from "@/utils/cookie";
 import {Message} from "@/utils/utils";
 import {get} from "lodash-es";
+import {deleteToken, getToken} from "@/utils/token";
 
 export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
 
@@ -17,7 +18,7 @@ const noDefaultErrMsgPath = [
 ]
 
 http.interceptors.request.use((config: AxiosRequestConfig) => {
-  const token = cookie.getCookie('token');
+  const token = getToken();
   if (token) {
     (config.headers as AxiosRequestHeaders).Authorization = `Bearer ${token}`
   }
@@ -49,7 +50,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
   let data = get(err, 'response.data', {});
 
   if (status === 401) {
-    cookie.delCookie('token');
+    deleteToken();
   }
   if (status === 401 && (location.pathname !== '/sign-in')) {
     location.pathname = '/sign-in';

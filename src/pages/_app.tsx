@@ -16,6 +16,7 @@ import {CssBaseline} from "@mui/material";
 import {find, get} from "lodash-es";
 import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
 import { GlobalLoadingProvider } from "@/basicComponents/GlobalLoadingProvider";
+import {deleteToken, getToken} from "@/utils/token";
 
 const noCheckLoginPage = [
   '/sign-in',
@@ -73,7 +74,7 @@ function App({Component, pageProps}: AppProps) {
   }
 
   function loginCheck() {
-    if (cookie.getCookie('token')) {
+    if (getToken()) {
       getOrgList().then(res => {
         let list = res.data;
         dispatch({
@@ -105,7 +106,7 @@ function App({Component, pageProps}: AppProps) {
             startRender();
           }
         } else {
-          cookie.delCookie("token");
+          deleteToken();
           location.pathname = '/sign-in';
         }
       })

@@ -5,12 +5,12 @@ import { CommonProps } from "@/utils/commonType";
 import { Tab } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-interface Props extends CommonProps {
+interface Props<LabelType extends string = string> extends CommonProps {
   tabItems: Array<{
-    label: string;
+    label: LabelType;
   }>;
-  selectedTab: string;
-  setSelectedTab: Dispatch<SetStateAction<string>>;
+  selectedTab: LabelType;
+  setSelectedTab: Dispatch<SetStateAction<LabelType>>;
 }
 
 interface StyledTabListProps {
@@ -61,17 +61,17 @@ const SlideTab = styled((props: StyledTabProps) => (
   },
 });
 
-export default function SlideTabs({
+export default function SlideTabs<LabelType extends string = string>({
   tabItems,
   selectedTab,
   setSelectedTab,
-}: Props): React.ReactElement {
+}: Props<LabelType>): React.ReactElement {
   return (
     <TabContext value={selectedTab}>
       <SlideTabList
         onChange={(e, n) => {
           console.log(n);
-          setSelectedTab(n);
+          setSelectedTab(n as LabelType);
         }}
       >
         {tabItems.map((tabItem, index) => (

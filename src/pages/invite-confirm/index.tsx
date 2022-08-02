@@ -5,6 +5,7 @@ import {confirmJoin, getInviteEmail, getInviteInfo} from "@/api/org";
 import cookie from "@/utils/cookie";
 import {getUserInfo} from "@/api/profile";
 import {get} from "lodash-es";
+import {deleteToken, getToken} from "@/utils/token";
 
 export default function InviteConfirm() {
   let token = getQuery('token');
@@ -12,11 +13,11 @@ export default function InviteConfirm() {
   let [orgName, setOrgName] = useState('');
 
   useEffect(() => {
-    if (cookie.getCookie('token')) {
+    if (getToken()) {
       getUserInfo().then(res => {
         getInviteInfoFun(res.email);
       }).catch(err => {
-        cookie.delCookie('token');
+        deleteToken();
         getInviteInfoFun(undefined);
       })
     } else {
@@ -49,7 +50,7 @@ export default function InviteConfirm() {
         desc={errMessage}
         btnDesc={"Logout"}
         btnCb={() => {
-          cookie.delCookie('token');
+          deleteToken();
           location.reload();
         }}
       >

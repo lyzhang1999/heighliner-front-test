@@ -1,5 +1,6 @@
 import { Avatar } from "@mui/material";
 import React from "react";
+import { useRouter } from "next/router";
 import { get } from "lodash-es";
 
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -7,11 +8,13 @@ import { GetEnvRes } from "@/api/application";
 import Link from "/public/img/application/panel/env/link.svg";
 import Config from "/public/img/application/panel/env/config.svg";
 import Gear from "/public/img/application/panel/env/gear.svg";
+import { getQuery, getUrlEncodeName } from "@/utils/utils";
 
 import styles from "./index.module.scss";
 
 export default function Main(props: any): React.ReactElement {
   const { env } = props;
+  const router = useRouter();
 
   return (
     <div className={styles.wrapper}>
@@ -45,7 +48,16 @@ export default function Main(props: any): React.ReactElement {
         >
           <Config />
         </span>
-        <span>
+        <span
+          onClick={() => {
+            const app_id = getQuery("app_id");
+            const release_id = getQuery("release_id");
+            const env_id = getQuery("env_id");
+            router.push(
+              `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+            );
+          }}
+        >
           <Gear />
         </span>
       </div>

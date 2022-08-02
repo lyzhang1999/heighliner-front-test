@@ -10,6 +10,7 @@ import {
 import React, {useState} from "react";
 
 import styles from "./index.module.scss";
+import {deleteToken} from "@/utils/token";
 
 export default function Logout(): React.ReactElement {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Logout(): React.ReactElement {
   };
 
   const logout = () => {
-    cookie.delCookie("token");
+    deleteToken();
     location.pathname = "/sign-in";
   };
 

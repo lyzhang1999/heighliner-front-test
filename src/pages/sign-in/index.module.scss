@@ -86,6 +86,18 @@
       margin-top: 16px;
     }
 
-    
+    .tips {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      .desc{
+        font-size: 14px;
+        margin-left: 4px;
+      }
+      :global(.MuiCheckbox-root){
+        padding: 0px;
+      }
+    }
   }
 }

@@ -1,5 +1,6 @@
 import {AxiosRequestConfig} from "axios";
 import http from "../utils/axios";
+import {set} from "lodash-es";
 
 export enum LoginType {
   Email = "email",
@@ -9,6 +10,7 @@ export enum LoginType {
 export type GetAuthTokenReq =
   | {
   login_type: LoginType.Email;
+  rememberMe: boolean,
   body: {
     email: string;
     password: string;
@@ -45,6 +47,9 @@ export function getAuthToken(req: GetAuthTokenReq): Promise<GetAuthTokenRes> {
   switch (req.login_type) {
     case LoginType.Email:
       body = req.body;
+      if (req.rememberMe) {
+        set(config, 'params.rememberMe', 'true')
+      }
       break;
     case LoginType.GitHub:
       config.params.code = req.code;

@@ -7,6 +7,7 @@ import {
   IconButton,
   InputAdornment,
   TextField,
+  Checkbox
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -37,6 +38,7 @@ import styles from "./index.module.scss";
 const FieldMap = {
   Email: "Email",
   Password: "Password",
+  Remember: 'Remember'
 };
 
 export const IconFocusStyle = {
@@ -63,6 +65,7 @@ export default function SignIn(): React.ReactElement {
     defaultValues: {
       [FieldMap.Email]: "",
       [FieldMap.Password]: "",
+      [FieldMap.Remember]: false,
     },
   });
   const [eyeStatus, reverseEyeStatus, type] = usePasswordEye();
@@ -78,6 +81,7 @@ export default function SignIn(): React.ReactElement {
 
     const req: GetAuthTokenReq = {
       login_type: LoginType.Email,
+      rememberMe: data[FieldMap.Remember],
       body: {
         email: trim(data[FieldMap.Email]),
         password: trim(data[FieldMap.Password]),
@@ -190,7 +194,21 @@ export default function SignIn(): React.ReactElement {
               required: "Please enter your password.",
             }}
           />
-          <p className={styles.forgotPassword}>Forgot password?</p>
+          <div className={styles.tips}>
+            <div>
+              <Controller
+                control={control}
+                name={FieldMap.Remember}
+                render={({field}) => (
+                  // <div>{JSON.stringify(field.value) }</div>
+                  <Checkbox size="small"
+                            onChange={field.onChange} value={field.value}/>
+                )}
+              />
+              <span className={styles.desc}>Remember me </span>
+            </div>
+            {/*<p className={styles.forgotPassword}>Forgot password?</p>*/}
+          </div>
           <Button
             variant="contained"
             className={styles.signInBtn}

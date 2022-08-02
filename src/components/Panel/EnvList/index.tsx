@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 
 import RightDrawer from "@/basicComponents/RightDrawer";
 import {EnvItemRes, ForkRes, StatusColor} from "@/api/application";
-import {getQuery, getUrlEncodeName} from "@/utils/utils";
+import {formatDate, getQuery, getUrlEncodeName} from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import ForkNewEnv from "./ForkNewEnv";
@@ -116,6 +116,37 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                     <Link/>
                   </span>
                 </div>
+                {/*<div className={styles.infoWrapper}>*/}
+                {/*  <div className={styles.statusWrapper}>*/}
+                {/*  <span className={styles.key}>*/}
+                {/*      Owner:*/}
+                {/*  </span>*/}
+                {/*    <span>*/}
+                {/*    <span className={styles.statusValue}>{get(i, 'owner_name', '')}</span>*/}
+                {/*  </span>*/}
+                {/*  </div>*/}
+                {/*  <div className={styles.configWrapper}>*/}
+                {/*   <span className={styles.key}>*/}
+                {/*      Created:*/}
+                {/*   </span>*/}
+                {/*    <span className={styles.statusValue}>*/}
+                {/*     {formatDate(get(i, 'last_release.start_time', 0) * 1000)}*/}
+                {/*    </span>*/}
+                {/*  </div>*/}
+                  {/*<div className={styles.logsWrapper}>*/}
+                    {/* <span className={styles.key}>*/}
+                    {/*    Logs:*/}
+                    {/*</span>*/}
+                    {/*  <span className={styles.logsValue}*/}
+                    {/*        onClick={() => {*/}
+                    {/*          router.push(`/${getUrlEncodeName()}/applications/creating?app_id=${getQuery('app_id')}&release_id=${get(i, 'last_release.id', '')}&foromPane=true`);*/}
+                    {/*        }}*/}
+                    {/*  >*/}
+                    {/*  Deploy*/}
+                    {/*</span>*/}
+                  {/*</div>*/}
+                {/*</div>*/}
+
                 <div className={styles.infoWrapper}>
                   <div className={styles.statusWrapper}>
                   <span className={styles.key}>
@@ -157,6 +188,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   </span>
                   </div>
                 </div>
+
               </div>
               {index === 0 && (
                 <div

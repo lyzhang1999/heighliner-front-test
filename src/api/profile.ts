@@ -45,27 +45,27 @@ export interface UserInfo extends CreativeApiReturnField{
   avatar: string;
   status: number;
   github_id: number;
-  preferred_org_id: number;
+  default_org_id: number;
 }
 
 export function getUserInfo(): Promise<UserInfo> {
   return http.get("/user");
 }
 
-export interface ChangePreferredOrgRes extends CreativeApiReturnField {
+export interface ChangeDefaultOrgRes extends CreativeApiReturnField {
   avatar: string;
   email: string;
   github_id: number;
   id: number;
   nickname: string;
   password: string;
-  preferred_org_id: number;
+  default_org_id: number;
   status: string;
   username: string;
 }
 
-export function changePreferredOrg(org_id: number): Promise<ChangePreferredOrgRes> {
-  return http.post(`/user/change-preferred-org`, undefined, {
+export function changeDefaultOrg(org_id: number): Promise<ChangeDefaultOrgRes> {
+  return http.post(`/user/change-default-org`, undefined, {
     params: {
       org_id,
     },

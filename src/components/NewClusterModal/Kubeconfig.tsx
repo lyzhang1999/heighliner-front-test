@@ -102,7 +102,7 @@ export const KubeconfigPanel = ({
             rules={{required: "Please input kube config"}}
           />
           <div className={styles.label}>
-            Public Ip
+            Public Ingress IP
           </div>
           <Controller
             name="ingress_lb_address"

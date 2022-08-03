@@ -4,11 +4,11 @@ import { getCurrentOrg, getDefaultOrg } from "@/utils/utils";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { get } from "lodash-es";
-import usePreferredOrg from "./preferredOrg";
+import useDefaultOrg from "./defaultOrg";
 import { getUserInfo } from "@/api/profile";
 
 export default function useRedirectCurrentOrganization() {
-  const [currentPreferredOrgId, flushCurrentPreferredOrgId] = usePreferredOrg();
+  const [currentDefaultOrgId, flushCurrentDefaultOrgId] = useDefaultOrg();
   const { dispatch } = useContext(Context);
   const router = useRouter();
 
@@ -20,15 +20,15 @@ export default function useRedirectCurrentOrganization() {
         let currentOrganization = getCurrentOrg(getDefaultOrg(list));
 
         getUserInfo().then((userInfo) => {
-          // Check user whether have preferred organization.
+          // Check user whether have default organization.
           if (
-            userInfo.preferred_org_id !== undefined &&
-            userInfo.preferred_org_id > 0
+            userInfo.default_org_id !== undefined &&
+            userInfo.default_org_id > 0
           ) {
             const result = list.filter(
-              (item) => item.id === userInfo.preferred_org_id
+              (item) => item.id === userInfo.default_org_id
             );
-            // If preferred organization exist:
+            // If default organization exist:
             if (result && result.length === 1) {
               oriName = result[0].name;
               currentOrganization = getCurrentOrg(result[0]);

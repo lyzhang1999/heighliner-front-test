@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import {TableRow, TableHead, TableCell, TableBody, Table, Tooltip} from "@mui/material";
+import {TableRow, TableHead, TableCell, TableBody, Table, Tooltip, Button} from "@mui/material";
 import CreateOrganization from "@/pages/organizations/createOrganization";
 import DeleteOrganization from "@/pages/organizations/deleteOrganization";
 import TransferOrganization from "@/pages/organizations/transferOrganization";
@@ -10,13 +10,13 @@ import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, RoleIcon, roleType} from "@/api/org";
 import {formatDate, getCurrentOrg, getDefaultOrg, getQuery, Message} from "@/utils/utils";
-import {get, omit} from "lodash-es";
+import {get} from "lodash-es";
 import {useRouter} from "next/router";
 import RoleTag from "@/components/RoleTag";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PopSelect, {PopItem} from "@/components/PopSelect";
-import { changePreferredOrg, getUserInfo } from "@/api/profile";
-import usePreferredOrg from "@/hooks/preferredOrg";
+import { changeDefaultOrg } from "@/api/profile";
+import useDefaultOrg from "@/hooks/defaultOrg";
 
 const Organizations = () => {
   const {state, dispatch} = useContext(Context);
@@ -29,9 +29,8 @@ const Organizations = () => {
   const [transferId, setTransferId] = useState<number>(0);
   const [leaveModalVisible, setLeaveModalVisible] = useState<boolean>(false);
   const [leaveId, setLeaveId] = useState<number>(0);
-  // const [preferredOrgModalVisible, setPreferredOrgModalVisible] = useState<boolean>(false);
-  const [currentPreferredOrgId, flushCurrentPreferredOrgId] = usePreferredOrg();
-  const [chosenPreferredOrgId, setChosenPreferredOrgId] = useState<number>();
+  const [currentDefaultOrgId, flushCurrentDefaultOrgId] = useDefaultOrg();
+  const [chosenDefaultOrgId, setChosenDefaultOrgId] = useState<number>();
   const [activeType, setActiveType] = React.useState<{
     roleType: keyof typeof roleType,
     isDefault: boolean
@@ -83,13 +82,13 @@ const Organizations = () => {
     })
   }
   
-  function setPreferOrg() {
-    if(currentPreferredOrgId !== chosenPreferredOrgId) {
-      changePreferredOrg(chosenPreferredOrgId!).then(res => {
-        flushCurrentPreferredOrgId(res.preferred_org_id)
+  function setDefaultOrg() {
+    if(currentDefaultOrgId !== chosenDefaultOrgId) {
+      changeDefaultOrg(chosenDefaultOrgId!).then(res => {
+        flushCurrentDefaultOrgId(res.default_org_id)
       });
     } else {
-      Message.warning("The current organization is already a preferred organization.");
+      Message.warning("The current organization is already the default.");
     }
     
     setMountDom(null);
@@ -117,8 +116,8 @@ const Organizations = () => {
     }
     // No role limit
     item.push({
-      key: "Set as Prefer",
-      clickCb: setPreferOrg
+      key: "Set As Default",
+      clickCb: setDefaultOrg
     })
     return item;
   }
@@ -159,11 +158,10 @@ const Organizations = () => {
                       <span>
                         {row.name}
                         {
-                          row.id === currentPreferredOrgId && (
-                            <Tooltip 
-                              title="This is your preferred Organization and will be set to default chosen organization when you login into ForkMain.">
-                              <span className={styles.preferredOrg}></span>
-                            </Tooltip>
+                          row.id === currentDefaultOrgId && (
+                            <span>
+                              <div className={styles.defaultOrg}>Default</div>
+                            </span>
                         )}
                       </span>
                     </div>
@@ -185,7 +183,7 @@ const Organizations = () => {
                           //   <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
                           // </Tooltip>
                           <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
-                            setChosenPreferredOrgId(row.id);
+                            setChosenDefaultOrgId(row.id);
                             setActiveType({roleType: member_type, isDefault: true});
                             setMountDom(event?.currentTarget);
                           }}/>
@@ -194,7 +192,7 @@ const Organizations = () => {
                             setDeleteId(row.id);
                             setTransferId(row.id);
                             setLeaveId(row.id);
-                            setChosenPreferredOrgId(row.id);
+                            setChosenDefaultOrgId(row.id);
                             setActiveType({roleType: member_type, isDefault: false});
                             setMountDom(event?.currentTarget);
                           }}/>

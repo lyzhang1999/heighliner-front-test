@@ -247,9 +247,9 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
           >
             <h1>{FieldsMap.gitProvider}</h1>
             <ul className={styles.gitWrap}>
-              {gitProviderOrganizations.map((gitProviderOrganization) => (
+              {gitProviderOrganizations.map((gitProviderOrganization ) => (
                 <li
-                  key={gitProviderOrganization.git_provider_id}
+                  key={gitProviderOrganization.git_provider_id + gitProviderOrganization.git_owner_name}
                   onClick={() => {
                     field.onChange(gitProviderOrganization.git_owner_name);
                   }}

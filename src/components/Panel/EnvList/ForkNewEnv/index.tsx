@@ -88,11 +88,23 @@ const schema = yup.object().shape({
     .string()
     .default("")
     .oneOf(Object.values(EnvType))
-    .required("Please enter the forked environment name."),
+    .required("Please choose the forked environment type."),
   [FieldsMap.Name]: yup
     .string()
     .default("")
-    .required("Please enter the forked environment name."),
+    .required("Please enter the forked environment name.")
+    .trim()
+    .max(63, "The max length is 63 character.")
+    .matches(/^[a-z]/, "The name should start with lowercase letter character.")
+    .matches(
+      /[a-z0-9]$/,
+      "Then name should end with lowercase alphanumeric character."
+    )
+    .test(
+      "exclude illegal characters",
+      "The name should only contain lowercase alphanumeric character, or hyphen(-).",
+      (value) => !/[^a-z0-9-]/.test(value)
+    ),
   [FieldsMap.StartPoint]: yup.object().shape({
     [FieldsMap.Backend]: yup
       .string()
@@ -248,6 +260,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                 value={EnvType.Test}
                 control={<Radio />}
                 label={EnvType.Test}
+                disabled
               />
               <FormControlLabel
                 value={EnvType.Development}
@@ -272,6 +285,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                 errors[FieldsMap.Name] && errors[FieldsMap.Name]?.message
               }
               size="small"
+              autoFocus
             />
           </FormControl>
         )}

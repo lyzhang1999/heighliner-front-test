@@ -1,3 +1,4 @@
+import { CreativeApiReturnField } from "@/utils/commonType";
 import http from "../utils/axios";
 
 export interface PasswordReq {
@@ -36,21 +37,37 @@ export function updateBasicProfile(
   return http.patch(`/user`, data);
 }
 
-
-export interface UserInfo {
+export interface UserInfo extends CreativeApiReturnField{
   id: number;
-  created_at: number;
-  created_by: number;
-  updated_at: number;
-  updated_by: number;
   nickname: string;
   password: string;
   email: string;
   avatar: string;
   status: number;
   github_id: number;
+  preferred_org_id: number;
 }
 
-export function getUserInfo(): Promise<UserInfo>{
-  return http.get('/user');
+export function getUserInfo(): Promise<UserInfo> {
+  return http.get("/user");
+}
+
+export interface ChangePreferredOrgRes extends CreativeApiReturnField {
+  avatar: string;
+  email: string;
+  github_id: number;
+  id: number;
+  nickname: string;
+  password: string;
+  preferred_org_id: number;
+  status: string;
+  username: string;
+}
+
+export function changePreferredOrg(org_id: number): Promise<ChangePreferredOrgRes> {
+  return http.post(`/user/change-preferred-org`, undefined, {
+    params: {
+      org_id,
+    },
+  });
 }

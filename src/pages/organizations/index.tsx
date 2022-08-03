@@ -9,12 +9,14 @@ import {useContext, useEffect, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, RoleIcon, roleType} from "@/api/org";
-import {formatDate, getCurrentOrg, getDefaultOrg, getQuery} from "@/utils/utils";
+import {formatDate, getCurrentOrg, getDefaultOrg, getQuery, Message} from "@/utils/utils";
 import {get, omit} from "lodash-es";
 import {useRouter} from "next/router";
 import RoleTag from "@/components/RoleTag";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PopSelect, {PopItem} from "@/components/PopSelect";
+import { changePreferredOrg, getUserInfo } from "@/api/profile";
+import usePreferredOrg from "@/hooks/preferredOrg";
 
 const Organizations = () => {
   const {state, dispatch} = useContext(Context);
@@ -27,7 +29,13 @@ const Organizations = () => {
   const [transferId, setTransferId] = useState<number>(0);
   const [leaveModalVisible, setLeaveModalVisible] = useState<boolean>(false);
   const [leaveId, setLeaveId] = useState<number>(0);
-  const [activeType, setActiveType] = React.useState<string>("");
+  // const [preferredOrgModalVisible, setPreferredOrgModalVisible] = useState<boolean>(false);
+  const [currentPreferredOrgId, flushCurrentPreferredOrgId] = usePreferredOrg();
+  const [chosenPreferredOrgId, setChosenPreferredOrgId] = useState<number>();
+  const [activeType, setActiveType] = React.useState<{
+    roleType: keyof typeof roleType,
+    isDefault: boolean
+  }>();
   const [mountDom, setMountDom] = useState<Element | null>(null);
 
   useEffect(() => {
@@ -59,7 +67,7 @@ const Organizations = () => {
     checkOrg(leaveId);
   }
 
-  // judage is current organiztion, change to default organization
+  // Judge is current organization, change to default organization
   function checkOrg(id: number) {
     if (get(currentOrganization, 'org_id') === id) {
       let defaultItem = getDefaultOrg(organizationList);
@@ -74,24 +82,44 @@ const Organizations = () => {
       dispatch({organizationList: res.data})
     })
   }
+  
+  function setPreferOrg() {
+    if(currentPreferredOrgId !== chosenPreferredOrgId) {
+      changePreferredOrg(chosenPreferredOrgId!).then(res => {
+        flushCurrentPreferredOrgId(res.preferred_org_id)
+      });
+    } else {
+      Message.warning("The current organization is already a preferred organization.");
+    }
+    
+    setMountDom(null);
+    return;
+  }
 
   function getPopItem(): PopItem[] {
     let item: PopItem[] = [];
-    if ([roleType.Owner].includes(activeType)) {
-      item.push({
-        key: "Delete",
-        red: true,
-        clickCb: () => setDeleteModalVisible(true)
-      }, {
-        key: "Transfer",
-        clickCb: () => setTransferModalVisible(true)
-      })
-    } else if ([roleType.Admin, roleType.Member].includes(activeType)) {
-      item.push({
-        key: "Leave",
-        clickCb: () => setLeaveModalVisible(true)
-      })
+    if(!activeType?.isDefault) {
+      if ([roleType.Owner].includes(activeType?.roleType || "")) {
+        item.push({
+          key: "Delete",
+          red: true,
+          clickCb: () => setDeleteModalVisible(true)
+        }, {
+          key: "Transfer",
+          clickCb: () => setTransferModalVisible(true)
+        })
+      } else if ([roleType.Admin, roleType.Member].includes(activeType?.roleType || "")) {
+        item.push({
+          key: "Leave",
+          clickCb: () => setLeaveModalVisible(true)
+        })
+      }
     }
+    // No role limit
+    item.push({
+      key: "Set as Prefer",
+      clickCb: setPreferOrg
+    })
     return item;
   }
 
@@ -130,6 +158,13 @@ const Organizations = () => {
                       <img src={RoleIcon[member_type]} alt="user"/>
                       <span>
                         {row.name}
+                        {
+                          row.id === currentPreferredOrgId && (
+                            <Tooltip 
+                              title="This is your preferred Organization and will be set to default chosen organization when you login into ForkMain.">
+                              <span className={styles.preferredOrg}></span>
+                            </Tooltip>
+                        )}
                       </span>
                     </div>
                   </TableCell>
@@ -143,18 +178,24 @@ const Organizations = () => {
                     <div className={styles.moreIcon}>
                       {
                         [roleType.Owner].includes(member_type) && row.type === 'Default' ?
-                          <Tooltip
-                            title="Init organization does not allow operations"
-                            placement="left"
-                          >
-                            <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
-                          </Tooltip>
+                          // <Tooltip
+                          //   title="Init organization does not allow operations"
+                          //   placement="left"
+                          // >
+                          //   <MoreVertIcon color="disabled" sx={{cursor: "pointer"}}/>
+                          // </Tooltip>
+                          <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
+                            setChosenPreferredOrgId(row.id);
+                            setActiveType({roleType: member_type, isDefault: true});
+                            setMountDom(event?.currentTarget);
+                          }}/>
                           :
                           <MoreVertIcon sx={{cursor: "pointer"}} onClick={(event) => {
                             setDeleteId(row.id);
                             setTransferId(row.id);
                             setLeaveId(row.id);
-                            setActiveType(member_type);
+                            setChosenPreferredOrgId(row.id);
+                            setActiveType({roleType: member_type, isDefault: false});
                             setMountDom(event?.currentTarget);
                           }}/>
                       }

@@ -126,7 +126,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   PUBLIC URL:
                 </div>
                 <div className={styles.url}>
-                  http://{i.domain}
+                  <a>http://{i.domain}</a>
                   <span
                     className={styles.linkIcon}
                     onClick={() => {

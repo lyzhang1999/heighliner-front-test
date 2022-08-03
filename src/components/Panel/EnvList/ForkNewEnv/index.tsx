@@ -34,7 +34,7 @@ import { useBranches } from "@/hooks/branches";
 import { CommonProps } from "@/utils/commonType";
 import { GetBranchesReq, GetBranchesRes } from "@/api/gitProviders";
 import { PanelContext } from "@/pages/[organization]/applications/panel";
-import { getQuery } from "@/utils/utils";
+import { getQuery, getUrlEncodeName } from "@/utils/utils";
 import useEnvSetting from "@/hooks/envSetting";
 
 import styles from "./index.module.scss";
@@ -125,6 +125,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
   let app_id = +getQuery("app_id");
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
   const panelContext = useContext(PanelContext);
+  const router = useRouter();
 
   const {
     control,
@@ -238,6 +239,11 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
 
     fork(req).then((res) => {
       props.forkSuccessCb && props.forkSuccessCb(res);
+      const app_id = getQuery("app_id");
+      const release_id = getQuery("release_id");
+      router.push(
+        `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${res.application_env_id}`
+      );
     });
   };
 
@@ -309,7 +315,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                     error={
                       errors[FieldsMap.StartPoint] &&
                       errors[FieldsMap.StartPoint]![FieldsMap.Backend] !==
-                        undefined
+                      undefined
                     }
                   >
                     <Select
@@ -340,7 +346,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                     error={
                       errors[FieldsMap.StartPoint] &&
                       errors[FieldsMap.StartPoint]![FieldsMap.Frontend] !==
-                        undefined
+                      undefined
                     }
                   >
                     <Select

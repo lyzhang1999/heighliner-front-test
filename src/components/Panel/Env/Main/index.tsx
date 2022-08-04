@@ -64,8 +64,7 @@ export default function Main(props: any): React.ReactElement {
       <div className={styles.publicUrlWrap}>
         <h2>public url</h2>
         <p>
-          {/* https://bd603175-3825-4e31-b259-49d9550079a1-hongchao-heighliner.forkmain */}
-          {"http://" + env?.domain}
+          <a href={`http://${env?.domain}`} target="_blank" >http://{env?.domain}</a>
           <span
             onClick={() => {
               window.open("http://" + env?.domain);

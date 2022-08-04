@@ -114,7 +114,11 @@ export default function Newpanel() {
                <div 
                 style={{   
                   marginLeft: '20px',
-                  marginTop: '50px'
+                  marginTop: '50px',
+                  marginRight: '50px',
+                  width: '30%',
+                  maxWidth: '500px',
+                  // display: 'flex'
                 }}>
                 <RepoList {...{repoList, git_provider_id: +git_provider_id}} />
               </div>

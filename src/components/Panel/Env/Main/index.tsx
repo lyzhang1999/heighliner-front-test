@@ -64,7 +64,7 @@ export default function Main(props: any): React.ReactElement {
       <div className={styles.publicUrlWrap}>
         <h2>public url</h2>
         <p>
-          <a href={`http://${env?.domain}`} target="_blank" >http://{env?.domain}</a>
+          <a href={`http://${env?.domain}`} target="_blank" rel="noreferrer" >http://{env?.domain}</a>
           <span
             onClick={() => {
               window.open("http://" + env?.domain);

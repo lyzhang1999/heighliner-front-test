@@ -126,7 +126,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   PUBLIC URL:
                 </div>
                 <div className={styles.url}>
-                  <a href={`http://${i.domain}`} target="_blank" >http://{i.domain}</a>
+                  <a href={`http://${i.domain}`} target="_blank" rel="noreferrer" >http://{i.domain}</a>
                   <span
                     className={styles.linkIcon}
                     onClick={() => {

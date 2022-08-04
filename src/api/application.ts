@@ -465,6 +465,26 @@ export function getEnvSetting({
   );
 }
 
+export interface UpdateEnvSettingReq {
+  app_id: number;
+  env_id: number;
+  body: {
+    service: Array<{
+      env: EnvVariables;
+      name: string;
+    }>;
+  };
+}
+
+export function updateEnvSetting(req: UpdateEnvSettingReq) {
+  return http.patch(
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/envs/${
+      req.env_id
+    }/setting`,
+    req.body
+  );
+}
+
 export interface AppRepoRes {
   git_organization: string;
   provider: string;

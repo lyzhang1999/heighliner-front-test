@@ -16,22 +16,32 @@ export default function SingleCollapsiblePanel(
 ): React.ReactElement {
   const { title, children, defaultIsExpanded } = props;
   const ref = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState<number>(0);
+  const [height, setHeight] = useState<string>("0px");
 
   const [isExpand, setIsExpanded] = useState(defaultIsExpanded);
 
   const collapseChange = () => {
     if (isExpand) {
-      setHeight(0);
+      setHeight(ref.current?.clientHeight + "px" ?? "0px");
+      requestAnimationFrame(() => {
+        setHeight(0 + "px");
+      });
     } else {
-      setHeight(ref.current?.clientHeight ?? 0);
+      setHeight(ref.current?.clientHeight + "px" ?? "0px");
+      // Consider children heigh will change.
+      setTimeout(() => {
+        setHeight("auto");
+      }, 150);
     }
     setIsExpanded(!isExpand);
   };
 
   useEffect(() => {
     if (defaultIsExpanded) {
-      setHeight(ref.current?.clientHeight ?? 0);
+      setHeight(ref.current?.clientHeight + "px" ?? "0px");
+      setTimeout(() => {
+        setHeight("auto");
+      }, 242);
     }
   }, []);
 
@@ -44,7 +54,7 @@ export default function SingleCollapsiblePanel(
       <div
         className={clsx(styles.content, isExpand && styles.expanded)}
         style={{
-          height: height + "px",
+          height: height,
         }}
       >
         <div ref={ref}>{children}</div>

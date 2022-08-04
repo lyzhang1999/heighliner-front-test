@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import {
@@ -15,10 +15,12 @@ import { CommonProps } from "@/utils/commonType";
 import Layout from "@/components/Layout";
 import SingleCollapsiblePanel from "@/basicComponents/SingleCollapsiblePanel";
 import { getQuery, getUrlEncodeName, Message } from "@/utils/utils";
-import { deleteEnv, getProdEnv } from "@/api/application";
+import { deleteEnv, GetEnvSettingRes, getProdEnv } from "@/api/application";
 import { useGlobalLoading } from "@/hooks/GlobalLoading";
+import Frontend from "@/components/Panel/EnvList/Setting/Frontend";
 
 import styles from "./index.module.scss";
+import Backend from "@/components/Panel/EnvList/Setting/Backend";
 
 interface Props extends CommonProps {}
 
@@ -75,9 +77,20 @@ export default function Settings(props: Props): React.ReactElement {
         >
           Environment settings(feat-shop)
         </Typography>
-        <div style={{
-          marginTop: "20px"
-        }}>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px"
+          }}
+        >
+          <SingleCollapsiblePanel title="Frontend" defaultIsExpanded={true}>
+            <Frontend />
+          </SingleCollapsiblePanel>
+          <SingleCollapsiblePanel title="Backend" defaultIsExpanded={true}>
+            <Backend />
+          </SingleCollapsiblePanel>
           <SingleCollapsiblePanel title="Danger Zone" defaultIsExpanded={true}>
             <div>
               <Button

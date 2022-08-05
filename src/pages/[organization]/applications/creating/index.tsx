@@ -5,7 +5,6 @@ import {useRouter} from "next/router";
 import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
-import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/api/application";
 import {Alert} from "@mui/material";
 import clsx from "clsx";

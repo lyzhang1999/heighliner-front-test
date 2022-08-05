@@ -1,10 +1,10 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axios';
-import cookie from "@/utils/cookie";
 import {Message} from "@/utils/utils";
 import {get} from "lodash-es";
 import {deleteToken, getToken} from "@/utils/token";
 
 export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
+// export const baseURL = 'http://localhost:3001/api/'
 
 export const http = axios.create({
   baseURL: baseURL,

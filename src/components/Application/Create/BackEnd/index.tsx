@@ -292,7 +292,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
               name={`rewrite`}
               control={control}
               render={({field}) => (
-                <Switch value={field.value} onChange={field.onChange}/>
+                <Switch checked={field.value} onChange={field.onChange} />
               )}
             />
           </div>

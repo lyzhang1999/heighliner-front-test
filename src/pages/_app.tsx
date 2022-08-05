@@ -7,7 +7,6 @@ import {initState, Context, reducer} from "@/utils/store";
 import {ThemeProvider} from '@mui/material/styles';
 
 import '@/styles/globals.scss';
-import cookie from "@/utils/cookie";
 import Notice from '@/components/Notice/index';
 import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";

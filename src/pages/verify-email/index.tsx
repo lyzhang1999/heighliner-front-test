@@ -28,8 +28,6 @@ export default function VerifyEmail() {
     <PageWrapper
       title="Authentication Failed"
       desc="It looks like you may have clicked on an invalid email verification link, Please close this window and try authenticating again."
-      // btnDesc={"Yes I`m sure"}
-      // btnCb={confirm}
     >
     </PageWrapper>
   )

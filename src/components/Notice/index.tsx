@@ -63,7 +63,9 @@ const Notice = (): ReactElement => {
               }}
     >
       <Alert onClose={close} severity={type}>
-        {message}
+        {
+          (typeof message === 'object') ? JSON.stringify(message) : message
+        }
       </Alert>
     </Snackbar>
   );

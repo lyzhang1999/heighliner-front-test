@@ -1,4 +1,3 @@
-import cookie from "@/utils/cookie";
 import {GlobalContxtRef} from "@/components/GlobalContxt";
 import {NoticeRef} from "@/components/Notice";
 import {OrgList, roleType} from "@/api/org";
@@ -166,51 +165,3 @@ export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
 export function isProduct() {
   return !["localhost", "heighliner-cloud.heighliner.cloud"].includes(location.hostname)
 }
-
-export function copyFile(value: string, successText: string) {
-  const input = document.createElement('input');
-  document.body.appendChild(input);
-  input.setAttribute('value', value);
-  input.select();
-  if (document.execCommand('copy')) {
-    document.execCommand('copy');
-    Message.success(successText);
-  } else {
-    Message.error("Copy error")
-  }
-  document.body.removeChild(input);
-}
-
-
-function fallbackCopyTextToClipboard(text: string, successText: string) {
-  // 1.创建一个可选中元素
-  let textArea = document.createElement("textarea");
-  textArea.value = text;
-  // 2.使用定位，阻止页面滚动
-  textArea.style.top = "0";
-  textArea.style.left = "0";
-  textArea.style.position = "fixed";
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-  try {
-    document.execCommand('copy');
-    Message.success(successText);
-  } catch (err) {
-    Message.error('Error on document.execCommand(\'copy\') ');
-  }
-  document.body.removeChild(textArea);
-}
-
-export function copyTextToClipboard(text: string, successText: string) {
-  if (!navigator.clipboard) {
-    fallbackCopyTextToClipboard(text, successText);
-    return;
-  }
-  navigator.clipboard.writeText(text).then(function () {
-    Message.success(successText);
-  }, function (err) {
-    Message.error("Copy Error!");
-  });
-}
-

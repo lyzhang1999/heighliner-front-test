@@ -13,7 +13,7 @@ import {
   SelectAStackType,
   SelectAStackInitState,
   ProvidersType,
-  ProvidersInitState, getParams, BackendFrameWorkInitState, FrontendFrameWorkInitState
+  ProvidersInitState, getParams, BackendFrameWorkInitState, FrontendFrameWorkInitState, FrontendType
 } from "@/components/Application/Create/util";
 import {cloneDeep, get} from "lodash-es";
 import {createApp, createAppRes, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
@@ -24,7 +24,7 @@ export interface FormStateType {
   selectAStack: SelectAStackType,
   providers: ProvidersType,
   backend: FrameworkType,
-  frontend: FrameworkType,
+  frontend: FrontendType,
   middleWares: MiddleWareType[],
 }
 

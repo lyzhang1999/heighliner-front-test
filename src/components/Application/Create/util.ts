@@ -215,16 +215,6 @@ export interface EnvType {
   value: string
 }
 
-export interface FrameworkType {
-  isRepo: boolean;
-  framework: string;
-  repo_url: string;
-  env: Array<EnvType>;
-  exposePort: string;
-  path: Array<{ v: string }>;
-  rewrite: boolean;
-  entryFile: string;
-}
 
 export const BackendFrameWorkInitState: FrameworkType = {
   isRepo: false,
@@ -237,7 +227,39 @@ export const BackendFrameWorkInitState: FrameworkType = {
   entryFile: "",
 };
 
-export const FrontendFrameWorkInitState: FrameworkType = {
+export interface FrameworkType {
+  isRepo: boolean;
+  framework: string;
+  repo_url: string;
+  env: Array<EnvType>;
+  exposePort: string;
+  path: Array<{ v: string }>;
+  rewrite: boolean;
+  entryFile: string;
+}
+
+export interface FrontendType {
+  isRepo: boolean;
+  framework: string;
+  repo_url: string;
+  env: Array<EnvType>;
+  exposePort: string;
+  path: Array<{ v: string }>;
+  rewrite: boolean;
+  entryFile: string;
+
+  buildCommand: string,
+  outputDir: string,
+  buildEnv: Array<EnvType>,
+  runCommand: string
+  port: string,
+  deployEnv: Array<EnvType>,
+  staticDeployMode: "spa" | 'mpa' | '',
+  path404: string,
+  deployMode: 'static' | "command" | "",
+}
+
+export const FrontendFrameWorkInitState: FrontendType = {
   isRepo: false,
   framework: "",
   repo_url: "",
@@ -246,6 +268,16 @@ export const FrontendFrameWorkInitState: FrameworkType = {
   path: [{v: "/"}],
   rewrite: false,
   entryFile: "",
+
+  buildCommand: '',
+  outputDir: '',
+  buildEnv: [],
+  deployMode: '',
+  runCommand: "",
+  port: '',
+  deployEnv: [],
+  staticDeployMode: '',
+  path404: ''
 };
 
 
@@ -285,6 +317,27 @@ export interface FrameItemType {
   version: string,
   language: string,
   languageVersion: string,
+}
+
+
+export interface FrontendItemType {
+  img: string,
+  name: string,
+  key: string,
+  version: string,
+  language: string,
+  languageVersion: string,
+
+
+  buildCommand: string,
+  outputDir: string,
+  buildEnv: Array<EnvType>,
+  runCommand: string
+  port: string,
+  deployEnv: Array<EnvType>,
+  staticDeployMode: "spa" | 'mpa' | '',
+  path404: string,
+  deployMode: 'static' | "command",
 }
 
 function getService(key: string, value: FrameworkType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string, middleWares: MiddleWareType[]) {
@@ -362,13 +415,111 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
   return obj;
 }
 
+function getForntendService(key: string, value: FrontendType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string) {
+  let {
+    isRepo,
+    framework,
+    repo_url,
+    buildCommand,
+    outputDir,
+    runCommand,
+    port,
+    deployEnv,
+    staticDeployMode,
+    path404,
+    deployMode,
+  } = value;
+
+  let name = '';
+  let frontendPort = Number(port);
+
+  if (isRepo) {   // deploy frontend by repo
+    let thisRepo = find(repoList, {url: repo_url});
+    name = get(thisRepo, 'repo_name', '');
+    let obj = {
+      framework: {
+        name: "js",
+        version: "1.7.7",
+      },
+      language: {
+        name: "typescript",
+        version: "1.7.7",
+      },
+      name: name,
+      scaffold: false,
+      setting: {
+        env: deployEnv,
+        expose: [
+          {
+            paths: [{path: "/"}],
+            port: (deployMode === 'static') ? 3000 : frontendPort,
+            rewrite: false,
+          },
+        ],
+        extended_fields: {
+          "frontend_404_path": path404,
+          "frontend_app_type": (staticDeployMode === 'spa') ? "SPA" : "MPA",
+          "frontend_build_cmd": buildCommand,
+          "frontend_out_dir": outputDir,
+          "frontend_run_cmd": runCommand
+        },
+        repo_url: '',
+      },
+      type: (deployMode === 'static') ? 'frontend-static' : "frontend-cmd",
+    }
+    return obj;
+  } else { // deploy frontend by framework
+    let thisItem = find(frameList, {key: framework});
+    let buildCommand = get(thisItem, 'buildCommand', '');
+    let outputDir = get(thisItem, 'outputDir', '');
+    let runCommand = get(thisItem, 'runCommand', '');
+    let staticDeployMode = get(thisItem, 'staticDeployMode', '');
+    let path404 = get(thisItem, 'path404', '');
+    let deployMode = get(thisItem, 'deployMode', '');
+    let key = get(thisItem, 'key', '');
+
+    let obj = {
+      framework: {
+        name: key,
+        version: get(thisItem, 'version', ''),
+      },
+      language: {
+        name: get(thisItem, 'language', ''),
+        version: get(thisItem, 'languageVersion', ''),
+      },
+      name: appName + '-' + key,
+      scaffold: true,
+      setting: {
+        env: [],
+        expose: [
+          {
+            paths: [{path: "/"}],
+            port: 3000,
+            rewrite: false,
+          },
+        ],
+        extended_fields: {
+          "frontend_404_path": path404,
+          "frontend_app_type": (staticDeployMode === 'spa') ? "SPA" : "MPA",
+          "frontend_build_cmd": buildCommand,
+          "frontend_out_dir": outputDir,
+          "frontend_run_cmd": runCommand
+        },
+        repo_url: repo_url,
+      },
+      type: (deployMode === 'static') ? 'frontend-static' : "frontend-cmd",
+    }
+    return obj;
+  }
+}
+
 export function getParams(formState: FormStateType, repoList: getRepoListRes[]) {
   let {selectAStack, providers, backend, frontend, middleWares} = formState;
   let {Name, Stack} = selectAStack;
   let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}, cluster_id} = providers;
   const service = [
     getService('backend', backend, backItem, repoList, Name, middleWares),
-    getService('frontend', frontend, frontItem, repoList, Name, middleWares)
+    getForntendService('frontend', frontend, frontItem, repoList, Name)
   ]
   const body = {
     name: Name,

@@ -13,17 +13,6 @@ import styles from "./index.module.scss";
 import ForkNewEnv from "./ForkNewEnv";
 import Link from "/public/img/application/panel/env/link.svg";
 
-// const item =
-//   {
-//     envName: "Main",
-//     pubulicUrl: "https://bd603175-3825-4e31-b259-49d9550079a1-hongchao-heighliner.forkmain",
-//     status: 'Creating',
-//     config: "",
-//     logs: "",
-//     pr: ['feat: Validate against nested core actions #777', 'build(deps): bump @docusaurus/core from 2.0.0-beta.21 to 2.0.0-beta.22 in....'],
-//     issue: ['Refactor core.#Stop and core.#SendSignal to not reference core.#Start directly', 'Refactor core.#Stop and core.#SendSignal to not reference core.']
-//   }
-
 export const itemClass = "CANVASITME";
 
 interface Props {
@@ -123,7 +112,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   {/*</div>*/}
                 </div>
                 <div className={styles.urlTitle}>
-                  PUBLIC URL:
+                  Public Url:
                 </div>
                 <div className={styles.url}>
                   <a href={`http://${i.domain}`} target="_blank" rel="noreferrer" >http://{i.domain}</a>
@@ -136,37 +125,6 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                     <Link/>
                   </span>
                 </div>
-                {/*<div className={styles.infoWrapper}>*/}
-                {/*  <div className={styles.statusWrapper}>*/}
-                {/*  <span className={styles.key}>*/}
-                {/*      Owner:*/}
-                {/*  </span>*/}
-                {/*    <span>*/}
-                {/*    <span className={styles.statusValue}>{get(i, 'owner_name', '')}</span>*/}
-                {/*  </span>*/}
-                {/*  </div>*/}
-                {/*  <div className={styles.configWrapper}>*/}
-                {/*   <span className={styles.key}>*/}
-                {/*      Created:*/}
-                {/*   </span>*/}
-                {/*    <span className={styles.statusValue}>*/}
-                {/*     {formatDate(get(i, 'last_release.start_time', 0) * 1000)}*/}
-                {/*    </span>*/}
-                {/*  </div>*/}
-                  {/*<div className={styles.logsWrapper}>*/}
-                    {/* <span className={styles.key}>*/}
-                    {/*    Logs:*/}
-                    {/*</span>*/}
-                    {/*  <span className={styles.logsValue}*/}
-                    {/*        onClick={() => {*/}
-                    {/*          router.push(`/${getUrlEncodeName()}/applications/creating?app_id=${getQuery('app_id')}&release_id=${get(i, 'last_release.id', '')}&foromPane=true`);*/}
-                    {/*        }}*/}
-                    {/*  >*/}
-                    {/*  Deploy*/}
-                    {/*</span>*/}
-                  {/*</div>*/}
-                {/*</div>*/}
-
                 <div className={styles.infoWrapper}>
                   <div className={styles.statusWrapper}>
                   <span className={styles.key}>
@@ -217,7 +175,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                 >
                   <div className={styles.star}></div>
                   <img src="/img/application/panel/forkenv.svg" alt=""/>
-                  <span className={styles.desc}>Fork a new environment</span>
+                  <span className={styles.desc}>Fork an new environment</span>
                   <RightDrawer
                     {...{
                       title: "Fork an Environment From Main",

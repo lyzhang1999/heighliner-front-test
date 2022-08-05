@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { get } from "lodash-es";
+import React, { useEffect, useRef, useState } from "react";
+import { cloneDeep, get, has, omit, set } from "lodash-es";
+import $$ from "dodollar";
 
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
@@ -12,11 +13,15 @@ import { getCluster } from "@/api/cluster";
 import useEnv from "@/hooks/env";
 import { getQuery } from "@/utils/utils";
 import { IEnvContext, EnvContext } from "@/utils/contexts";
-
-import styles from "./index.module.scss";
-import { PanelContext } from "..";
 import { useApplicationRepos } from "@/hooks/applicationRepos";
 import { useEnvProd } from "@/hooks/envProd";
+import {
+  getArgoCDInfo,
+  GetArgoCDInfoRes,
+  updateArgoCDInfo,
+} from "@/api/application/argo";
+
+import styles from "./index.module.scss";
 
 const tabItems: Array<{
   label: ResourceType;
@@ -43,17 +48,23 @@ const tabItems: Array<{
 
 export default function Env(): React.ReactElement {
   const [selectedTab, setSelectedTab] = useState(tabItems[0].label);
-  const [envContext, setEnvContext] = useState<IEnvContext>({});
 
-  const app_id = getQuery("app_id");
-  const env_id = getQuery("env_id");
+  const [envContext, setEnvContext] = useState<IEnvContext>({
+    argoCDAutoSync: false,
+  });
+  const envContextRef = useRef(envContext);
+
+  // const [argoCDAutoSync, setArgoCDAutoSync] = useState(false);
+
+  const app_id = +getQuery("app_id");
+  const env_id = +getQuery("env_id");
 
   const [repos] = useApplicationRepos(getQuery("app_id"));
   const [envProd] = useEnvProd(+app_id);
 
   const [env] = useEnv({
-    app_id: +app_id,
-    env_id: +env_id,
+    app_id,
+    env_id,
   });
 
   // Get the kubeconfig
@@ -63,14 +74,93 @@ export default function Env(): React.ReactElement {
       getCluster({
         cluster_id: application.cluster_id,
       }).then((res) => {
-        setEnvContext((preState) => ({
-          ...preState,
-          cluster_id: application.cluster_id,
-          kubeconfig: res.kubeconfig,
-        }));
+        setEnvContext((preState) => {
+          const nextState = {
+            ...cloneDeep(preState),
+            cluster_id: application.cluster_id,
+            kubeconfig: res.kubeconfig,
+          };
+          envContextRef.current = nextState;
+          return nextState;
+        });
       });
     }
   }, [application]);
+
+  // Manage ArgoCD information.
+  function changeArgoCDAutoSync() {
+    const envContext = envContextRef.current;
+    $$.start().title("changeArgoCDAutoSync").blankLine().log(envContext).end();
+
+    let argoCDInfoOnlySpace: Pick<GetArgoCDInfoRes, "space">;
+
+    if (envContext.argoCDInfo && envContext.argoCDInfo.space) {
+      if (envContext.argoCDAutoSync === true) {
+        // Close it.
+        argoCDInfoOnlySpace = operateAutomatedProperty(
+          { space: envContext.argoCDInfo.space }!,
+          "remove"
+        );
+      } else {
+        // Open it.
+        argoCDInfoOnlySpace = operateAutomatedProperty(
+          { space: envContext.argoCDInfo.space }!,
+          "append"
+        );
+      }
+
+      updateArgoCDInfo({
+        app_id,
+        env_id,
+        body: argoCDInfoOnlySpace,
+      }).then(() => {
+        setEnvContext((preState) => {
+          const nextState = {
+            ...cloneDeep(preState),
+            argoCDAutoSync: !preState.argoCDAutoSync,
+          };
+          envContextRef.current = nextState;
+          return nextState;
+        });
+      });
+    }
+  }
+
+  const flushArgoCDInfo = () => {
+    getArgoCDInfo({
+      app_id,
+      env_id,
+    }).then((res) => {
+      // If property `automated` exist, then ArgoCD Auto Sync is opening.
+      let argoCDAutoSyncNextState = false;
+      if (has(res, ["space", "syncPolicy", "automated"])) {
+        argoCDAutoSyncNextState = true;
+      }
+      setEnvContext((preState) => {
+        const nextState = {
+          ...cloneDeep(preState),
+          argoCDInfo: res,
+          argoCDAutoSync: argoCDAutoSyncNextState,
+        };
+        envContextRef.current = nextState;
+        return nextState;
+      });
+    });
+  };
+
+  useEffect(() => {
+    flushArgoCDInfo();
+
+    setEnvContext((preState) => {
+      const nextState = { ...cloneDeep(preState), changeArgoCDAutoSync };
+      envContextRef.current = nextState;
+      return nextState;
+    });
+
+    const timer = setInterval(flushArgoCDInfo, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <Layout
@@ -84,11 +174,10 @@ export default function Env(): React.ReactElement {
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>
           <div className={styles.main}>
-            <Main env={env} />
+            <Main {...{ env }} />
             <SlideTabs<ResourceType>
               {...{ tabItems, selectedTab, setSelectedTab }}
             />
-            {/* <Projects /> */}
             <Resources
               {...{
                 env,
@@ -112,4 +201,17 @@ export default function Env(): React.ReactElement {
       </EnvContext.Provider>
     </Layout>
   );
+}
+
+function operateAutomatedProperty(
+  argoCDInfo: Pick<GetArgoCDInfoRes, "space">,
+  operate: "remove" | "append"
+) {
+  switch (operate) {
+    case "remove":
+      return omit(argoCDInfo, "space.syncPolicy.automated");
+    case "append":
+      const newArgoCDInfo = cloneDeep(argoCDInfo);
+      return set(newArgoCDInfo, "space.syncPolicy.automated", {});
+  }
 }

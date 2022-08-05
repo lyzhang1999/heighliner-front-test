@@ -20,6 +20,7 @@
     "clsx": "^1.1.1",
     "copy-to-clipboard": "^3.3.2",
     "dayjs": "^1.11.3",
+    "dodollar": "^1.0.0",
     "event-source-polyfill": "^1.0.26",
     "identicon.js": "^2.3.3",
     "lodash-es": "^4.17.21",

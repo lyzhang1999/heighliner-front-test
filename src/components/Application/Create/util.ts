@@ -499,7 +499,7 @@ function getForntendService(key: string, value: FrontendType, frameList: FrameIt
           },
         ],
         extended_fields: {
-          "frontend_404_path": path404,
+          "frontend_404_path": (staticDeployMode === 'spa') ? '/404.html' : path404,
           "frontend_app_type": (staticDeployMode === 'spa') ? "SPA" : "MPA",
           "frontend_build_cmd": buildCommand,
           "frontend_out_dir": outputDir,

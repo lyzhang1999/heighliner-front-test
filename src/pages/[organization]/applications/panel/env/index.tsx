@@ -12,7 +12,6 @@ import { getCluster } from "@/api/cluster";
 import useEnv from "@/hooks/env";
 import { getQuery } from "@/utils/utils";
 import { IEnvContext, EnvContext } from "@/utils/contexts";
-import PRAccordion from "@/components/Panel/Env/PRAccordion";
 
 import styles from "./index.module.scss";
 import { PanelContext } from "..";
@@ -98,11 +97,11 @@ export default function Env(): React.ReactElement {
             />
           </div>
           <div>
-            {/* <PRAccordion /> */}
             {repos && repos.length > 0 && envProd && envProd.git_provider_id && (
               <RepoList
                 {...{
                   repoList: repos,
+                  envDetails: env?.setting.application.service,
                   git_provider_id: envProd.git_provider_id,
                   base_name: env?.name,
                 }}

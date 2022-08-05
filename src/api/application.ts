@@ -399,7 +399,7 @@ interface Middleware {
   username: string;
 }
 
-interface Service {
+export interface Service {
   framework: string;
   image: {
     repository: string;

@@ -15,6 +15,11 @@ import {getAppTimeLine, GetAppTimeLineRes} from "@/api/creatingApp";
 import {getToken} from "@/utils/token";
 
 
+interface RepoType {
+  pr_url: string,
+  url: string
+}
+
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
   const [status, setStatus] = React.useState('');
@@ -45,7 +50,7 @@ const CreatingApplication = () => {
         if (item.status === 'succeeded') {
           index = i + 1;
         }
-        if(item.type !== "repository") {
+        if (item.type !== "repository") {
           return;
         }
         try {
@@ -53,7 +58,7 @@ const CreatingApplication = () => {
           repos = filter(repos, (i) => i.status === "succeeded")
           if (repos) {
             let repo = pick(groupBy(repos, 'type'), ['creating', 'settingUp']);
-            if(!isEmpty(repo)){
+            if (!isEmpty(repo)) {
               setRepoInfo(repo);
             }
           }
@@ -290,7 +295,7 @@ const CreatingApplication = () => {
                 </div>
               }
               {
-                get(repoInfo, 'creating', []).map(item => {
+                get(repoInfo, 'creating', []).map((item: RepoType) => {
                   return (
                     <div key={item.url} className={styles.repoList}
                          onClick={() => {
@@ -307,7 +312,7 @@ const CreatingApplication = () => {
                 </div>
               }
               {
-                get(repoInfo, 'settingUp', []).map(item => {
+                get(repoInfo, 'settingUp', []).map((item: RepoType) => {
                   return (
                     <div key={item.pr_url} className={styles.repoList}
                          onClick={() => {

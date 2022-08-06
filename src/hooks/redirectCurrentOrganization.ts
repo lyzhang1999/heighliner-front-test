@@ -49,7 +49,7 @@ export default function useRedirectCurrentOrganization() {
   return redirectCurrentOrganization;
 }
 
-export function getOrgErr(err): void {
+export function getOrgErr(err: any): void {
   if (
     get(err, "response.status") === 302 &&
     get(err, "response.data.redirect_to") === "userInfoComplete" &&

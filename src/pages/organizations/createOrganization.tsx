@@ -57,7 +57,7 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Please Input a Organization Name
+        Please Input Organization Name
       </DialogTitle>
       <DialogContent>
         <TextField id="outlined-basic" label="Organization Name" variant="outlined"

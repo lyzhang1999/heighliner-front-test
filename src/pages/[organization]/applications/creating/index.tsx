@@ -5,39 +5,20 @@ import {useRouter} from "next/router";
 import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/utils";
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
-import cookie from "@/utils/cookie";
 import {getApplicationStatus, ApplicationStatus} from "@/api/application";
-import {Alert} from "@mui/material";
+import {Alert, Button} from "@mui/material";
 import clsx from "clsx";
-import {
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot
-} from "@mui/lab";
-
-import {get} from "lodash-es";
+import {filter, get, groupBy, isEmpty, pick, sortBy} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
+import {getAppTimeLine, GetAppTimeLineRes} from "@/api/creatingApp";
 import {getToken} from "@/utils/token";
 
 
-const list = [
-  {
-    desc: 'Createing 1'
-  },
-  {
-    desc: 'Createing 2'
-  },
-  {
-    desc: 'Createing 3'
-  },
-  {
-    desc: 'Createing 4'
-  },
-]
+interface RepoType {
+  pr_url: string,
+  url: string
+}
 
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
@@ -45,17 +26,58 @@ const CreatingApplication = () => {
   const [durationTime, setDurationTime] = useState<number>(0);
   const [skipTime, setSkipTime] = useState<number>(-1);
   const router = useRouter();
-  const [number, setNumber] = useState(1);
+  const [number, setNumber] = useState(0);
+  const [timeLine, setTimeLine] = useState<GetAppTimeLineRes[]>([]);
+  const [repoInfo, setRepoInfo] = useState<any>(null);
 
   let app_id: string = getQuery('app_id');
   let release_id: string = getQuery('release_id');
 
   let durationTimeInterval: ReturnType<typeof setInterval>;
   let getStatusInterval: any;
+  let getTimeLineInterval: any;
   let term: any = null;
   let leaveFlag: boolean = false;
   let ro: any = null;
   let globalState = '';
+
+  function getTimeLine() {
+    getAppTimeLine({app_id, release_id}).then(res => {
+      res = sortBy(res, (item) => item.step);
+      setTimeLine(res);
+      let index = 0;
+      res.map((item, i) => {
+        if (item.status === 'succeeded') {
+          index = i + 1;
+        }
+        if (item.type !== "repository") {
+          return;
+        }
+        try {
+          let repos = get(JSON.parse(item.detail), 'data.repos', '');
+          repos = filter(repos, (i) => i.status === "succeeded")
+          if (repos) {
+            let repo = pick(groupBy(repos, 'type'), ['creating', 'settingUp']);
+            if (!isEmpty(repo)) {
+              setRepoInfo(repo);
+            }
+          }
+        } catch (e) {
+        }
+      })
+      setNumber(index);
+    })
+  }
+
+  useEffect(() => {
+    getTimeLine()
+    getTimeLineInterval = setInterval(() => {
+      getTimeLine();
+    }, 1000 * 5)
+    return () => {
+      getTimeLineInterval && clearInterval(getTimeLineInterval)
+    }
+  }, [])
 
   function getStatus(isFirst: boolean) {
     getApplicationStatus({app_id, release_id}).then((res) => {
@@ -76,17 +98,19 @@ const CreatingApplication = () => {
           setDurationTime(Math.trunc((completion_time - start_time)));
         }
         getStatusInterval && clearInterval(getStatusInterval);
-        durationTimeInterval && clearInterval(durationTimeInterval)
-        if (!getQuery('foromPane')) {
-          setSkipTime(5);
-        }
+        durationTimeInterval && clearInterval(durationTimeInterval);
+        getTimeLineInterval && clearInterval(getTimeLineInterval);
+        // if (!getQuery('foromPane')) {
+        //   // setSkipTime(5);
+        // }
       }
       if (status === ApplicationStatus.FAILED) {
         if (completion_time && start_time) {
           setDurationTime(Math.trunc((completion_time - start_time)));
         }
         getStatusInterval && clearInterval(getStatusInterval);
-        durationTimeInterval && clearInterval(durationTimeInterval)
+        durationTimeInterval && clearInterval(durationTimeInterval);
+        getTimeLineInterval && clearInterval(getTimeLineInterval);
       }
     })
   }
@@ -179,7 +203,6 @@ const CreatingApplication = () => {
   }
 
   function goDashboard() {
-    Message.success('Creat Success');
     router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
@@ -206,56 +229,6 @@ const CreatingApplication = () => {
             notStandardLayout
     >
       <div className={styles.wrapper} id="TERMIANLWRAPPER">
-
-        {/*<Timeline>*/}
-        {/*  <TimelineItem>*/}
-        {/*    <TimelineSeparator>*/}
-        {/*      <TimelineDot/>*/}
-        {/*      <TimelineConnector/>*/}
-        {/*    </TimelineSeparator>*/}
-        {/*    <TimelineContent>Eat</TimelineContent>*/}
-        {/*  </TimelineItem>*/}
-        {/*  <TimelineItem>*/}
-        {/*    <TimelineSeparator>*/}
-        {/*      <TimelineDot/>*/}
-        {/*      <TimelineConnector/>*/}
-        {/*    </TimelineSeparator>*/}
-        {/*    <TimelineContent>Code</TimelineContent>*/}
-        {/*  </TimelineItem>*/}
-        {/*  <TimelineItem>*/}
-        {/*    <TimelineSeparator>*/}
-        {/*      <TimelineDot/>*/}
-        {/*    </TimelineSeparator>*/}
-        {/*    <TimelineContent>Sleep</TimelineContent>*/}
-        {/*  </TimelineItem>*/}
-        {/*</Timeline>*/}
-
-        {/*<div className={styles.timeLine}>*/}
-        {/*  {*/}
-        {/*    list.map((item, index) => {*/}
-        {/*      return (*/}
-        {/*        <div key={index} className={styles.lineItem}>*/}
-        {/*          <div className={clsx(styles.line)}>*/}
-        {/*            {*/}
-        {/*              (number >= index) &&*/}
-        {/*              <div className={styles.activeLine}></div>*/}
-        {/*            }*/}
-        {/*          </div>*/}
-        {/*          <div className={styles.circleWrapper}>*/}
-        {/*            <div className={clsx(styles.circlePoint, (number >= index) && styles.circlePointDone)}></div>*/}
-        {/*            <div*/}
-        {/*              className={clsx(styles.circle, (number === index) && styles.circleDoing, (number > index) && styles.circleDone)}>*/}
-        {/*            </div>*/}
-        {/*            <div className={styles.desc}>*/}
-        {/*              <div>{item.desc}...</div>*/}
-        {/*            </div>*/}
-        {/*          </div>*/}
-        {/*        </div>*/}
-        {/*      )*/}
-        {/*    })*/}
-        {/*  }*/}
-        {/*</div>*/}
-
         <div className={styles.infoWrapper}>
           <Alert severity="info">Start {Math.trunc(durationTime / 60)}m {durationTime % 60}s</Alert>
           {
@@ -267,10 +240,105 @@ const CreatingApplication = () => {
           {
             status === ApplicationStatus.COMPLETED && (!getQuery('foromPane')) &&
             <Alert severity="success">
-              Success, auto go panel page after {skipTime}s
+              {/* Success, auto go panel page after {skipTime}s */}
+              Create Application Success
             </Alert>
           }
         </div>
+        <div className={styles.timeLine}>
+          {
+            !isEmpty(timeLine) && timeLine.map((item, index) => {
+              let detail = '';
+              try {
+                detail = JSON.parse(item.detail);
+              } catch (e) {
+                console.warn(e)
+              }
+              let status = get(detail, 'data.status', 'processing');
+              return (
+                <div key={item.id} className={styles.lineItem}>
+                  <div className={clsx(styles.line)}>
+                    {
+                      (number >= index) &&
+                      <div className={styles.activeLine}></div>
+                    }
+                  </div>
+                  <div className={styles.circleWrapper}>
+                    <div className={clsx(styles.circlePoint, (number >= index) && styles.circlePointDone)}></div>
+                    <div
+                      className={clsx(styles.circle, (number === index) && styles.circleDoing, (number > index) && styles.circleDone)}>
+                    </div>
+                    <div className={styles.desc}>
+                      <div>{item.description}</div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </div>
+        {
+          repoInfo &&
+          <div className={styles.repoInfo}>
+
+            <div className={styles.repo}>
+              {
+                status === ApplicationStatus.COMPLETED &&
+                <div className={styles.successHeader}>
+                  Create App Success
+                </div>
+              }
+              {
+                get(repoInfo, 'creating', '') &&
+                <div className={styles.info}>
+                  The following repositories are created by ForkMain:
+                </div>
+              }
+              {
+                get(repoInfo, 'creating', []).map((item: RepoType) => {
+                  return (
+                    <div key={item.url} className={styles.repoList}
+                         onClick={() => {
+                           window.open(item.url)
+                         }}
+                    >{item.url}</div>
+                  )
+                })
+              }
+              {
+                get(repoInfo, 'settingUp', '') &&
+                <div className={styles.info}>
+                  There are some Pull Requests that need to be merged:
+                </div>
+              }
+              {
+                get(repoInfo, 'settingUp', []).map((item: RepoType) => {
+                  return (
+                    <div key={item.pr_url} className={styles.repoList}
+                         onClick={() => {
+                           window.open(item.pr_url)
+                         }}
+                    >{item.pr_url}</div>
+                  )
+                })
+              }
+              {
+                status === ApplicationStatus.COMPLETED &&
+                <div className={styles.buttonWrapper}>
+                  <Button
+                    variant="contained"
+                    onClick={goDashboard}
+                  >
+                    {
+                      get(repoInfo, 'settingUp', '') && "Aleady Merged PR, "
+                    }
+                    Go App Detail
+                  </Button>
+                </div>
+              }
+            </div>
+          </div>
+        }
         <div id="TERMINAL"
              className={styles.terminal}
         >

@@ -1,13 +1,13 @@
 import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React, {useImperativeHandle, forwardRef, useState} from "react";
+import React, {useImperativeHandle, forwardRef, useState, useEffect} from "react";
 import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
-import {filter, get, set} from "lodash-es";
+import {filter, get, set, trim} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
-import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import {EnvType, FrameItemType, FrontendItemType, FrontendType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
 
@@ -25,24 +25,89 @@ export interface Props {
   repoList: getRepoListRes[]
 }
 
-export const frontItem: FrameItemType[] = [
+export const frontItem: FrontendItemType[] = [
   {
     img: "/img/application/next.svg",
     name: 'Next.js',
     key: "nextjs",
     version: "1.7.7",
     language: 'typescript',
-    languageVersion: '1.7.7'
+    languageVersion: '1.7.7',
+
+    buildCommand: 'yarn install && yarn build',
+    outputDir: '/',
+    buildEnv: [],
+    deployMode: 'command',
+    runCommand: "yarn start",
+    port: '3000',
+    deployEnv: [],
+    staticDeployMode: 'mpa',
+    path404: '/404.html'
   },
+  {
+    img: "/img/application/vue.svg",
+    name: 'Vue.js',
+    key: "vuejs",
+    version: "1.7.7",
+    language: 'typescript',
+    languageVersion: '1.7.7',
+
+    buildCommand: 'yarn install && yarn build',
+    outputDir: '/dist',
+    buildEnv: [],
+    deployMode: 'static',
+    runCommand: "",
+    port: '',
+    deployEnv: [],
+    staticDeployMode: 'spa',
+    path404: '/404.html'
+  },
+]
+
+// public/img/application/create/vue.svg
+
+export const DeplodModeList = [
+  {
+    key: 'static',
+    value: 'Static Site'
+  },
+  {
+    key: 'command',
+    value: 'Deploy By Command'
+  }
+]
+
+export const StaticDeployModeList = [
+  {
+    key: 'spa',
+    value: "Single Page App"
+  },
+  {
+    key: 'mpa',
+    value: "Multi Page App"
+  }
 ]
 
 const Frontend = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState, repoList} = props;
-  let {frontend, backend} = formState;
-  let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = frontend;
+  let {frontend} = formState;
+  let {
+    isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile,
+    buildCommand,
+    outputDir,
+    buildEnv,
+    deployMode,
+    runCommand,
+    port,
+    deployEnv,
+    staticDeployMode,
+    path404,
+    name
+  } = frontend;
   let [isRepo, setIsRepo] = useState<boolean>(repo);
+  let [reload, setReload] = useState(null);
 
-  const {control, handleSubmit, formState: {errors}, getValues} = useForm({
+  const {control, handleSubmit, formState: {errors}, getValues, watch} = useForm({
     defaultValues: {
       path: path,
       env: env,
@@ -51,9 +116,24 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
       entryFile: entryFile,
       exposePort: exposePort,
       framework: framework,
-      isRepo: repo
+      isRepo: repo,
+
+      buildCommand,
+      outputDir,
+      buildEnv,
+      deployMode,
+      runCommand,
+      port,
+      deployEnv,
+      staticDeployMode,
+      path404,
+      name,
     },
   });
+
+  useEffect(() => {
+    setReload(null);
+  }, [watch()])
 
   const {fields, append, remove} = useFieldArray({
     control,
@@ -62,7 +142,12 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
 
   const {fields: envFields, append: envAppend, remove: envRemove} = useFieldArray({
     control,
-    name: "env"
+    name: "buildEnv"
+  });
+
+  const {fields: deployFields, append: deployAppend, remove: deployRemove} = useFieldArray({
+    control,
+    name: "deployEnv"
   });
 
   useImperativeHandle(ref, () => ({
@@ -81,53 +166,17 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
     submitCb('frontend', value, true)
   }
 
-  function submit(value: FrameworkType) {
+  function submit(value: FrontendType) {
     set(value, 'isRepo', isRepo);
     submitCb('frontend', value)
   }
 
-  function addEnvByJson(obj: EnvType[]){
+  function addEnvByJson(obj: EnvType[]) {
     envAppend(obj);
   }
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <div className={styles.formItem}>
-        <div className={styles.label}>
-          Framework*
-        </div>
-        <div className={styles.content}>
-          <Controller
-            name={`framework`}
-            control={control}
-            render={({field}) => (
-              <div className={styles.selectWrapper}>
-                {
-                  frontItem.map(i => {
-                    return (
-                      <div key={i.name} className={clsx(styles.selectItem, (field.value === i.key) && styles.selected)}
-                           onClick={() => {
-                             field.onChange(i.key)
-                           }}
-                      >
-                        <img src={i.img} alt=""/>
-                        <div className={styles.name}>{i.name}</div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            )}
-            rules={{
-              required: "Please choose a framework",
-            }}
-          />
-          {
-            errors.framework?.message &&
-            <div className={styles.error}>{errors.framework?.message}</div>
-          }
-        </div>
-      </div>
       <div className={styles.selectTab}>
         <div className={clsx(styles.tab, !isRepo && styles.selected)}
              onClick={() => setIsRepo(false)}
@@ -141,6 +190,76 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
         </div>
       </div>
       <div className={styles.formWrapper}>
+        {
+          !isRepo &&
+          <div className={styles.content}>
+            <Controller
+              name={`framework`}
+              control={control}
+              render={({field}) => (
+                <div className={styles.selectWrapper}>
+                  {
+                    frontItem.map(i => {
+                      return (
+                        <div key={i.name}
+                             className={clsx(styles.selectItem, (field.value === i.key) && styles.selected)}
+                             onClick={() => {
+                               field.onChange(i.key)
+                             }}
+                        >
+                          <img src={i.img} alt=""/>
+                          <div className={styles.name}>{i.name}</div>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+              )}
+              rules={{
+                required: "Please choose a framework",
+              }}
+            />
+            {
+              errors.framework?.message &&
+              <div className={styles.error}>{errors.framework?.message}</div>
+            }
+          </div>
+        }
+        {
+          !isRepo &&
+          <div className={styles.item}>
+            <div className={styles.label}>Repo Name*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`name`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="frontend-repo-name"
+                  />
+                )}
+                rules={{
+                  required: "Please input repo name",
+                  validate: {
+                    unconformity: (value) => {
+                      if (!trim(getValues('name'))) {
+                        return "Please input repo name";
+                      }
+                    }
+                  }
+                }}
+              />
+              {
+                errors.name?.message &&
+                <div className={styles.error}>{errors.name?.message}</div>
+              }
+            </div>
+          </div>
+        }
         {
           isRepo &&
           <div className={styles.item}>
@@ -179,10 +298,10 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Entry file*</div>
+            <div className={styles.label}>Build Command</div>
             <div className={styles.content}>
               <Controller
-                name={`entryFile`}
+                name={`buildCommand`}
                 control={control}
                 render={({field}) => (
                   <TextField
@@ -190,13 +309,14 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                     sx={IconFocusStyle}
                     value={field.value}
                     onChange={field.onChange}
+                    placeholder="yarn install && yarn build"
                   />
                 )}
-                rules={entryPathRule}
+                // rules={{required: "Please Input Build Command"}}
               />
               {
-                errors.entryFile?.message &&
-                <div className={styles.error}>{errors.entryFile?.message}</div>
+                errors.buildCommand?.message &&
+                <div className={styles.error}>{errors.buildCommand?.message}</div>
               }
             </div>
           </div>
@@ -204,10 +324,10 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Port*</div>
+            <div className={styles.label}>Output Directory*</div>
             <div className={styles.content}>
               <Controller
-                name={`exposePort`}
+                name={`outputDir`}
                 control={control}
                 render={({field}) => (
                   <TextField
@@ -215,144 +335,307 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                     sx={IconFocusStyle}
                     value={field.value}
                     onChange={field.onChange}
+                    placeholder="/dist"
                   />
                 )}
-                rules={portRule}
+                rules={{...pathRule, required: "Please input output directory"}}
               />
               {
-                errors.exposePort?.message &&
-                <div className={styles.error}>{errors.exposePort?.message}</div>
+                errors.outputDir?.message &&
+                <div className={styles.error}>{errors.outputDir?.message}</div>
+              }
+            </div>
+          </div>
+        }
+        {/*{*/}
+        {/*  isRepo &&*/}
+        {/*  <div className={styles.item}>*/}
+        {/*    <div className={styles.label}>Env Variables</div>*/}
+        {/*    <div className={styles.content}>*/}
+        {/*      {envFields.map((item, index) => (*/}
+        {/*        <div key={item.id} className={styles.inputItem}>*/}
+        {/*          <div className={styles.left}>*/}
+        {/*            <Controller*/}
+        {/*              name={`buildEnv.${index}.name`}*/}
+        {/*              control={control}*/}
+        {/*              render={({field}) => (*/}
+        {/*                <TextField*/}
+        {/*                  size="small"*/}
+        {/*                  sx={{...IconFocusStyle, width: '150px'}}*/}
+        {/*                  value={field.value}*/}
+        {/*                  onChange={field.onChange}*/}
+        {/*                />*/}
+        {/*              )}*/}
+        {/*              rules={{*/}
+        {/*                required: 'Please input env name',*/}
+        {/*                validate: {*/}
+        {/*                  unconformity: (value) => {*/}
+        {/*                    if (filter(getValues('buildEnv'), item => item.name === value).length > 1) {*/}
+        {/*                      return "There can be same env key";*/}
+        {/*                    }*/}
+        {/*                  }*/}
+        {/*                }*/}
+        {/*              }}*/}
+        {/*            />*/}
+        {/*            {*/}
+        {/*              get(errors, `buildEnv.${index}.name.message`) &&*/}
+        {/*              <div className={styles.error}>{get(errors, `buildEnv.${index}.name.message`)}</div>*/}
+        {/*            }*/}
+        {/*          </div>*/}
+        {/*          <span className={styles.equal}>*/}
+        {/*         =*/}
+        {/*        </span>*/}
+        {/*          <div className={styles.right}>*/}
+        {/*            <Controller*/}
+        {/*              name={`buildEnv.${index}.value`}*/}
+        {/*              control={control}*/}
+        {/*              render={({field}) => (*/}
+        {/*                <TextField*/}
+        {/*                  size="small"*/}
+        {/*                  sx={{...IconFocusStyle, width: '150px'}}*/}
+        {/*                  value={field.value}*/}
+        {/*                  onChange={field.onChange}*/}
+        {/*                />*/}
+        {/*              )}*/}
+        {/*              rules={{required: 'Please input env value'}}*/}
+        {/*            />*/}
+        {/*            {*/}
+        {/*              get(errors, `buildEnv.${index}.value.message`) &&*/}
+        {/*              <div className={styles.error}>{get(errors, `buildEnv.${index}.value.message`)}</div>*/}
+        {/*            }*/}
+        {/*          </div>*/}
+        {/*          <img src="/img/application/delete.svg" alt="" onClick={() => envRemove(index)}*/}
+        {/*               className={styles.deleteIcon}/>*/}
+        {/*        </div>*/}
+        {/*      ))}*/}
+        {/*      <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>*/}
+        {/*        ADD ONE*/}
+        {/*      </div>*/}
+        {/*      /!*<ImportEnvByJson addEnvByJson={addEnvByJson}/>*!/*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*}*/}
+
+        {
+          isRepo &&
+          <div className={styles.item}>
+            <div className={styles.label}>Deploy Mode*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`deployMode`}
+                control={control}
+                render={({field}) => (
+                  <Select
+                    value={field.value}
+                    onChange={field.onChange}
+                    size="small"
+                    sx={{background: "#fff", width: "250px"}}
+                  >
+                    {
+                      DeplodModeList.map(item => {
+                        return (
+                          <MenuItem value={item.key} key={item.key}>{item.value}</MenuItem>
+                        )
+                      })
+                    }
+                  </Select>
+                )}
+                rules={{
+                  required: "Please select deploy mode",
+                }}
+              />
+              {
+                errors.deployMode?.message &&
+                <div className={styles.error}>{errors.deployMode?.message}</div>
               }
             </div>
           </div>
         }
 
-        <div className={styles.item}>
-          <div className={styles.label}>HTTP Routes*</div>
-          <div className={styles.content}>
-            {fields.map((item, index) => (
-              <div key={item.id} className={styles.inputItem}>
-                <div className={styles.left}>
-                  <Controller
-                    name={`path.${index}.v`}
-                    control={control}
-                    render={({field}) => (
-                      <TextField
-                        size="small"
-                        sx={IconFocusStyle}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                    rules={{
-                      ...pathRule,
-                      validate: {
-                        unconformity: (value) => {
-                          if ((
-                            filter(getValues('path'), item => item.v === value).length +
-                            filter(backend.path, item => item.v === value).length
-                          ) > 1) {
-                            return "There can be same values";
-                          }
-                        }
-                      }
-                    }}
+        {
+          isRepo && (getValues('deployMode') === 'command') &&
+          <div className={styles.item}>
+            <div className={styles.label}>Run Command*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`runCommand`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="yarn start"
                   />
-                  {
-                    get(errors, `path.${index}.v.message`) &&
-                    <div className={styles.error}>{get(errors, `path.${index}.v.message`)}</div>
-                  }
-                </div>
-                {
-                  (fields.length > 1) &&
-                  <img src="/img/application/delete.svg" alt="" onClick={() => remove(index)}
-                       className={styles.deleteIcon}/>
-                }
-              </div>
-            ))}
-            <div className={styles.add} onClick={() => append({v: ''})}>
-              ADD ONE
+                )}
+                rules={{required: "Please input deploy command"}}
+              />
+              {
+                errors.runCommand?.message &&
+                <div className={styles.error}>{errors.runCommand?.message}</div>
+              }
             </div>
           </div>
-        </div>
-        <div className={styles.item}>
-          <div className={styles.label}>Path Rewrite</div>
-          <div className={styles.content}>
-            <Controller
-              name={`rewrite`}
-              control={control}
-              render={({field}) => (
-                <Switch value={field.value} onChange={field.onChange}/>
-              )}
-            />
+        }
+        {
+          isRepo && (getValues('deployMode') === 'command') &&
+          <div className={styles.item}>
+            <div className={styles.label}>Port*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`port`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="3000"
+                  />
+                )}
+                rules={portRule}
+              />
+              {
+                errors.port?.message &&
+                <div className={styles.error}>{errors.port?.message}</div>
+              }
+            </div>
           </div>
-        </div>
-        <div className={styles.item}>
-          <div className={styles.label}>Env Variables</div>
-          <div className={styles.content}>
-            {envFields.map((item, index) => (
-              <div key={item.id} className={styles.inputItem}>
-                <div className={styles.left}>
-                  <Controller
-                    name={`env.${index}.name`}
-                    control={control}
-                    render={({field}) => (
-                      <TextField
-                        size="small"
-                        sx={{...IconFocusStyle, width: '150px'}}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                    rules={{
-                      required: 'Please input env name',
-                      validate: {
-                        unconformity: (value) => {
-                          if (filter(getValues('env'), item => item.name === value).length > 1) {
-                            return "There can be same env key";
+        }
+        {
+          isRepo && (getValues('deployMode') === 'command') &&
+          <div className={styles.item}>
+            <div className={styles.label}>Env Variables</div>
+            <div className={styles.content}>
+              {deployFields.map((item, index) => (
+                <div key={item.id} className={styles.inputItem}>
+                  <div className={styles.left}>
+                    <Controller
+                      name={`deployEnv.${index}.name`}
+                      control={control}
+                      render={({field}) => (
+                        <TextField
+                          size="small"
+                          sx={{...IconFocusStyle, width: '150px'}}
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      )}
+                      rules={{
+                        required: 'Please input env name',
+                        validate: {
+                          unconformity: (value) => {
+                            if (filter(getValues('deployEnv'), item => item.name === value).length > 1) {
+                              return "There can be same env key";
+                            }
                           }
                         }
-                      }
-                    }}
-                  />
-                  {
-                    get(errors, `env.${index}.name.message`) &&
-                    <div className={styles.error}>{get(errors, `env.${index}.name.message`)}</div>
-                  }
-                </div>
-                <span className={styles.equal}>
+                      }}
+                    />
+                    {
+                      get(errors, `deployEnv.${index}.name.message`) &&
+                      <div className={styles.error}>{get(errors, `deployEnv.${index}.name.message`)}</div>
+                    }
+                  </div>
+                  <span className={styles.equal}>
                  =
                 </span>
-                <div className={styles.right}>
-                  <Controller
-                    name={`env.${index}.value`}
-                    control={control}
-                    render={({field}) => (
-                      <TextField
-                        size="small"
-                        sx={{...IconFocusStyle, width: '150px'}}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                    rules={{required: 'Please input env value'}}
-                  />
-                  {
-                    get(errors, `env.${index}.value.message`) &&
-                    <div className={styles.error}>{get(errors, `env.${index}.value.message`)}</div>
-                  }
+                  <div className={styles.right}>
+                    <Controller
+                      name={`deployEnv.${index}.value`}
+                      control={control}
+                      render={({field}) => (
+                        <TextField
+                          size="small"
+                          sx={{...IconFocusStyle, width: '150px'}}
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      )}
+                      rules={{required: 'Please input env value'}}
+                    />
+                    {
+                      get(errors, `deployEnv.${index}.value.message`) &&
+                      <div className={styles.error}>{get(errors, `deployEnv.${index}.value.message`)}</div>
+                    }
+                  </div>
+                  <img src="/img/application/delete.svg" alt="" onClick={() => deployRemove(index)}
+                       className={styles.deleteIcon}/>
                 </div>
-                <img src="/img/application/delete.svg" alt="" onClick={() => envRemove(index)}
-                     className={styles.deleteIcon}/>
+              ))}
+              <div className={styles.add} onClick={() => deployAppend({name: "", value: ''})}>
+                ADD ONE
               </div>
-            ))}
-            <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
-              ADD ONE
+              {/*<ImportEnvByJson addEnvByJson={addEnvByJson}/>*/}
             </div>
             <ImportEnvByJson addEnvByJson={addEnvByJson} />
             <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
           </div>
-        </div>
+        }
+        {
+          isRepo && (getValues('deployMode') === 'static') &&
+          <div className={styles.item}>
+            <div className={styles.label}>Static Type*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`staticDeployMode`}
+                control={control}
+                render={({field}) => (
+                  <Select
+                    value={field.value}
+                    onChange={field.onChange}
+                    size="small"
+                    sx={{background: "#fff", width: "250px"}}
+                  >
+                    {
+                      StaticDeployModeList.map(item => {
+                        return (
+                          <MenuItem value={item.key} key={item.key}>{item.value}</MenuItem>
+                        )
+                      })
+                    }
+                  </Select>
+                )}
+                rules={{
+                  required: "Please select static deploy mode",
+                }}
+              />
+              {
+                errors.staticDeployMode?.message &&
+                <div className={styles.error}>{errors.staticDeployMode?.message}</div>
+              }
+            </div>
+          </div>
+        }
+
+        {
+          isRepo && (getValues('staticDeployMode') === 'mpa') && (getValues('deployMode') === 'static') &&
+          <div className={styles.item}>
+            <div className={styles.label}>404 Path*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`path404`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="/404.html"
+                  />
+                )}
+                rules={{...pathRule, required: "Please input 404 path"}}
+              />
+              {
+                errors.path404?.message &&
+                <div className={styles.error}>{errors.path404?.message}</div>
+              }
+            </div>
+          </div>
+        }
       </div>
     </form>
   );

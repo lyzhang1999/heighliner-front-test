@@ -399,7 +399,7 @@ interface Middleware {
   username: string;
 }
 
-interface Service {
+export interface Service {
   framework: string;
   image: {
     repository: string;
@@ -462,6 +462,26 @@ export function getEnvSetting({
 }: GetEnvSettingReq): Promise<GetEnvSettingRes> {
   return http.get(
     `/orgs/${getOriIdByContext()}/applications/${app_id}/envs/${env_id}/setting`
+  );
+}
+
+export interface UpdateEnvSettingReq {
+  app_id: number;
+  env_id: number;
+  body: {
+    service: Array<{
+      env: EnvVariables;
+      name: string;
+    }>;
+  };
+}
+
+export function updateEnvSetting(req: UpdateEnvSettingReq) {
+  return http.patch(
+    `/orgs/${getOriIdByContext()}/applications/${req.app_id}/envs/${
+      req.env_id
+    }/setting`,
+    req.body
   );
 }
 

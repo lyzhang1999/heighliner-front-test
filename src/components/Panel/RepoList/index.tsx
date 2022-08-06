@@ -2,18 +2,20 @@
 import styles from "./index.module.scss";
 import {useEffect, useState} from "react";
 import clsx from "clsx";
-import {AppRepoRes} from "@/api/application";
+import { AppRepoRes, Service } from "@/api/application";
 import {get, isEmpty, without} from "lodash-es";
 import { getPrList, GetPrListRes } from "@/api/gitProviders";
+import { Button } from "@mui/material"
 
 interface Props {
   repoList: AppRepoRes[],
   git_provider_id: number,
   base_name?: string;
   head_name?: string;
+  envDetails?: Service[],
 }
 
-export default function RepoList({repoList, git_provider_id, base_name, head_name}: Props) {
+export default function RepoList({repoList, envDetails, git_provider_id, base_name, head_name}: Props) {
   const [sepredIndex, setSepredIndex] = useState<number[]>([0]);
   let [prList, setPrList] = useState<GetPrListRes>([]);
 
@@ -42,6 +44,24 @@ export default function RepoList({repoList, git_provider_id, base_name, head_nam
     })
   }, [])
 
+  const handleGithubLink = (repoUrl: string) => (e: any) => {
+    e.stopPropagation()
+    let branchUrl = repoUrl
+    if (base_name) {
+      branchUrl = `${repoUrl}/tree/${encodeURIComponent(base_name)}`
+    }
+    window.open(branchUrl)
+  }
+
+  const handleNewPR = (repo: AppRepoRes) => (e: any) => {
+    e.stopPropagation()
+
+    const repoSettings = envDetails?.find(item => item.name === repo.repo_name)?.setting
+    const startPoint: string = repoSettings?.fork.from || 'main'
+    const prUrl = `${repo.repo_url}/compare/${encodeURIComponent(startPoint)}...${encodeURIComponent(base_name || '')}`
+    window.open(prUrl)
+  }
+
   return (
     <div className={styles.repolist}>
       {
@@ -51,7 +71,6 @@ export default function RepoList({repoList, git_provider_id, base_name, head_nam
               clsx(styles.reopItem, (sepredIndex.includes(index)) && styles.spreadItem)
             } key={index}>
               <div className={styles.header} onClick={() => {
-                // window.open(item.repo_url)
                 spread(index)
               }}>
                 <img src="/img/gitprovider/GITHUB.svg" alt="" className={styles.githubIcon}
@@ -60,16 +79,11 @@ export default function RepoList({repoList, git_provider_id, base_name, head_nam
                 >
                   {item.repo_name}
                 </div>
-                <img src="/img/application/panel/link4.svg" alt=""
-                     onClick={(e) => {
-                       window.open(item.repo_url);
-                       e.stopPropagation()
-                     }}
+                <img
+                  alt=""
+                  src="/img/application/panel/link4.svg"
+                  onClick={handleGithubLink(item.repo_url)}
                 />
-                {/*<OpenInNewIcon onClick={(e) => {*/}
-                {/*  window.open(item.repo_url);*/}
-                {/*  e.stopPropagation()*/}
-                {/*}}/>*/}
                 <img src="/img/application/panel/spread.svg" alt=""
                      className={clsx(styles.spreadIcon)}
                 />
@@ -97,45 +111,13 @@ export default function RepoList({repoList, git_provider_id, base_name, head_nam
                     )
                   })
                 }
-                {/*<div className={styles.title}>*/}
-                {/*  Commits(main)*/}
-                {/*</div>*/}
-                {/*{*/}
-                {/*  item.commits.map((v, i) => {*/}
-                {/*    return (*/}
-                {/*      <div className={styles.list} key={i}>*/}
-                {/*        <span className={styles.keyCommit}>*/}
-                {/*          <img src="/img/application/panel/link2.svg" alt=""*/}
-                {/*               className={styles.commitIcon}/>*/}
-                {/*          {v.key}</span>*/}
-                {/*        <span className={styles.value}>*/}
-                {/*          {v.value}*/}
-                {/*        </span>*/}
-                {/*      </div>*/}
-                {/*    )*/}
-                {/*  })*/}
-                {/*}*/}
-                {/*<div className={styles.title}>*/}
-                {/*  Branches*/}
-                {/*  <img src="/img/application/panel/branch.svg" alt="" className={styles.branch}/>*/}
-                {/*</div>*/}
-                {/*{*/}
-                {/*  item.branchs.map((v, i) => {*/}
-                {/*    return (*/}
-                {/*      <div className={styles.list} key={i}>*/}
-                {/*        <div className={styles.branchKey}>*/}
-                {/*          <img src="/img/application/panel/link3.svg" alt=""*/}
-                {/*               className={styles.branchIcon}/>*/}
-                {/*          {v.key}</div>*/}
-                {/*        <div className={styles.value}>*/}
-                {/*          <img src="/img/application/panel/link2.svg" alt=""*/}
-                {/*               className={styles.valueBranchIcon}/>*/}
-                {/*          {v.value}*/}
-                {/*        </div>*/}
-                {/*      </div>*/}
-                {/*    )*/}
-                {/*  })*/}
-                {/*}*/}
+                {
+                  base_name && (
+                    <div className={styles.newPrBtn}>
+                      <Button onClick={handleNewPR(item)} variant="outlined">New pull request</Button>
+                    </div>
+                  )
+                }
               </div>
             </div>
           )

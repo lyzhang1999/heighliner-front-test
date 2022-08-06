@@ -41,6 +41,12 @@ export default function Resources(props: Props): React.ReactElement {
     });
   }, [props.selectedResourceType]);
 
+  useEffect(() => {
+    const timer = setInterval(flushEnvResources, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <ul className={styles.wrapper}>
       {envResources.map((envResource) => (

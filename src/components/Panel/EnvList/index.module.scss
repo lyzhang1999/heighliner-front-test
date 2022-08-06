@@ -1,6 +1,7 @@
 @import "@/styles/globalVar.scss";
 
 .wrapper {
+  width: 100%;
   .item {
     min-width: 500px;
     padding: 8px 10px 8px 8px;
@@ -8,7 +9,7 @@
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
     border: solid 1px #c9d5eb;
     background-color: #fff;
-    max-width: 500px;
+    // max-width: 1200px;
     position: relative;
     margin: 50px 0px;
     transition: all 0.3s linear;
@@ -150,7 +151,7 @@
 }
 
 .forkEnv {
-  max-width: 500px;
+  max-width: 400px;
   height: 46px;
   border-radius: 8px;
   border: 1px dashed #abb4c3;

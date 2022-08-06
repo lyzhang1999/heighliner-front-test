@@ -5,6 +5,7 @@ import {
   Table, TableBody, TableCell, TableRow, TableHead,
 } from '@mui/material';
 import {find, isEmpty} from "lodash-es";
+import copy from 'copy-to-clipboard';
 
 import Layout from "@/components/Layout";
 import NewClusterModal from "@/components/NewClusterModal";
@@ -15,7 +16,7 @@ import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 import styles from './index.module.scss';
 import popStyles from "@/components/PopSelect/index.module.scss";
 import clsx from "clsx";
-import {copyFile, Message, copyTextToClipboard} from "@/utils/utils";
+import {Message} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -67,11 +68,12 @@ const Clusters = () => {
     setDialogVisible(true);
   }
 
-  function copy() {
+  function copyIt() {
     let thisCluster = find(clusterList, {id: deleteItemID});
     if (thisCluster) {
       let {kubeconfig} = thisCluster;
-      copyTextToClipboard(kubeconfig, 'Copy KubeConfig Success');
+      copy(kubeconfig);
+      Message.success('Copy KubeConfig Success');
       setAnchorEl(null);
     }
   }
@@ -135,7 +137,7 @@ const Clusters = () => {
       >
         <div className={popStyles.selectWrapper}>
           <div className={clsx(popStyles.selectItem, popStyles.redItem)} onClick={openDeleteDialog}>Delete</div>
-          <div className={clsx(popStyles.selectItem)} onClick={copy}>Copy KubeConfig</div>
+          <div className={clsx(popStyles.selectItem)} onClick={copyIt}>Copy KubeConfig</div>
         </div>
       </Popover>
       <div className={styles.wrapper}>

@@ -2,7 +2,7 @@
 
 .wrapper {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto;
   grid-template-rows:
     auto
     auto
@@ -13,6 +13,8 @@
   border: solid 1px #c9d5eb;
   background-color: #fff;
   padding: 13px 9px 22px;
+  font-size: 14px;
+  row-gap: 10px;
 
   h1 {
     font-size: 20px;
@@ -35,7 +37,7 @@
   }
 
   .titleWrap {
-    grid-column: span 2;
+    grid-column: span 3;
     display: flex;
     gap: 14px;
     align-items: center;
@@ -44,15 +46,12 @@
   .infoWrap {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
     gap: 8px;
 
     & > span {
       cursor: pointer;
     }
-
-    // & > span:nth-child(2) {
-    //   cursor: not-allowed;
-    // }
   }
 
   .publicUrlWrap {
@@ -69,7 +68,14 @@
 
   .publicUrlWrap,
   .issuesWrap {
-    grid-column: span 3;
+    grid-column: span 4;
+  }
+
+  .publicUrlWrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: center;
   }
 
   .issuesWrap {
@@ -81,9 +87,12 @@
 
   .statusWrap {
     display: flex;
-    align-items: center;
     gap: 5px;
-    font-size: 12px;
+
+    & > h3 {
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
 
     & > span {
       display: block;
@@ -94,9 +103,29 @@
     }
   }
 
-  .branchWrap {
-    display: flex;
+  .syncWrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
     align-items: center;
-    gap: 5px;
+
+    & > h3 {
+      grid-column: 1 / -1;
+
+    }
+  }
+
+  .operateStateWrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: center;
+  }
+
+  .switchWrap {
+    display: flex;
+    // flex-direction: row;
+    // gap: 8px;
+    // align-items: center;
   }
 }

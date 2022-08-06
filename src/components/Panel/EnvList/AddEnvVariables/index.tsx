@@ -19,34 +19,12 @@ import { EnvVariableMap, EnvVariables } from "@/api/application";
 
 import styles from "./index.module.scss";
 
-// declare module "yup" {
-//   // tslint:disable-next-line
-//   interface ArraySchema<T> {
-//     uniqueName(mapper: (a: T) => T, message?: any): ArraySchema<T>;
-//   }
-// }
-
-// // https://github.com/jquense/yup/issues/345
-// yup.addMethod(
-//   yup.array,
-//   "uniqueName",
-//   function (message, mapper = (a: any) => a) {
-//     return this.test("uniqueName", message, function (list) {
-//       if (!list || list.length <= 1) return true;
-//       return list.length === new Set(list.map(mapper)).size;
-//     });
-//   }
-// );
-
-// export const schema = yup
-//   .array()
-//   .of(
-//     yup.object().shape({
-//       [EnvVariableMap.name]: yup.string().required("Please enter key."),
-//       [EnvVariableMap.value]: yup.string().required("Please enter value."),
-//     })
-//   )
-//   .uniqueName((s) => s);
+export const schema = yup.array().of(
+  yup.object().shape({
+    [EnvVariableMap.name]: yup.string().required("Please enter key."),
+    [EnvVariableMap.value]: yup.string().required("Please enter value."),
+  })
+);
 
 interface Props extends CommonProps {
   control: Control<FieldValue<FieldValues>, any>;

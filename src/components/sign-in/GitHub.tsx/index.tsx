@@ -9,7 +9,6 @@ import {
   openGitHubOAuthWindow,
   PostAuthAction,
 } from "@/pages/distributor/post-auth-github";
-import cookie from "@/utils/cookie";
 import {isProduct} from "@/utils/utils";
 import {deleteToken} from "@/utils/token";
 

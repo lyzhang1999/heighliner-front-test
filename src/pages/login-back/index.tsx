@@ -4,7 +4,6 @@ import clsx from "clsx";
 import {TextField} from "@mui/material";
 import {useRouter} from "next/router";
 
-import {getPopUpsWindowFeatures} from "@/utils/window";
 import {omit, trim} from "lodash-es";
 
 import styles from "./index.module.scss";

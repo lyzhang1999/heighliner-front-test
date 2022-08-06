@@ -1,0 +1,11 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  margin-top: 27px;
+  margin-left: 16px;
+}
+
+.wrap {
+  max-width: 362px;
+}

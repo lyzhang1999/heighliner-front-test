@@ -42,7 +42,6 @@ import AddEnvVariables, {
   schema as backendVariableSchema,
 } from "../AddEnvVariables";
 import { schema as frontendVariableSchema } from "../AddEnvVariables";
-import { has } from "lodash-es";
 
 interface Props extends CommonProps {
   forkSuccessCb?: (res: ForkRes) => void;
@@ -297,7 +296,6 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
         )}
       />
       <Box className={styles.switchWrap}>
-        <span>*</span>
         Show Advanced Options
         <Switch checked={showAdvancedSettings} onChange={switchChangeHandler} />
       </Box>

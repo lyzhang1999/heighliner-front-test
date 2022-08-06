@@ -1,4 +1,3 @@
-import cookie from "@/utils/cookie";
 import {
   Button,
   Dialog,

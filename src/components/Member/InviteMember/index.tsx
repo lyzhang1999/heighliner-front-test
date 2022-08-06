@@ -196,7 +196,7 @@ export default function InviteMember({
           Cancel
         </Button>
         <Button onClick={handleSubmit(invitation)} variant="contained">
-          Invitation
+          Send Invitation Email
         </Button>
       </DialogActions>
     </Dialog>

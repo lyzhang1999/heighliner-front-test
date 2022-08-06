@@ -1,5 +1,7 @@
 @import "../../../../styles/globalVar";
 
+$activeColor: #749ad3;
+
 .wrapper {
   width: 100%;
   padding: 20px 40px 0 40px;
@@ -7,7 +9,7 @@
   .terminal {
     margin-top: 18px;
     border-radius: 4px;
-    height: calc(100vh - 190px);
+    height: calc(100vh - 380px);
     padding-left: 10px;
     background-color: #000;
 
@@ -28,23 +30,74 @@
     :global(.MuiPaper-root) {
       width: 48%;
     }
+
+
   }
 }
 
+.title {
+  margin-top: 30px;
+  font-size: 20px;
+  //font-weight: 500;
+  color: #383535;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-.timeLine {
-  margin: 0 auto;
-  height: 600px;
+.repoInfo {
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+
+  .repo {
+    box-shadow: 0 4px 8px 0 rgba(32, 45, 64, 0.25);
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 600px;
+
+    .successHeader {
+      text-align: center;
+      //color: #09099a;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .info {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #171616;
+      font-weight: 500;
+    }
+
+    .repoList {
+      cursor: pointer;
+      color: #2e2ec5;
+      font-size: 14px;
+      margin: 8px 0;
+    }
+
+    .buttonWrapper {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.timeLine {
+  margin: 50px auto 0 auto;
+  height: 120px;
+  display: flex;
+  align-items: flex-start;
   flex-wrap: wrap;
-  flex-direction: column;
-  margin-top: 100px;
-  margin-left: -40px;
+  justify-content: center;
 
   .lineItem {
     display: flex;
-    flex-direction: column;
     align-items: center;
 
     &:first-child {
@@ -69,7 +122,7 @@
       }
 
       .circlePointDone {
-        background: #ba77ff;
+        background: $activeColor;
       }
 
       .circle {
@@ -80,34 +133,38 @@
       }
 
       .circleDoing {
-        border-top: 2px solid #ba77ff;
+        border-top: 2px solid $activeColor;
         animation: load 1s linear infinite;
       }
 
       .circleDone {
-        border: 2px solid #ba77ff;
+        border: 2px solid $activeColor;
         animation: none;
       }
 
       .desc {
+        width: 140px;
+        text-align: center;
         position: absolute;
-        left: 40px;
-        top: -15px
+        left: -70px;
+        top: 30px;
+        font-size: 12px;
       }
     }
 
     .line {
-      width: 2px;
-      height: 100px;
-      margin-top: 10px;
-      margin-bottom: 10px;
+      height: 2px;
+      width: 150px;
+      margin-left: 10px;
+      margin-right: 10px;
       background: #ccc;
       position: relative;
 
       .activeLine {
         position: absolute;
-        width: 100%;
-        background: #ba77ff;
+        width: 0;
+        height: 2px;
+        background: $activeColor;
         animation: moveLine 0.6s ease-out infinite;
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
@@ -116,10 +173,10 @@
 
     @keyframes moveLine {
       0% {
-        height: 0px;
+        width: 0px;
       }
       100% {
-        height: 100%;
+        width: 100%;
       }
     }
   }
@@ -134,4 +191,109 @@
   }
 }
 
+
+//
+//
+//.timeLine {
+//  margin: 0 auto;
+//  height: 600px;
+//  display: flex;
+//  align-items: center;
+//  flex-wrap: wrap;
+//  flex-direction: column;
+//  margin-top: 100px;
+//  margin-left: -40px;
+//
+//  .lineItem {
+//    display: flex;
+//    flex-direction: column;
+//    align-items: center;
+//
+//    &:first-child {
+//      .line {
+//        display: none;
+//      }
+//    }
+//
+//    .circleWrapper {
+//      position: relative;
+//      width: 20px;
+//      height: 20px;
+//
+//      .circlePoint {
+//        position: absolute;
+//        left: 5px;
+//        top: 5px;
+//        width: 10px;
+//        height: 10px;
+//        background: #ccc;
+//        border-radius: 50%;
+//      }
+//
+//      .circlePointDone {
+//        background: #ba77ff;
+//      }
+//
+//      .circle {
+//        border-radius: 50%;
+//        width: 20px;
+//        height: 20px;
+//        border-top: 2px solid #ccc;
+//      }
+//
+//      .circleDoing {
+//        border-top: 2px solid #ba77ff;
+//        animation: load 1s linear infinite;
+//      }
+//
+//      .circleDone {
+//        border: 2px solid #ba77ff;
+//        animation: none;
+//      }
+//
+//      .desc {
+//        position: absolute;
+//        left: 40px;
+//        top: -15px
+//      }
+//    }
+//
+//    .line {
+//      width: 2px;
+//      height: 100px;
+//      margin-top: 10px;
+//      margin-bottom: 10px;
+//      background: #ccc;
+//      position: relative;
+//
+//      .activeLine {
+//        position: absolute;
+//        width: 100%;
+//        background: #ba77ff;
+//        animation: moveLine 0.6s ease-out infinite;
+//        animation-iteration-count: 1;
+//        animation-fill-mode: forwards;
+//      }
+//    }
+//
+//    @keyframes moveLine {
+//      0% {
+//        height: 0px;
+//      }
+//      100% {
+//        height: 100%;
+//      }
+//    }
+//  }
+//}
+//
+//@keyframes load {
+//  0% {
+//    transform: rotate(0deg);
+//  }
+//  100% {
+//    transform: rotate(360deg);
+//  }
+//}
+//
 

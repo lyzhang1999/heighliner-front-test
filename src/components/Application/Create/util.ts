@@ -1,5 +1,5 @@
 import {backItem} from "@/components/Application/Create/BackEnd";
-import {assign, find, get, isEmpty, map} from "lodash-es";
+import {find, get, isEmpty, map, trim} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
@@ -257,6 +257,7 @@ export interface FrontendType {
   staticDeployMode: "spa" | 'mpa' | '',
   path404: string,
   deployMode: 'static' | "command" | "",
+  name: string
 }
 
 export const FrontendFrameWorkInitState: FrontendType = {
@@ -277,7 +278,8 @@ export const FrontendFrameWorkInitState: FrontendType = {
   port: '',
   deployEnv: [],
   staticDeployMode: '',
-  path404: ''
+  path404: '',
+  name: ''
 };
 
 export interface MiddleWareType {
@@ -321,7 +323,6 @@ export interface FrameItemType {
 
 export interface FrontendItemType {
   img: string,
-  name: string,
   key: string,
   version: string,
   language: string,
@@ -337,6 +338,7 @@ export interface FrontendItemType {
   staticDeployMode: "spa" | 'mpa' | '',
   path404: string,
   deployMode: 'static' | "command",
+  name: string,
 }
 
 function getService(key: string, value: FrameworkType, frameList: FrameItemType[], repoList: getRepoListRes[], appName: string, middleWares: MiddleWareType[]) {
@@ -427,14 +429,14 @@ function getForntendService(key: string, value: FrontendType, frameList: FrameIt
     staticDeployMode,
     path404,
     deployMode,
+    name
   } = value;
 
-  let name = '';
   let frontendPort = Number(port);
 
   if (isRepo) {   // deploy frontend by repo
     let thisRepo = find(repoList, {url: repo_url});
-    name = get(thisRepo, 'repo_name', '');
+    let name = get(thisRepo, 'repo_name', '');
     let obj = {
       framework: {
         name: "js",
@@ -486,7 +488,7 @@ function getForntendService(key: string, value: FrontendType, frameList: FrameIt
         name: get(thisItem, 'language', ''),
         version: get(thisItem, 'languageVersion', ''),
       },
-      name: appName + '-' + key,
+      name: trim(name),
       scaffold: true,
       setting: {
         env: [],

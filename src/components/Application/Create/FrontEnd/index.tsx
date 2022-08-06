@@ -4,7 +4,7 @@ import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
-import {filter, get, set} from "lodash-es";
+import {filter, get, set, trim} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrontendItemType, FrontendType} from "@/components/Application/Create/util";
@@ -100,7 +100,8 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
     port,
     deployEnv,
     staticDeployMode,
-    path404
+    path404,
+    name
   } = frontend;
   let [isRepo, setIsRepo] = useState<boolean>(repo);
   let [reload, setReload] = useState(null);
@@ -124,7 +125,8 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
       port,
       deployEnv,
       staticDeployMode,
-      path404
+      path404,
+      name,
     },
   });
 
@@ -220,6 +222,41 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
               errors.framework?.message &&
               <div className={styles.error}>{errors.framework?.message}</div>
             }
+          </div>
+        }
+        {
+          !isRepo &&
+          <div className={styles.item}>
+            <div className={styles.label}>Repo Name*</div>
+            <div className={styles.content}>
+              <Controller
+                name={`name`}
+                control={control}
+                render={({field}) => (
+                  <TextField
+                    size="small"
+                    sx={IconFocusStyle}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="frontend-repo-name"
+                  />
+                )}
+                rules={{
+                  required: "Please input repo name",
+                  validate: {
+                    unconformity: (value) => {
+                      if (!trim(getValues('name'))) {
+                        return "Please input repo name";
+                      }
+                    }
+                  }
+                }}
+              />
+              {
+                errors.name?.message &&
+                <div className={styles.error}>{errors.name?.message}</div>
+              }
+            </div>
           </div>
         }
         {

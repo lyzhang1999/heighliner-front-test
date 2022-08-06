@@ -11,7 +11,6 @@ export const http = axios.create({
   timeout: 10000,
 });
 
-
 const noDefaultErrMsgPath = [
   '/user/email_verification',
   "/orgs"

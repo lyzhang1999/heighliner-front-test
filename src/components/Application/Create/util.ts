@@ -296,7 +296,7 @@ export const InitMiddleWareItem = {
     names: [{v: ''}],
     username: 'admin',
     password: "password",
-    storage: '10'
+    storage: '20'
   },
 };
 

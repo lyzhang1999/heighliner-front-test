@@ -296,7 +296,6 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
         )}
       />
       <Box className={styles.switchWrap}>
-        <span>*</span>
         Show Advanced Options
         <Switch checked={showAdvancedSettings} onChange={switchChangeHandler} />
       </Box>

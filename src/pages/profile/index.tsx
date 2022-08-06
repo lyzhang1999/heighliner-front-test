@@ -15,7 +15,7 @@ export default function Setting(): React.ReactElement {
     >
       <div className={styles.wrapper}>
         <div className={styles.container}>
-          <Typography variant="h1">User Profile</Typography>
+          <Typography variant="h1">My Profile</Typography>
           <Stack spacing={2} style={{marginTop: '25px'}}>
             <div className={styles.card}>
               <BasicProfile />

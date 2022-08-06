@@ -30,8 +30,8 @@ export const FreeClusterPanel = ({
   }
 
   const noticeIcon = isAvailable ? "/img/cluster/NoticeIcon.svg" : "/img/cluster/free-cluster-expired.svg"
-  const noticeText = isAvailable ? "This organization is eligible for a 14 day free trial Heighliner Cluster."
-    : "14 days free trial of Heighliner Cluster has expired."
+  const noticeText = isAvailable ? "This organization is eligible for a 14 day free trial ForkMain Cluster."
+    : "14 days free trial of ForkMain Cluster has expired."
 
   return (
     <div className={styles.content}>

@@ -47,7 +47,7 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
             <CloseIcon onClick={closeDialog} />
           </div>
           <div className={styles.header}>
-            Create a new cluster
+            Add a new cluster
           </div>
           <TabContext value={clusterType}>
             <TabList onChange={handleChangeClusterType}>

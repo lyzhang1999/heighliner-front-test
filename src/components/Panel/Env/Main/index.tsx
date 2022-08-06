@@ -52,6 +52,18 @@ export default function Main({ env }: Props): React.ReactElement {
       <div className={styles.infoWrap}>
         <span
           onClick={() => {
+            const app_id = getQuery("app_id");
+            const release_id = getQuery("release_id");
+            const env_id = getQuery("env_id");
+            router.push(
+              `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+            );
+          }}
+        >
+          <Gear />
+        </span>
+        <span
+          onClick={() => {
             let url = get(env, "setting.application.deploy.url", "");
             let valueName = get(
               env,
@@ -63,18 +75,6 @@ export default function Main({ env }: Props): React.ReactElement {
           }}
         >
           <Config />
-        </span>
-        <span
-          onClick={() => {
-            const app_id = getQuery("app_id");
-            const release_id = getQuery("release_id");
-            const env_id = getQuery("env_id");
-            router.push(
-              `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-            );
-          }}
-        >
-          <Gear />
         </span>
       </div>
       <div className={styles.publicUrlWrap}>

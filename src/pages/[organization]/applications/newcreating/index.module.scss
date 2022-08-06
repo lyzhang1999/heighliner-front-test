@@ -30,61 +30,6 @@ $activeColor: #749ad3;
     :global(.MuiPaper-root) {
       width: 48%;
     }
-
-
-  }
-}
-
-.title {
-  margin-top: 30px;
-  font-size: 20px;
-  //font-weight: 500;
-  color: #383535;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.repoInfo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
-
-  .repo {
-    box-shadow: 0 4px 8px 0 rgba(32, 45, 64, 0.25);
-    padding: 20px;
-    border-radius: 10px;
-    min-width: 600px;
-
-    .successHeader {
-      text-align: center;
-      //color: #09099a;
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    .info {
-      font-size: 16px;
-      margin-bottom: 10px;
-      color: #171616;
-      font-weight: 500;
-    }
-
-    .repoList {
-      cursor: pointer;
-      color: #2e2ec5;
-      font-size: 14px;
-      margin: 8px 0;
-    }
-
-    .buttonWrapper {
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   }
 }
 
@@ -122,7 +67,7 @@ $activeColor: #749ad3;
       }
 
       .circlePointDone {
-        background: $activeColor;
+        background:  $activeColor;
       }
 
       .circle {
@@ -138,7 +83,7 @@ $activeColor: #749ad3;
       }
 
       .circleDone {
-        border: 2px solid $activeColor;
+        border: 2px solid  $activeColor;
         animation: none;
       }
 
@@ -164,7 +109,7 @@ $activeColor: #749ad3;
         position: absolute;
         width: 0;
         height: 2px;
-        background: $activeColor;
+        background:  $activeColor;
         animation: moveLine 0.6s ease-out infinite;
         animation-iteration-count: 1;
         animation-fill-mode: forwards;

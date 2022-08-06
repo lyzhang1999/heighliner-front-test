@@ -280,7 +280,6 @@ export const FrontendFrameWorkInitState: FrontendType = {
   path404: ''
 };
 
-
 export interface MiddleWareType {
   name: string;
   type: string;

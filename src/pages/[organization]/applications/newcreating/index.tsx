@@ -6,14 +6,12 @@ import {getOriIdByContext, getQuery, getUrlEncodeName, Message} from "@/utils/ut
 import {baseURL} from '@/utils/axios';
 import {EventSourcePolyfill} from "event-source-polyfill";
 import {getApplicationStatus, ApplicationStatus} from "@/api/application";
-import {Alert, Button} from "@mui/material";
+import {Alert} from "@mui/material";
 import clsx from "clsx";
-import {filter, get, groupBy, isEmpty, pick, sortBy} from "lodash-es";
+import {get, isEmpty} from "lodash-es";
 import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
 import {getAppTimeLine, GetAppTimeLineRes} from "@/api/creatingApp";
-import {getToken} from "@/utils/token";
-
 
 const CreatingApplication = () => {
   const [hasMounted, setHasMounted] = React.useState(false);
@@ -23,7 +21,6 @@ const CreatingApplication = () => {
   const router = useRouter();
   const [number, setNumber] = useState(0);
   const [timeLine, setTimeLine] = useState<GetAppTimeLineRes[]>([]);
-  const [repoInfo, setRepoInfo] = useState<any>(null);
 
   let app_id: string = getQuery('app_id');
   let release_id: string = getQuery('release_id');
@@ -38,29 +35,15 @@ const CreatingApplication = () => {
 
   function getTimeLine() {
     getAppTimeLine({app_id, release_id}).then(res => {
-      res = sortBy(res, (item) => item.step);
       setTimeLine(res);
       let index = 0;
       res.map((item, i) => {
         if (item.status === 'succeeded') {
           index = i + 1;
         }
-        if(item.type !== "repository") {
-          return;
-        }
-        try {
-          let repos = get(JSON.parse(item.detail), 'data.repos', '');
-          repos = filter(repos, (i) => i.status === "succeeded")
-          if (repos) {
-            let repo = pick(groupBy(repos, 'type'), ['creating', 'settingUp']);
-            if(!isEmpty(repo)){
-              setRepoInfo(repo);
-            }
-          }
-        } catch (e) {
-        }
       })
       setNumber(index);
+      console.warn(index);
     })
   }
 
@@ -95,9 +78,9 @@ const CreatingApplication = () => {
         getStatusInterval && clearInterval(getStatusInterval);
         durationTimeInterval && clearInterval(durationTimeInterval);
         getTimeLineInterval && clearInterval(getTimeLineInterval);
-        // if (!getQuery('foromPane')) {
-        //   // setSkipTime(5);
-        // }
+        if (!getQuery('foromPane')) {
+          setSkipTime(5);
+        }
       }
       if (status === ApplicationStatus.FAILED) {
         if (completion_time && start_time) {
@@ -113,7 +96,6 @@ const CreatingApplication = () => {
   useEffect(() => {
     getStatus(true);
     getStatusInterval = setInterval(getStatus, 5000);
-    renderLog();
     return () => {
       getStatusInterval && clearInterval(getStatusInterval);
       durationTimeInterval && clearInterval(durationTimeInterval);
@@ -126,78 +108,8 @@ const CreatingApplication = () => {
     }
   }, [])
 
-  function renderLog() {
-    const initTerminal = async () => {
-      const {Terminal} = await import('xterm')
-      const {FitAddon} = await import('xterm-addon-fit');
-      const fitAddon = new FitAddon();
-      term = new Terminal({
-        fontFamily: "Monaco, Menlo, Consolas, Courier New, monospace",
-        fontSize: 12,
-        lineHeight: 1,
-        scrollback: 999999,
-      })
-      term.loadAddon(fitAddon);
-      term.open(document.getElementById('TERMINAL'));
-      fitAddon.fit();
-      var target = document.getElementById('TERMIANLWRAPPER');
-      ro = new ResizeObserver(() => {
-        try {
-          fitAddon.fit();
-        } catch (e) {
-          console.log('fitAddon.fit() err')
-        }
-      });
-      if (target) {
-        ro.observe(target);
-      }
-      getLogEventSource();
-    }
-    setTimeout(() => {
-      initTerminal()
-    }, 0);
-  }
-
-  function getLogEventSource() {
-    console.warn('getLogEventSource')
-    const url = `${baseURL}orgs/${getOriIdByContext()}/applications/${app_id}/releases/${release_id}/logs`
-    const token = getToken();
-    var eventSource = new EventSourcePolyfill(url, {
-      headers: {Authorization: `Bearer ${token}`},
-      heartbeatTimeout: 1000 * 60 * 5
-    });
-    eventSource.onerror = function () {
-      console.warn('onerror');
-      eventSource.close();
-      setTimeout(() => {
-        console.warn('onerrorTimeout', globalState)
-        if (leaveFlag) {
-          return;
-        }
-        if (globalState === ApplicationStatus.PROCESSING) {
-          getLogEventSource();
-        }
-      }, 1000)
-    }
-    eventSource.addEventListener("MESSAGE", function (e) {
-      term.writeln(get(e, 'data'));
-    });
-    eventSource.addEventListener("END", function (e) {
-      console.warn('end')
-      eventSource.close();
-      setTimeout(() => {
-        console.warn("onend" + globalState)
-        if (leaveFlag) {
-          return;
-        }
-        if (globalState === ApplicationStatus.PROCESSING) {
-          getLogEventSource();
-        }
-      }, 5000);
-    });
-  }
-
   function goDashboard() {
+    Message.success('Creat Success');
     router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
@@ -235,8 +147,7 @@ const CreatingApplication = () => {
           {
             status === ApplicationStatus.COMPLETED && (!getQuery('foromPane')) &&
             <Alert severity="success">
-              {/* Success, auto go panel page after {skipTime}s */}
-              Create Application Success
+              Success, auto go panel page after {skipTime}s
             </Alert>
           }
         </div>
@@ -250,6 +161,7 @@ const CreatingApplication = () => {
                 console.warn(e)
               }
               let status = get(detail, 'data.status', 'processing');
+              console.warn(status)
               return (
                 <div key={item.id} className={styles.lineItem}>
                   <div className={clsx(styles.line)}>
@@ -271,72 +183,6 @@ const CreatingApplication = () => {
               )
             })
           }
-        </div>
-        {
-          repoInfo &&
-          <div className={styles.repoInfo}>
-
-            <div className={styles.repo}>
-              {
-                status === ApplicationStatus.COMPLETED &&
-                <div className={styles.successHeader}>
-                  Create App Success
-                </div>
-              }
-              {
-                get(repoInfo, 'creating', '') &&
-                <div className={styles.info}>
-                  The following repositories are created by ForkMain:
-                </div>
-              }
-              {
-                get(repoInfo, 'creating', []).map(item => {
-                  return (
-                    <div key={item.url} className={styles.repoList}
-                         onClick={() => {
-                           window.open(item.url)
-                         }}
-                    >{item.url}</div>
-                  )
-                })
-              }
-              {
-                get(repoInfo, 'settingUp', '') &&
-                <div className={styles.info}>
-                  There are some Pull Requests that need to be merged:
-                </div>
-              }
-              {
-                get(repoInfo, 'settingUp', []).map(item => {
-                  return (
-                    <div key={item.pr_url} className={styles.repoList}
-                         onClick={() => {
-                           window.open(item.pr_url)
-                         }}
-                    >{item.pr_url}</div>
-                  )
-                })
-              }
-              {
-                status === ApplicationStatus.COMPLETED &&
-                <div className={styles.buttonWrapper}>
-                  <Button
-                    variant="contained"
-                    onClick={goDashboard}
-                  >
-                    {
-                      get(repoInfo, 'settingUp', '') && "Aleady Merged PR, "
-                    }
-                    Go App Detail
-                  </Button>
-                </div>
-              }
-            </div>
-          </div>
-        }
-        <div id="TERMINAL"
-             className={styles.terminal}
-        >
         </div>
       </div>
     </Layout>

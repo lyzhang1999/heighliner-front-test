@@ -35,7 +35,7 @@ export enum LinkMethod {
 
 export default function Create(): React.ReactElement {
   const router = useRouter();
-  const [index, setIndex] = useState<number>(1);
+  const [index, setIndex] = useState<number>(4);
   const [formState, setFormState] = useState<FormStateType>({
     selectAStack: cloneDeep(SelectAStackInitState),
     providers: cloneDeep(ProvidersInitState),

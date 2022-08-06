@@ -11,7 +11,9 @@ import {
 import { TextField } from "@mui/material";
 import Image from "next/image";
 import * as yup from "yup";
-
+import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
+import ImportEnvByJson from "@/components/ImportEnvByJson";
 import { CommonProps } from "@/utils/commonType";
 import { EnvVariableMap, EnvVariables } from "@/api/application";
 
@@ -67,7 +69,9 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
     control: props.control,
     name: props.name,
   });
-
+  function addEnvByJson(obj: EnvType[]){
+    appender(obj);
+  }
   return (
     <div className={styles.wrapper}>
       {variables.map((variable, index) => (
@@ -142,6 +146,8 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
       >
         ADD ONE
       </div>
+      <ImportEnvByJson addEnvByJson={addEnvByJson} />
+      <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
     </div>
   );
 }

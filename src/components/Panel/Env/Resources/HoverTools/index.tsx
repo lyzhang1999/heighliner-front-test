@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import clsx from "clsx";
 import Image from "next/image";
 import {
   Button,
@@ -64,7 +63,7 @@ export default function HoverTools(props: Props) {
 
   const { env, resource } = props;
 
-  function getParameters() {
+  function getParameters(action: string) {
     const token = getToken();
     if (!token) {
       console.error("Error: No token found, exit.");
@@ -74,19 +73,21 @@ export default function HoverTools(props: Props) {
     const { namespace, name, type } = resource;
 
     const parameters: any = {
+      action,
       token,
-      kubeconfig: envContext.kubeconfig,
       namespace: namespace,
       application: "default",
       workload_type: type,
       workload: name,
-      action: "debug",
       organization: globalState?.currentOrganization?.name,
       email: globalState?.userInfo?.email,
       app: env.application_id,
       service: name,
       env: env.name,
-    };
+      baseUrl: window.location.origin,
+      orgId: globalState?.currentOrganization?.org_id,
+      clusterId: env.last_release.cluster_id,
+    }
 
     return parameters;
   }
@@ -94,6 +95,11 @@ export default function HoverTools(props: Props) {
   function wakeUpVSCode(qsObj: any): void {
     const searchParams = new URLSearchParams(qsObj);
     window.open(`vscode://forkmain.forkmain?${searchParams.toString()}`);
+  }
+
+  const handleDev = (action: string) => {
+    const parameters = getParameters(action)
+    wakeUpVSCode(parameters)
   }
 
   function pre(type: ExecuteType) {
@@ -133,33 +139,16 @@ export default function HoverTools(props: Props) {
   function handleContributor(type: ExecuteType) {
     switch (type) {
       case ExecuteType.DEBUG:
-        handleDebug();
+        handleDev('debug')
         break;
       case ExecuteType.RUN:
-        handleRun();
+        handleDev('run')
         break;
       case ExecuteType.STOP:
-        handleStopDev();
+        handleDev('stop')
         break;
     }
   }
-
-  const handleDebug = () => {
-    const parameters = getParameters();
-    wakeUpVSCode(parameters);
-  };
-
-  const handleRun = () => {
-    const parameters = getParameters();
-    parameters["action"] = "run";
-    wakeUpVSCode(parameters);
-  };
-
-  const handleStopDev = () => {
-    const parameters = getParameters();
-    parameters["action"] = "stop";
-    wakeUpVSCode(parameters);
-  };
 
   return (
     <>

@@ -11,7 +11,7 @@ export interface IEnvContext {
   kubeconfig?: string;
   argoCDInfo?: GetArgoCDInfoRes;
   argoCDAutoSync: boolean;
-  changeArgoCDAutoSync?: () => void;
+  changeArgoCDAutoSync?: () => Promise<boolean>;
 }
 
 export const EnvContext = createContext<IEnvContext>({

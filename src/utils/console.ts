@@ -1,4 +1,5 @@
 import { DoDollar } from "dodollar";
+import dodollar from "dodollar";
 
 const $$ = new DoDollar({
   batchIntercept: {

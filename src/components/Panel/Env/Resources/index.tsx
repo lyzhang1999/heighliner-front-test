@@ -1,12 +1,11 @@
 import React, {
-  Dispatch,
   ReactElement,
-  SetStateAction,
   useEffect,
+  useRef,
+  useState,
 } from "react";
 import clsx from "clsx";
-import ApiIcon from "@mui/icons-material/Api";
-import DeviceHubIcon from "@mui/icons-material/DeviceHub";
+import NoiseControlOffIcon from "@mui/icons-material/NoiseControlOff";
 
 import { CommonProps } from "@/utils/commonType";
 import LeftSideTabs from "@/basicComponents/CustomTab/LeftSideTabs";
@@ -21,8 +20,9 @@ import useEnvResources from "@/hooks/envResources";
 
 import styles from "./index.module.scss";
 import Resource from "./Resource";
-import { Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import { ResourceType } from "@/api/application";
+import { $$ } from "@/utils/console";
 
 interface Props extends CommonProps {
   env: any;
@@ -34,18 +34,49 @@ export default function Resources(props: Props): React.ReactElement {
     app_id: +getQuery("app_id"),
     env_id: +getQuery("env_id"),
   });
+  const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
+  const timerRef = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
     flushEnvResources({
       resource_type: props.selectedResourceType,
     });
+
+    if (timer) {
+      clearInterval(timer);
+      const newTimer = setInterval<Parameters<typeof flushEnvResources>>(
+        flushEnvResources,
+        5000,
+        {
+          resource_type: props.selectedResourceType,
+        }
+      );
+      setTimer(newTimer);
+      timerRef.current = newTimer;
+    }
+
+    return () => {
+      timerRef.current && clearInterval(timerRef.current);
+    };
   }, [props.selectedResourceType]);
 
   useEffect(() => {
-    const timer = setInterval(flushEnvResources, 5000);
+    const newTimer = setInterval<Parameters<typeof flushEnvResources>>(
+      flushEnvResources,
+      5000,
+      {
+        resource_type: props.selectedResourceType,
+      }
+    );
+    setTimer(newTimer);
+    timerRef.current = newTimer;
 
-    return () => clearInterval(timer);
+    return () => {
+      timerRef.current && clearInterval(timerRef.current);
+    };
   }, []);
+
+  // useEffect(() => {}, [timer]);
 
   return (
     <ul className={styles.wrapper}>
@@ -76,25 +107,28 @@ export default function Resources(props: Props): React.ReactElement {
                     style={{
                       listStyleType: "none",
                     }}
+                    className={styles.containerWrap}
                   >
                     {envResource.container.map((container) => (
-                      <li
-                        key={container.name}
-                        style={{
-                          margin: "10px",
-                          padding: "2px",
-                          backgroundColor: "",
-                          display: "grid",
-                          gridTemplateColumns: "auto 1fr",
-                          gridTemplateRows: "auto auto",
-                          columnGap: "2px",
-                          rowGap: "2px",
-                        }}
-                      >
-                        <ApiIcon />
-                        Name:&nbsp;{container.name}
-                        <DeviceHubIcon />
-                        Image:&nbsp; {container.image}
+                      <li key={container.name}>
+                        <NoiseControlOffIcon
+                          sx={{
+                            color: "#88a4da",
+                          }}
+                        />
+                        <Typography variant="h3">Name:</Typography>
+                        <Tooltip title={container.name || ""}>
+                          <p>{container.name}</p>
+                        </Tooltip>
+                        <NoiseControlOffIcon
+                          sx={{
+                            color: "#88a4da",
+                          }}
+                        />
+                        <Typography variant="h3">Image:</Typography>
+                        <Tooltip title={container.image || ""}>
+                          <p>{container.image}</p>
+                        </Tooltip>
                       </li>
                     ))}
                   </ul>

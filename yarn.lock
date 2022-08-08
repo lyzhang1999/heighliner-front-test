@@ -2326,9 +2326,9 @@ doctrine@^3.0.0:
     esutils "^2.0.2"
 
 dodollar@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/dodollar/-/dodollar-1.0.0.tgz#029624b0d9346b38a2f63ba5e1a17446871bd40f"
-  integrity sha512-ITuEdRCAJpcW/rl7952HyKEl7avX3W32MIqUj8WNh+s4F18T+ZetqJ/VnKjRl/YubaxXvF/Z0WONznfYtkvvjw==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/dodollar/-/dodollar-1.1.1.tgz#5796824595f208f331ded9e96cafd12eb4deaef0"
+  integrity sha512-Lis7gCQK22VVn9a9yC598JeQxRHlH4hQADXDz2s15c2Xyc45Ak5mvRRlkY9tRNm9SclQvNgFnA38Og7GPYgL7A==
 
 dom-helpers@^5.0.1:
   version "5.2.1"

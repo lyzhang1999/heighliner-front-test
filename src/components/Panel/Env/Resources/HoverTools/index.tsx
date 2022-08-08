@@ -14,10 +14,14 @@ import { Context } from "@/utils/store";
 import { IEnvContext, EnvContext } from "@/utils/contexts";
 import { CommonProps } from "@/utils/commonType";
 import { getToken } from "@/utils/token";
+import { GetEnvResourcesRes } from "@/api/application";
 
 import styles from "./index.module.scss";
 
-interface Props extends CommonProps {}
+interface Props extends CommonProps {
+  env: any;
+  resource: GetEnvResourcesRes[number];
+}
 
 enum DevStatus {
   NORMAL = "normal",
@@ -31,7 +35,7 @@ enum ExecuteType {
   STOP = "stop",
 }
 
-export default function HoverTools(props: any) {
+export default function HoverTools(props: Props) {
   const { state: globalState, dispatch: globalStateDispatch } =
     useContext(Context);
   const envContext: IEnvContext = useContext(EnvContext);
@@ -47,11 +51,14 @@ export default function HoverTools(props: any) {
 
   useEffect(() => {
     if (props.resource.container) {
-      props.resource.container.forEach((container: any) => {
-        if (container.name === "nocalhost-dev") {
-          setDevState(DevStatus.RUNNING);
-        }
-      });
+      const isDeveloping = props.resource.container.some(
+        (container) => container.name === "nocalhost-dev"
+      );
+      if (isDeveloping) {
+        setDevState(DevStatus.RUNNING);
+      } else {
+        setDevState(DevStatus.NORMAL);
+      }
     }
   }, [props.resource]);
 

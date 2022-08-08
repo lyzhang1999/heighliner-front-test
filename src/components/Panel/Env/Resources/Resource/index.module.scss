@@ -8,4 +8,11 @@
     font-weight: 600;
     color: #222f42;
   }
+
+  .status {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 5px;
+  }
 }

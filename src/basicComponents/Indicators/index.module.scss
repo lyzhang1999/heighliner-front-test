@@ -4,13 +4,23 @@
   gap: 2px;
 
   .line {
-    width: 9px;
-    height: 3px;
-    border-radius: 1px;
+    width: 15px;
+    height: 4px;
+    border-radius: 2px;
     background-color: #9eea91;
   }
 
   .noReady {
-    background-color: #6c727b;
+    // background-color: #6c727b;
+    animation: alert 1s linear infinite;
+  }
+}
+
+@keyframes alert {
+  from {
+    background-color: #494c4f;
+  }
+  to {
+    background-color: #de1a27;
   }
 }

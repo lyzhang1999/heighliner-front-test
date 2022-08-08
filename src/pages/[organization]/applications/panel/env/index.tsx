@@ -88,42 +88,48 @@ export default function Env(): React.ReactElement {
   }, [application]);
 
   // Manage ArgoCD information.
-  function changeArgoCDAutoSync() {
-    const envContext = envContextRef.current;
-    $$.start().title("changeArgoCDAutoSync").blankLine().log(envContext).end();
+  function changeArgoCDAutoSync(): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      const envContext = envContextRef.current;
 
-    let argoCDInfoOnlySpace: Pick<GetArgoCDInfoRes, "space">;
+      let argoCDInfoOnlySpace: Pick<GetArgoCDInfoRes, "space">;
 
-    if (envContext.argoCDInfo && envContext.argoCDInfo.space) {
-      if (envContext.argoCDAutoSync === true) {
-        // Close it.
-        argoCDInfoOnlySpace = operateAutomatedProperty(
-          { space: envContext.argoCDInfo.space }!,
-          "remove"
-        );
-      } else {
-        // Open it.
-        argoCDInfoOnlySpace = operateAutomatedProperty(
-          { space: envContext.argoCDInfo.space }!,
-          "append"
-        );
+      if (envContext.argoCDInfo && envContext.argoCDInfo.space) {
+        if (envContext.argoCDAutoSync === true) {
+          // Close it.
+          argoCDInfoOnlySpace = operateAutomatedProperty(
+            { space: envContext.argoCDInfo.space }!,
+            "remove"
+          );
+        } else {
+          // Open it.
+          argoCDInfoOnlySpace = operateAutomatedProperty(
+            { space: envContext.argoCDInfo.space }!,
+            "append"
+          );
+        }
+        try {
+          await updateArgoCDInfo({
+            app_id,
+            env_id,
+            body: argoCDInfoOnlySpace,
+          });
+
+          setEnvContext((preState) => {
+            const nextState = {
+              ...cloneDeep(preState),
+              argoCDAutoSync: !preState.argoCDAutoSync,
+            };
+            envContextRef.current = nextState;
+            return nextState;
+          });
+
+          resolve(true);
+        } catch (error) {
+          reject(error);
+        }
       }
-
-      updateArgoCDInfo({
-        app_id,
-        env_id,
-        body: argoCDInfoOnlySpace,
-      }).then(() => {
-        setEnvContext((preState) => {
-          const nextState = {
-            ...cloneDeep(preState),
-            argoCDAutoSync: !preState.argoCDAutoSync,
-          };
-          envContextRef.current = nextState;
-          return nextState;
-        });
-      });
-    }
+    });
   }
 
   const flushArgoCDInfo = () => {

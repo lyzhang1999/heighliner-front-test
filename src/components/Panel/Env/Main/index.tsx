@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { get, has } from "lodash-es";
 import $$ from "dodollar";
-import { Switch, Typography } from "@mui/material";
+import { Button, IconButton, Switch, Tooltip, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -11,6 +11,8 @@ import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import ReplayIcon from "@mui/icons-material/Replay";
+import ReplayCircleFilledIcon from "@mui/icons-material/ReplayCircleFilled";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -19,7 +21,7 @@ import Link from "@mui/material/Link";
 import LinkSVG from "/public/img/application/panel/env/link.svg";
 import Config from "/public/img/application/panel/env/config.svg";
 import Gear from "/public/img/application/panel/env/gear.svg";
-import { getQuery, getUrlEncodeName } from "@/utils/utils";
+import { getQuery, getUrlEncodeName, Message } from "@/utils/utils";
 import { CommonProps } from "@/utils/commonType";
 import {
   GetArgoCDInfoRes,
@@ -43,6 +45,12 @@ export default function Main({ env }: Props): React.ReactElement {
 
   const { argoCDInfo, argoCDAutoSync, changeArgoCDAutoSync }: IEnvContext =
     useContext(EnvContext);
+
+  const reSync = async () => {
+    changeArgoCDAutoSync && (await changeArgoCDAutoSync());
+    changeArgoCDAutoSync && (await changeArgoCDAutoSync());
+    Message.success("ArgoCD re-sync successfully.");
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -99,9 +107,8 @@ export default function Main({ env }: Props): React.ReactElement {
       <Typography variant="h3">Health</Typography>
       <Typography variant="h3">Current Sync Status</Typography>
       <Typography variant="h3">Last Sync Result</Typography>
-      <Typography variant="h3">ArgoCD Auto Sync</Typography>
+      <Typography variant="h3">ArgoCD Sync</Typography>
       <div className={styles.statusWrap}>
-        {/* <h3>Health</h3> */}
         {getHealthStatusIcon(
           get(argoCDInfo, "status.health.status") as HealthStatus
         )}
@@ -114,7 +121,6 @@ export default function Main({ env }: Props): React.ReactElement {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "5px",
           }}
         >
           {getSyncStatus(get(argoCDInfo, "status.sync.status") as SyncStatus)}
@@ -149,35 +155,49 @@ export default function Main({ env }: Props): React.ReactElement {
         </div>
       </div>
       <div className={styles.operateStateWrap}>
-        {/* <Typography
-          variant="h3"
-          sx={{
-            gridRow: "1 / 5",
-            alignSelf: "center",
-          }}
-        >
-          Last Sync Result
-        </Typography> */}
         <Typography>Phase:</Typography>
         <div>{get(argoCDInfo, "status.operationState.phase")}</div>
-        <Typography>Started At:</Typography>
+        <Typography>Start:</Typography>
         <div>
           {dayjs(get(argoCDInfo, "status.operationState.startedAt")).format(
             "YYYY-MM-DD HH:mm:ss"
           )}
         </div>
-        <Typography>Finished At:</Typography>
+        <Typography>Finish:</Typography>
         <div>
           {dayjs(get(argoCDInfo, "status.operationState.finishedAt")).format(
             "YYYY-MM-DD HH:mm:ss"
           )}
         </div>
         <Typography>Message:</Typography>
-        <div>{get(argoCDInfo, "status.operationState.message")}</div>
+        <Tooltip title={get(argoCDInfo, "status.operationState.message") || ""}>
+          <div
+            style={{
+              maxWidth: "200px",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {get(argoCDInfo, "status.operationState.message")}
+          </div>
+        </Tooltip>
       </div>
       <div className={styles.switchWrap}>
-        {/* <Typography variant="h3">ArgoCD Auto Sync</Typography> */}
+        <Typography>Auto Sync:</Typography>
         <Switch checked={argoCDAutoSync} onChange={changeArgoCDAutoSync} />
+        <Typography>Re-Sync:</Typography>
+        <Button
+          variant="outlined"
+          sx={{
+            maxWidth: "20px",
+            maxHeight: "27px",
+            borderRadius: "82px",
+          }}
+          onClick={reSync}
+        >
+          <ReplayIcon />
+        </Button>
       </div>
     </div>
   );
@@ -199,6 +219,7 @@ function getHealthStatusIcon(healthStatus: HealthStatus) {
           sx={{
             color: "#50a7da",
           }}
+          className={styles.spin}
         />
       );
     case HealthStatus.DEGRADED:

@@ -1,4 +1,5 @@
 import PageCenter from "@/basicComponents/PageCenter";
+import { $$ } from "@/utils/console";
 import { formatDate } from "@/utils/utils";
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { GetStaticProps } from "next";

@@ -9,6 +9,7 @@ import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrontendItemType, FrontendType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
+import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
 
 const widhtSx = {width: "250px"};
 
@@ -569,6 +570,8 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
               </div>
               {/*<ImportEnvByJson addEnvByJson={addEnvByJson}/>*/}
             </div>
+            <ImportEnvByJson addEnvByJson={addEnvByJson} />
+            <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
           </div>
         }
         {

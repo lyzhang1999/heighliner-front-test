@@ -9,6 +9,7 @@ import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
+import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
 import {CommonProps} from "@/utils/commonType";
 
 const widhtSx = {width: "250px"};
@@ -359,7 +360,8 @@ const Backend = forwardRef(function Component(props: Props, ref) {
             <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
               ADD ONE
             </div>
-            <ImportEnvByJson addEnvByJson={addEnvByJson}/>
+            <ImportEnvByJson addEnvByJson={addEnvByJson} />
+            <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
           </div>
         </div>
       </div>

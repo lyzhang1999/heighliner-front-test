@@ -11,7 +11,7 @@ import { ResourceType } from "@/api/application";
 import useApplication from "@/hooks/application";
 import { getCluster } from "@/api/cluster";
 import useEnv from "@/hooks/env";
-import { getQuery } from "@/utils/utils";
+import { getOrganizationNameByUrl, getQuery } from "@/utils/utils";
 import { IEnvContext, EnvContext } from "@/utils/contexts";
 import { useApplicationRepos } from "@/hooks/applicationRepos";
 import { useEnvProd } from "@/hooks/envProd";
@@ -22,6 +22,8 @@ import {
 } from "@/api/application/argo";
 
 import styles from "./index.module.scss";
+import { Breadcrumbs, Link, Skeleton, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 
 const tabItems: Array<{
   label: ResourceType;
@@ -48,6 +50,7 @@ const tabItems: Array<{
 
 export default function Env(): React.ReactElement {
   const [selectedTab, setSelectedTab] = useState(tabItems[0].label);
+  const router = useRouter();
 
   const [envContext, setEnvContext] = useState<IEnvContext>({
     argoCDAutoSync: false,
@@ -164,6 +167,7 @@ export default function Env(): React.ReactElement {
     });
 
     const timer = setInterval(flushArgoCDInfo, 5000);
+    $$.fold(router);
 
     return () => clearInterval(timer);
   }, []);
@@ -171,11 +175,59 @@ export default function Env(): React.ReactElement {
   return (
     <Layout
       notStandardLayout
-      pageHeader={`Applications / ${application?.name || ""} / ${get(
-        env,
-        "name",
-        ""
-      )}`}
+      breadcrumbs={
+        <Breadcrumbs separator="›">
+          <Link
+            onClick={() =>
+              router.push(
+                `/${encodeURIComponent(
+                  getOrganizationNameByUrl()
+                )}/applications`
+              )
+            }
+            underline="hover"
+            color="inherit"
+            sx={{
+              cursor: "pointer",
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            Applications
+          </Link>
+          <Link
+            onClick={() =>
+              router.push({
+                pathname: `/${encodeURIComponent(
+                  getOrganizationNameByUrl()
+                )}/applications/panel`,
+                query: {
+                  app_id: router.query.app_id,
+                  release_id: router.query.release_id,
+                },
+              })
+            }
+            underline="hover"
+            color="inherit"
+            sx={{
+              cursor: "pointer",
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            {application?.name || <Skeleton variant="text" width={100} />}
+          </Link>
+          <Typography
+            color={"text.primary"}
+            sx={{
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            {get(env, "name", "") || <Skeleton variant="text" width={100} />}
+          </Typography>
+        </Breadcrumbs>
+      }
     >
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>

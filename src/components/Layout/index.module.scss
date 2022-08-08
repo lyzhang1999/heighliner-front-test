@@ -32,16 +32,23 @@
     .rightContent {
       min-width: calc(992px - 80px);
 
-      .pageHeader {
-        font-family: 'OpenSans';
+      .pageHeader, .breadcrumbs {
         padding: 40px 40px 0px 40px;
+        font-family: 'OpenSans';
+        font-size: 25px;
+      }
+
+      .pageHeader {
         display: flex;
         justify-content: space-between;
-        font-size: 25px;
         letter-spacing: normal;
         text-align: left;
         color: #000;
         align-items: center;
+      }
+
+      .breadcrumbs {
+        
       }
     }
 
@@ -49,7 +56,7 @@
       padding: 0 40px 40px 40px;
       // max-width: 1200px;
 
-      .pageHeader {
+      .pageHeader, .breadcrumbs {
         padding: 40px 0 20px 0;
       }
     }

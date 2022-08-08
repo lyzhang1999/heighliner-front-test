@@ -10,6 +10,7 @@ interface HomeProps {
   children?: react.ReactNode,
   hiddenContent?: boolean,
   pageHeader?: string,
+  breadcrumbs?: ReactElement,
   CustomSlider?: ReactElement,
   rightBtnDesc?: string,
   rightBtnCb?: () => void,
@@ -17,7 +18,7 @@ interface HomeProps {
 }
 
 const Layout = (props: HomeProps): react.ReactElement => {
-  let {children, pageHeader, rightBtnDesc, rightBtnCb, notStandardLayout} = props;
+  let {children, pageHeader, breadcrumbs, rightBtnDesc, rightBtnCb, notStandardLayout} = props;
   const {state, dispatch} = useContext(Context);
   let {hasRenderLayout} = state;
   useEffect(() => {
@@ -58,6 +59,12 @@ const Layout = (props: HomeProps): react.ReactElement => {
                       {rightBtnDesc}
                     </Button>
                   }
+                </div>
+              }
+              {
+                breadcrumbs && 
+                <div className={styles.breadcrumbs}>
+                  { breadcrumbs }
                 </div>
               }
               {children}

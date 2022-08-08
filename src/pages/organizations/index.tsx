@@ -9,7 +9,7 @@ import {useContext, useEffect, useState} from "react";
 import * as React from "react";
 import {Context} from "@/utils/store";
 import {getOrgList, OrgList, RoleIcon, roleType} from "@/api/org";
-import {formatDate, getCurrentOrg, getDefaultOrg, getQuery, Message} from "@/utils/utils";
+import {formatDate, getCurrentOrg, parseInitialDefaultOrg, getQuery, Message} from "@/utils/utils";
 import {get} from "lodash-es";
 import {useRouter} from "next/router";
 import RoleTag from "@/components/RoleTag";
@@ -69,7 +69,7 @@ const Organizations = () => {
   // Judge is current organization, change to default organization
   function checkOrg(id: number) {
     if (get(currentOrganization, 'org_id') === id) {
-      let defaultItem = getDefaultOrg(organizationList);
+      let defaultItem = parseInitialDefaultOrg(organizationList);
       if (defaultItem) {
         dispatch({currentOrganization: getCurrentOrg(defaultItem)})
       }

@@ -1,14 +1,13 @@
 import { getOrgList } from "@/api/org";
 import { Context } from "@/utils/store";
-import { getCurrentOrg, getDefaultOrg } from "@/utils/utils";
+import { getCurrentOrg, parseInitialDefaultOrg } from "@/utils/utils";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { get } from "lodash-es";
-import useDefaultOrg from "./defaultOrg";
 import { getUserInfo } from "@/api/profile";
+import { $$ } from "@/utils/console";
 
 export default function useRedirectCurrentOrganization() {
-  const [currentDefaultOrgId, flushCurrentDefaultOrgId] = useDefaultOrg();
   const { dispatch } = useContext(Context);
   const router = useRouter();
 
@@ -17,7 +16,7 @@ export default function useRedirectCurrentOrganization() {
       .then((res) => {
         let list = res.data;
         let oriName = list[0]?.name;
-        let currentOrganization = getCurrentOrg(getDefaultOrg(list));
+        let currentOrganization = getCurrentOrg(parseInitialDefaultOrg(list));
 
         getUserInfo().then((userInfo) => {
           // Check user whether have default organization.
@@ -43,6 +42,7 @@ export default function useRedirectCurrentOrganization() {
         });
       })
       .catch((err) => {
+        $$.error(err);
         getOrgErr(err);
       });
   };

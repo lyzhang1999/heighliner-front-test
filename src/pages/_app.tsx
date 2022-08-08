@@ -10,12 +10,14 @@ import '@/styles/globals.scss';
 import Notice from '@/components/Notice/index';
 import GlobalContxt from "@/components/GlobalContxt";
 import theme from "@/utils/theme";
-import {getOrgList} from "@/api/org";
+import {getOrgList, OrgList} from "@/api/org";
 import {CssBaseline} from "@mui/material";
 import {find, get} from "lodash-es";
-import {getCurrentOrg, getDefaultOrg, getOrganizationNameByUrl, getStateByContext} from "@/utils/utils";
+import {getCurrentOrg, getOrganizationNameByUrl, getStateByContext, parseInitialDefaultOrg} from "@/utils/utils";
 import { GlobalLoadingProvider } from "@/basicComponents/GlobalLoadingProvider";
 import {deleteToken, getToken} from "@/utils/token";
+import { getUserInfo } from "@/api/profile";
+import { $$ } from "@/utils/console";
 
 const noCheckLoginPage = [
   '/sign-in',
@@ -74,14 +76,34 @@ function App({Component, pageProps}: AppProps) {
 
   function loginCheck() {
     if (getToken()) {
-      getOrgList().then(res => {
+      getOrgList().then(async res => {
         let list = res.data;
         dispatch({
           organizationList: list,
         });
-        let defaultOriName = getDefaultOrg(list).name;
+
+        let initialDefaultOrg: OrgList = parseInitialDefaultOrg(list);
+        let userSetDefaultOrg: OrgList | undefined;
+
+        const userInfo = await getUserInfo();
+        // Check user whether have default organization.
+        if (
+          userInfo.default_org_id !== undefined &&
+          userInfo.default_org_id > 0
+        ) {
+          userSetDefaultOrg = list.find(item => item.id === userInfo.default_org_id);
+        }
+
+        /**
+         * Enter preferred organization set by user in organization page.
+         */
+        if(userSetDefaultOrg && userSetDefaultOrg.name && "/" === router.pathname) {
+          location.pathname = `${encodeURIComponent(userSetDefaultOrg.name)}/applications`;
+          return;
+        }
+
         if (ifLoginDisablePage.includes(router.pathname)) {
-          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+          location.pathname = `${encodeURIComponent(initialDefaultOrg.name)}/applications`;
           return;
         }
         if (noCheckOrgNamePage.includes(router.pathname)) {
@@ -95,9 +117,10 @@ function App({Component, pageProps}: AppProps) {
           startRender();
           return;
         } else {
-          location.pathname = `${encodeURIComponent(defaultOriName)}/applications`;
+          location.pathname = `${encodeURIComponent(initialDefaultOrg.name)}/applications`;
         }
       }).catch(err => {
+        $$.error(err);
         if ((get(err, "response.status") === 302) && (get(err, 'response.data.redirect_to') === 'userInfoComplete')) {
           if (location.pathname !== '/sign-up') {
             location.href = location.origin + '/sign-up?completeInfo=true'

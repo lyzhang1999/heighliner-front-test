@@ -157,6 +157,18 @@ export function getCurrentOrg(organization: OrgList): OrganizationType {
   };
 }
 
+/**
+ * User initial organization when sign in into ForkMain.
+ */
+export function parseInitialDefaultOrg(orgList: OrgList[] | undefined): OrgList {
+  let defaultOrg = find(orgList, {type: "Default", member: {member_type: roleType.Owner}});
+  return defaultOrg as OrgList;
+}
+
+/**
+ * @Deprecated Please use parseInitialDefaultOrg instead if you want to get initial default organization.
+ * To invoke getUserInfo api to get the user info which have default organization set by user.
+ */
 export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
   let defaultOrg = find(orgList, {type: "Default", member: {member_type: roleType.Owner}});
   return defaultOrg as OrgList;

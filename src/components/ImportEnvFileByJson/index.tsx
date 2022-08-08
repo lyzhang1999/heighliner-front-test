@@ -14,7 +14,7 @@ interface Props {
   addEnvByJson: (arr: EnvType[]) => void
 }
 
-export default function importEnvFileByJson({addEnvByJson}: Props) {
+export default function ImportEnvFileByJson({addEnvByJson}: Props) {
   const [spread, setSpread] = useState<boolean>(false);
   const [value, setValue] = useState<string>(defaultValue);
 

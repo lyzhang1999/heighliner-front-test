@@ -173,7 +173,6 @@ export default function Main({ env }: Props): React.ReactElement {
         <Tooltip title={get(argoCDInfo, "status.operationState.message") || ""}>
           <div
             style={{
-              maxWidth: "200px",
               overflow: "hidden",
               whiteSpace: "nowrap",
               textOverflow: "ellipsis",

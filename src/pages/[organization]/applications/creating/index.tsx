@@ -330,7 +330,7 @@ const CreatingApplication = () => {
                     onClick={goDashboard}
                   >
                     {
-                      get(repoInfo, 'settingUp', '') && "Aleady Merged PR, "
+                      get(repoInfo, 'settingUp', '') && "Already Merged PR, "
                     }
                     Go App Detail
                   </Button>

@@ -157,7 +157,7 @@ export default function HoverTools(props: any) {
   return (
     <>
       <ul className={styles.wrapper}>
-        <li>
+        {/* <li>
           <Image
             src="/img/application/panel/env/circle@3x.png"
             layout="fill"
@@ -188,7 +188,7 @@ export default function HoverTools(props: any) {
             objectFit="contain"
             alt=""
           />
-        </li>
+        </li> */}
         {devState === DevStatus.RUNNING ? (
           <li onClick={pre(ExecuteType.STOP)} title="Stop">
             <Image

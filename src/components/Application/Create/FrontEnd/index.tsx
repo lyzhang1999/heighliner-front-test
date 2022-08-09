@@ -45,9 +45,9 @@ export const frontItem: FrontendItemType[] = [
     path404: '/404.html'
   },
   {
-    img: "/img/application/vue.svg",
-    name: 'Vue.js',
-    key: "vuejs",
+    img: "/img/application/create/vite.svg",
+    name: 'Vite',
+    key: "vue-vite",
     version: "1.7.7",
     language: 'typescript',
     languageVersion: '1.7.7',
@@ -62,9 +62,43 @@ export const frontItem: FrontendItemType[] = [
     staticDeployMode: 'spa',
     path404: '/404.html'
   },
-]
+  {
+    img: "/img/application/vue.svg",
+    name: 'Vue-Cli',
+    key: "vue-cli",
+    version: "1.7.7",
+    language: 'typescript',
+    languageVersion: '1.7.7',
 
-// public/img/application/create/vue.svg
+    buildCommand: 'yarn install && yarn build',
+    outputDir: '/dist',
+    buildEnv: [],
+    deployMode: 'static',
+    runCommand: "",
+    port: '',
+    deployEnv: [],
+    staticDeployMode: 'spa',
+    path404: '/404.html'
+  },
+  {
+    img: "/img/application/create/create-react-app.svg",
+    name: 'React-App',
+    key: "react-cli",
+    version: "1.7.7",
+    language: 'typescript',
+    languageVersion: '1.7.7',
+
+    buildCommand: 'yarn install && yarn build',
+    outputDir: '/build',
+    buildEnv: [],
+    deployMode: 'static',
+    runCommand: "",
+    port: '',
+    deployEnv: [],
+    staticDeployMode: 'spa',
+    path404: '/404.html'
+  },
+]
 
 export const DeplodModeList = [
   {
@@ -207,7 +241,7 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                                field.onChange(i.key)
                              }}
                         >
-                          <img src={i.img} alt=""/>
+                          <img src={i.img} alt="" style={{width: '40px', height: '40px'}}/>
                           <div className={styles.name}>{i.name}</div>
                         </div>
                       )

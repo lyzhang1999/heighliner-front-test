@@ -13,8 +13,14 @@ import theme from "@/utils/theme";
 import {getOrgList, OrgList} from "@/api/org";
 import {CssBaseline} from "@mui/material";
 import {find, get} from "lodash-es";
-import {getCurrentOrg, getOrganizationNameByUrl, getStateByContext, parseInitialDefaultOrg} from "@/utils/utils";
-import { GlobalLoadingProvider } from "@/basicComponents/GlobalLoadingProvider";
+import {
+  getCurrentOrg,
+  getOrganizationNameByUrl,
+  getStateByContext,
+  isProduct,
+  parseInitialDefaultOrg
+} from "@/utils/utils";
+import {GlobalLoadingProvider} from "@/basicComponents/GlobalLoadingProvider";
 import {deleteToken, getToken} from "@/utils/token";
 import { getUserInfo } from "@/api/profile";
 import { $$ } from "@/utils/console";
@@ -50,6 +56,16 @@ function App({Component, pageProps}: AppProps) {
   useEffect(() => {
     loginCheck();
     initSpread();
+    if(isProduct()){
+      // @ts-ignore
+      window.dataLayer = window.dataLayer || [];
+      // @ts-ignore
+      function gtag(){dataLayer.push(arguments);}
+      // @ts-ignore
+      gtag('js', new Date());
+      // @ts-ignore
+      gtag('config', 'G-HFR54HFQGS');
+    }
   }, []);
 
   function initSpread() {
@@ -124,7 +140,7 @@ function App({Component, pageProps}: AppProps) {
         if ((get(err, "response.status") === 302) && (get(err, 'response.data.redirect_to') === 'userInfoComplete')) {
           if (location.pathname !== '/sign-up') {
             location.href = location.origin + '/sign-up?completeInfo=true'
-          }else{
+          } else {
             startRender();
           }
         } else {
@@ -153,6 +169,7 @@ function App({Component, pageProps}: AppProps) {
         <title>ForkMain · Speed up Cloud Native Application Development</title>
         <meta name="description" content="ForkMain · Speed up Cloud Native Application Development"/>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico"/>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFR54HFQGS"></script>
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline/>

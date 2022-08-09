@@ -174,6 +174,7 @@ export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
   return defaultOrg as OrgList;
 }
 
+
 export function isProduct() {
-  return !["localhost", "heighliner-cloud.heighliner.cloud"].includes(location.hostname)
+  return location.host === "forkmain.com";
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import clsx from "clsx";
-import { Button, IconButton, Typography } from "@mui/material";
-import SaveIcon from "@mui/icons-material/Save";
+import { Button, Typography } from "@mui/material";
+import UpgradeOutlinedIcon from "@mui/icons-material/UpgradeOutlined";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -79,35 +79,6 @@ export default function Frontend(props: Props) {
     }
   }, [envSetting]);
 
-  useEffect(() => {
-    // getEnvSetting({
-    //   app_id: +app_id,
-    //   env_id: +env_id,
-    // }).then((envSetting) => {
-    //   // Parse env variables from envSetting.
-    //   if (
-    //     envSetting &&
-    //     envSetting.application &&
-    //     envSetting.application.service
-    //   ) {
-    //     const services = envSetting.application.service;
-    //     const frontendService = services.find(
-    //       (service) => service.type === ServiceType.frontend
-    //     );
-    //     if (
-    //       frontendService &&
-    //       frontendService.setting &&
-    //       frontendService.setting.env
-    //     ) {
-    //       const envVariables = frontendService.setting.env;
-    //       console.log(frontendService.setting.env);
-    //       setEnvVariables(envVariables);
-    //       setValue("frontend", envVariables);
-    //     }
-    //   }
-    // });
-  }, []);
-
   const submitHandler: SubmitHandler<FieldsValue> = (data) => {
     const req: UpdateEnvSettingReq = {
       app_id: app_id,
@@ -147,18 +118,19 @@ export default function Frontend(props: Props) {
           }}
         />
       </div>
-      <div></div>
       <Button
         variant="outlined"
         sx={{
-          maxWidth: "20px",
-          justifySelf: "center",
-          marginTop: "15px",
+          width: "100%",
+          marginTop: "30px",
+          marginBottom: "10px",
+          gridColumn: "span 2",
+          height: "45px",
         }}
         type="submit"
       >
-        <SaveIcon />
-        Save
+        <UpgradeOutlinedIcon />
+        Update
       </Button>
     </form>
   );

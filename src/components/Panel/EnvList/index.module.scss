@@ -14,7 +14,7 @@
     margin: 50px 0px;
     transition: all 0.3s linear;
 
-    .prevewWrapper {
+    .previewWrapper {
       position: absolute;
       top: -30px;
       right: 10px;
@@ -64,6 +64,7 @@
     }
 
     .urlTitle {
+      display: inline-block;
       font-size: 14px;
       color: #000;
       margin-top: 10px;
@@ -71,6 +72,7 @@
     }
 
     .url {
+      display: inline-block;
       margin-top: 10px;
       font-size: 14px;
       text-align: left;
@@ -81,6 +83,14 @@
         margin-left: 4px;
         cursor: pointer;
       }
+    }
+
+    .previewURLWrap, .issuesWrap {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 8px;
+      align-items: center;
+      margin-top: 10px;
     }
 
     .infoWrapper {

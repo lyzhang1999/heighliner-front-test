@@ -193,7 +193,7 @@ export default function HoverTools(props: Props) {
           </li>
         ) : (
           <>
-            <li onClick={getExecutor(ExecuteType.DEBUG)} title="Debug">
+            {/* <li onClick={getExecutor(ExecuteType.DEBUG)} title="Debug">
               <Image
                 src="/img/application/panel/env/debug@3x.png"
                 alt=""
@@ -202,7 +202,7 @@ export default function HoverTools(props: Props) {
                 height={22}
               />
               Start Debug
-            </li>
+            </li> */}
             <li onClick={getExecutor(ExecuteType.RUN)} title="Develop">
               <Image
                 src="/img/application/panel/env/start@3x.png"

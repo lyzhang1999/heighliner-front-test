@@ -320,6 +320,7 @@ export interface Setting {
 export interface EnvItemRes {
   application_env_id: number;
   application_id: number;
+  github_issues: Array<string>;
   owner_id: number;
   owner_name: string;
   name: string;
@@ -525,7 +526,7 @@ export interface ForkReq {
   body: {
     env_name: string;
     env_type: EnvType;
-
+    issue_url: string;
     service: Array<{
       name: string;
       repo_url: string;

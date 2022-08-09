@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import * as yup from "yup";
+import ForkRightIcon from "@mui/icons-material/ForkRight";
 
 import {
   EnvType,
@@ -50,6 +51,7 @@ interface Props extends CommonProps {
 const FieldsMap = {
   EnvType: "Env Type",
   Name: "Name",
+  Issues: "Issues",
   StartPoint: "Start Point",
   Backend: "Backend",
   Frontend: "Frontend",
@@ -59,6 +61,7 @@ const FieldsMap = {
 interface FieldsValue {
   [FieldsMap.EnvType]: EnvType;
   [FieldsMap.Name]: string;
+  [FieldsMap.Issues]: string;
   [FieldsMap.StartPoint]: {
     [FieldsMap.Backend]: string;
     [FieldsMap.Frontend]: string;
@@ -72,6 +75,7 @@ interface FieldsValue {
 const DefaultFields: FieldsValue = {
   [FieldsMap.EnvType]: EnvType.Development,
   [FieldsMap.Name]: "",
+  [FieldsMap.Issues]: "",
   [FieldsMap.StartPoint]: {
     [FieldsMap.Backend]: "",
     [FieldsMap.Frontend]: "",
@@ -103,6 +107,17 @@ const schema = yup.object().shape({
       "exclude illegal characters",
       "The name should only contain lowercase alphanumeric character, or hyphen(-).",
       (value) => !/[^a-z0-9-]/.test(value)
+    ),
+  [FieldsMap.Issues]: yup
+    .string()
+    .default("")
+    .trim()
+    .test(
+      "Validated GitHub issue link.",
+      "Please enter validated GitHub issue link.",
+      (value) =>
+        value.length <= 0 ||
+        /https?:\/\/github.com\/[\w-]+\/[\w-]+\/issues\/[0-9]+/.test(value)
     ),
   [FieldsMap.StartPoint]: yup.object().shape({
     [FieldsMap.Backend]: yup
@@ -232,6 +247,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
       body: {
         env_name: data[FieldsMap.Name],
         env_type: data[FieldsMap.EnvType],
+        issue_url: data[FieldsMap.Issues],
         service: [backendService, frontendService],
       },
     };
@@ -241,7 +257,9 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
       const app_id = getQuery("app_id");
       const release_id = getQuery("release_id");
       router.push(
-        `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${res.application_env_id}`
+        `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${
+          res.application_env_id
+        }`
       );
     });
   };
@@ -259,7 +277,10 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
               gap: "55px",
             }}
           >
-            <HeadlineOne>{FieldsMap.EnvType}</HeadlineOne>
+            <HeadlineOne>
+              {FieldsMap.EnvType}
+              <span>*</span>
+            </HeadlineOne>
             <RadioGroup row name={FieldsMap.EnvType} value={field.value}>
               <FormControlLabel
                 value={EnvType.Test}
@@ -281,7 +302,10 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
         control={control}
         render={({ field }) => (
           <FormControl className={styles.nameWrap}>
-            <HeadlineOne>{FieldsMap.Name}</HeadlineOne>
+            <HeadlineOne>
+              {FieldsMap.Name}
+              <span>*</span>
+            </HeadlineOne>
             <TextField
               value={field.value}
               onChange={field.onChange}
@@ -290,7 +314,27 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                 errors[FieldsMap.Name] && errors[FieldsMap.Name]?.message
               }
               size="small"
+              placeholder="The new forked environment name"
               autoFocus
+            />
+          </FormControl>
+        )}
+      />
+      <Controller
+        name={FieldsMap.Issues}
+        control={control}
+        render={({ field }) => (
+          <FormControl className={styles.issueWrap}>
+            <HeadlineOne>{FieldsMap.Issues}</HeadlineOne>
+            <TextField
+              value={field.value}
+              onChange={field.onChange}
+              error={errors[FieldsMap.Issues] !== undefined}
+              helperText={
+                errors[FieldsMap.Issues] && errors[FieldsMap.Issues]?.message
+              }
+              placeholder="The related GitHub issue link with this environment"
+              size="small"
             />
           </FormControl>
         )}
@@ -300,11 +344,14 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
         <Switch checked={showAdvancedSettings} onChange={switchChangeHandler} />
       </Box>
       {showAdvancedSettings && (
-        <>
+        <div className={styles.advancedSettingsWrap}>
           <div className={styles.startPointWrap}>
             <HeadlineOne>{FieldsMap.StartPoint}:</HeadlineOne>
             <div>
-              <HeadlineTwo>{FieldsMap.Backend}</HeadlineTwo>
+              <HeadlineTwo>
+                {FieldsMap.Backend}
+                <span>*</span>
+              </HeadlineTwo>
               <Controller
                 name={`${FieldsMap.StartPoint}.${FieldsMap.Backend}`}
                 control={control}
@@ -313,7 +360,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                     error={
                       errors[FieldsMap.StartPoint] &&
                       errors[FieldsMap.StartPoint]![FieldsMap.Backend] !==
-                      undefined
+                        undefined
                     }
                   >
                     <Select
@@ -335,7 +382,10 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                   </FormControl>
                 )}
               />
-              <HeadlineTwo>{FieldsMap.Frontend}</HeadlineTwo>
+              <HeadlineTwo>
+                {FieldsMap.Frontend}
+                <span>*</span>
+              </HeadlineTwo>
               <Controller
                 name={`${FieldsMap.StartPoint}.${FieldsMap.Frontend}`}
                 control={control}
@@ -344,7 +394,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                     error={
                       errors[FieldsMap.StartPoint] &&
                       errors[FieldsMap.StartPoint]![FieldsMap.Frontend] !==
-                      undefined
+                        undefined
                     }
                   >
                     <Select
@@ -393,16 +443,21 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
               />
             </div>
           </div>
-        </>
+        </div>
       )}
       <div>
         <Button
-          variant="contained"
-          type="submit"
+          variant="outlined"
           sx={{
-            width: 94,
+            width: "100%",
+            marginTop: "10px",
+            marginBottom: "20px",
+            gridColumn: "span 2",
+            height: "45px",
           }}
+          type="submit"
         >
+          <ForkRightIcon />
           Fork
         </Button>
       </div>

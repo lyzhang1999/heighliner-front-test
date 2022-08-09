@@ -12,7 +12,6 @@ import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ReplayIcon from "@mui/icons-material/Replay";
-import ReplayCircleFilledIcon from "@mui/icons-material/ReplayCircleFilled";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -23,15 +22,12 @@ import Config from "/public/img/application/panel/env/config.svg";
 import Gear from "/public/img/application/panel/env/gear.svg";
 import { getQuery, getUrlEncodeName, Message } from "@/utils/utils";
 import { CommonProps } from "@/utils/commonType";
-import {
-  GetArgoCDInfoRes,
-  HealthStatus,
-  SyncStatus,
-} from "@/api/application/argo";
+import { HealthStatus, SyncStatus } from "@/api/application/argo";
 import { EnvItemRes } from "@/api/application";
 import { EnvContext, IEnvContext } from "@/utils/contexts";
 
 import styles from "./index.module.scss";
+import useGitHubIssues from "@/hooks/GitHubIssues";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -42,6 +38,8 @@ interface Props extends CommonProps {
 
 export default function Main({ env }: Props): React.ReactElement {
   const router = useRouter();
+  const app_id = +getQuery("app_id");
+  const env_id = +getQuery("env_id");
 
   const { argoCDInfo, argoCDAutoSync, changeArgoCDAutoSync }: IEnvContext =
     useContext(EnvContext);
@@ -51,6 +49,11 @@ export default function Main({ env }: Props): React.ReactElement {
     changeArgoCDAutoSync && (await changeArgoCDAutoSync());
     Message.success("ArgoCD re-sync successfully.");
   };
+
+  const [envGitHubIssues, flushEnvGitHubIssues] = useGitHubIssues({
+    app_id,
+    env_id,
+  });
 
   return (
     <div className={styles.wrapper}>
@@ -103,6 +106,26 @@ export default function Main({ env }: Props): React.ReactElement {
           </Link>
         </p>
       </div>
+      {envGitHubIssues && envGitHubIssues.length === 1 && (
+        <div className={styles.publicUrlWrap}>
+          <h2>Issue</h2>
+          <p>
+            <Link
+              href={envGitHubIssues[0].url}
+              target="_blank"
+              rel="noreferrer"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "7px",
+              }}
+            >
+              {envGitHubIssues[0].url}
+              <LinkSVG />
+            </Link>
+          </p>
+        </div>
+      )}
       <div className={styles.issuesWrap}></div>
       <Typography variant="h3">Health</Typography>
       <Typography variant="h3">Current Sync Status</Typography>

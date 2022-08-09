@@ -4,6 +4,7 @@ import React, {Fragment, useState} from "react";
 import LinkIcon from '@mui/icons-material/Link';
 import {useRouter} from "next/router";
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Link as MUILink, Skeleton } from "@mui/material";
 
 import RightDrawer from "@/basicComponents/RightDrawer";
 import {EnvItemRes, ForkRes, StatusColor} from "@/api/application";
@@ -54,13 +55,18 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
   return (
     <div className={styles.wrapper}>
       {
+        (!envlist || envlist.length <= 0) && (
+          <Skeleton variant="rectangular" width={500} height={100} sx={{marginTop: "50px"}} />
+        )
+      }
+      {
         envlist.map((i, index) => {
           return (
             <Fragment key={index}>
               <div key={index} className={clsx(styles.item, itemClass,
                 (index === spreadIndex) && styles.spreadItem
               )}>
-                <div className={styles.prevewWrapper}
+                <div className={styles.previewWrapper}
                      style={{
                        right: '175px',
                        top: '-31px',
@@ -78,7 +84,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                     &nbsp;Settings
                   </span>
                 </div>
-                <div className={styles.prevewWrapper}
+                <div className={styles.previewWrapper}
                      style={{
                        right: '91px',
                        top: '-31px',
@@ -91,7 +97,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                     &nbsp;Details
                   </span>
                 </div>
-                <div className={styles.prevewWrapper} onClick={() => {
+                <div className={styles.previewWrapper} onClick={() => {
                   window.open("http://" + i.domain)
                 }}>
                   <img src="/img/application/panel/preview.svg" alt=""/>
@@ -100,31 +106,24 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                 </span>
                 </div>
                 <div className={styles.star}></div>
-                {/*<img src="/img/application/panel/spreadItem.svg" alt="" className={styles.spreadIcon}*/}
-                {/*     onClick={() => spread(index)}/>*/}
                 <div className={styles.header} >
                   <div 
                     className={styles.envName}
                     onClick={goEnvDetailPage(i.application_env_id)}
                   >{i.name}</div>
-                  {/*<div className={styles.iconWrapper}>*/}
-                  {/*  <img src="/img/cluster/aws.webp" alt=""/>*/}
-                  {/*</div>*/}
                 </div>
-                <div className={styles.urlTitle}>
+                <div className={styles.previewURLWrap}>
                   Preview URL:
+                  <MUILink href={`http://${i.domain}`} target="_blank" rel="noreferrer" >http://{i.domain}{" "}<Link/></MUILink>
                 </div>
-                <div className={styles.url}>
-                  <a href={`http://${i.domain}`} target="_blank" rel="noreferrer" >http://{i.domain}</a>
-                  <span
-                    className={styles.linkIcon}
-                    onClick={() => {
-                      window.open("http://" + i?.domain);
-                    }}
-                  >
-                    <Link/>
-                  </span>
-                </div>
+                {
+                  i.github_issues && i.github_issues.length >= 1 && (
+                    <div className={styles.issuesWrap}>
+                      Issue:
+                      <MUILink>{i.github_issues[0]}</MUILink>
+                    </div>
+                  )
+                }
                 <div className={styles.infoWrapper}>
                   <div className={styles.statusWrapper}>
                   <span className={styles.key}>

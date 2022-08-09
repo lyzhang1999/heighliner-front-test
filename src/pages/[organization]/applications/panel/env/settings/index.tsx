@@ -32,6 +32,7 @@ import useApplication from "@/hooks/application";
 import useEnv from "@/hooks/env";
 
 import styles from "./index.module.scss";
+import GitHubIssues from "@/components/Panel/EnvList/Setting/GitHubIssues";
 
 interface Props extends CommonProps {}
 
@@ -163,15 +164,6 @@ export default function Settings(props: Props): React.ReactElement {
       }
     >
       <div className={styles.wrapper}>
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: 25,
-            fontFamily: "Roboto",
-          }}
-        >
-          Environment settings(feat-shop)
-        </Typography>
         <div
           style={{
             marginTop: "20px",
@@ -180,18 +172,28 @@ export default function Settings(props: Props): React.ReactElement {
             gap: "10px",
           }}
         >
-          <SingleCollapsiblePanel title="Frontend" defaultIsExpanded={true}>
+          <SingleCollapsiblePanel
+            title="GitHub Issues"
+            defaultIsExpanded={false}
+          >
+            <GitHubIssues />
+          </SingleCollapsiblePanel>
+          <SingleCollapsiblePanel title="Frontend" defaultIsExpanded={false}>
             <Frontend />
           </SingleCollapsiblePanel>
-          <SingleCollapsiblePanel title="Backend" defaultIsExpanded={true}>
+          <SingleCollapsiblePanel title="Backend" defaultIsExpanded={false}>
             <Backend />
           </SingleCollapsiblePanel>
-          <SingleCollapsiblePanel title="Danger Zone" defaultIsExpanded={true}>
+          <SingleCollapsiblePanel title="Danger Zone" defaultIsExpanded={false}>
             <div>
               <Button
                 variant="contained"
                 color="error"
                 onClick={handleOpenDialog}
+                sx={{
+                  marginTop: "20px",
+                  marginBottom: "10px",
+                }}
               >
                 Delete This Environment
               </Button>

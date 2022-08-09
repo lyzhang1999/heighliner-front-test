@@ -11,7 +11,7 @@ import {
 import { TextField } from "@mui/material";
 import Image from "next/image";
 import * as yup from "yup";
-import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import { EnvType } from "@/components/Application/Create/util";
 import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 import { CommonProps } from "@/utils/commonType";
@@ -21,8 +21,8 @@ import styles from "./index.module.scss";
 
 export const schema = yup.array().of(
   yup.object().shape({
-    [EnvVariableMap.name]: yup.string().required("Please enter key."),
-    [EnvVariableMap.value]: yup.string().required("Please enter value."),
+    [EnvVariableMap.name]: yup.string().trim().required("Please enter key."),
+    [EnvVariableMap.value]: yup.string().trim().required("Please enter value."),
   })
 );
 
@@ -47,7 +47,7 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
     control: props.control,
     name: props.name,
   });
-  function addEnvByJson(obj: EnvType[]){
+  function addEnvByJson(obj: EnvType[]) {
     appender(obj);
   }
   return (
@@ -125,7 +125,7 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
         ADD ONE
       </div>
       <ImportEnvByJson addEnvByJson={addEnvByJson} />
-      <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
+      <ImportEnvFileByJson addEnvByJson={addEnvByJson} />
     </div>
   );
 }

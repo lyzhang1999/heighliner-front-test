@@ -141,7 +141,6 @@ export default function Newpanel() {
     >
       <PanelContext.Provider value={panelContextValue}>
         <div className={styles.wrapper}>
-          {/*<div className={styles.left}>*/}
           <Canvas arrList={arrList} />
           <EnvList
             {...{
@@ -150,8 +149,6 @@ export default function Newpanel() {
               forkSuccessCb: forkEnvCb,
             }}
           />
-          {/*</div>*/}
-          {/*<div className={styles.right}>*/}
           {git_provider_id && !isEmpty(repoList) && (
             <div
               style={{
@@ -160,17 +157,13 @@ export default function Newpanel() {
                 marginRight: "50px",
                 width: "30%",
                 maxWidth: "500px",
-                // display: 'flex'
               }}
             >
               <RepoList {...{ repoList, git_provider_id: +git_provider_id }} />
             </div>
           )}
-          {/*</div>*/}
         </div>
       </PanelContext.Provider>
     </Layout>
   );
 }
-
-// http://localhost/zhangze-9n6qd/applications/newpanel

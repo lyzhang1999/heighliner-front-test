@@ -115,7 +115,6 @@ export default function Main({ env }: Props): React.ReactElement {
         <div>{get(argoCDInfo, "status.health.status")}</div>
       </div>
       <div className={styles.syncWrap}>
-        {/* <Typography variant="h3">Current Sync Status</Typography> */}
         <Typography>Status:</Typography>
         <div
           style={{

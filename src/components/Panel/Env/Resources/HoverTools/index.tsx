@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Checkbox,
 } from "@mui/material";
 
 import { Context } from "@/utils/store";
@@ -16,6 +17,7 @@ import { getToken } from "@/utils/token";
 import { GetEnvResourcesRes } from "@/api/application";
 
 import styles from "./index.module.scss";
+import { $$ } from "@/utils/console";
 
 interface Props extends CommonProps {
   env: any;
@@ -43,6 +45,8 @@ export default function HoverTools(props: Props) {
 
   const [open, setOpen] = useState(false);
   const [executeType, setExecuteType] = useState<ExecuteType>();
+  const [enableArgoCDAutoSync, setEnableArgoCDAutoSync] = useState(true);
+  const [disableArgoCDAutoSync, setDisableArgoCDAutoSync] = useState(true);
 
   const handleClose = () => {
     setOpen(false);
@@ -63,7 +67,7 @@ export default function HoverTools(props: Props) {
 
   const { env, resource } = props;
 
-  function getParameters(action: string) {
+  function getParameters(action: ExecuteType) {
     const token = getToken();
     if (!token) {
       console.error("Error: No token found, exit.");
@@ -87,7 +91,7 @@ export default function HoverTools(props: Props) {
       baseUrl: window.location.origin,
       orgId: globalState?.currentOrganization?.org_id,
       clusterId: env.last_release.cluster_id,
-    }
+    };
 
     return parameters;
   }
@@ -97,58 +101,49 @@ export default function HoverTools(props: Props) {
     window.open(`vscode://forkmain.forkmain?${searchParams.toString()}`);
   }
 
-  const handleDev = (action: string) => {
-    const parameters = getParameters(action)
-    wakeUpVSCode(parameters)
-  }
+  const handleDev = (action: ExecuteType) => {
+    const parameters = getParameters(action);
+    wakeUpVSCode(parameters);
+  };
 
-  function pre(type: ExecuteType) {
-    return () => {
-      switch (type) {
-        case ExecuteType.RUN:
-          if (envContext.argoCDAutoSync) {
-            setExecuteType(type);
-            setOpen(true);
-            return;
-          }
-          break;
-        case ExecuteType.DEBUG:
-          if (envContext.argoCDAutoSync) {
-            setExecuteType(type);
-            setOpen(true);
-            return;
-          }
-          break;
-        case ExecuteType.STOP:
-          if (!envContext.argoCDAutoSync) {
-            setExecuteType(type);
-            setOpen(true);
-            return;
-          }
-          break;
-      }
-      handleContributor(type);
-    };
-  }
-
-  function executeAfterChangeArgoCDAutoSync(type: ExecuteType) {
-    envContext.changeArgoCDAutoSync && envContext.changeArgoCDAutoSync();
-    handleContributor(type);
-  }
-
-  function handleContributor(type: ExecuteType) {
-    switch (type) {
-      case ExecuteType.DEBUG:
-        handleDev('debug')
+  const getExecutor = (type: ExecuteType) => () => {
+    switch (true) {
+      case type === ExecuteType.RUN || type === ExecuteType.DEBUG:
+        // Need to close ArgoCD auto sync.
+        if (envContext.argoCDAutoSync) {
+          setExecuteType(type);
+          setOpen(true);
+          return;
+        }
         break;
-      case ExecuteType.RUN:
-        handleDev('run')
-        break;
-      case ExecuteType.STOP:
-        handleDev('stop')
+      case type === ExecuteType.STOP:
+        // Need to open ArgoCD auto sync.
+        if (!envContext.argoCDAutoSync) {
+          setExecuteType(type);
+          setOpen(true);
+          return;
+        }
         break;
     }
-  }
+    handleDev(type);
+  };
+
+  const preExecute = () => {
+    switch (true) {
+      case executeType === ExecuteType.RUN || executeType === ExecuteType.DEBUG:
+        // Close ArgoCD auto sync.
+        if (envContext.argoCDAutoSync && disableArgoCDAutoSync) {
+          envContext.changeArgoCDAutoSync && envContext.changeArgoCDAutoSync();
+        }
+        break;
+      case executeType === ExecuteType.STOP:
+        // Open ArgoCD auto sync.
+        if (!envContext.argoCDAutoSync && enableArgoCDAutoSync) {
+          envContext.changeArgoCDAutoSync && envContext.changeArgoCDAutoSync();
+        }
+        break;
+    }
+  };
 
   return (
     <>
@@ -186,85 +181,137 @@ export default function HoverTools(props: Props) {
           />
         </li> */}
         {devState === DevStatus.RUNNING ? (
-          <li onClick={pre(ExecuteType.STOP)} title="Stop">
+          <li onClick={getExecutor(ExecuteType.STOP)} title="Stop">
             <Image
               src="/img/application/panel/env/stop@3x.webp"
               alt="stop"
-              layout="fill"
+              width={22}
+              height={22}
               objectFit="contain"
             />
+            End Development
           </li>
         ) : (
-          <div style={{ display: "flex" }}>
-            <li
-              onClick={pre(ExecuteType.DEBUG)}
-              title="Debug"
-              style={{ marginRight: 10 }}
-            >
+          <>
+            <li onClick={getExecutor(ExecuteType.DEBUG)} title="Debug">
               <Image
                 src="/img/application/panel/env/debug@3x.png"
-                layout="fill"
-                objectFit="contain"
                 alt=""
+                objectFit="contain"
+                width={22}
+                height={22}
               />
+              Start Debug
             </li>
-            <li onClick={pre(ExecuteType.RUN)} title="Develop">
+            <li onClick={getExecutor(ExecuteType.RUN)} title="Develop">
               <Image
                 src="/img/application/panel/env/start@3x.png"
-                layout="fill"
+                // layout="fill"
                 objectFit="contain"
                 alt=""
+                width={22}
+                height={22}
               />
+              Start Development
             </li>
-          </div>
+          </>
         )}
       </ul>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          {executeType === ExecuteType.STOP ? (
-            <>
-              Open <b>ArgoCD Auto Sync</b> when you stop Run/Debug project?
-            </>
-          ) : (
-            <>
-              Close <b>ArgoCD Auto Sync</b> during Run/Debug project in local?
-            </>
-          )}
+          {executeType === ExecuteType.RUN && "Start Remote Development"}
+          {executeType === ExecuteType.DEBUG && "Start Remote Debug"}
+          {executeType === ExecuteType.STOP && "End Remote Development"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <div className={styles.dialogContentTextWrap}>
+            {executeType === ExecuteType.RUN && (
+              <>
+                <p>In remote development mode, you can:</p>
+                <ul>
+                  <li>Edit source code in your local IDE.</li>
+                  <li>
+                    Compile and run your source code in remote dev-container
+                    with one click.
+                  </li>
+                  <li>Enjoy live-reload code editing with 0 configuration.</li>
+                  <li>Preview code changes in seconds.</li>
+                </ul>
+                <p>Tips: Automatic GitOps Sync need to be disabled.</p>
+              </>
+            )}
+            {executeType === ExecuteType.DEBUG && (
+              <>
+                <p>In remote debug mode, you can:</p>
+                <ul>
+                  <li>Edit source code in your local IDE.</li>
+                  <li>
+                    Compile and run your source code in remote dev-container
+                    with one click.
+                  </li>
+                  <li>Enjoy live-reload code editing with 0 configuration.</li>
+                  <li>Preview code changes in seconds.</li>
+                  <li>
+                    Debug step by step in your local IDE with breakpoints.
+                  </li>
+                </ul>
+                <p>Tips: Automatic GitOps Sync need to be disabled.</p>
+              </>
+            )}
+            {executeType === ExecuteType.STOP && (
+              <>
+                <p>Once ended remote development mode:</p>
+                <ul>
+                  <li>Workload would run with origin container images.</li>
+                  <li>
+                    File syncing between local and remote workspace would be
+                    stopped.
+                  </li>
+                </ul>
+                <p>
+                  Tips: Automatic GitOps Sync need to be enabled to keep the
+                  environment in track
+                </p>
+              </>
+            )}
             {executeType === ExecuteType.STOP ? (
               <>
-                Open <b>ArgoCD Auto Sync</b> will monitor your environment and
-                try to fix it in case is broken accidentally.
+                <Checkbox
+                  checked={enableArgoCDAutoSync}
+                  onClick={() =>
+                    setEnableArgoCDAutoSync((preState) => !preState)
+                  }
+                />{" "}
+                Enable ArgoCD Auto Sync
               </>
             ) : (
               <>
-                Close <b>ArgoCD Auto Sync</b> will improve your development
-                experience by avoiding unknown expectation from ArgoCD auto
-                sync.
+                <Checkbox
+                  checked={disableArgoCDAutoSync}
+                  onClick={() =>
+                    setDisableArgoCDAutoSync((preState) => !preState)
+                  }
+                />{" "}
+                Disable ArgoCD Auto Sync
               </>
             )}
-          </DialogContentText>
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              handleContributor(executeType!);
-              handleClose();
-            }}
-            variant="outlined"
-          >
-            Keep it
+          <Button onClick={handleClose} variant="outlined">
+            Cancel
           </Button>
           <Button
             onClick={() => {
-              executeAfterChangeArgoCDAutoSync(executeType!);
-              handleClose();
+              preExecute();
+              handleDev(executeType!);
+              setOpen(false);
             }}
             variant="contained"
           >
-            {executeType === ExecuteType.STOP ? "Open it" : "Close it"}
+            {executeType === ExecuteType.RUN && "Start Development in VS Code"}
+            {executeType === ExecuteType.DEBUG && "Start Debug in VS Code"}
+            {executeType === ExecuteType.STOP && "End Remote Development"}
           </Button>
         </DialogActions>
       </Dialog>

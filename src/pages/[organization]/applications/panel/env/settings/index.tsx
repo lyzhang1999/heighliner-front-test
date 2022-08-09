@@ -2,25 +2,36 @@ import React, { createContext, useState } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import {
+  Breadcrumbs,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Link,
+  Skeleton,
   Typography,
 } from "@mui/material";
+import { get } from "lodash-es";
 
 import { CommonProps } from "@/utils/commonType";
 import Layout from "@/components/Layout";
 import SingleCollapsiblePanel from "@/basicComponents/SingleCollapsiblePanel";
-import { getQuery, getUrlEncodeName, Message } from "@/utils/utils";
+import {
+  getOrganizationNameByUrl,
+  getQuery,
+  getUrlEncodeName,
+  Message,
+} from "@/utils/utils";
 import { deleteEnv, GetEnvSettingRes, getProdEnv } from "@/api/application";
 import { useGlobalLoading } from "@/hooks/GlobalLoading";
 import Frontend from "@/components/Panel/EnvList/Setting/Frontend";
+import Backend from "@/components/Panel/EnvList/Setting/Backend";
+import useApplication from "@/hooks/application";
+import useEnv from "@/hooks/env";
 
 import styles from "./index.module.scss";
-import Backend from "@/components/Panel/EnvList/Setting/Backend";
 
 interface Props extends CommonProps {}
 
@@ -29,14 +40,20 @@ export default function Settings(props: Props): React.ReactElement {
   const [disableDelete, setDisableDelete] = useState(false);
   const router = useRouter();
 
-  const app_id = getQuery("app_id");
-  const env_id = getQuery("env_id");
+  const app_id = +getQuery("app_id");
+  const env_id = +getQuery("env_id");
+
+  const [application] = useApplication({ app_id: +app_id });
+  const [env] = useEnv({
+    app_id,
+    env_id,
+  });
 
   const { setGlobalLoading } = useGlobalLoading();
 
   const handleOpenDialog = () => {
     // Unable to delete environment if it is main/master env.
-    getProdEnv(app_id).then((res) => {
+    getProdEnv(String(app_id)).then((res) => {
       if (res.id === +env_id) {
         setDisableDelete(true);
       }
@@ -66,7 +83,85 @@ export default function Settings(props: Props): React.ReactElement {
   };
 
   return (
-    <Layout notStandardLayout>
+    <Layout
+      notStandardLayout
+      breadcrumbs={
+        <Breadcrumbs separator="›">
+          <Link
+            onClick={() =>
+              router.push(
+                `/${encodeURIComponent(
+                  getOrganizationNameByUrl()
+                )}/applications`
+              )
+            }
+            underline="hover"
+            color="inherit"
+            sx={{
+              cursor: "pointer",
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            Applications
+          </Link>
+          <Link
+            onClick={() =>
+              router.push({
+                pathname: `/${encodeURIComponent(
+                  getOrganizationNameByUrl()
+                )}/applications/panel`,
+                query: {
+                  app_id: router.query.app_id,
+                  release_id: router.query.release_id,
+                },
+              })
+            }
+            underline="hover"
+            color="inherit"
+            sx={{
+              cursor: "pointer",
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            {application?.name || <Skeleton variant="text" width={100} />}
+          </Link>
+          <Link
+            onClick={() =>
+              router.push({
+                pathname: `/${encodeURIComponent(
+                  getOrganizationNameByUrl()
+                )}/applications/panel/env`,
+                query: {
+                  app_id: router.query.app_id,
+                  release_id: router.query.release_id,
+                  env_id: router.query.env_id,
+                },
+              })
+            }
+            underline="hover"
+            color="inherit"
+            sx={{
+              cursor: "pointer",
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            {get(env, "name", "") || <Skeleton variant="text" width={100} />}
+          </Link>
+          <Typography
+            color={"text.primary"}
+            sx={{
+              fontSize: "25px",
+              fontFamily: "OpenSans",
+            }}
+          >
+            settings
+          </Typography>
+        </Breadcrumbs>
+      }
+    >
       <div className={styles.wrapper}>
         <Typography
           variant="h1"
@@ -82,7 +177,7 @@ export default function Settings(props: Props): React.ReactElement {
             marginTop: "20px",
             display: "flex",
             flexDirection: "column",
-            gap: "10px"
+            gap: "10px",
           }}
         >
           <SingleCollapsiblePanel title="Frontend" defaultIsExpanded={true}>

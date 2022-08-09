@@ -97,11 +97,11 @@ export default function Resources(props: Props): React.ReactElement {
                   <Typography
                     variant="h2"
                     sx={{
-                      fontSize: "14px",
+                      fontSize: "16px",
                       marginTop: "6.5px",
                     }}
                   >
-                    Docker Images:
+                    Containers:
                   </Typography>
                   <ul
                     style={{

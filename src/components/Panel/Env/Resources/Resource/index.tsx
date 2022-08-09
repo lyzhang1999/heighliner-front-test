@@ -18,7 +18,7 @@ export default function Resource(props: Props): React.ReactElement {
     <div className={styles.wrapper}>
       <h1>{props.name}</h1>
       <div className={styles.status}>
-        <Typography>Status:</Typography>
+        <Typography>Status({props.ready_replicas}/{props.replicas}):</Typography>
         <Indicators
           {...{
             total: props.replicas,

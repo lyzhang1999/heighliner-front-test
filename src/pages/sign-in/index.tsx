@@ -61,6 +61,8 @@ export default function SignIn(): React.ReactElement {
     handleSubmit,
     formState: { errors },
     setError,
+    getValues,
+    setValue,
   } = useForm({
     defaultValues: {
       [FieldMap.Email]: "",
@@ -201,13 +203,17 @@ export default function SignIn(): React.ReactElement {
                 name={FieldMap.Remember}
                 render={({field}) => (
                   // <div>{JSON.stringify(field.value) }</div>
-                  <Checkbox size="small"
-                            onChange={field.onChange} value={field.value}/>
+                  <div className={""}>
+                    <Checkbox size="small"
+                              checked={field.value as boolean}
+                              onChange={field.onChange}/>
+                    <span className={styles.desc} onClick={() => {
+                      setValue(FieldMap.Remember, !getValues(FieldMap.Remember))
+                    }}>Remember me</span>
+                  </div>
                 )}
               />
-              <span className={styles.desc}>Remember me </span>
             </div>
-            {/*<p className={styles.forgotPassword}>Forgot password?</p>*/}
           </div>
           <Button
             variant="contained"

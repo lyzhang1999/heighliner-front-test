@@ -23,7 +23,7 @@ export const KubernetesIcon =
 export const AwsIcon =
   "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/aws.webp";
 export const ShapeLogo =
-  "https://assets-1309519128.cos.ap-hongkong.myqcloud.com/shape-logo.png";
+  "/img/logo/sliderlogo.png";
 /**
  *
  * @param provider Cluster Provider

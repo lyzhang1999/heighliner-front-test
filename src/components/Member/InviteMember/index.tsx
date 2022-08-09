@@ -121,10 +121,10 @@ export default function InviteMember({
         setOpen(false);
       }}
     >
-      <DialogTitle>Invite User</DialogTitle>
+      <DialogTitle>Invite a member</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          You can invite a user to your team by email.
+          Send an invitation email to your team member.
         </DialogContentText>
       </DialogContent>
       <Stack direction="row" gap={1} className={styles.row}>

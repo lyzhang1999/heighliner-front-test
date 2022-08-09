@@ -83,6 +83,7 @@ const SelectAStack = forwardRef(function SelectAStack(
               <span>*</span>
             </h1>
             <TextField
+              autoFocus
               value={field.value}
               onChange={field.onChange}
               sx={{

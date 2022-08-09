@@ -42,6 +42,7 @@ export default function CreateAppLayout({children, index, goIndex}: Props) {
             <Button
               variant="contained"
               onClick={() => goIndex(index + 1)}
+              sx={{marginLeft: "30px"}}
               // sx={(index === 5) ? {cursor: "not-allowed"} : {}}
             >
               {

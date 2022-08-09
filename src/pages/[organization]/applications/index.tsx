@@ -118,7 +118,7 @@ const Applications = () => {
               }
             </Select>
           </div>
-          <div className={styles.selectItemBox}>
+          {/* <div className={styles.selectItemBox}>
             <div className={styles.lable}>Stack:</div>
             <Select
               value={get(selectRule, 'stack_ids.0') || AllKey}
@@ -134,7 +134,7 @@ const Applications = () => {
                 })
               }
             </Select>
-          </div>
+          </div> */}
           <div className={styles.selectItemBox}>
             <div className={styles.lable}>Cluster:</div>
             <Select

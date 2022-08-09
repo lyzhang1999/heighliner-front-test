@@ -86,7 +86,7 @@ export default function Main({ env }: Props): React.ReactElement {
         </span>
       </div>
       <div className={styles.publicUrlWrap}>
-        <h2>public url</h2>
+        <h2>Preview URL</h2>
         <p>
           <Link
             href={`http://${env?.domain}`}

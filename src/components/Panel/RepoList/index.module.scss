@@ -49,7 +49,7 @@
 
     .content {
       background-color: #fff;
-      padding: 0 40px 20px 40px;
+      padding: 0 20px 20px 20px;
       display: none;
 
       .title {
@@ -80,7 +80,7 @@
         .key {
           color: #1b51b9;
           min-width: 60px;
-          max-width: 60px;
+          max-width: 120px;
           margin-right: 10px;
           @include overflowEllipsis;
         }

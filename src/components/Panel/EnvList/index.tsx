@@ -112,7 +112,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                   {/*</div>*/}
                 </div>
                 <div className={styles.urlTitle}>
-                  Public Url:
+                  Preview URL:
                 </div>
                 <div className={styles.url}>
                   <a href={`http://${i.domain}`} target="_blank" rel="noreferrer" >http://{i.domain}</a>
@@ -181,7 +181,7 @@ export default function EnvList({spreadCb, envlist, forkSuccessCb}: Props) {
                       title: "Fork an Environment From Main",
                       modalDisplay,
                       setModalDisplay,
-                      width: "550px",
+                      width: "700px",
                     }}
                   >
                     <ForkNewEnv {...{

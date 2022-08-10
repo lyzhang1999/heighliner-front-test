@@ -2,6 +2,7 @@ import { string } from "yup/lib/locale";
 import http from "../utils/axios";
 import { CreativeApiReturnField } from "../utils/commonType";
 import { getOriIdByContext } from "../utils/utils";
+import { GetEnvGitHubIssuesRes } from "./application/GitHubIssues";
 
 export interface CreateApplicationRequest {
   cluster_id: number;
@@ -320,7 +321,7 @@ export interface Setting {
 export interface EnvItemRes {
   application_env_id: number;
   application_id: number;
-  github_issues: Array<string>;
+  github_issues: Array<GetEnvGitHubIssuesRes[number]>;
   owner_id: number;
   owner_name: string;
   name: string;
@@ -526,7 +527,7 @@ export interface ForkReq {
   body: {
     env_name: string;
     env_type: EnvType;
-    issue_url: string;
+    issue_urls: Array<string>;
     service: Array<{
       name: string;
       repo_url: string;

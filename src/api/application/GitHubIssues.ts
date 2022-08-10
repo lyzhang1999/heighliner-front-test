@@ -19,16 +19,13 @@ export function createEnvGitHubIssue(req: CreateEnvGitHubIssueReq) {
   );
 }
 
-export type GetEnvGitHubIssuesRes = Array<
-  {
-    env_id: number;
-    id: number;
-    issue_num: number;
-    organization: string;
-    repo_name: string;
-    url: string;
-  } & CreativeApiReturnField
->;
+export type GetEnvGitHubIssuesRes = Array<{
+  issue_num: string;
+  organization: string;
+  repo_name: string;
+  title: string;
+  url: string;
+}>;
 
 export function getEnvGitHubIssues({
   app_id,
@@ -45,16 +42,15 @@ export function getEnvGitHubIssues({
 export interface UpdateEnvGitHubIssueReq {
   app_id: number;
   env_id: number;
-  issue_id: number;
   body: {
-    issue_url: string;
+    issue_urls: Array<string>;
   };
 }
 export function updateEnvGitHubIssue(req: UpdateEnvGitHubIssueReq) {
   return http.put(
     `/orgs/${getOriIdByContext()}/applications/${req.app_id}/envs/${
       req.env_id
-    }/github_issues/${req.issue_id}`,
+    }/github_issues`,
     req.body
   );
 }
@@ -62,13 +58,12 @@ export function updateEnvGitHubIssue(req: UpdateEnvGitHubIssueReq) {
 export interface DeleteEnvGitHubIssueReq {
   app_id: number;
   env_id: number;
-  issue_id: number;
 }
 
 export function deleteEnvGitHubIssue(req: DeleteEnvGitHubIssueReq) {
   return http.delete(
     `/orgs/${getOriIdByContext()}/applications/${req.app_id}/envs/${
       req.env_id
-    }/github_issues/${req.issue_id}`
+    }/github_issues`
   );
 }

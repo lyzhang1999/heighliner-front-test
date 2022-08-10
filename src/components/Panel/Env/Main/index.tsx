@@ -88,42 +88,50 @@ export default function Main({ env }: Props): React.ReactElement {
           <Config />
         </span>
       </div>
-      <div className={styles.publicUrlWrap}>
-        <h2>Preview URL</h2>
-        <p>
+      <div className={styles.previewURLWrap}>
+        Preview URL:
+        <div>
+          <Tooltip title={`http://${env?.domain}`}>
+            <Link
+              href={`http://${env?.domain}`}
+              target="_blank"
+              rel="noreferrer"
+              underline="hover"
+            >
+              http://{env?.domain}
+            </Link>
+          </Tooltip>
           <Link
             href={`http://${env?.domain}`}
             target="_blank"
             rel="noreferrer"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "7px",
-            }}
+            underline="hover"
           >
-            http://{env?.domain}
             <LinkSVG />
           </Link>
-        </p>
+        </div>
       </div>
-      {envGitHubIssues && envGitHubIssues.length === 1 && (
-        <div className={styles.publicUrlWrap}>
-          <h2>Issue</h2>
-          <p>
-            <Link
-              href={envGitHubIssues[0].url}
-              target="_blank"
-              rel="noreferrer"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "7px",
-              }}
-            >
-              {envGitHubIssues[0].url}
-              <LinkSVG />
-            </Link>
-          </p>
+      {envGitHubIssues && envGitHubIssues.length >= 1 && (
+        <div className={styles.issuesWrap}>
+          Issues:
+          <ul>
+            {envGitHubIssues.map((issue, index) => (
+              <li key={index}>
+                <Tooltip title={envGitHubIssues[index].url}>
+                  <Link
+                    underline="hover"
+                    href={envGitHubIssues[index].url}
+                    target="_blank"
+                  >
+                    {envGitHubIssues[index].title || envGitHubIssues[index].url}
+                  </Link>
+                </Tooltip>
+                <Link href={envGitHubIssues[index].url} target="_blank">
+                  <LinkSVG />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
       <div className={styles.issuesWrap}></div>

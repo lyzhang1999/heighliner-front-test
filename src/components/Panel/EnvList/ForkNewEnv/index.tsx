@@ -43,6 +43,11 @@ import AddEnvVariables, {
   schema as backendVariableSchema,
 } from "../AddEnvVariables";
 import { schema as frontendVariableSchema } from "../AddEnvVariables";
+import AddGitHubIssues, {
+  schema as AddGitHubIssuesSchema,
+  FieldsMap as AddGitHubIssuesFieldsMap,
+} from "../AddGitHubIssues";
+import { $$ } from "@/utils/console";
 
 interface Props extends CommonProps {
   forkSuccessCb?: (res: ForkRes) => void;
@@ -52,6 +57,7 @@ const FieldsMap = {
   EnvType: "Env Type",
   Name: "Name",
   Issues: "Issues",
+  URL: "URL",
   StartPoint: "Start Point",
   Backend: "Backend",
   Frontend: "Frontend",
@@ -61,7 +67,9 @@ const FieldsMap = {
 interface FieldsValue {
   [FieldsMap.EnvType]: EnvType;
   [FieldsMap.Name]: string;
-  [FieldsMap.Issues]: string;
+  [FieldsMap.Issues]: Array<{
+    [AddGitHubIssuesFieldsMap.URL]: string;
+  }>;
   [FieldsMap.StartPoint]: {
     [FieldsMap.Backend]: string;
     [FieldsMap.Frontend]: string;
@@ -75,7 +83,7 @@ interface FieldsValue {
 const DefaultFields: FieldsValue = {
   [FieldsMap.EnvType]: EnvType.Development,
   [FieldsMap.Name]: "",
-  [FieldsMap.Issues]: "",
+  [FieldsMap.Issues]: [],
   [FieldsMap.StartPoint]: {
     [FieldsMap.Backend]: "",
     [FieldsMap.Frontend]: "",
@@ -108,17 +116,7 @@ const schema = yup.object().shape({
       "The name should only contain lowercase alphanumeric character, or hyphen(-).",
       (value) => !/[^a-z0-9-]/.test(value)
     ),
-  [FieldsMap.Issues]: yup
-    .string()
-    .default("")
-    .trim()
-    .test(
-      "Validated GitHub issue link.",
-      "Please enter validated GitHub issue link.",
-      (value) =>
-        value.length <= 0 ||
-        /https?:\/\/github.com\/[\w-]+\/[\w-]+\/issues\/[0-9]+/.test(value)
-    ),
+  [FieldsMap.Issues]: AddGitHubIssuesSchema,
   [FieldsMap.StartPoint]: yup.object().shape({
     [FieldsMap.Backend]: yup
       .string()
@@ -216,6 +214,15 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
   };
 
   const submitHandler: SubmitHandler<FieldsValue> = (data) => {
+    // Parse issue URLs.
+    const issue_urls: Array<string> = [];
+    if (data[FieldsMap.Issues] && data[FieldsMap.Issues].length >= 1) {
+      data[FieldsMap.Issues].map((issue) =>
+        issue_urls.push(issue[AddGitHubIssuesFieldsMap.URL])
+      );
+    }
+
+    // Parse backend and frontend env variables.
     const [backendRepo, frontendRepo] = panelContext.repos!;
     const backendService = {
       name: backendRepo.repo_name,
@@ -247,7 +254,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
       body: {
         env_name: data[FieldsMap.Name],
         env_type: data[FieldsMap.EnvType],
-        issue_url: data[FieldsMap.Issues],
+        issue_urls,
         service: [backendService, frontendService],
       },
     };
@@ -325,16 +332,15 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
         control={control}
         render={({ field }) => (
           <FormControl className={styles.issueWrap}>
-            <HeadlineOne>{FieldsMap.Issues}</HeadlineOne>
-            <TextField
-              value={field.value}
-              onChange={field.onChange}
-              error={errors[FieldsMap.Issues] !== undefined}
-              helperText={
-                errors[FieldsMap.Issues] && errors[FieldsMap.Issues]?.message
-              }
-              placeholder="The related GitHub issue link with this environment"
-              size="small"
+            <div style={{ marginTop: "10px" }}>
+              <HeadlineOne>{FieldsMap.Issues}</HeadlineOne>
+            </div>
+            <AddGitHubIssues
+              {...{
+                control,
+                name: FieldsMap.Issues,
+                error: errors[FieldsMap.Issues],
+              }}
             />
           </FormControl>
         )}

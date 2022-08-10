@@ -24,6 +24,10 @@ import {
   deleteEnvGitHubIssue,
   updateEnvGitHubIssue,
 } from "@/api/application/GitHubIssues";
+import AddGitHubIssues, {
+  schema,
+  FieldsMap as AddGitHubIssuesFieldsMap,
+} from "../../AddGitHubIssues";
 
 interface Props extends CommonProps {}
 
@@ -32,22 +36,10 @@ const FieldsMap = {
 } as const;
 
 interface FieldsValue {
-  [FieldsMap.ISSUES]: string;
+  [FieldsMap.ISSUES]: Array<{
+    [AddGitHubIssuesFieldsMap.URL]: string;
+  }>;
 }
-
-const schema: yup.SchemaOf<FieldsValue> = yup.object().shape({
-  [FieldsMap.ISSUES]: yup
-    .string()
-    .default("")
-    .trim()
-    .test(
-      "Validated GitHub issue link.",
-      "Please enter validated GitHub issue link.",
-      (value) =>
-        value.length <= 0 ||
-        /https?:\/\/github.com\/[\w-]+\/[\w-]+\/issues\/[0-9]+/.test(value)
-    ),
-});
 
 export default function GitHubIssues(props: Props): React.ReactElement {
   const app_id = +getQuery("app_id");
@@ -66,67 +58,53 @@ export default function GitHubIssues(props: Props): React.ReactElement {
     reset,
   } = useForm<FieldsValue>({
     defaultValues: {
-      [FieldsMap.ISSUES]: "",
+      [FieldsMap.ISSUES]: [],
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(
+      yup.object().shape({
+        [FieldsMap.ISSUES]: schema,
+      })
+    ),
   });
 
   useEffect(() => {
-    if (envGitHubIssues && envGitHubIssues.length === 1) {
-      setValue(FieldsMap.ISSUES, envGitHubIssues[0].url);
+    // if (envGitHubIssues && envGitHubIssues.length === 1) {
+    //   setValue(FieldsMap.ISSUES, envGitHubIssues[0].url);
+    // }
+    if (envGitHubIssues && envGitHubIssues.length >= 1) {
+      const issues = envGitHubIssues.map((issue) => ({
+        [AddGitHubIssuesFieldsMap.URL]: issue.url,
+      }));
+      setValue(FieldsMap.ISSUES, issues);
     }
   }, [envGitHubIssues]);
 
-  const clear = () => {
-    reset();
-  };
-
   const submit: SubmitHandler<FieldsValue> = (data) => {
-    const newIssueURL = data[FieldsMap.ISSUES];
+    if (data[FieldsMap.ISSUES] && data[FieldsMap.ISSUES].length >= 1) {
+      // Parse issue URLs.
+      const issue_urls: Array<string> = [];
+      data[FieldsMap.ISSUES].map((issue) =>
+        issue_urls.push(issue[AddGitHubIssuesFieldsMap.URL])
+      );
 
-    if (!envGitHubIssues || envGitHubIssues.length <= 0) {
-      if (newIssueURL.length <= 0) {
-        Message.warning("Nothing change to issue.");
-      } else {
-        // Append a new issue
-        createEnvGitHubIssue({
-          app_id,
-          env_id,
-          body: {
-            issue_url: newIssueURL,
-          },
-        }).then(() => {
-          Message.success("Append a new issue.");
-          flushEnvGitHubIssues();
-        });
-      }
+      updateEnvGitHubIssue({
+        app_id,
+        env_id,
+        body: {
+          issue_urls,
+        },
+      }).then(() => {
+        Message.success("Update issues successfully.");
+        flushEnvGitHubIssues();
+      });
     } else {
-      if (newIssueURL === envGitHubIssues[0].url) {
-        Message.warning("Nothing change to issue.");
-      } else if (newIssueURL.length <= 0) {
-        // Delete the current issue.
-        deleteEnvGitHubIssue({
-          app_id,
-          env_id,
-          issue_id: envGitHubIssues[0].id,
-        }).then(() => {
-          Message.success("Clear the issue successfully.");
-          flushEnvGitHubIssues();
-        });
-      } else {
-        // Change the issue.
-        updateEnvGitHubIssue({
-          app_id,
-          env_id,
-          issue_id: envGitHubIssues[0].id,
-          body: {
-            issue_url: newIssueURL,
-          },
-        }).then(() => {
-          Message.success("Update issue successfully.");
-          flushEnvGitHubIssues();
-        });
-      }
+      deleteEnvGitHubIssue({
+        app_id,
+        env_id,
+      }).then((res) => {
+        Message.success("Clear all issue successfully.");
+        flushEnvGitHubIssues();
+      });
     }
   };
 
@@ -146,31 +124,13 @@ export default function GitHubIssues(props: Props): React.ReactElement {
                 color: "#303133",
               }}
             >
-              Issue:
+              Issues:
             </Typography>
-            <TextField
-              value={field.value}
-              onChange={field.onChange}
-              error={errors[FieldsMap.ISSUES] !== undefined}
-              helperText={
-                errors[FieldsMap.ISSUES] && errors[FieldsMap.ISSUES]?.message
-              }
-              placeholder="The related GitHub issue link with this environment"
-              size="small"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={clear}>
-                      <HighlightOffIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                "&.Mui-focused .MuiIconButton-root": {
-                  background: "black",
-                  color: "black",
-                },
+            <AddGitHubIssues
+              {...{
+                control,
+                name: FieldsMap.ISSUES,
+                error: errors[FieldsMap.ISSUES],
               }}
             />
           </FormControl>

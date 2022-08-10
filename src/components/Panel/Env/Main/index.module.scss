@@ -15,6 +15,7 @@
   padding: 13px 9px 22px;
   font-size: 14px;
   row-gap: 10px;
+  column-gap: 5px;
 
   h1 {
     font-size: 20px;
@@ -84,6 +85,51 @@
       gap: 5px;
     }
   }
+
+
+  .previewURLWrap,
+  .issuesWrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+    grid-column: span 4;
+
+    a {
+      max-width: 500px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+  }
+
+  .previewURLWrap {
+    & > div {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+
+  .issuesWrap {
+    align-items: initial;
+    & > ul {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      & > li {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+    }
+  }
+
 
   .statusWrap {
     display: flex;

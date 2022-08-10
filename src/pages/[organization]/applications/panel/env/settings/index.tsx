@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import {
@@ -11,6 +11,7 @@ import {
   DialogTitle,
   Link,
   Skeleton,
+  TextField,
   Typography,
 } from "@mui/material";
 import { get } from "lodash-es";
@@ -33,6 +34,7 @@ import useEnv from "@/hooks/env";
 
 import styles from "./index.module.scss";
 import GitHubIssues from "@/components/Panel/EnvList/Setting/GitHubIssues";
+import { $$ } from "@/utils/console";
 
 interface Props extends CommonProps {}
 
@@ -66,6 +68,8 @@ export default function Settings(props: Props): React.ReactElement {
     setOpenDialog(false);
   };
 
+  const [confirmType, setConfirmType] = useState("");
+
   const handleDeleteEnv = () => {
     handleCloseDialog();
     setGlobalLoading(true);
@@ -73,7 +77,9 @@ export default function Settings(props: Props): React.ReactElement {
       app_id,
       env_id,
     }).then(() => {
-      Message.success("Delete environment successfully.");
+      Message.success(
+        `Delete the environment ${get(env, "name", "")} successfully.`
+      );
       const app_id = getQuery("app_id");
       const release_id = getQuery("release_id");
       setGlobalLoading(false);
@@ -202,31 +208,63 @@ export default function Settings(props: Props): React.ReactElement {
         </div>
       </div>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>
-          {disableDelete
-            ? "Unable to Delete Main/Master Environment"
-            : "Delete This Environment"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {disableDelete
-              ? "Current environment is Main/Master which can't be delete directly."
-              : "Please make sure you want to delete this environment because this operation is unrecoverable."}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} variant="outlined">
-            Cancel
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={handleDeleteEnv}
-            disabled={disableDelete}
-          >
-            Delete
-          </Button>
-        </DialogActions>
+        {disableDelete ? (
+          <>
+            <DialogTitle>Unable to Delete Main/Master Environment</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Current environment is Main/Master which can&apos;t be delete
+                directly.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} variant="outlined">
+                Close
+              </Button>
+            </DialogActions>
+          </>
+        ) : (
+          <>
+            <DialogTitle>
+              Delete the environment <b>{get(env, "name", "")}</b>
+            </DialogTitle>
+            <DialogContent>
+              <p>
+                This operation is unrecoverable and will permanently delete the
+                environment which resource will be released.
+              </p>
+              <p>
+                Please type <b>{get(env, "name", "")}</b> to confirm.
+              </p>
+              <TextField
+                value={confirmType}
+                onChange={(e) => setConfirmType(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleDeleteEnv();
+                  }
+                }}
+                size="small"
+                sx={{
+                  width: "100%",
+                }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} variant="outlined">
+                Cancel
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleDeleteEnv}
+                disabled={confirmType !== get(env, "name", "")}
+              >
+                Delete
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     </Layout>
   );

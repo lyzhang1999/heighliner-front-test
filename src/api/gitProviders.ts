@@ -142,7 +142,10 @@ export type GetPrListRes  = Array<{
   base: Base;
 }>
 
-
+/* 环境详情页面获取 PR 接口中分支信息应该传如 head_name 字段，
+  而不是 base_name 字段，并且 head_name 应该采用 {组织名/用户名}:{分支名} 格式，
+  详情见 GitHub 官方文档：https://docs.github.com/en/rest/pulls/pulls#list-pull-requests 
+*/
 export function getPrList(req: GetPrListReq): Promise<GetPrListRes> {
     return http.get(`/user/git_providers/${req.git_provider_id}/repo/pulls`, {
     params: {

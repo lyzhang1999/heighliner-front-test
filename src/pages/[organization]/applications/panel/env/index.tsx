@@ -250,7 +250,7 @@ export default function Env(): React.ReactElement {
                   repoList: repos,
                   envDetails: env?.setting.application.service,
                   git_provider_id: envProd.git_provider_id,
-                  base_name: env?.name,
+                  head_name: env?.name,
                 }}
               />
             )}

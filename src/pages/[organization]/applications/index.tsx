@@ -15,10 +15,10 @@ import DeleteApplication from "@/components/DeleteApplication";
 const AllKey = "THEDEFAULTALLKEY" + uuid();
 
 const Applications = () => {
-  const [applist, setApplist] = useState<ApplicationObject[]>([]);
+  const [appList, setAppList] = useState<ApplicationObject[] | null>(null);
   const [clusterList, setClusterList] = useState<ClusterItem[]>([]);
-  const [statckList, setStatckList] = useState<Stack[]>([]);
-  const [mumber, setMumber] = useState<Member[]>([]);
+  // const [stackList, setStackList] = useState<Stack[]>([]);
+  const [member, setMember] = useState<Member[]>([]);
   const [selectRule, setSelectRule] = useState<getAppListReq>({
     cluster_ids: [],
     owner_ids: [],
@@ -35,16 +35,16 @@ const Applications = () => {
     getClusterList().then(res => {
       setClusterList(res);
     })
-    getStacks().then(res => {
-      setStatckList(res);
-    })
+    // getStacks().then(res => {
+    //   setStackList(res);
+    // })
     getOrgMembers({org_id: Number(getOriIdByContext()), page: 1, page_size: 999}).then(res => {
-      setMumber(res.data);
+      setMember(res.data);
     })
   }, []);
 
   useEffect(() => {
-    let hasProcessingApp = find(applist, {last_release: {status: ApplicationStatus.PROCESSING}});
+    let hasProcessingApp = find(appList, {last_release: {status: ApplicationStatus.PROCESSING}});
     let timer: ReturnType<typeof setTimeout>;
     if (hasProcessingApp) {
       timer = setTimeout(() => {
@@ -52,7 +52,7 @@ const Applications = () => {
       }, 1000 * 60);
     }
     return () => clearTimeout(timer);
-  }, [applist])
+  }, [appList])
 
   useEffect(() => {
     getList()
@@ -65,7 +65,7 @@ const Applications = () => {
 
   function getList() {
     getApplicationList(selectRule).then((res) => {
-      setApplist(res);
+      setAppList(res);
     });
   }
 
@@ -112,7 +112,7 @@ const Applications = () => {
             >
               <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
               {
-                mumber.map(item => {
+                member.map(item => {
                   return <MenuItem value={item.user_id} key={item.user_id}>{item.nickname}</MenuItem>
                 })
               }
@@ -129,7 +129,7 @@ const Applications = () => {
             >
               <MenuItem value={AllKey} key={AllKey}>All</MenuItem>
               {
-                statckList.map(item => {
+                stackList.map(item => {
                   return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
                 })
               }
@@ -155,7 +155,7 @@ const Applications = () => {
         </div>
         <ApplicationList
           {...{
-            list: applist,
+            list: appList,
             clusterList,
             setDeleteID,
             setDeleteModalVisible,

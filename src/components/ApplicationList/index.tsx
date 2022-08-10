@@ -6,12 +6,12 @@ import {find, get} from "lodash-es";
 import {ClusterItem} from "@/api/cluster";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
-import {Popover} from "@mui/material";
+import {Popover, Skeleton} from "@mui/material";
 import popStyles from "@/components/PopSelect/index.module.scss";
 import clsx from "clsx";
 
 type Props = {
-  list: ApplicationObject[],
+  list: ApplicationObject[] | null,
   clusterList: ClusterItem[],
   setDeleteID: React.Dispatch<React.SetStateAction<number>>,
   setDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -71,20 +71,38 @@ export default function ApplicationList({
         </div>
       </Popover>
       {
-        list.map(item => {
+        list == null && 
+        (
+          <>
+            {[1, 2, 3].map(i => (
+              <Skeleton
+                key={i} 
+                width={300}
+                height={112}
+                variant="rectangular"
+                sx={{
+                  borderRadius: '6px'
+                }} 
+              />
+            ))}
+          </>
+        )
+      }
+      {
+        list && list.map(item => {
           let status = get(item, ['last_release', 'status']);
           let cluster: any = find(clusterList, {id: get(item, ['last_release', 'cluster_id'])});
-          let statckIcon = get(item, ['stack', 'icon_urls'], '').split(',')[0];
+          let stackIcon = get(item, ['stack', 'icon_urls'], '').split(',')[0];
           if (cluster) {
             cluster = get(cluster, 'name');
           }
           return (
             <div className={styles.itemWrapper} key={item.app_id}>
               <div className={styles.item} onClick={() => goPanel(item.app_id, item.last_release.id, status)}
-                   key={item.app_id}>
+                  key={item.app_id}>
                 <div className={styles.left}>
                   {
-                    statckIcon && <img src={statckIcon} alt=""/>
+                    stackIcon && <img src={stackIcon} alt=""/>
                   }
                 </div>
                 <div className={styles.right}>
@@ -121,10 +139,10 @@ export default function ApplicationList({
                     </span>
                   </div>
                   <div className={styles.status}>
-                    Owner： <span className={styles.value}>{item.owner_name}</span>
+                    Owner: <span className={styles.value}>{item.owner_name}</span>
                   </div>
                   <div className={styles.status}>
-                    Cluster： <span className={styles.value}> {cluster && cluster}</span>
+                    Cluster: <span className={styles.value}> {cluster && cluster}</span>
                   </div>
                   {
                     get(item, ['stack', 'name']) &&

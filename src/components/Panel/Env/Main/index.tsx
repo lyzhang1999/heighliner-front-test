@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { get, has } from "lodash-es";
 import $$ from "dodollar";
-import { Button, IconButton, Switch, Tooltip, Typography } from "@mui/material";
+import { Box, Button, IconButton, Switch, Tooltip, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -16,6 +16,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import Link from "@mui/material/Link";
+import CopyAllIcon from '@mui/icons-material/CopyAll';
+import copy from 'copy-to-clipboard';
 
 import LinkSVG from "/public/img/application/panel/env/link.svg";
 import Config from "/public/img/application/panel/env/config.svg";
@@ -101,14 +103,24 @@ export default function Main({ env }: Props): React.ReactElement {
               http://{env?.domain}
             </Link>
           </Tooltip>
-          <Link
+          {/* <Link
             href={`http://${env?.domain}`}
             target="_blank"
             rel="noreferrer"
             underline="hover"
           >
             <LinkSVG />
-          </Link>
+          </Link> */}
+          <div
+            onClick={() => {
+              copy(`http://${env?.domain}`);
+              Message.success(
+                `Copy the URL "http://${env?.domain}" to clipboard.`
+              );
+            }}
+          >
+            <CopyAllIcon fontSize="small" color="primary" />
+          </div>
         </div>
       </div>
       {envGitHubIssues && envGitHubIssues.length >= 1 && (

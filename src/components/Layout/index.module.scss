@@ -38,6 +38,12 @@
         font-size: 25px;
       }
 
+      .breadcrumbs {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+
       .pageHeader {
         display: flex;
         justify-content: space-between;

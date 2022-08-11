@@ -5,10 +5,12 @@ import LinkIcon from "@mui/icons-material/Link";
 import { useRouter } from "next/router";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Link as MUILink, Skeleton, Tooltip } from "@mui/material";
+import CopyAllIcon from '@mui/icons-material/CopyAll';
+import copy from 'copy-to-clipboard';
 
 import RightDrawer from "@/basicComponents/RightDrawer";
 import { EnvItemRes, ForkRes, StatusColor } from "@/api/application";
-import { formatDate, getQuery, getUrlEncodeName } from "@/utils/utils";
+import { formatDate, getQuery, getUrlEncodeName, Message } from "@/utils/utils";
 
 import styles from "./index.module.scss";
 import ForkNewEnv from "./ForkNewEnv";
@@ -55,12 +57,15 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
   return (
     <div className={styles.wrapper}>
       {(!envlist || envlist.length <= 0) && (
-        <Skeleton
-          variant="rectangular"
-          width={500}
-          height={100}
-          sx={{ marginTop: "50px" }}
-        />
+        [1, 2, 3].map(i => (
+          <Skeleton
+            key={i}
+            variant="rectangular"
+            width={500}
+            height={100}
+            sx={{ marginTop: "50px" }}
+          />
+        ))
       )}
       {envlist.map((i, index) => {
         return (
@@ -133,14 +138,24 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                       http://{i.domain}
                     </MUILink>
                   </Tooltip>
-                  <MUILink
+                  {/* <MUILink
                     href={`http://${i.domain}`}
                     target="_blank"
                     rel="noreferrer"
                     underline="hover"
                   >
                     <Link />
-                  </MUILink>
+                  </MUILink> */}
+                  <div
+                    onClick={() => {
+                      copy(`http://${i.domain}`);
+                      Message.success(
+                        `Copy the URL "http://${i.domain}" to clipboard.`
+                      );
+                    }}
+                  >
+                    <CopyAllIcon fontSize="small" color="primary" />
+                  </div>
                 </div>
               </div>
               {i.github_issues && i.github_issues.length >= 1 && (

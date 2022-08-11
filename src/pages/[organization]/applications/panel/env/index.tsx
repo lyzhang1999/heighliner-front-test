@@ -175,59 +175,62 @@ export default function Env(): React.ReactElement {
   return (
     <Layout
       notStandardLayout
-      breadcrumbs={
-        <Breadcrumbs separator="›">
-          <Link
-            onClick={() =>
-              router.push(
-                `/${encodeURIComponent(
-                  getOrganizationNameByUrl()
-                )}/applications`
-              )
-            }
-            underline="hover"
-            color="inherit"
-            sx={{
-              cursor: "pointer",
-              fontSize: "25px",
-              fontFamily: "OpenSans",
-            }}
-          >
-            Applications
-          </Link>
-          <Link
-            onClick={() =>
-              router.push({
-                pathname: `/${encodeURIComponent(
-                  getOrganizationNameByUrl()
-                )}/applications/panel`,
-                query: {
-                  app_id: router.query.app_id,
-                  release_id: router.query.release_id,
-                },
-              })
-            }
-            underline="hover"
-            color="inherit"
-            sx={{
-              cursor: "pointer",
-              fontSize: "25px",
-              fontFamily: "OpenSans",
-            }}
-          >
-            {application?.name || <Skeleton variant="text" width={100} />}
-          </Link>
-          <Typography
-            color={"text.primary"}
-            sx={{
-              fontSize: "25px",
-              fontFamily: "OpenSans",
-            }}
-          >
-            {get(env, "name", "") || <Skeleton variant="text" width={100} />}
-          </Typography>
-        </Breadcrumbs>
-      }
+      breadcrumbs={{
+        back: router.back,
+        ele: (
+          <Breadcrumbs separator="›">
+            <Link
+              onClick={() =>
+                router.push(
+                  `/${encodeURIComponent(
+                    getOrganizationNameByUrl()
+                  )}/applications`
+                )
+              }
+              underline="hover"
+              color="inherit"
+              sx={{
+                cursor: "pointer",
+                fontSize: "25px",
+                fontFamily: "OpenSans",
+              }}
+            >
+              Applications
+            </Link>
+            <Link
+              onClick={() =>
+                router.push({
+                  pathname: `/${encodeURIComponent(
+                    getOrganizationNameByUrl()
+                  )}/applications/panel`,
+                  query: {
+                    app_id: router.query.app_id,
+                    release_id: router.query.release_id,
+                  },
+                })
+              }
+              underline="hover"
+              color="inherit"
+              sx={{
+                cursor: "pointer",
+                fontSize: "25px",
+                fontFamily: "OpenSans",
+              }}
+            >
+              {application?.name || <Skeleton variant="text" width={100} />}
+            </Link>
+            <Typography
+              color={"text.primary"}
+              sx={{
+                fontSize: "25px",
+                fontFamily: "OpenSans",
+              }}
+            >
+              {get(env, "name", "") || <Skeleton variant="text" width={100} />}
+            </Typography>
+          </Breadcrumbs>
+        ),
+      }}
     >
       <EnvContext.Provider value={envContext}>
         <div className={styles.wrapper}>

@@ -1,16 +1,21 @@
 import react, {ReactElement, useContext, useEffect, useState} from 'react';
-import Menu from './Menu';
+import {Button, IconButton} from '@mui/material';
 import clsx from "clsx";
-import styles from './index.module.scss';
+import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
+
 import {getUserInfo} from "@/api/profile";
 import {Context} from "@/utils/store";
-import {Button} from '@mui/material';
 
+import Menu from './Menu';
+import styles from './index.module.scss';
 interface HomeProps {
   children?: react.ReactNode,
   hiddenContent?: boolean,
   pageHeader?: string,
-  breadcrumbs?: ReactElement,
+  breadcrumbs?: ReactElement | {
+    back: () => void,
+    ele: ReactElement
+  },
   CustomSlider?: ReactElement,
   rightBtnDesc?: string,
   rightBtnCb?: () => void,
@@ -37,43 +42,48 @@ const Layout = (props: HomeProps): react.ReactElement => {
       <div className={styles.contentWrappper}>
         <div className={styles.content}>
           <div className={styles.left}>
-            <Menu/>
+            <Menu />
           </div>
-          <div className={clsx(
-            styles.right,
-            // styles.horizontalFadeIn
-          )}>
-            <div className={
-              clsx(
+          <div
+            className={clsx(
+              styles.right
+              // styles.horizontalFadeIn
+            )}
+          >
+            <div
+              className={clsx(
                 styles.rightContent,
                 !notStandardLayout && styles.standard
-              )
-            }>
-              {
-                pageHeader &&
+              )}
+            >
+              {pageHeader && (
                 <div className={styles.pageHeader}>
                   {pageHeader}
-                  {
-                    rightBtnDesc &&
+                  {rightBtnDesc && (
                     <Button onClick={rightBtnCb} variant="contained">
                       {rightBtnDesc}
                     </Button>
-                  }
+                  )}
                 </div>
-              }
-              {
-                breadcrumbs && 
+              )}
+              {breadcrumbs && !("back" in breadcrumbs) && (
+                <div className={styles.breadcrumbs}>{breadcrumbs}</div>
+              )}
+              {breadcrumbs && "back" in breadcrumbs && (
                 <div className={styles.breadcrumbs}>
-                  { breadcrumbs }
+                  <IconButton onClick={breadcrumbs.back}>
+                    <ArrowBackSharpIcon />
+                  </IconButton>
+                  {breadcrumbs.ele}
                 </div>
-              }
+              )}
               {children}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Layout;

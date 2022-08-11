@@ -1,7 +1,14 @@
 import React, { createContext, useEffect, useState } from "react";
 import { get, isEmpty } from "lodash-es";
+import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
+import { useRouter } from "next/router";
+import {
+  Breadcrumbs,
+  Link,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 
-import styles from "./index.module.scss";
 import Layout from "@/components/Layout";
 import RepoList from "@/components/Panel/RepoList";
 import Canvas from "@/pages/[organization]/applications/panel/canvas";
@@ -14,13 +21,7 @@ import {
   getEnvs,
   getProdEnv,
 } from "@/api/application";
-import {
-  Breadcrumbs,
-  Link,
-  Skeleton,
-  Typography,
-} from "@mui/material";
-import { useRouter } from "next/router";
+import styles from "./index.module.scss";
 
 interface PanelContextValue {
   git_provider_id?: number;
@@ -105,39 +106,42 @@ export default function Newpanel() {
   return (
     <Layout
       notStandardLayout
-      breadcrumbs={
-        <Breadcrumbs separator="›">
-          <Link
-            onClick={() =>
-              router.push(
-                `/${encodeURIComponent(
-                  getOrganizationNameByUrl()
-                )}/applications`
-              )
-            }
-            underline="hover"
-            color="inherit"
-            sx={{
-              cursor: "pointer",
-              fontSize: "25px",
-              fontFamily: "OpenSans",
-            }}
-          >
-            Applications
-          </Link>
-          <Typography
-            color={"text.primary"}
-            sx={{
-              fontSize: "25px",
-              fontFamily: "OpenSans",
-            }}
-          >
-            {get(envlist, "0.setting.application.name", "") || (
-              <Skeleton variant="text" width={100} />
-            )}
-          </Typography>
-        </Breadcrumbs>
-      }
+      breadcrumbs={{
+        back: router.back,
+        ele: (
+          <Breadcrumbs separator="›">
+            <Link
+              onClick={() =>
+                router.push(
+                  `/${encodeURIComponent(
+                    getOrganizationNameByUrl()
+                  )}/applications`
+                )
+              }
+              underline="hover"
+              color="inherit"
+              sx={{
+                cursor: "pointer",
+                fontSize: "25px",
+                fontFamily: "OpenSans",
+              }}
+            >
+              Applications
+            </Link>
+            <Typography
+              color={"text.primary"}
+              sx={{
+                fontSize: "25px",
+                fontFamily: "OpenSans",
+              }}
+            >
+              {get(envlist, "0.setting.application.name", "") || (
+                <Skeleton variant="text" width={100} />
+              )}
+            </Typography>
+          </Breadcrumbs>
+        ),
+      }}
     >
       <PanelContext.Provider value={panelContextValue}>
         <div className={styles.wrapper}>

@@ -9,9 +9,10 @@ export enum ClusterProvider {
 }
 
 export enum ClusterStatus {
-  "Active" = "Active",
-  "Initializing" = "Initializing",
-  "Inactive" = "Inactive",
+  "ACTIVE" = "Active",
+  "INITIALIZING" = "Initializing",
+  "INACTIVE" = "Inactive",
+  "EXPIRED" = "Expired"
 }
 
 export interface ClusterItem extends CreativeApiReturnField{
@@ -22,10 +23,10 @@ export interface ClusterItem extends CreativeApiReturnField{
   kubeconfig: string;
   status: ClusterStatus;
   created_by_name: string,
+  expire_at: number;
 }
 
 export type Clusters = ClusterItem[];
-
 
 export const getClusterList = (): Promise<ClusterItem[]> => {
   return http.get(`/orgs/${getOriIdByContext()}/clusters`);

@@ -91,12 +91,12 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     // Check the cluster status
     const cluster_id = +data[FieldsMap.clusterProvider];
     const cluster = clusterList.find((cluster) => cluster.id === cluster_id);
-    if (cluster!.status === ClusterStatus.Initializing) {
+    if (cluster!.status === ClusterStatus.INITIALIZING) {
       const res = await getCluster({
         cluster_id: cluster_id,
       });
       // If the clsuter is initializing, forbid to create.
-      if (res.status === ClusterStatus.Initializing) {
+      if (res.status === ClusterStatus.INITIALIZING) {
         Message.warning(
           `The clsuter "${res.name}" is still initializing. Please wait 2 to 3 minutes.`
         );
@@ -125,42 +125,10 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
     props.submitCb("providers", providersSubmitState);
   };
 
-  // useEffect(() => {
-  //   const cardItems: CardItems = [];
-  //   clusterList.map((cluster) => {
-  //     cardItems.push({
-  //       icon: getClusterIcon(cluster.provider),
-  //       name: cluster.name,
-  //       iconSettings: {
-  //         leftLayout: true,
-  //         width: 29,
-  //         height: 29,
-  //       },
-  //       value: cluster.id,
-  //     });
-  //   });
-  //   setClusterCardItems(cardItems);
-  // }, [clusterList]);
-
-  // useEffect(() => {
-  //   const cardItems: CardItems = [];
-  //   gitProviderOrganizations.map((gitProviderOrganization) => {
-  //     cardItems.push({
-  //       name: gitProviderOrganization.git_owner_name,
-  //       icon: <GitHubIcon />,
-  //       iconSettings: {
-  //         leftLayout: true,
-  //       },
-  //       value: gitProviderOrganization.git_owner_name,
-  //     });
-  //   });
-  //   setGitProviderOrganizationsCardItems(cardItems);
-  // }, [gitProviderOrganizations]);
-
   // Update initializing cluster status on time.
   useEffect(() => {
     const hasInitializingCluster = clusterList.some(
-      (cluster) => cluster.status === ClusterStatus.Initializing
+      (cluster) => cluster.status === ClusterStatus.INITIALIZING
     );
 
     let timer: ReturnType<typeof setTimeout>;
@@ -191,15 +159,15 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
                   key={cluster.name}
                   onClick={() => {
                     // Cluster status must is active or initializing
-                    [ClusterStatus.Active, ClusterStatus.Initializing].includes(
+                    [ClusterStatus.ACTIVE, ClusterStatus.INITIALIZING].includes(
                       cluster.status
                     ) && field.onChange(cluster.id);
                   }}
                   className={clsx(
                     cluster.id === +field.value && styles.chosenCluster,
                     ![
-                      ClusterStatus.Active,
-                      ClusterStatus.Initializing,
+                      ClusterStatus.ACTIVE,
+                      ClusterStatus.INITIALIZING,
                     ].includes(cluster.status) && styles.inactiveCluster
                   )}
                   title={cluster.status}
@@ -213,7 +181,7 @@ const Provider = forwardRef(function Provider(props: Props, ref) {
                     />
                   </div>
                   <span title={cluster.name}>{cluster.name}</span>
-                  {cluster.status === ClusterStatus.Initializing && (
+                  {cluster.status === ClusterStatus.INITIALIZING && (
                     <div className={styles.spinner}>
                       <Spinner spinnerColor="#6b6b6b" scale={"17%"} />
                     </div>

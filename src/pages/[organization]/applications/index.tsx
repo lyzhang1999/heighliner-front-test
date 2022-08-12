@@ -11,6 +11,7 @@ import {getStacks, Stack} from "@/api/stack";
 import {getOrgMembers, Member} from "@/api/org";
 import {find, get} from "lodash-es";
 import DeleteApplication from "@/components/DeleteApplication";
+import ApplyFreeCluster from "@/components/ApplyFreeCluster";
 
 const AllKey = "THEDEFAULTALLKEY" + uuid();
 
@@ -173,6 +174,7 @@ const Applications = () => {
           setAnchorEl
         }}
       />
+      <ApplyFreeCluster />
     </Layout>
   );
 };

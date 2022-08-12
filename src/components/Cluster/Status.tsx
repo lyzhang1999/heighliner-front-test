@@ -14,7 +14,7 @@ import {
 import styles from './index.module.scss';
 
 type Props = {
-  status: string
+  status: ClusterStatus;
 }
 
 export const StatusDot = ({
@@ -31,29 +31,29 @@ export const StatusIconText = ({
   let icon = '', text = ''
 
   switch (status) {
-    case ClusterStatus.Active:
+    case ClusterStatus.ACTIVE:
       text = 'Running'
       icon = '/img/cluster/active-status.webp'
       break
-    case ClusterStatus.Inactive:
+    case ClusterStatus.INACTIVE:
       text = 'Failed'
       icon = '/img/cluster/failed-status.webp'
       break
-    case ClusterStatus.Initializing:
+    case ClusterStatus.INITIALIZING:
       text = 'Creating'
       icon = '/img/cluster/creating-status.webp'
       break
-    default:
-      text = 'Creating'
-      icon = '/img/cluster/creating-status.webp'
+    case ClusterStatus.EXPIRED:
+      text = 'Expired'
+      icon = '/img/cluster/failed-status.webp'
   }
 
   return (
     <div className={clsx(styles[`${status}IconText`], styles.statusIconText)}>
-      <Image width={21} height={21} src={icon} alt="status" />
-      <span style={{ marginLeft: 8 }}>
+      <span style={{ marginRight: 5 }}>
         {text}
       </span>
+      <Image width={21} height={21} src={icon} alt="status" />
     </div>
   )
 }

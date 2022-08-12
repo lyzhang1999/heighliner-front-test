@@ -1,4 +1,5 @@
 @import "@/styles/globalVar.scss";
+@import "@/styles/trick";
 
 .clusterItem {
   position: relative;
@@ -6,16 +7,6 @@
   img {
     width: 35px;
   }
-
-  //.regionColumn {
-  //  width: 300px;
-  //  padding-left: 130px;
-  //
-  //  @media screen and (max-width: 1200px) {
-  //    width: 200px;
-  //    padding-left: 16px;
-  //  }
-  //}
 
   .moreIcon {
     cursor: pointer;
@@ -64,6 +55,10 @@
     background-color: #ff6046;
   }
 
+  .ExpiredDot {
+    background-color: #ff6046;
+  }
+
   .region {
     padding: 7px 20px;
     border-radius: 9px;
@@ -81,6 +76,7 @@
 
   .statusIconText {
     display: flex;
+    justify-content: flex-end;
   }
 
   .ActiveIconText {
@@ -89,9 +85,17 @@
 
   .InitializingIconText {
     color: #ffb31f;
+
+    & img {
+      @include spin;
+    }
   }
 
   .InactiveIconText {
+    color: #ff6046;
+  }
+
+  .ExpiredIconText {
     color: #ff6046;
   }
 

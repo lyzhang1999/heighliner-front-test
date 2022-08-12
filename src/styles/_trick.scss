@@ -1,0 +1,29 @@
+/**
+* Common use CSS style, like spin, fade-in, fade-out, etc.
+*/
+
+@mixin spin($direction: "clockwise") {
+  @if $direction == "clockwise" {
+    animation: clockwise-spin 1s linear infinite;
+  } @else if $direction == "anticlockwise" {
+    animation: anticlockwise-spin 1s linear infinite;
+  }
+}
+
+@keyframes clockwise-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes anticlockwise-spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}

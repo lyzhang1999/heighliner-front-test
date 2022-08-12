@@ -40,7 +40,7 @@ const Clusters = () => {
   }
 
   useEffect(() => {
-    let hasInitializingCluster = find(clusterList, {status: ClusterStatus.Initializing});
+    let hasInitializingCluster = find(clusterList, {status: ClusterStatus.INITIALIZING});
     let timer: ReturnType<typeof setTimeout>;
     if (hasInitializingCluster) {
       timer = setTimeout(() => {
@@ -145,10 +145,12 @@ const Clusters = () => {
           <TableHead>
             <TableRow>
               <TableCell width={200} align='right'>CLUSTER</TableCell>
-              <TableCell className={styles.regionColumn} align="right">REGION</TableCell>
+              {/* <TableCell className={styles.regionColumn} align="right">REGION</TableCell> */}
               <TableCell align="right">CREATED BY</TableCell>
-              <TableCell align="right">VERSION</TableCell>
+              {/* <TableCell align="right">VERSION</TableCell> */}
               <TableCell align="right">CREATE TIME</TableCell>
+              <TableCell align="right">EXPIRE AT</TableCell>
+              <TableCell align="right">STATUS</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>

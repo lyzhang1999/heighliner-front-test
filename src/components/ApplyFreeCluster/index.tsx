@@ -34,6 +34,7 @@ import {
   getClusterApplication,
   GetClusterApplicationRes,
 } from "@/api/cluster/application";
+import { getClusterList } from "@/api/cluster";
 
 interface Props extends CommonProps {
   showType?: "Draw";
@@ -66,12 +67,17 @@ export default function ApplyFreeCluster({
     useState<GetClusterApplicationRes>([]);
 
   useEffect(() => {
-    // Check whether have applied.
-    getClusterApplication(+getOriIdByContext()).then((res) => {
+    getClusterList().then((res) => {
+      // Check whether have cluster
       if (res.length <= 0) {
-        handleOpenDialog();
+        // Check whether have applied cluster.
+        getClusterApplication(+getOriIdByContext()).then((res) => {
+          if (res.length <= 0) {
+            handleOpenDialog();
+          }
+          setClusterApplication(res);
+        });
       }
-      setClusterApplication(res);
     });
   }, []);
 
@@ -229,20 +235,6 @@ export default function ApplyFreeCluster({
                       <Grid item xs={8}>
                         <ListItemText>
                           {formatDate((detail?.created_at ?? 0) * 1000)}
-                        </ListItemText>
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                  <ListItem>
-                    <Grid container>
-                      <Grid item xs={4}>
-                        <ListItemText sx={{ color: "rgba(0, 0, 0, 0.54)" }}>
-                          AUDITED AT{" "}
-                        </ListItemText>
-                      </Grid>
-                      <Grid item xs={8}>
-                        <ListItemText>
-                          {formatDate((detail?.updated_at ?? 0) * 1000)}
                         </ListItemText>
                       </Grid>
                     </Grid>

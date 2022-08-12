@@ -181,16 +181,28 @@ export default function HoverTools(props: Props) {
           />
         </li> */}
         {devState === DevStatus.RUNNING ? (
-          <li onClick={getExecutor(ExecuteType.STOP)} title="Stop">
-            <Image
-              src="/img/application/panel/env/stop@3x.webp"
-              alt="stop"
-              width={22}
-              height={22}
-              objectFit="contain"
-            />
-            End Development
-          </li>
+          <>
+            <li onClick={getExecutor(ExecuteType.RUN)} title="Develop">
+              <Image
+                src="/img/application/panel/env/start@3x.png"
+                objectFit="contain"
+                alt=""
+                width={22}
+                height={22}
+              />
+              Reenter Development
+            </li>
+            <li onClick={getExecutor(ExecuteType.STOP)} title="Stop">
+              <Image
+                src="/img/application/panel/env/stop@3x.webp"
+                alt="stop"
+                width={22}
+                height={22}
+                objectFit="contain"
+              />
+              End Development
+            </li>
+          </>
         ) : (
           <>
             {/* <li onClick={getExecutor(ExecuteType.DEBUG)} title="Debug">

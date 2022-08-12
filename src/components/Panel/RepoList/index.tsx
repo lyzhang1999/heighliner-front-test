@@ -23,7 +23,7 @@ export default function RepoList({
   base_name,
   head_name,
 }: Props) {
-  const [spreadIndex, setSpreadIndex] = useState<number[]>([0]);
+  const [spreadIndex, setSpreadIndex] = useState<number[]>([0, 1, 2]);
   let [prList, setPrList] = useState<GetPrListRes>([]);
 
   const spread = (index: number) => {

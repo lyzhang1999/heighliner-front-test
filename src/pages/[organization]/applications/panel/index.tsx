@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import { get, isEmpty } from "lodash-es";
-import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
 import { useRouter } from "next/router";
 import {
   Breadcrumbs,
@@ -33,7 +32,7 @@ interface PanelContextValue {
 
 export const PanelContext = createContext<PanelContextValue>({});
 
-export default function Newpanel() {
+export default function Panel() {
   const router = useRouter();
   const [panelContextValue, setPanelContextValue] = useState<PanelContextValue>(
     {}

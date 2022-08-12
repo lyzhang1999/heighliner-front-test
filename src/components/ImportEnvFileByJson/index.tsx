@@ -11,10 +11,11 @@ const defaultValue =
   `key=value`
 
 interface Props {
-  addEnvByJson: (arr: EnvType[]) => void
+  addEnvByJson: (arr: EnvType[]) => void,
+  noMargin?: boolean
 }
 
-export default function ImportEnvFileByJson({addEnvByJson}: Props) {
+export default function ImportEnvFileByJson({addEnvByJson, noMargin}: Props) {
   const [spread, setSpread] = useState<boolean>(false);
   const [value, setValue] = useState<string>(defaultValue);
 
@@ -55,7 +56,7 @@ export default function ImportEnvFileByJson({addEnvByJson}: Props) {
 
   return (
     <div>
-      <div className={styles.header}>
+      <div className={styles.header} style={noMargin ? {margin: "0"} : {}}>
         <div className={styles.btn} onClick={() => handleOk()}>
           {
             spread ? "ADD" : "ADD BY .ENV"

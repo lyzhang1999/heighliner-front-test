@@ -19,4 +19,8 @@
     transition-duration: 242ms;
     overflow-y: hidden;
   }
+
+  &:last-of-type{
+    border-width: 0px;
+  }
 }

@@ -255,6 +255,7 @@ export function getTheRepoList({
       owner_type,
       owner_name,
     },
+    timeout: 30 * 1000
   });
 }
 

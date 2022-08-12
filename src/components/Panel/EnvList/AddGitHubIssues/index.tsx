@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 import * as yup from "yup";
 import {
   Control,
@@ -12,11 +11,10 @@ import {
 import Image from "next/image";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
-import { CommonProps } from "@/utils/commonType";
+import {CommonProps} from "@/utils/commonType";
 
 import styles from "./index.module.scss";
-import { Button, TextField, Tooltip } from "@mui/material";
-import { $$ } from "@/utils/console";
+import {TextField, Tooltip} from "@mui/material";
 
 export const FieldsMap = {
   URL: "URL",

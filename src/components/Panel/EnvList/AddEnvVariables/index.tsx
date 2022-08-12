@@ -125,8 +125,8 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
       >
         ADD ONE
       </div>
-      <ImportEnvByJson addEnvByJson={addEnvByJson} />
-      <ImportEnvFileByJson addEnvByJson={addEnvByJson} />
+      <ImportEnvByJson addEnvByJson={addEnvByJson} noMargin/>
+      <ImportEnvFileByJson addEnvByJson={addEnvByJson} noMargin/>
     </div>
   );
 }

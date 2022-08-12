@@ -56,7 +56,7 @@ http.interceptors.response.use((res: AxiosResponse) => {
     location.pathname = '/sign-in';
     return;
   }
-  let errMsg = data?.msg || data?.err_msg || data;
+  let errMsg = data?.msg || data?.err_msg || err.message || 'http error!';
   if (!noDefaultErrMsgPath.includes(url)) {
     errMsg && Message.error(errMsg);
   }

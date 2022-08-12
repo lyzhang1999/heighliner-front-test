@@ -47,7 +47,7 @@ export default function MiddleDrawer({setModalDisplay, successCb, modalDisplay, 
     <RightDrawer{...{
       modalDisplay,
       setModalDisplay,
-      title: "MariaDB Configuration",
+      title: "Middleware Configuration",
     }}>
       <div className={styles.drawerWrap}>
         <form onSubmit={handleSubmit(submit)}>

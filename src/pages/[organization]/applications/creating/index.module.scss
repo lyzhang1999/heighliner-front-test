@@ -60,7 +60,6 @@ $activeColor: #749ad3;
 
     .successHeader {
       text-align: center;
-      //color: #09099a;
       font-size: 20px;
       margin-bottom: 20px;
     }
@@ -74,7 +73,7 @@ $activeColor: #749ad3;
 
     .repoList {
       cursor: pointer;
-      color: #2e2ec5;
+      color: #4242d5;
       font-size: 14px;
       margin: 8px 0;
     }
@@ -84,6 +83,14 @@ $activeColor: #749ad3;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+
+      .mrError {
+        text-align: center;
+        color: #F85056;
+        font-size: 14px;
+        margin-top: 10px;
+      }
     }
   }
 }

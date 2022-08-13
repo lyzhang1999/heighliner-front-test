@@ -224,7 +224,7 @@ export default function HoverTools(props: Props) {
                 width={22}
                 height={22}
               />
-              Start Development
+              Develop
             </li>
           </>
         )}
@@ -321,8 +321,8 @@ export default function HoverTools(props: Props) {
             }}
             variant="contained"
           >
-            {executeType === ExecuteType.RUN && "Start Development in VS Code"}
-            {executeType === ExecuteType.DEBUG && "Start Debug in VS Code"}
+            {executeType === ExecuteType.RUN && "Start to develop in VS Code"}
+            {executeType === ExecuteType.DEBUG && "Start to debug in VS Code"}
             {executeType === ExecuteType.STOP && "End Remote Development"}
           </Button>
         </DialogActions>

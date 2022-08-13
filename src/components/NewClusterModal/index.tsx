@@ -1,10 +1,10 @@
-import React, {MouseEvent, useState} from "react";
+import React, {MouseEvent,useContext, useState} from "react";
 import { Drawer, Tab } from '@mui/material';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import CloseIcon from '@mui/icons-material/Close';
-
+import {Context} from "@/utils/store";
 import { KubeconfigPanel } from "./Kubeconfig";
 import { FreeClusterPanel } from "./FreeCluster";
 import { CloudHostedPanel } from "./CloudHosted";
@@ -26,7 +26,7 @@ enum ClusterTypeEnums {
 const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
   const [clusterType, setClusterType] = useState<ClusterTypeEnums>(ClusterTypeEnums.FREE)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-
+  const {state, dispatch} = useContext(Context);
   function handleChangeClusterType(e: React.SyntheticEvent, n: ClusterTypeEnums) {
     setClusterType(n)
   }
@@ -53,7 +53,7 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
             <TabList onChange={handleChangeClusterType}>
               <Tab disableRipple label="Free Cluster" value={ClusterTypeEnums.FREE} />
               <Tab disableRipple label="Cloud Provider" value={ClusterTypeEnums.CLOUD_HOSTED} />
-              {/* <Tab disableRipple label="Kubernetes" value={ClusterTypeEnums.KUBECONFIG} /> */}
+              {location.pathname.startsWith("/forkmain-dev/") ||location.pathname.startsWith("/admin/")   ? <Tab disableRipple label="Kubernetes" value={ClusterTypeEnums.KUBECONFIG} /> : ""}
             </TabList>
             <TabPanel value={ClusterTypeEnums.FREE}>
               <FreeClusterPanel {...{ modalDisplay, successCb, isAvailable: true }} />

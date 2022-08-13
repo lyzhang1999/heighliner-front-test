@@ -13,7 +13,7 @@ import {get} from 'lodash-es';
 import {getOriNameByContext, uuid} from "@/utils/utils";
 import Identicon, {IdenticonOptions} from 'identicon.js';
 import md5 from 'md5';
-import {helpLink} from "@/utils/config";
+import {HelpLink} from "@/utils/config";
 
 const NEWORGANIZATION = "NEWORGANIZATION" + uuid();
 
@@ -104,7 +104,7 @@ const Menu = () => {
       icon: "/img/slider/icon8Active.svg",
       href: `/help`,
       name: "Help",
-      openLink: helpLink
+      openLink: HelpLink
     },
     {
       activeIcon: "/img/slider/icon6Active.svg",

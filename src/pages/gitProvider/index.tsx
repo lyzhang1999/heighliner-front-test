@@ -81,10 +81,10 @@ const Clusters = () => {
           <Table className="transparentHeader">
             <TableHead>
               <TableRow>
-                <TableCell>GIT ORGANIZATION</TableCell>
-                <TableCell align="right">CREAT TIME</TableCell>
+                <TableCell>ORGANIZATION/ACCOUNT</TableCell>
+                <TableCell align="right">CREATED AT</TableCell>
                 <TableCell align="right">STATUS</TableCell>
-                <TableCell align="right">CREATE BY</TableCell>
+                <TableCell align="right">CREATED BY</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>

@@ -188,7 +188,7 @@ const Members = () => {
           >
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell align="right">Role</TableCell>
               <TableCell align="right">Joined at</TableCell>
               <TableCell align="right">Role</TableCell>
               <TableCell align="right">Status</TableCell>

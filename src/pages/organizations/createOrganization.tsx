@@ -60,7 +60,7 @@ const CreateOrganization = ({open, setOpen, successCb}: Props) => {
         Please Input Organization Name
       </DialogTitle>
       <DialogContent>
-        <TextField id="outlined-basic" label="Organization Name" variant="outlined"
+        <TextField id="outlined-basic" label="Organization Name" variant="outlined" autoFocus
                    value={name}
                    onChange={(e) => {
                      setName(e.target.value);

@@ -284,11 +284,11 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
               gap: "55px",
             }}
           >
-            <HeadlineOne>
+            {/* <HeadlineOne>
               {FieldsMap.EnvType}
               <span>*</span>
-            </HeadlineOne>
-            <RadioGroup row name={FieldsMap.EnvType} value={field.value}>
+            </HeadlineOne> */}
+            {/* <RadioGroup row name={FieldsMap.EnvType} value={field.value}>
               <FormControlLabel
                 value={EnvType.Test}
                 control={<Radio />}
@@ -300,7 +300,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                 control={<Radio />}
                 label={EnvType.Development}
               />
-            </RadioGroup>
+            </RadioGroup> */}
           </FormControl>
         )}
       />
@@ -321,7 +321,7 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
                 errors[FieldsMap.Name] && errors[FieldsMap.Name]?.message
               }
               size="small"
-              placeholder="The new forked environment name"
+              placeholder="The new forked environment(branch) name"
               autoFocus
             />
           </FormControl>

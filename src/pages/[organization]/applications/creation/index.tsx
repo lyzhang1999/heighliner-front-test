@@ -82,7 +82,7 @@ export default function Create(): React.ReactElement {
       application_id,
       application_release_id
     } = res
-    Message.success('Creat Success');
+    Message.success('Application creating');
     router.replace(`/${getUrlEncodeName()}/applications/creating?app_id=${application_id}&release_id=${application_release_id}`)
   }
 

@@ -96,7 +96,7 @@ export default function ApplyFreeCluster({
     return (
       <Stack gap="20px">
         <DialogContentText>
-          ForkMain current is beta stage. Now you can apply a new cluster to
+          ForkMain is beta stage currently. Now you can apply a new cluster to
           freely navigate our platform without any cost. 🚀
         </DialogContentText>
         <Button

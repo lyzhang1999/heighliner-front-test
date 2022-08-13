@@ -25,6 +25,10 @@ interface Props {
 
 const StackCardItems = [
   {
+    name: "Web Application",
+    url: "/img/application/create/WebApplication@3x.webp",
+  },
+  {
     name: "Micro service",
     url: "/img/application/create/MachineLearning@3x.webp",
   },
@@ -32,10 +36,7 @@ const StackCardItems = [
     name: "Machine Learning",
     url: "/img/application/create/MicroService@3x.webp",
   },
-  {
-    name: "Web Application",
-    url: "/img/application/create/WebApplication@3x.webp",
-  },
+
 ];
 
 const SelectAStack = forwardRef(function SelectAStack(

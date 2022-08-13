@@ -251,7 +251,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
               >
                 <div className={styles.star}></div>
                 <img src="/img/application/panel/forkenv.svg" alt="" />
-                <span className={styles.desc}>Fork an new environment</span>
+                <span className={styles.desc}>Fork a new environment</span>
                 <RightDrawer
                   {...{
                     title: "Fork an Environment From Main",

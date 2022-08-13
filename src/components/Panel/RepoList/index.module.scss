@@ -28,11 +28,11 @@
         width: 20px;
         height: 20px;
         margin-left: 14px;
-        margin-right: 10px;
+        margin-right: 5px;
       }
 
       .name {
-        margin: 0 10px 0 9px;
+        margin: 0 5px 0 5px;
         font-size: 16px;
         color: #202d40;
         @include overflowEllipsis;

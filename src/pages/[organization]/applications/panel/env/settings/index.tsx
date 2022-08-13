@@ -182,7 +182,7 @@ export default function Settings(props: Props): React.ReactElement {
           }}
         >
           <SingleCollapsiblePanel
-            title="GitHub Issues"
+            title="Ralated Issues"
             defaultIsExpanded={false}
           >
             <GitHubIssues />

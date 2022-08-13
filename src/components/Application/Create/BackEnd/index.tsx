@@ -4,7 +4,7 @@ import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
 import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
-import {get, set, filter} from "lodash-es";
+import {get, set, filter, isEmpty} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
@@ -23,7 +23,7 @@ export const IconFocusStyle = {
 export interface Props {
   submitCb: Function,
   formState: FormStateType,
-  repoList: getRepoListRes[]
+  repoList: getRepoListRes[] | boolean
 }
 
 export const backItem: FrameItemType[] = [
@@ -168,7 +168,16 @@ const Backend = forwardRef(function Component(props: Props, ref) {
                     sx={{background: "#fff", width: "250px"}}
                   >
                     {
-                      repoList.map(item => {
+                      !repoList &&
+                      <div className={styles.repoLoading}>
+                        <img src="/img/application/create/loading.png" alt="" className={styles.loadingIcon}/>
+                        <span className={styles.loadingText}>
+                          Loading Repositories List
+                        </span>
+                      </div>
+                    }
+                    {
+                      repoList && (repoList as getRepoListRes[]).map(item => {
                         return (
                           <MenuItem value={item.url} key={item.url}>{item.repo_name}</MenuItem>
                         )
@@ -293,7 +302,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
               name={`rewrite`}
               control={control}
               render={({field}) => (
-                <Switch checked={field.value} onChange={field.onChange} />
+                <Switch checked={field.value} onChange={field.onChange}/>
               )}
             />
           </div>

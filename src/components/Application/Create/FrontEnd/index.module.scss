@@ -1,5 +1,6 @@
 @import "@/components/Application/Create/create.module.scss";
 @import "@/styles/globalVar.scss";
+@import "src/styles/_trick.scss";
 
 .formItem {
   display: flex;
@@ -146,5 +147,21 @@
     font-size: 20px;
     margin: 0 10px;
     line-height: 40px;
+  }
+}
+
+.repoLoading {
+  display: flex;
+  align-items: center;
+
+  .loadingIcon {
+    width: 18px;
+    height: 18px;
+    margin: 0 10px;
+    @include spin("clockwise");
+  }
+
+  .loadingText {
+    color: #525252;
   }
 }

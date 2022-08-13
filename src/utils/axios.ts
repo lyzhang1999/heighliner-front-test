@@ -5,7 +5,7 @@ import {deleteToken, getToken} from "@/utils/token";
 import { $$ } from './console';
 
 export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
-// export const baseURL = 'http://localhost:3001/api/'
+// export const baseURL = 'http://workload-logs-forkmain-dsnq4xbac.forkmain.cloud/api/';
 
 export const http = axios.create({
   baseURL: baseURL,

@@ -207,16 +207,19 @@ const CreatingApplication = () => {
     router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
-  function checkMerged(){
-    getPrStatus({app_id, release_id}).then(res => {
-      console.warn(res);
-      let {merged} = res;
-      setPrMerged(merged);
-      if(!merged){
-      }else{
-
-      }
-    })
+  function checkMerged(hasPr: boolean) {
+    if (!hasPr) {
+      goDashboard();
+    } else {
+      getPrStatus({app_id, release_id}).then(res => {
+        let {merged} = res;
+        if (merged) {
+          goDashboard();
+        } else {
+          setPrMerged(false);
+        }
+      })
+    }
   }
 
   useEffect(() => {
@@ -340,14 +343,18 @@ const CreatingApplication = () => {
                 <div className={styles.buttonWrapper}>
                   <Button
                     variant="contained"
-                    onClick={checkMerged}
+                    onClick={() => {
+                      checkMerged(Boolean(get(repoInfo, 'settingUp', '')))
+                    }}
                   >
                     {
                       get(repoInfo, 'settingUp', '') && "Already Merged PR, "
                     }
                     Go App Detail
                   </Button>
-                  <div className={styles.mrError}></div>
+                  {
+                    !prMerged && <div className={styles.mrError}>Please merge Pull Request first</div>
+                  }
                 </div>
               }
             </div>

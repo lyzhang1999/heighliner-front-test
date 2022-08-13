@@ -179,6 +179,6 @@ interface GetPrStatusReq{
   release_id: string,
 }
 
-export const getPrStatus = ({app_id, release_id}: GetPrStatusReq): Promise<any> =>{
+export const getPrStatus = ({app_id, release_id}: GetPrStatusReq): Promise<{merged: boolean}> =>{
   return http.get(`/orgs/${getOriIdByContext()}/applications/${release_id}/releases/${release_id}/pr_merged`);
 }

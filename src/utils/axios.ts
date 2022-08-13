@@ -4,8 +4,7 @@ import {get} from "lodash-es";
 import {deleteToken, getToken} from "@/utils/token";
 import { $$ } from './console';
 
-// export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
-export const baseURL = 'http://pr-status-forkmain-g1ae70hnn.forkmain.cloud/api/';
+export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
 
 export const http = axios.create({
   baseURL: baseURL,

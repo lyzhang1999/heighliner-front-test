@@ -14,7 +14,6 @@ import "xterm/css/xterm.css";
 import {getAppTimeLine, GetAppTimeLineRes} from "@/api/creatingApp";
 import {getToken} from "@/utils/token";
 
-
 interface RepoType {
   pr_url: string,
   url: string

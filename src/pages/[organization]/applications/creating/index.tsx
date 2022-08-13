@@ -13,7 +13,7 @@ import styles from "./index.module.scss";
 import "xterm/css/xterm.css";
 import {getAppTimeLine, GetAppTimeLineRes} from "@/api/creatingApp";
 import {getToken} from "@/utils/token";
-
+import {getPrStatus} from "@/api/gitProviders";
 
 interface RepoType {
   pr_url: string,
@@ -29,6 +29,7 @@ const CreatingApplication = () => {
   const [number, setNumber] = useState(0);
   const [timeLine, setTimeLine] = useState<GetAppTimeLineRes[]>([]);
   const [repoInfo, setRepoInfo] = useState<any>(null);
+  const [prMerged, setPrMerged] = useState<boolean>(true);
 
   let app_id: string = getQuery('app_id');
   let release_id: string = getQuery('release_id');
@@ -206,6 +207,18 @@ const CreatingApplication = () => {
     router.replace(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}&release_id=${release_id}`)
   }
 
+  function checkMerged(){
+    getPrStatus({app_id, release_id}).then(res => {
+      console.warn(res);
+      let {merged} = res;
+      setPrMerged(merged);
+      if(!merged){
+      }else{
+
+      }
+    })
+  }
+
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (skipTime > 0) {
@@ -327,13 +340,14 @@ const CreatingApplication = () => {
                 <div className={styles.buttonWrapper}>
                   <Button
                     variant="contained"
-                    onClick={goDashboard}
+                    onClick={checkMerged}
                   >
                     {
                       get(repoInfo, 'settingUp', '') && "Already Merged PR, "
                     }
                     Go App Detail
                   </Button>
+                  <div className={styles.mrError}></div>
                 </div>
               }
             </div>

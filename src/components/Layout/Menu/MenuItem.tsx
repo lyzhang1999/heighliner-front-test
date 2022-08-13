@@ -14,24 +14,32 @@ function isActiveNav(currentPath: string) {
   }
 }
 
-export type MenuList = Array<{
+export type MenuItem = {
   activeIcon: string,
   icon: string,
   href: string,
   name: string,
-}>
+  openLink?: string
+}
+
+export type MenuList = MenuItem[];
 
 interface Props {
   list: MenuList;
 }
 
-export default function MenuItem({ list }: Props) {
+export default function MenuItem({list}: Props) {
 
   const {state: {menuSpread}} = useContext(Context);
   const router = useRouter();
 
-  function handleClick(href: string) {
-    router.push(href)
+  function handleClick(item: MenuItem) {
+    let {href, openLink} = item;
+    if (openLink) {
+      window.open(openLink);
+    } else {
+      router.push(href);
+    }
   }
 
   return (
@@ -46,7 +54,7 @@ export default function MenuItem({ list }: Props) {
               menuSpread && styles.spreadMenuItem
             )}
                  key={item.name}
-                 onClick={() => handleClick(item.href)}
+                 onClick={() => handleClick(item)}
             >
               <div className={clsx(styles.iconWrapper,)}>
                 <img src={isActive ? item.activeIcon : item.icon} alt="" className={styles.menuIcon}/>
@@ -59,7 +67,7 @@ export default function MenuItem({ list }: Props) {
               </div>
               {
                 !menuSpread &&
-                <Pop cb={() => handleClick(item.href)}>{item.name}</Pop>
+                <Pop cb={() => handleClick(item)}>{item.name}</Pop>
               }
             </div>
           )

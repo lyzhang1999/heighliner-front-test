@@ -6,7 +6,6 @@ import clsx from "clsx";
 import {cloneDeep, find, findIndex, get, set, without} from "lodash-es";
 import {FieldsMap, InitMiddleWareItem, MiddleWareType} from "@/components/Application/Create/util";
 import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
-import {getRepoListRes} from "@/api/application";
 import MiddleDrawer, {PgTypes} from "@/components/Application/Create/Middlewares/MiddleDrawer";
 
 const IconFocusStyle = {}
@@ -16,7 +15,6 @@ const SelectStyle = {}
 export interface Props {
   submitCb: Function,
   formState: FormStateType,
-  repoList: getRepoListRes[]
 }
 
 export const Middles = [

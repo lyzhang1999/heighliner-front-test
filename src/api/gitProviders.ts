@@ -172,3 +172,13 @@ export function getPrList(req: GetPrListReq): Promise<GetPrListRes> {
 //     }
 //   })
 // }
+
+
+interface GetPrStatusReq{
+  app_id: string,
+  release_id: string,
+}
+
+export const getPrStatus = ({app_id, release_id}: GetPrStatusReq): Promise<any> =>{
+  return http.get(`/orgs/${getOriIdByContext()}/applications/${release_id}/releases/${release_id}/pr_merged`);
+}

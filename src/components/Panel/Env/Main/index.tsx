@@ -227,7 +227,7 @@ export default function Main({ env }: Props): React.ReactElement {
       <div className={styles.switchWrap}>
         <Typography>Auto Sync:</Typography>
         <Switch checked={argoCDAutoSync} onChange={changeArgoCDAutoSync} />
-        <Typography>Re-Sync:</Typography>
+        {/* <Typography>Re-Sync:</Typography>
         <Button
           variant="outlined"
           sx={{
@@ -238,7 +238,7 @@ export default function Main({ env }: Props): React.ReactElement {
           onClick={reSync}
         >
           <ReplayIcon />
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export const IconFocusStyle = {
 export interface Props {
   submitCb: (key: string, value: object, flag?: boolean) => void,
   formState: FormStateType,
-  repoList: getRepoListRes[]
+  repoList: getRepoListRes[] | boolean
 }
 
 export const frontItem: FrontendItemType[] = [
@@ -310,7 +310,16 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                     sx={{background: "#fff", width: "250px"}}
                   >
                     {
-                      repoList.map(item => {
+                      !repoList &&
+                      <div className={styles.repoLoading}>
+                        <img src="/img/application/create/loading.png" alt="" className={styles.loadingIcon}/>
+                        <span className={styles.loadingText}>
+                          Loading Repositories List
+                        </span>
+                      </div>
+                    }
+                    {
+                      repoList && (repoList as getRepoListRes[]).map(item => {
                         return (
                           <MenuItem value={item.url} key={item.url}>{item.repo_name}</MenuItem>
                         )

@@ -43,7 +43,7 @@ export default function Create(): React.ReactElement {
     frontend: cloneDeep(FrontendFrameWorkInitState),
     middleWares: cloneDeep(MiddleWaresInitState)
   });
-  const [repoList, setRepoList] = useState<getRepoListRes[]>([]);
+  const [repoList, setRepoList] = useState<getRepoListRes[] | boolean>(false);
 
   let nextIndex = 1;
 
@@ -71,7 +71,7 @@ export default function Create(): React.ReactElement {
   }
 
   function create(value: FormStateType) {
-    let body = getParams(value, repoList);
+    let body = getParams(value, repoList as getRepoListRes[]);
     createApp(body).then(res => {
       goDashboard(res)
     })

@@ -28,6 +28,23 @@
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+
+      .containerNameWrapper {
+        display: flex;
+        align-items: center;
+
+        .containerName {
+          overflow-x: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .containerImg {
+          height: 18px;
+          cursor: pointer;
+          margin-left: 10px;
+        }
+      }
     }
   }
 }

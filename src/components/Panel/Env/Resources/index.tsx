@@ -4,17 +4,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import clsx from "clsx";
 import NoiseControlOffIcon from "@mui/icons-material/NoiseControlOff";
 
 import { CommonProps } from "@/utils/commonType";
 import LeftSideTabs from "@/basicComponents/CustomTab/LeftSideTabs";
-import Folder from "/public/img/application/panel/env/git.svg";
-import Git from "/public/img/application/panel/env/folder.svg";
-import Server from "/public/img/application/panel/env/server.svg";
 import Docker from "/public/img/application/panel/env/docker.svg";
-import Paper from "/public/img/application/panel/env/paper.svg";
-import { getQuery } from "@/utils/utils";
+import {getOriIdByContext, getQuery} from "@/utils/utils";
 import HoverTools from "./HoverTools";
 import useEnvResources from "@/hooks/envResources";
 
@@ -22,11 +17,20 @@ import styles from "./index.module.scss";
 import Resource from "./Resource";
 import { Tooltip, Typography } from "@mui/material";
 import { ResourceType } from "@/api/application";
-import { $$ } from "@/utils/console";
+import WorkloadLog from "@/components/WorkloadLog";
 
 interface Props extends CommonProps {
   env: any;
   selectedResourceType: ResourceType;
+}
+
+export interface GetLogParams {
+  container_name: string,
+  resource_name: string,
+  resource_type: ResourceType,
+  org_id: string,
+  app_id: string,
+  env_id: string,
 }
 
 export default function Resources(props: Props): React.ReactElement {
@@ -36,6 +40,8 @@ export default function Resources(props: Props): React.ReactElement {
   });
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
   const timerRef = useRef<ReturnType<typeof setInterval>>();
+  const [logVisible, setLogVisible] = useState<boolean>(false);
+  const [logsParams, setLogsParams] = useState<null | GetLogParams>(null);
 
   useEffect(() => {
     flushEnvResources({
@@ -117,9 +123,27 @@ export default function Resources(props: Props): React.ReactElement {
                           }}
                         />
                         <Typography variant="h3">Name:</Typography>
-                        <Tooltip title={container.name || ""}>
-                          <p>{container.name}</p>
-                        </Tooltip>
+                        <p className={styles.containerNameWrapper}>
+                          <Tooltip title={container.name || ""}>
+                            <span className={styles.containerName}>{container.name}</span>
+                          </Tooltip>
+                          <Tooltip title="Container Logs">
+                            <img className={styles.containerImg} src="/img/application/panel/env/logs.png"
+                                 alt="container log"
+                                 onClick={() => {
+                                   setLogsParams({
+                                     container_name: envResource.name,
+                                     resource_name: container.name,
+                                     resource_type: envResource.type,
+                                     org_id: getOriIdByContext(),
+                                     app_id: getQuery("app_id"),
+                                     env_id: getQuery("env_id"),
+                                   })
+                                   setLogVisible(true);
+                                 }}
+                            />
+                          </Tooltip>
+                        </p>
                         <NoiseControlOffIcon
                           sx={{
                             color: "#88a4da",
@@ -136,9 +160,18 @@ export default function Resources(props: Props): React.ReactElement {
               ),
             },
           ]}
-          hoverTools={<HoverTools env={props.env} resource={envResource} />}
+          hoverTools={<HoverTools env={props.env} resource={envResource}/>}
         />
       ))}
+
+      {
+        logVisible &&
+        <WorkloadLog {...{
+          setLogVisible,
+          logVisible,
+          logsParams
+        }}/>
+      }
     </ul>
   );
 }

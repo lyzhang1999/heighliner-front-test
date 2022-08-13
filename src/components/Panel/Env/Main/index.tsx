@@ -1,8 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { get, has } from "lodash-es";
-import $$ from "dodollar";
-import { Box, Button, IconButton, Switch, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Skeleton,
+  Switch,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -16,8 +22,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import Link from "@mui/material/Link";
-import CopyAllIcon from '@mui/icons-material/CopyAll';
-import copy from 'copy-to-clipboard';
+import CopyAllIcon from "@mui/icons-material/CopyAll";
+import copy from "copy-to-clipboard";
 
 import LinkSVG from "/public/img/application/panel/env/link.svg";
 import Config from "/public/img/application/panel/env/config.svg";
@@ -103,14 +109,6 @@ export default function Main({ env }: Props): React.ReactElement {
               http://{env?.domain}
             </Link>
           </Tooltip>
-          {/* <Link
-            href={`http://${env?.domain}`}
-            target="_blank"
-            rel="noreferrer"
-            underline="hover"
-          >
-            <LinkSVG />
-          </Link> */}
           <div
             onClick={() => {
               copy(`http://${env?.domain}`);
@@ -151,95 +149,114 @@ export default function Main({ env }: Props): React.ReactElement {
       <Typography variant="h3">Current Sync Status</Typography>
       <Typography variant="h3">Last Sync Result</Typography>
       <Typography variant="h3">ArgoCD Sync</Typography>
-      <div className={styles.statusWrap}>
-        {getHealthStatusIcon(
-          get(argoCDInfo, "status.health.status") as HealthStatus
-        )}
-        <div>{get(argoCDInfo, "status.health.status")}</div>
-      </div>
-      <div className={styles.syncWrap}>
-        <Typography>Status:</Typography>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          {getSyncStatus(get(argoCDInfo, "status.sync.status") as SyncStatus)}
-          {get(argoCDInfo, "status.sync.status")}
-        </div>
-        <Typography>Revision:</Typography>
-        <div>
-          {has(argoCDInfo, "status.operationState.syncResult.revision") &&
-            has(argoCDInfo, "space.source.repoURL") && (
-              <Link
-                href={`${get(argoCDInfo, "space.source.repoURL")}/commit/${get(
-                  argoCDInfo,
-                  "status.operationState.syncResult.revision"
-                )}`}
-                target="_blank"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "7px",
+      {!argoCDInfo ? (
+        [1, 2, 3, 4].map((i) => (
+          <Box key={i} maxWidth="80%">
+            <Skeleton animation="wave" />
+            <Skeleton animation="wave" />
+            <Skeleton animation="wave" />
+          </Box>
+        ))
+      ) : (
+        <>
+          <div className={styles.statusWrap}>
+            {getHealthStatusIcon(
+              get(argoCDInfo, "status.health.status") as HealthStatus
+            )}
+            <div>{get(argoCDInfo, "status.health.status")}</div>
+          </div>
+          <div className={styles.syncWrap}>
+            <Typography>Status:</Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {getSyncStatus(
+                get(argoCDInfo, "status.sync.status") as SyncStatus
+              )}
+              {get(argoCDInfo, "status.sync.status")}
+            </div>
+            <Typography>Revision:</Typography>
+            <div>
+              {has(argoCDInfo, "status.operationState.syncResult.revision") &&
+                has(argoCDInfo, "space.source.repoURL") && (
+                  <Link
+                    href={`${get(
+                      argoCDInfo,
+                      "space.source.repoURL"
+                    )}/commit/${get(
+                      argoCDInfo,
+                      "status.operationState.syncResult.revision"
+                    )}`}
+                    target="_blank"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "7px",
+                    }}
+                  >
+                    {(
+                      get(
+                        argoCDInfo,
+                        "status.operationState.syncResult.revision"
+                      ) as string
+                    ).slice(0, 7)}
+
+                    <LinkSVG />
+                  </Link>
+                )}
+            </div>
+          </div>
+          <div className={styles.operateStateWrap}>
+            <Typography>Phase:</Typography>
+            <div>{get(argoCDInfo, "status.operationState.phase")}</div>
+            <Typography>Start:</Typography>
+            <div>
+              {dayjs(get(argoCDInfo, "status.operationState.startedAt")).format(
+                "YYYY-MM-DD HH:mm:ss"
+              )}
+            </div>
+            <Typography>Finish:</Typography>
+            <div>
+              {dayjs(
+                get(argoCDInfo, "status.operationState.finishedAt")
+              ).format("YYYY-MM-DD HH:mm:ss")}
+            </div>
+            <Typography>Message:</Typography>
+            <Tooltip
+              title={get(argoCDInfo, "status.operationState.message") || ""}
+            >
+              <div
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
                 }}
               >
-                {(
-                  get(
-                    argoCDInfo,
-                    "status.operationState.syncResult.revision"
-                  ) as string
-                ).slice(0, 7)}
-
-                <LinkSVG />
-              </Link>
-            )}
-        </div>
-      </div>
-      <div className={styles.operateStateWrap}>
-        <Typography>Phase:</Typography>
-        <div>{get(argoCDInfo, "status.operationState.phase")}</div>
-        <Typography>Start:</Typography>
-        <div>
-          {dayjs(get(argoCDInfo, "status.operationState.startedAt")).format(
-            "YYYY-MM-DD HH:mm:ss"
-          )}
-        </div>
-        <Typography>Finish:</Typography>
-        <div>
-          {dayjs(get(argoCDInfo, "status.operationState.finishedAt")).format(
-            "YYYY-MM-DD HH:mm:ss"
-          )}
-        </div>
-        <Typography>Message:</Typography>
-        <Tooltip title={get(argoCDInfo, "status.operationState.message") || ""}>
-          <div
-            style={{
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {get(argoCDInfo, "status.operationState.message")}
+                {get(argoCDInfo, "status.operationState.message")}
+              </div>
+            </Tooltip>
           </div>
-        </Tooltip>
-      </div>
-      <div className={styles.switchWrap}>
-        <Typography>Auto Sync:</Typography>
-        <Switch checked={argoCDAutoSync} onChange={changeArgoCDAutoSync} />
-        {/* <Typography>Re-Sync:</Typography>
-        <Button
-          variant="outlined"
-          sx={{
-            maxWidth: "20px",
-            maxHeight: "27px",
-            borderRadius: "82px",
-          }}
-          onClick={reSync}
-        >
-          <ReplayIcon />
-        </Button> */}
-      </div>
+          <div className={styles.switchWrap}>
+            <Typography>Auto Sync:</Typography>
+            <Switch checked={argoCDAutoSync} onChange={changeArgoCDAutoSync} />
+            {/* <Typography>Re-Sync:</Typography>
+            <Button
+              variant="outlined"
+              sx={{
+                maxWidth: "20px",
+                maxHeight: "27px",
+                borderRadius: "82px",
+              }}
+              onClick={reSync}
+            >
+              <ReplayIcon />
+            </Button> */}
+          </div>
+        </>
+      )}
     </div>
   );
 }

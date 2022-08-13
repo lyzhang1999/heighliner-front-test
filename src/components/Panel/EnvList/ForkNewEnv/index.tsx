@@ -134,10 +134,11 @@ const schema = yup.object().shape({
 });
 
 export default function ForkNewEnv(props: Props): React.ReactElement {
-  let app_id = +getQuery("app_id");
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
   const panelContext = useContext(PanelContext);
+
   const router = useRouter();
+  let app_id = +getQuery("app_id");
 
   const {
     control,
@@ -260,14 +261,11 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
     };
 
     fork(req).then((res) => {
-      props.forkSuccessCb && props.forkSuccessCb(res);
-      // const app_id = getQuery("app_id");
-      // const release_id = getQuery("release_id");
-      // router.push(
-      //   `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${
-      //     res.application_env_id
-      //   }`
-      // );
+      router.push(
+        `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${
+          res.application_release_id
+        }&env_id=${res.application_env_id}`
+      );
     });
   };
 
@@ -284,23 +282,6 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
               gap: "55px",
             }}
           >
-            {/* <HeadlineOne>
-              {FieldsMap.EnvType}
-              <span>*</span>
-            </HeadlineOne> */}
-            {/* <RadioGroup row name={FieldsMap.EnvType} value={field.value}>
-              <FormControlLabel
-                value={EnvType.Test}
-                control={<Radio />}
-                label={EnvType.Test}
-                disabled
-              />
-              <FormControlLabel
-                value={EnvType.Development}
-                control={<Radio />}
-                label={EnvType.Development}
-              />
-            </RadioGroup> */}
           </FormControl>
         )}
       />

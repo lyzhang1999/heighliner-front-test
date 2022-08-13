@@ -2,7 +2,7 @@
  * Place all contexts used by components
  */
 
-import React, { createContext, Dispatch, SetStateAction } from "react";
+import React, { createContext, Dispatch, MutableRefObject, SetStateAction } from "react";
 
 import { GetArgoCDInfoRes } from "@/api/application/argo";
 
@@ -12,6 +12,7 @@ export interface IEnvContext {
   argoCDInfo?: GetArgoCDInfoRes;
   argoCDAutoSync: boolean;
   changeArgoCDAutoSync?: () => Promise<boolean>;
+  argoCDReadyRef?: MutableRefObject<boolean>;
 }
 
 export const EnvContext = createContext<IEnvContext>({

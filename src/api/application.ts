@@ -32,8 +32,8 @@ export function createApplication(
 }
 
 export interface GetApplicationReq {
-  app_id: string;
-  release_id: string;
+  app_id: number;
+  release_id: number;
 }
 
 export enum ApplicationStatus {

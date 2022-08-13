@@ -42,18 +42,10 @@ export default function ApplicationList({
   }
 
   const router = useRouter();
-
-  function goPanel(appId: number, releaseId: number, stauts: any) {
-    // if (stauts === ApplicationStatus.COMPLETED) {
-      router.push(
-        `/${getUrlEncodeName()}/applications/panel?app_id=${appId}&release_id=${releaseId}`
-      );
-    // } else {
-    //   router.push(
-    //     `/${getUrlEncodeName()}/applications/creating?app_id=${appId}&release_id=${releaseId}`
-    //   );
-    // }
-  }
+    
+  const handleGoPanel = (app_id: number) => () => {
+    router.push(`/${getUrlEncodeName()}/applications/panel?app_id=${app_id}`);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -98,7 +90,7 @@ export default function ApplicationList({
           }
           return (
             <div className={styles.itemWrapper} key={item.app_id}>
-              <div className={styles.item} onClick={() => goPanel(item.app_id, item.last_release.id, status)}
+              <div className={styles.item} onClick={handleGoPanel(item.app_id)}
                   key={item.app_id}>
                 <div className={styles.left}>
                   {

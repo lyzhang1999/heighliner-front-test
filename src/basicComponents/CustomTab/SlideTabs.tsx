@@ -82,9 +82,6 @@ export default function SlideTabs<LabelType extends string = string>({
           ></SlideTab>
         ))}
       </SlideTabList>
-      <TabPanel value="a">aaa</TabPanel>
-      <TabPanel value="b">bbb</TabPanel>
-      <TabPanel value="c">ccc</TabPanel>
     </TabContext>
   );
 }

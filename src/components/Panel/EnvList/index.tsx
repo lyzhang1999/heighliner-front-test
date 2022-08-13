@@ -27,37 +27,46 @@ interface Props {
 export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
   const [spreadIndex, setSpreadIndex] = useState<number>(-1);
   const [modalDisplay, setModalDisplay] = useState(false);
+
   const router = useRouter();
   const app_id = getQuery("app_id");
-  const release_id = getQuery("release_id");
-
-  const spread = (index: number) => {
-    spreadCb();
-    if (spreadIndex === index) {
-      setSpreadIndex(-1);
-    } else {
-      setSpreadIndex(index);
-    }
-  };
 
   const openForkNewEnvDrawer = () => {
     setModalDisplay(true);
   };
 
-  const goEnvDetailPage = function (env_id: string | number) {
-    return () => {
-      const app_id = getQuery("app_id");
-      const release_id = getQuery("release_id");
-      router.push(
-        `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-      );
+  const handlePageChange =
+    (
+      page: "env panel" | "env settings" | "logs",
+      env_id: number,
+      release_id: number
+    ) =>
+    () => {
+      switch (page) {
+        case "env panel":
+          router.push(
+            `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+          );
+          break;
+        case "env settings":
+          router.push(
+            `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+          );
+          break;
+        case "logs":
+          router.push(
+            `/${getUrlEncodeName()}/applications/creating?app_id=${getQuery(
+              "app_id"
+            )}&release_id=${release_id}&foromPane=true`
+          );
+          break;
+      }
     };
-  };
 
   return (
     <div className={styles.wrapper}>
-      {(!envlist || envlist.length <= 0) && (
-        [1, 2, 3].map(i => (
+      {(!envlist || envlist.length <= 0) &&
+        [1, 2, 3].map((i) => (
           <Skeleton
             key={i}
             variant="rectangular"
@@ -65,8 +74,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
             height={100}
             sx={{ marginTop: "50px" }}
           />
-        ))
-      )}
+        ))}
       {envlist.map((i, index) => {
         return (
           <Fragment key={index}>
@@ -85,12 +93,11 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                   top: "-31px",
                   color: "#1b51b9",
                 }}
-                onClick={() => {
-                  const env_id = i.application_env_id;
-                  router.push(
-                    `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-                  );
-                }}
+                onClick={handlePageChange(
+                  "env settings",
+                  i.application_env_id,
+                  i.last_release.id
+                )}
               >
                 <SettingsIcon />
                 <span className={styles.preview}>&nbsp;Settings</span>
@@ -102,7 +109,11 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                   top: "-31px",
                   color: "#1b51b9",
                 }}
-                onClick={goEnvDetailPage(i.application_env_id)}
+                onClick={handlePageChange(
+                  "env panel",
+                  i.application_env_id,
+                  i.last_release.id
+                )}
               >
                 <LinkIcon />
                 <span className={styles.preview}>&nbsp;Details</span>
@@ -120,7 +131,11 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
               <div className={styles.header}>
                 <div
                   className={styles.envName}
-                  onClick={goEnvDetailPage(i.application_env_id)}
+                  onClick={handlePageChange(
+                    "env panel",
+                    i.application_env_id,
+                    i.last_release.id
+                  )}
                 >
                   {i.name}
                 </div>
@@ -138,14 +153,6 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                       http://{i.domain}
                     </MUILink>
                   </Tooltip>
-                  {/* <MUILink
-                    href={`http://${i.domain}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    underline="hover"
-                  >
-                    <Link />
-                  </MUILink> */}
                   <div
                     onClick={() => {
                       copy(`http://${i.domain}`);
@@ -227,17 +234,11 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                   <span className={styles.key}>Logs:</span>
                   <span
                     className={styles.logsValue}
-                    onClick={() => {
-                      router.push(
-                        `/${getUrlEncodeName()}/applications/creating?app_id=${getQuery(
-                          "app_id"
-                        )}&release_id=${get(
-                          i,
-                          "last_release.id",
-                          ""
-                        )}&foromPane=true`
-                      );
-                    }}
+                    onClick={handlePageChange(
+                      "logs",
+                      i.application_env_id,
+                      i.last_release.id
+                    )}
                   >
                     Deploy
                   </span>

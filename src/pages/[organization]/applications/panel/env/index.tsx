@@ -7,7 +7,11 @@ import RepoList from "@/components/Panel/RepoList";
 import Main from "@/components/Panel/Env/Main";
 import SlideTabs from "@/basicComponents/CustomTab/SlideTabs";
 import Resources from "@/components/Panel/Env/Resources";
-import { ResourceType } from "@/api/application";
+import {
+  ApplicationStatus,
+  getApplicationStatus,
+  ResourceType,
+} from "@/api/application";
 import useApplication from "@/hooks/application";
 import { getCluster } from "@/api/cluster";
 import useEnv from "@/hooks/env";
@@ -56,11 +60,11 @@ export default function Env(): React.ReactElement {
     argoCDAutoSync: false,
   });
   const envContextRef = useRef(envContext);
-
-  // const [argoCDAutoSync, setArgoCDAutoSync] = useState(false);
+  const argoCDReadyRef = useRef(false);
 
   const app_id = +getQuery("app_id");
   const env_id = +getQuery("env_id");
+  const release_id = +getQuery("release_id");
 
   const [repos] = useApplicationRepos(getQuery("app_id"));
   const [envProd] = useEnvProd(+app_id);
@@ -135,7 +139,22 @@ export default function Env(): React.ReactElement {
     });
   }
 
-  const flushArgoCDInfo = () => {
+  const flushArgoCDInfo = async () => {
+    // Must waiting the application status not to be processing status.
+    if (argoCDReadyRef.current === false) {
+      const res = await getApplicationStatus({
+        app_id,
+        release_id,
+      });
+
+      if (res.status !== ApplicationStatus.PROCESSING) {
+        argoCDReadyRef.current = true;
+      } else {
+        argoCDReadyRef.current = false;
+        return;
+      }
+    }
+
     getArgoCDInfo({
       app_id,
       env_id,
@@ -161,7 +180,11 @@ export default function Env(): React.ReactElement {
     flushArgoCDInfo();
 
     setEnvContext((preState) => {
-      const nextState = { ...cloneDeep(preState), changeArgoCDAutoSync };
+      const nextState = { 
+        ...cloneDeep(preState),
+        changeArgoCDAutoSync,
+        argoCDReadyRef
+      };
       envContextRef.current = nextState;
       return nextState;
     });
@@ -205,7 +228,6 @@ export default function Env(): React.ReactElement {
                   )}/applications/panel`,
                   query: {
                     app_id: router.query.app_id,
-                    release_id: router.query.release_id,
                   },
                 })
               }

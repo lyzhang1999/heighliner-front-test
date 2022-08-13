@@ -122,7 +122,6 @@ export default function Settings(props: Props): React.ReactElement {
                   )}/applications/panel`,
                   query: {
                     app_id: router.query.app_id,
-                    release_id: router.query.release_id,
                   },
                 })
               }

@@ -47,13 +47,13 @@ const NewClusterModal = ({modalDisplay, setModalDisplay, successCb}: Props) => {
             <CloseIcon onClick={closeDialog} />
           </div>
           <div className={styles.header}>
-            Add a new cluster
+            Add a Kubernetes cluster
           </div>
           <TabContext value={clusterType}>
             <TabList onChange={handleChangeClusterType}>
               <Tab disableRipple label="Free Cluster" value={ClusterTypeEnums.FREE} />
               <Tab disableRipple label="Cloud Provider" value={ClusterTypeEnums.CLOUD_HOSTED} />
-              <Tab disableRipple label="Kubernetes" value={ClusterTypeEnums.KUBECONFIG} />
+              {/* <Tab disableRipple label="Kubernetes" value={ClusterTypeEnums.KUBECONFIG} /> */}
             </TabList>
             <TabPanel value={ClusterTypeEnums.FREE}>
               <FreeClusterPanel {...{ modalDisplay, successCb, isAvailable: true }} />

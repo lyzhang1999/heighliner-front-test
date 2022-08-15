@@ -78,6 +78,18 @@ const Menu = () => {
       href: `/${name}/members`,
       name: "Members",
     },
+    {
+      activeIcon: "/img/slider/icon6Active.svg",
+      icon: "/img/slider/icon6.svg",
+      href: `/gitProvider`,
+      name: "Git Provider",
+    },
+    {
+      activeIcon: "/img/slider/icon10Active.svg",
+      icon: "/img/slider/icon10.svg",
+      href: `/organizations`,
+      name: "Organizations",
+    },
   ];
   let avatar = get(userInfo, 'avatar', '');
 
@@ -105,18 +117,6 @@ const Menu = () => {
       href: `/help`,
       name: "Help",
       openLink: HelpLink
-    },
-    {
-      activeIcon: "/img/slider/icon6Active.svg",
-      icon: "/img/slider/icon6.svg",
-      href: `/gitProvider`,
-      name: "Git Provider",
-    },
-    {
-      activeIcon: "/img/slider/icon10Active.svg",
-      icon: "/img/slider/icon10.svg",
-      href: `/organizations`,
-      name: "Organizations",
     },
     {
       activeIcon: getAvatar(true),

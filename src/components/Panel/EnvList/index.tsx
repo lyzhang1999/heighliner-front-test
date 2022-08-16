@@ -211,7 +211,11 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                     </span>
                   </span>
                 </div>
-                <div className={styles.configWrapper}>
+                <div>
+                  <span className={styles.key}>Owner:</span>
+                  <span className={styles.statusValue}>{i.owner_name}</span>
+                </div>
+                {/* <div className={styles.configWrapper}>
                   <span className={styles.key}>Configs:</span>
                   <span
                     className={styles.configValue}
@@ -229,7 +233,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                   >
                     {get(i, "setting.application.deploy.values_file", "")}
                   </span>
-                </div>
+                </div> */}
                 <div className={styles.logsWrapper}>
                   <span className={styles.key}>Logs:</span>
                   <span
@@ -240,7 +244,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                       i.last_release.id
                     )}
                   >
-                    Deploy
+                    Timeline
                   </span>
                 </div>
               </div>

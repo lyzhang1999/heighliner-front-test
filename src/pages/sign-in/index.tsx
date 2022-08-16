@@ -7,7 +7,8 @@ import {
   IconButton,
   InputAdornment,
   TextField,
-  Checkbox
+  Checkbox,
+  Link as MUILink
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -19,6 +20,7 @@ import {
   useForm,
 } from "react-hook-form";
 import { trim } from "lodash-es";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { ForkMainLogo } from "@/utils/CDN";
 import Email from "/public/img/entrance/sign-in/Email.svg";
@@ -34,6 +36,7 @@ import GitHub from "@/components/sign-in/GitHub.tsx";
 import useRedirectCurrentOrganization from "@/hooks/redirectCurrentOrganization";
 
 import styles from "./index.module.scss";
+import Link from "next/link";
 
 const FieldMap = {
   Email: "Email",
@@ -213,6 +216,20 @@ export default function SignIn(): React.ReactElement {
                   </div>
                 )}
               />
+            </div>
+            <div>
+                <MUILink 
+                  underline="hover" 
+                  sx={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  href="https://heighliner.dev/contact-us"
+                  target="_blank"
+                >
+                  Contact Us <ArrowForwardIcon fontSize="small"/>
+                </MUILink>
             </div>
           </div>
           <Button

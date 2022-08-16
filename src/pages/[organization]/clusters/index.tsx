@@ -4,7 +4,7 @@ import {
   DialogContentText, Popover,
   Table, TableBody, TableCell, TableRow, TableHead,
 } from '@mui/material';
-import {find, isEmpty} from "lodash-es";
+import {find, get, isEmpty} from "lodash-es";
 import copy from 'copy-to-clipboard';
 
 import Layout from "@/components/Layout";
@@ -137,7 +137,10 @@ const Clusters = () => {
       >
         <div className={popStyles.selectWrapper}>
           <div className={clsx(popStyles.selectItem, popStyles.redItem)} onClick={openDeleteDialog}>Delete</div>
-          <div className={clsx(popStyles.selectItem)} onClick={copyIt}>Copy KubeConfig</div>
+          {
+              get(find(clusterList, {id: deleteItemID}), 'provider', '') === "kubeconfig" &&
+              <div className={clsx(popStyles.selectItem)} onClick={copyIt}>Copy KubeConfig</div>
+          }
         </div>
       </Popover>
       <div className={styles.wrapper}>

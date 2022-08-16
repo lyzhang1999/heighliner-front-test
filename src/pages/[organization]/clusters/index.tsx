@@ -16,7 +16,7 @@ import {ClusterItemComp} from '@/components/Cluster/ClusterItem';
 import styles from './index.module.scss';
 import popStyles from "@/components/PopSelect/index.module.scss";
 import clsx from "clsx";
-import {Message} from "@/utils/utils";
+import {getOrganizationNameByUrl, Message} from "@/utils/utils";
 
 const Clusters = () => {
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
@@ -138,7 +138,7 @@ const Clusters = () => {
         <div className={popStyles.selectWrapper}>
           <div className={clsx(popStyles.selectItem, popStyles.redItem)} onClick={openDeleteDialog}>Delete</div>
           {
-              get(find(clusterList, {id: deleteItemID}), 'provider', '') === "kubeconfig" &&
+             ((get(find(clusterList, {id: deleteItemID}), 'provider', '') === "kubeconfig") || (getOrganizationNameByUrl() === 'forkmain-dev')) &&
               <div className={clsx(popStyles.selectItem)} onClick={copyIt}>Copy KubeConfig</div>
           }
         </div>

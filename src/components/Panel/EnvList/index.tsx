@@ -235,7 +235,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                   </span>
                 </div> */}
                 <div className={styles.logsWrapper}>
-                  <span className={styles.key}>Logs:</span>
+                  <span className={styles.key}>Deploy Timeline:</span>
                   <span
                     className={styles.logsValue}
                     onClick={handlePageChange(
@@ -244,7 +244,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                       i.last_release.id
                     )}
                   >
-                    Timeline
+                    Link
                   </span>
                 </div>
               </div>

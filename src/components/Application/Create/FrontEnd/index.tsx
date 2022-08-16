@@ -279,12 +279,20 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                 rules={{
                   required: "Please input repo name",
                   validate: {
-                    unconformity: (value) => {
-                      if (!trim(getValues('name'))) {
-                        return "Please input repo name";
-                      }
-                    }
-                  }
+                    illegalCharacter: (value) =>
+                      !/[^a-z0-9-]/.test(value) ||
+                      "The name should only contain lowercase alphanumeric character, or hyphen(-).",
+                    illegalStart: (value) =>
+                      /^[a-z]/.test(value) ||
+                      "The name should start with lowercase letter character.",
+                    illegalEnd: (value) =>
+                      /[a-z0-9]$/.test(value) ||
+                      "Then name should end with lowercase alphanumeric character.",
+                  },
+                  maxLength: {
+                    value: 63,
+                    message: "The max length is 63 character.",
+                  },
                 }}
               />
               {

@@ -183,14 +183,21 @@ export default function HoverTools(props: Props) {
         {devState === DevStatus.RUNNING ? (
           <>
             <li onClick={getExecutor(ExecuteType.RUN)} title="Develop">
-              <Image
+              {/* <Image
                 src="/img/application/panel/env/start@3x.png"
                 objectFit="contain"
                 alt=""
                 width={22}
                 height={22}
+              /> */}
+              <Image
+                src="/img/application/panel/env/vscode.png"
+                alt=""
+                objectFit="contain"
+                width={22}
+                height={22}
               />
-              Reenter Development
+              Open VSCode
             </li>
             <li onClick={getExecutor(ExecuteType.STOP)} title="Stop">
               <Image

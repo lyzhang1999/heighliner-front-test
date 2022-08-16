@@ -35,7 +35,7 @@ import { useBranches } from "@/hooks/branches";
 import { CommonProps } from "@/utils/commonType";
 import { GetBranchesReq, GetBranchesRes } from "@/api/gitProviders";
 import { PanelContext } from "@/pages/[organization]/applications/panel";
-import { getQuery, getUrlEncodeName } from "@/utils/utils";
+import { getQuery, getUrlEncodeName, Message } from "@/utils/utils";
 import useEnvSetting from "@/hooks/envSetting";
 
 import styles from "./index.module.scss";
@@ -265,6 +265,12 @@ export default function ForkNewEnv(props: Props): React.ReactElement {
         `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${
           res.application_release_id
         }&env_id=${res.application_env_id}`
+      );
+      Message.success(
+        "Fork a new environment successfully. There will spend about 20s to initialize the environment. ",
+        {
+          showTime: 7
+        }
       );
     });
   };

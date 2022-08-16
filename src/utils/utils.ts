@@ -1,5 +1,5 @@
 import {GlobalContxtRef} from "@/components/GlobalContxt";
-import {NoticeRef} from "@/components/Notice";
+import {IOpen, NoticeRef} from "@/components/Notice";
 import {OrgList, roleType} from "@/api/org";
 import {find} from "lodash-es";
 import {OrganizationType} from "@/utils/store";
@@ -115,28 +115,32 @@ export function fileToBase64(file: File) {
 }
 
 export const Message = {
-  success: function (str: string) {
+  success: function (str: string, options?: IOpen['options']) {
     NoticeRef.current?.open({
       message: str,
       type: "success",
+      options,
     });
   },
-  error: function (str: string) {
+  error: function (str: string, options?: IOpen['options']) {
     NoticeRef.current?.open({
       message: str,
       type: "error",
+      options,
     });
   },
-  info: function (str: string) {
+  info: function (str: string, options?: IOpen['options']) {
     NoticeRef.current?.open({
       message: str,
       type: "info",
+      options,
     });
   },
-  warning: function (str: string) {
+  warning: function (str: string, options?: IOpen['options']) {
     NoticeRef.current?.open({
       message: str,
       type: "warning",
+      options,
     });
   }
 }

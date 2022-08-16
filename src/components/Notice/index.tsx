@@ -9,10 +9,16 @@ import {
 } from "react";
 import {Alert, AlertColor, Snackbar, SnackbarOrigin} from "@mui/material";
 
-interface IOpen {
+export interface IOpen {
   message: string;
   type?: AlertColor;
   origin?: SnackbarOrigin;
+  options?: {
+    /**
+     * The message show time in second.
+     */
+    showTime?: number;
+  }
 }
 
 interface INoticRef {
@@ -31,12 +37,19 @@ const Notice = (): ReactElement => {
     vertical: "top",
     horizontal: "center",
   });
+  const [options, setOptions] = useState<IOpen['options']>();
 
   useEffect(() => {
     if (state) {
+      // Parse options's show time.
+      const showTime =
+        options && options.showTime !== undefined && options.showTime > 0
+          ? options.showTime * 1000
+          : 3000;
+
       time.current = setTimeout(() => {
         setState(false);
-      }, 3000);
+      }, showTime);
     }
     return () => {
       clearTimeout(time.current);
@@ -46,10 +59,11 @@ const Notice = (): ReactElement => {
 
   const close: any = useCallback(() => setState(false), []);
 
-  const open = useCallback(({message, type, origin}: IOpen) => {
+  const open = useCallback(({message, type, origin, options}: IOpen) => {
     setMessage(message);
     type && setType(type);
     origin && setOrigin(origin);
+    options && setOptions(options);
     setState(true);
   }, []);
 

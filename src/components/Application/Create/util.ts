@@ -277,7 +277,7 @@ export const FrontendFrameWorkInitState: FrontendType = {
   runCommand: "",
   port: '',
   deployEnv: [],
-  staticDeployMode: '',
+  staticDeployMode: 'spa',
   path404: '',
   name: ''
 };

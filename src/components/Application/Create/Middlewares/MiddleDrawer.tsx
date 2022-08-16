@@ -4,6 +4,7 @@ import {TextField, InputAdornment, Button} from "@mui/material";
 import styles from "./middleDrawer.module.scss";
 import {get} from "lodash-es";
 import RightDrawer from "@/basicComponents/RightDrawer";
+import { Message } from "@/utils/utils";
 
 const IconFocusStyle = {width: "200px"}
 
@@ -39,6 +40,9 @@ export default function MiddleDrawer({setModalDisplay, successCb, modalDisplay, 
   });
 
   function submit(value: PgTypes) {
+    Message.success('Configuration Saved.', {
+      showTime: 2
+    });
     successCb(value)
     setModalDisplay(false);
   }

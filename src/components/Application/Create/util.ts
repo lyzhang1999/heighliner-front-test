@@ -273,7 +273,7 @@ export const FrontendFrameWorkInitState: FrontendType = {
   buildCommand: '',
   outputDir: '',
   buildEnv: [],
-  deployMode: '',
+  deployMode: 'static',
   runCommand: "",
   port: '',
   deployEnv: [],

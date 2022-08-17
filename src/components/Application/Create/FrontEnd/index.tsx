@@ -375,7 +375,7 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
         {
           isRepo &&
           <div className={styles.item}>
-            <div className={styles.label}>Output Directory*</div>
+            <div className={styles.label}>Output Directory</div>
             <div className={styles.content}>
               <Controller
                 name={`outputDir`}
@@ -389,7 +389,9 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                     placeholder="/dist"
                   />
                 )}
-                rules={{...pathRule, required: "Please input output directory"}}
+                rules={{...pathRule,
+                  // required: "Please input output directory"
+                }}
               />
               {
                 errors.outputDir?.message &&

@@ -386,12 +386,11 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
                     sx={IconFocusStyle}
                     value={field.value}
                     onChange={field.onChange}
-                    placeholder="/dist"
+                    placeholder="dist"
                   />
                 )}
-                rules={{...pathRule,
-                  // required: "Please input output directory"
-                }}
+                // rules={{
+                // }}
               />
               {
                 errors.outputDir?.message &&

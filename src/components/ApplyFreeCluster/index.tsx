@@ -75,9 +75,14 @@ export default function ApplyFreeCluster({
           if (res.length <= 0) {
             handleOpenDialog();
           }
-          setClusterApplication(res);
         });
       }
+    });
+  }, []);
+
+  useEffect(() => {
+    getClusterApplication(+getOriIdByContext()).then((res) => {
+      setClusterApplication(res);
     });
   }, []);
 

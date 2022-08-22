@@ -29,18 +29,48 @@ body {
 .transparentHeader {
   thead {
     background-color: rgba(0, 0, 0, 0);
-
-    tr {
-      th {
-        border: 0px;
-      }
-    }
   }
 
   tbody {
     tr {
       th, td {
         background-color: #fff;
+      }
+      
+      position: relative;
+      transition: transform 0.1s linear;
+
+      & > th:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+  
+      & > td:last-child {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }  
+
+      &::after {
+        content: "";
+        display: block;
+        width: 0px;
+        transition: width 0.1s linear;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+      
+      &:hover::after {
+        background-image: linear-gradient(to bottom, #1d57bd 0%, #429de3 100%);
+        content: "";
+        width: 5px;
+        height: 100%;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
       }
 
       &:last-child {

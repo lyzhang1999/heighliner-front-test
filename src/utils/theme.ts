@@ -91,12 +91,27 @@ const theme = createTheme({
         },
       },
     },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          borderCollapse: "separate",
+          borderSpacing: "0 14px",
+        },
+      },
+    },
     MuiTableCell: {
       styleOverrides: {
         root: {
-          fontFamily: "Inter"
-        }
-      }
+          fontFamily: "Inter",
+          fontSize: "15px",
+          fontWeight: 500,
+          borderBottom: "none",
+        },
+        head: {
+          color: "#606479",
+          textTransform: "uppercase"
+        },
+      },
     },
   },
 });

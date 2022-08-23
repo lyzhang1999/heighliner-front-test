@@ -54,7 +54,7 @@ export default function WorkloadLog({setLogVisible, logVisible, logsParams}: Pro
       resource_type,
     });
     const url = new URL(
-      `${baseURL}/orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?${searchParams.toString()}`
+      `${baseURL}orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?${searchParams.toString()}`
     );
     const token = getToken();
     var eventSource = new EventSourcePolyfill(url.toString(), {

@@ -53,9 +53,10 @@ export default function WorkloadLog({setLogVisible, logVisible, logsParams}: Pro
       pod_name,
       resource_type,
     });
-    const url = new URL(
-      `${baseURL}orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?${searchParams.toString()}`
-    );
+    // const url = new URL(
+    //   `${baseURL}orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?${searchParams.toString()}`
+    // );
+    const url = `${baseURL}orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?${searchParams.toString()}`
     const token = getToken();
     var eventSource = new EventSourcePolyfill(url.toString(), {
       headers: {Authorization: `Bearer ${token}`},

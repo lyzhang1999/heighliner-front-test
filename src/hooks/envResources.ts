@@ -1,10 +1,6 @@
+import { getEnvResources, GetEnvResourcesReq, GetEnvResourcesRes } from "@/api/application/env";
 import { useEffect, useState } from "react";
 
-import {
-  getEnvResources,
-  GetEnvResourcesReq,
-  GetEnvResourcesRes,
-} from "./../api/application";
 
 export default function useEnvResources(
   req: GetEnvResourcesReq

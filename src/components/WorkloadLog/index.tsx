@@ -20,11 +20,11 @@ export default function WorkloadLog({setLogVisible, logVisible, logsParams}: Pro
 
   useEffect(() => {
     setTimeout(() => {
-      getTermianl();
+      getTerminal();
     }, 0)
   }, [])
 
-  function getTermianl() {
+  function getTerminal() {
     const initTerminal = async () => {
       const {Terminal} = await import('xterm')
       const {FitAddon} = await import('xterm-addon-fit');
@@ -46,12 +46,20 @@ export default function WorkloadLog({setLogVisible, logVisible, logsParams}: Pro
   }
 
   function getLogEventSource() {
-    let {container_name, resource_name, resource_type, org_id, app_id, env_id} = logsParams as GetLogParams;
-    const url = `${baseURL}orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?resource_name=${resource_name}&resource_type=${resource_type}&container_name=${container_name}`
+    let {container_name, resource_name, pod_name, resource_type, org_id, app_id, env_id} = logsParams as GetLogParams;
+    const searchParams = new URLSearchParams({
+      container_name,
+      resource_name,
+      pod_name,
+      resource_type,
+    });
+    const url = new URL(
+      `${baseURL}/orgs/${org_id}/applications/${app_id}/envs/${env_id}/resources/logs?${searchParams.toString()}`
+    );
     const token = getToken();
-    var eventSource = new EventSourcePolyfill(url, {
+    var eventSource = new EventSourcePolyfill(url.toString(), {
       headers: {Authorization: `Bearer ${token}`},
-      heartbeatTimeout: 1000 * 60 * 5
+      heartbeatTimeout: 1000 * 60 * 5,
     });
     eventSource.onerror = function () {
       console.warn('onerror');

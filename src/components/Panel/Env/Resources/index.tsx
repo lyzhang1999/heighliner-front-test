@@ -1,14 +1,29 @@
-import React, { ReactElement, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  ReactElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import clsx from "clsx";
-import NoiseControlOffIcon from "@mui/icons-material/NoiseControlOff";
+
 import { isEmpty } from "lodash-es";
 import { DoDollar } from "dodollar";
-import { Box, Skeleton, Tooltip, Typography } from "@mui/material";
+
+import {
+  Box,
+  Skeleton,
+  styled,
+  Tooltip,
+  Typography,
+  TypographyProps,
+} from "@mui/material";
+import { PodStatus } from "@/api/application/env";
 
 import { CommonProps } from "@/utils/commonType";
 import LeftSideTabs from "@/basicComponents/CustomTab/LeftSideTabs";
 import Docker from "/public/img/application/panel/env/docker.svg";
-import {getOriIdByContext, getQuery} from "@/utils/utils";
+import { getOriIdByContext, getQuery } from "@/utils/utils";
 import HoverTools from "./HoverTools";
 import useEnvResources from "@/hooks/envResources";
 import { $$ } from "@/utils/console";
@@ -25,12 +40,13 @@ interface Props extends CommonProps {
 }
 
 export interface GetLogParams {
-  container_name: string,
-  resource_name: string,
-  resource_type: ResourceType,
-  org_id: string,
-  app_id: string,
-  env_id: string,
+  container_name: string;
+  pod_name: string;
+  resource_name: string;
+  resource_type: ResourceType;
+  org_id: string;
+  app_id: string;
+  env_id: string;
 }
 
 export default function Resources(props: Props): React.ReactElement {
@@ -88,12 +104,12 @@ export default function Resources(props: Props): React.ReactElement {
 
   return (
     <ul className={styles.wrapper}>
-      {argoCDReadyRef?.current === false &&
-        isEmpty(envResources) ?
+      {argoCDReadyRef?.current === false && isEmpty(envResources) ? (
         <>
           <Skeleton animation="wave" height={300} />
           <Skeleton animation="wave" height={300} />
-        </> :
+        </>
+      ) : (
         envResources.map((envResource) => (
           <LeftSideTabs
             key={envResource.name}
@@ -103,88 +119,19 @@ export default function Resources(props: Props): React.ReactElement {
                 content: (
                   <Resource
                     {...{
-                      name: envResource.name,
-                      replicas: envResource.status.replicas,
-                      ready_replicas: envResource.status.ready_replicas,
+                      envResource,
+                      logsParams,
+                      setLogsParams,
+                      setLogVisible,
                     }}
-                  >
-                    <Typography
-                      variant="h2"
-                      sx={{
-                        fontSize: "16px",
-                        marginTop: "6.5px",
-                      }}
-                    >
-                      Containers:
-                    </Typography>
-                    <ul
-                      style={{
-                        listStyleType: "none",
-                      }}
-                      className={styles.containerWrap}
-                    >
-                      {argoCDReadyRef?.current === false &&
-                      isEmpty(envResources) ? (
-                        <>
-                          <Skeleton height="300px" animation="wave" />
-                          <Skeleton height="300px" animation="wave" />
-                        </>
-                      ) : (
-                        <>
-                          {envResource.container.map((container) => (
-                            <li key={container.name}>
-                              <NoiseControlOffIcon
-                                sx={{
-                                  color: "#88a4da",
-                                }}
-                              />
-                              <Typography variant="h3">Name:</Typography>
-                              <p className={styles.containerNameWrapper}>
-                                <Tooltip title={container.name || ""}>
-                                  <span className={styles.containerName}>
-                                    {container.name}
-                                  </span>
-                                </Tooltip>
-                                <Tooltip title="Container Logs">
-                                  <img
-                                    className={styles.containerImg}
-                                    src="/img/application/panel/env/logs.png"
-                                    alt="container log"
-                                    onClick={() => {
-                                      setLogsParams({
-                                        container_name: envResource.name,
-                                        resource_name: container.name,
-                                        resource_type: envResource.type,
-                                        org_id: getOriIdByContext(),
-                                        app_id: getQuery("app_id"),
-                                        env_id: getQuery("env_id"),
-                                      });
-                                      setLogVisible(true);
-                                    }}
-                                  />
-                                </Tooltip>
-                              </p>
-                              <NoiseControlOffIcon
-                                sx={{
-                                  color: "#88a4da",
-                                }}
-                              />
-                              <Typography variant="h3">Image:</Typography>
-                              <Tooltip title={container.image || ""}>
-                                <p>{container.image}</p>
-                              </Tooltip>
-                            </li>
-                          ))}
-                        </>
-                      )}
-                    </ul>
-                  </Resource>
+                  />
                 ),
               },
             ]}
             hoverTools={<HoverTools env={props.env} resource={envResource} />}
           />
-        ))}
+        ))
+      )}
       {logVisible && (
         <WorkloadLog
           {...{
@@ -210,3 +157,10 @@ function composeIcon(icon: ReactElement) {
     </div>
   );
 }
+
+export const SubHeader = styled(Typography)<TypographyProps>(() => ({
+  fontSize: 14,
+  fontWeight: 500,
+  display: "inline-block",
+  color: "#222f42",
+}));

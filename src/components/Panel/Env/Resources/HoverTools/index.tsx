@@ -14,10 +14,10 @@ import { Context } from "@/utils/store";
 import { IEnvContext, EnvContext } from "@/utils/contexts";
 import { CommonProps } from "@/utils/commonType";
 import { getToken } from "@/utils/token";
-import { GetEnvResourcesRes } from "@/api/application";
 
 import styles from "./index.module.scss";
 import { $$ } from "@/utils/console";
+import { GetEnvResourcesRes } from "@/api/application/env";
 
 interface Props extends CommonProps {
   env: any;
@@ -53,8 +53,8 @@ export default function HoverTools(props: Props) {
   };
 
   useEffect(() => {
-    if (props.resource.container) {
-      const isDeveloping = props.resource.container.some(
+    if (props.resource.pods[0].container) {
+      const isDeveloping = props.resource.pods[0].container.some(
         (container) => container.name === "nocalhost-dev"
       );
       if (isDeveloping) {

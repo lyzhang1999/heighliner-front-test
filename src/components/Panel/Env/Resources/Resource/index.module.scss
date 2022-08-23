@@ -1,18 +1,101 @@
+@import "/src/styles/utils";
+
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 12px;
+  @include setHorizontalPadding(10px);
+  @include setVerticalPadding(15px);
+  font-size: 14px;
+  color: rgb(96, 100, 121);
 
-  & > h1 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #222f42;
-  }
-
-  .status {
+  .podsStatusBar {
     display: grid;
     grid-template-columns: auto 1fr;
+    margin-top: 20px;
     align-items: center;
-    column-gap: 5px;
+
+    & > ul {
+      list-style-type: none;
+      margin-left: 5px;
+
+      li {
+        display: inline-block;
+        @include setHorizontalPadding(5px);
+        @include setVerticalPadding(2px);
+        @include setHorizontalMargin(5px);
+        border-radius: 4px;
+        color: #e87777;
+        font-size: 14px;
+        box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+        border: 1px solid #e9eaef;
+        cursor: pointer;
+      }
+
+      li.Running,
+      li.Succeeded {
+        color: #38c17d;
+      }
+
+      li.Pending {
+        color: #ffb31f;
+      }
+
+      li.chosenStatus {
+        border-color: #419ce2;
+      }
+    }
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  .containerWrap {
+    list-style-type: none;
+
+    & > li {
+      margin: 10px;
+      padding: 2px;
+      display: grid;
+      grid-template-columns: auto auto 1fr;
+      column-gap: 2px;
+      row-gap: 2px;
+      align-items: center;
+
+      & > h3 {
+        font-size: 14px;
+      }
+
+      & > h3,
+      & > p {
+        margin: 0;
+        // max-width: 300px;
+        overflow-x: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .containerNameWrapper {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        .containerName {
+          overflow-x: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .containerImg {
+          height: 18px;
+          cursor: pointer;
+          margin-left: 10px;
+        }
+      }
+
+      .logsWrap {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+    }
   }
 }

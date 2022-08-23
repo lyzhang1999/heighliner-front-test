@@ -350,12 +350,18 @@ export function getEnv({ app_id, env_id }: GetEnvReq): Promise<GetEnvRes> {
   );
 }
 
+/**
+ * @Deprecated Use new getEnvResources() in api/application/env.ts instead.
+ */
 export interface GetEnvResourcesReq {
   app_id: number;
   env_id: number;
   resource_type?: ResourceType;
 }
 
+/**
+ * @Deprecated Use new getEnvResources() in api/application/env.ts instead.
+ */
 export type GetEnvResourcesRes = Array<{
   container: Array<{
     image: string;
@@ -370,6 +376,9 @@ export type GetEnvResourcesRes = Array<{
   type: ResourceType;
 }>;
 
+/**
+ * @Deprecated Use new getEnvResources() in api/application/env.ts instead.
+ */
 export function getEnvResources({
   app_id,
   env_id,

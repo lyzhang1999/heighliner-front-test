@@ -16,6 +16,7 @@
   font-size: 14px;
   row-gap: 10px;
   column-gap: 5px;
+  color: rgb(96, 100, 121);
 
   h1 {
     font-size: 20px;
@@ -28,6 +29,7 @@
     text-transform: uppercase;
     font-size: 14px;
     font-weight: bold;
+    color: #222f42;
     &::after {
       content: ":";
     }

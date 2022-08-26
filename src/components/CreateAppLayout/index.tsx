@@ -1,8 +1,9 @@
 import styles from './index.module.scss';
-import React, {ReactElement} from "react";
+import React, {ReactElement, useContext} from "react";
 import {Button} from "@mui/material";
 import {CommonProps} from '@/utils/commonType';
 import clsx from "clsx";
+import {CreateContext} from "@/pages/[organization]/applications/creation/context";
 
 const list = [
   'Select a stack',
@@ -16,9 +17,35 @@ interface Props extends CommonProps {
   children?: ReactElement,
   index: number,
   goIndex: (number: number) => void,
+  stack: string,
 }
 
-export default function CreateAppLayout({children, index, goIndex}: Props) {
+export default function CreateAppLayout({children, index, goIndex, stack}: Props) {
+
+  let timelineTitle: string[] = [];
+
+  if (stack === 'web') {
+    timelineTitle = [
+      'Select a stack',
+      'Providers',
+      'Backend',
+      "Frontend",
+      "Middlewares"
+    ]
+  } else if (stack === 'micro') {
+    timelineTitle = [
+      'Select a stack',
+      'Providers',
+      'Setting Service',
+      "Network Config",
+      "Middlewares"
+    ]
+  } else {
+    timelineTitle = [
+      'Select a stack', "", "", "", ""
+    ]
+  }
+
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.wrapper}>
@@ -26,7 +53,7 @@ export default function CreateAppLayout({children, index, goIndex}: Props) {
           <div className={styles.header}>
             <span className={styles.name}>New application</span>
             <span className={styles.currentIndex}>({index} / 5)</span>
-            <span className={styles.currentName}>{list[index - 1]}</span>
+            <span className={styles.currentName}>{timelineTitle[index - 1] || ""}</span>
           </div>
           <div className={styles.content}>
             {children}
@@ -54,7 +81,7 @@ export default function CreateAppLayout({children, index, goIndex}: Props) {
         </div>
         <div className={styles.right}>
           {
-            list.map((item, i) => {
+            timelineTitle.map((item, i) => {
               return (
                 <div key={i} className={clsx(styles.countItem, (i === (index - 1)) && styles.currentItem)}
                   // onClick={() => goIndex(i + 1)}

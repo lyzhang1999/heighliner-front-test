@@ -44,22 +44,34 @@ export const passportRule = {
 }
 
 export const pathRule = {
-  required: 'Please input a path',
+  required: 'Please entry a path',
   pattern: {
     value: /^(\/|(\/[\w\-\.]*)+\/?)$/,
-    message: "Pleact input a correct path",
+    message: "Pleact entry a correct path",
   },
 }
 
 export const portRule = {
-  required: 'Please input a port',
+  required: 'Please entry port',
   pattern: {
     value: /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/,
-    message: "Pleact input a correct port",
+    message: "Pleact entry a correct port",
   },
 }
 
 export const entryPathRule = {
   required: 'Please input entry path'
+}
+
+export const nameRule = {
+  illegalCharacter: (value: string) =>
+    !/[^a-z0-9-]/.test(value) ||
+    "The name should only contain lowercase alphanumeric character, or hyphen(-).",
+  illegalStart: (value: string) =>
+    /^[a-z]/.test(value) ||
+    "The name should start with lowercase letter character.",
+  illegalEnd: (value: string) =>
+    /[a-z0-9]$/.test(value) ||
+    "Then name should end with lowercase alphanumeric character.",
 }
 

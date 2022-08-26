@@ -273,7 +273,7 @@ export default function Env(): React.ReactElement {
               <RepoList
                 {...{
                   repoList: repos,
-                  envDetails: env?.setting.application.service,
+                  // envDetails: env?.setting.application.service,
                   git_provider_id: envProd.git_provider_id,
                   head_name: env?.name,
                 }}

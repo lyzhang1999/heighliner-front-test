@@ -8,7 +8,7 @@ import {
   FieldValues,
   useFieldArray,
 } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import Image from "next/image";
 import * as yup from "yup";
 
@@ -19,6 +19,7 @@ import { CommonProps } from "@/utils/commonType";
 import { EnvVariableMap, EnvVariables } from "@/api/application";
 
 import styles from "./index.module.scss";
+import { $$ } from "@/utils/console";
 
 export const schema = yup.array().of(
   yup.object().shape({
@@ -36,7 +37,6 @@ interface Props extends CommonProps {
         [EnvVariableMap.value]?: FieldError;
       }>
     | undefined;
-  // emitAppend: (envVariables: EnvVariables) => void;
 }
 
 export default function AddEnvVariables(props: Props): React.ReactElement {
@@ -125,8 +125,8 @@ export default function AddEnvVariables(props: Props): React.ReactElement {
       >
         ADD ONE
       </div>
-      <ImportEnvByJson addEnvByJson={addEnvByJson} noMargin/>
-      <ImportEnvFileByJson addEnvByJson={addEnvByJson} noMargin/>
+      <ImportEnvByJson addEnvByJson={addEnvByJson} noMargin />
+      <ImportEnvFileByJson addEnvByJson={addEnvByJson} noMargin />
     </div>
   );
 }

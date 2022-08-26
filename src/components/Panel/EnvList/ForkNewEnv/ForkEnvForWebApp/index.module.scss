@@ -1,0 +1,64 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .nameWrap, .issueWrap {
+    display: grid;
+    grid-template-columns: 107.5px auto;
+    align-items: center;
+  }
+
+  .issueWrap {
+    align-items: initial;
+    
+  }
+
+  .switchWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > span {
+      color: #f56c6c;
+      margin-right: 2px;
+    }
+  }
+
+  .advancedSettingsWrap {
+    display: grid;
+    grid-template-rows: auto auto;
+    row-gap: 10px;
+  }
+
+  .startPointWrap {
+    display: grid;
+    grid-template-columns: 113px auto;
+
+    & > div {
+      display: grid;
+      grid-template-columns: 75px auto;
+      grid-template-rows: auto auto;
+      row-gap: 20px;
+    }
+  }
+
+  .envVariablesWrap {
+    display: grid;
+    grid-template-columns: 113px auto;
+
+    .backendEnvVariablesWrap {
+      display: grid;
+      grid-template-columns: 75px auto;
+      row-gap: 21px;
+
+      .backendEnvVariables {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        align-items: center;
+        column-gap: 11px;
+        row-gap: 19px;
+      }
+    }
+  }
+}

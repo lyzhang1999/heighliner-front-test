@@ -128,7 +128,8 @@ export default function Resources(props: Props): React.ReactElement {
                 ),
               },
             ]}
-            hoverTools={<HoverTools env={props.env} resource={envResource} />}
+            hoverTools={(envResource.type === "Deployment") ? <HoverTools env={props.env} resource={envResource}/> :
+              <div style={{height: "42px"}}></div>}
           />
         ))
       )}

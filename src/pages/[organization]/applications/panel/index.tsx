@@ -16,22 +16,14 @@ import EnvList, { itemClass } from "@/components/Panel/EnvList";
 import { getOrganizationNameByUrl, getQuery } from "@/utils/utils";
 import {
   AppRepoRes,
-  EnvItemRes,
+  EnvItemRes, getApplicationInfo, GetApplicationInfoRes,
   getApplicationRepos,
   getEnvs,
   getProdEnv,
 } from "@/api/application";
+import { PanelContext, PanelContextValue } from "@/utils/contexts";
+
 import styles from "./index.module.scss";
-
-interface PanelContextValue {
-  git_provider_id?: number;
-  git_org_name?: string;
-  owner_id?: number;
-  repos?: AppRepoRes[];
-  prodEnvId?: number;
-}
-
-export const PanelContext = createContext<PanelContextValue>({});
 
 export default function Panel() {
   const router = useRouter();
@@ -42,7 +34,8 @@ export default function Panel() {
   let appId = getQuery("app_id");
 
   const [envlist, setEnvList] = useState<EnvItemRes[]>([]);
-  const [repoList, setRepoList] = useState<AppRepoRes[]>([]);
+  const [repoList, setRepoList] = useState<AppRepoRes>([]);
+  const [appInfo, setAppInfo] = useState<GetApplicationInfoRes | null>(null);
   const [git_provider_id, setGit_provider_id] = useState<string>("");
 
   useEffect(() => {
@@ -68,6 +61,9 @@ export default function Panel() {
         };
       });
     });
+    getApplicationInfo({app_id: appId}).then(res => {
+      setAppInfo(res);
+    })
   }, []);
 
   function getEnvList() {
@@ -135,7 +131,7 @@ export default function Panel() {
                 fontFamily: "OpenSans",
               }}
             >
-              {get(envlist, "0.setting.application.name", "") || (
+              {get(appInfo, "name", "") || (
                 <Skeleton variant="text" width={100} />
               )}
             </Typography>

@@ -1,6 +1,6 @@
 import React, {
   forwardRef,
-  ForwardRefRenderFunction,
+  ForwardRefRenderFunction, useContext,
   useEffect,
   useImperativeHandle,
   useState,
@@ -17,24 +17,29 @@ import useStacks from "@/hooks/stacks";
 import {FieldsMap} from "@/components/Application/Create/util";
 
 import styles from "./index.module.scss";
+import {nameRule} from "@/utils/formRules";
+import {CreateContext} from "@/pages/[organization]/applications/creation/context";
 
 interface Props {
   submitCb: Function;
   formState: FormStateType;
 }
 
-const StackCardItems = [
+export const StackCardItems = [
+  {
+    name: "Micro Service",
+    url: "/img/application/create/MicroService@3x.webp",
+    key: "micro"
+  },
   {
     name: "Web Application",
     url: "/img/application/create/WebApplication@3x.webp",
-  },
-  {
-    name: "Micro service",
-    url: "/img/application/create/MachineLearning@3x.webp",
+    key: "web"
   },
   {
     name: "Machine Learning",
-    url: "/img/application/create/MicroService@3x.webp",
+    url: "/img/application/create/MachineLearning@3x.webp",
+    key: "machine"
   },
 
 ];
@@ -144,17 +149,7 @@ const SelectAStack = forwardRef(function SelectAStack(
         rules={{
           /** Follow with RFC 1035 */
           required: "Please enter your application name.",
-          validate: {
-            illegalCharacter: (value) =>
-              !/[^a-z0-9-]/.test(value) ||
-              "The name should only contain lowercase alphanumeric character, or hyphen(-).",
-            illegalStart: (value) =>
-              /^[a-z]/.test(value) ||
-              "The name should start with lowercase letter character.",
-            illegalEnd: (value) =>
-              /[a-z0-9]$/.test(value) ||
-              "Then name should end with lowercase alphanumeric character.",
-          },
+          validate: nameRule,
           maxLength: {
             value: 63,
             message: "The max length is 63 character.",
@@ -176,13 +171,13 @@ const SelectAStack = forwardRef(function SelectAStack(
             <ul>
               {StackCardItems.map((stackCardItems, index) => (
                 <li
-                  key={stackCardItems.name}
+                  key={stackCardItems.key}
                   onClick={() => {
-                    field.onChange(stackCardItems.name);
+                    field.onChange(stackCardItems.key);
                   }}
                   className={clsx(
-                    field.value === stackCardItems.name && styles.chosen,
-                    stackCardItems.name !== "Web Application" && styles.disabled
+                    field.value === stackCardItems.key && styles.chosen,
+                    stackCardItems.key !== "micro" && styles.disabled
                   )}
                 >
                   <div>

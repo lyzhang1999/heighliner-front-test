@@ -41,18 +41,25 @@ interface Props extends CommonProps {
   DrawSuccessCb?: () => void;
 }
 
-enum LocalStorageKV {
-  K_HAVE_APPLIED = "K_HAVE_APPLIED",
-  V_HAVE_APPLIED = "V_HAVE_APPLIED",
+enum LocalStorageKey {
+  K_LAST_CANCEL_TIMESTAMP = "K_HAS_CANCEL_TODAY",
 }
 
 export default function ApplyFreeCluster({
   showType,
   DrawSuccessCb,
 }: Props): React.ReactElement {
+  const [hasCancelledToday, setHasCancelledToday] = useState(false);
+
   const [openDialog, setOpenDialog] = useState(false);
   const handleOpenDialog = () => setOpenDialog(true);
-  const handleCloseDialog = () => setOpenDialog(false);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    window.localStorage.setItem(
+      LocalStorageKey.K_LAST_CANCEL_TIMESTAMP,
+      Date.now().toString()
+    );
+  };
 
   const [detail, setDetail] = useState<GetClusterApplicationRes[number]>();
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
@@ -73,7 +80,17 @@ export default function ApplyFreeCluster({
         // Check whether have applied cluster.
         getClusterApplication(+getOriIdByContext()).then((res) => {
           if (res.length <= 0) {
-            handleOpenDialog();
+            // If the user has canceled the cluster application that will not open the dialog again within 24 hours.
+            const lastCancelTimestamp = window.localStorage.getItem(
+              LocalStorageKey.K_LAST_CANCEL_TIMESTAMP
+            );
+            const oneData = 24 * 60 * 60 * 1000;
+            if (
+              !lastCancelTimestamp ||
+              Number(lastCancelTimestamp) + oneData < Date.now()
+            ) {
+              handleOpenDialog();
+            }
           }
         });
       }

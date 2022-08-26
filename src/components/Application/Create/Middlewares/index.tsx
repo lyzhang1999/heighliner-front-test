@@ -5,8 +5,9 @@ import {TextField, Select, MenuItem} from "@mui/material";
 import clsx from "clsx";
 import {cloneDeep, find, findIndex, get, set, without} from "lodash-es";
 import {FieldsMap, InitMiddleWareItem, MiddleWareType} from "@/components/Application/Create/util";
-import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
+import {LinkMethod} from "@/pages/[organization]/applications/creation";
 import MiddleDrawer, {PgTypes} from "@/components/Application/Create/Middlewares/MiddleDrawer";
+import {FormStateType} from "@/pages/[organization]/applications/creation/context";
 
 const IconFocusStyle = {}
 
@@ -15,7 +16,12 @@ const SelectStyle = {}
 export interface Props {
   submitCb: Function,
   formState: FormStateType,
+  stack: string
 }
+
+const webList = [
+  'backend', 'frontend'
+]
 
 export const Middles = [
   {
@@ -25,14 +31,13 @@ export const Middles = [
 ]
 
 const Middlewares = forwardRef(function Component(props: Props, ref) {
-  const {submitCb, formState} = props;
-  let {middleWares, selectAStack} = formState;
+  const {submitCb, formState, stack} = props;
+  let {middleWares, selectAStack, microService} = formState;
   let {[FieldsMap.name]: name} = selectAStack;
 
   function getDefaultValue(): MiddleWareType {
     let defaultValue = cloneDeep(InitMiddleWareItem);
     set(defaultValue, 'otherValue.names.0.v', name.toLowerCase().replace(/-/g, '_'));
-    // set(defaultValue, 'otherValue.names.0.v', '123');
     return defaultValue;
   }
 
@@ -57,17 +62,11 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
     name: "middle"
   });
 
-  useImperativeHandle(ref, () => ({
-    submit: () => handleSubmit(submit)()
-  }));
-
   function submit(value: { middle: MiddleWareType[] }) {
     submitCb("middleWares", value.middle)
   }
 
   function successCb(value: PgTypes) {
-    console.warn(value)
-    // let v = getValues(`middle.${editIndex}.otherValue`);
     setValue(`middle.${editIndex as number}.otherValue`, value)
   }
 
@@ -83,16 +82,6 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
 
   function backCb() {
     submitCb('middleWares', getValues('middle'), true)
-  }
-
-  function clickFrondendAndBackend(key: string, filed: any) {
-    let {value, name} = filed;
-    if (value.includes(key)) {
-      value = without(value, key)
-    } else {
-      value.push(key)
-    }
-    setValue(name, value);
   }
 
   function getDisableValue(value: string, key: string, index: number) {
@@ -182,18 +171,43 @@ const Middlewares = forwardRef(function Component(props: Props, ref) {
                   render={({field}) => {
                     let {value} = field;
                     return (
-                      <div className={styles.checkbox}>
-                        <div className={clsx(styles.checkItem, value.includes('backend') && styles.selected)}
-                             onClick={() => clickFrondendAndBackend('backend', field)}>
-                          <span className={styles.icon}>√</span>
-                          backend
-                        </div>
-                        <div className={clsx(styles.checkItem, value.includes('frontend') && styles.selected)}
-                             onClick={() => clickFrondendAndBackend('frontend', field)}>
-                          <span className={styles.icon}>√</span>
-                          frontend
-                        </div>
-                      </div>
+                      <Select
+                        value={field.value}
+                        onChange={field.onChange}
+                        size="small"
+                        multiple
+                        sx={{width: "150px"}}
+                      >
+                        {
+                          stack === 'micro' &&
+                          (microService as any[]).map(item => {
+                            return <MenuItem value={item.serviceName} key={item.serviceName}
+                              // disabled={getDisableValue(field.value, item.key, index)}
+                            >{item.serviceName}</MenuItem>
+                          })
+                        }
+                        {
+                          stack === 'web' &&
+                          webList.map(item => {
+                            return <MenuItem value={item} key={item}
+                              // disabled={getDisableValue(field.value, item.key, index)}
+                            >{item}</MenuItem>
+                          })
+                        }
+                      </Select>
+
+                      // <div className={styles.checkbox}>
+                      //   <div className={clsx(styles.checkItem, value.includes('backend') && styles.selected)}
+                      //        onClick={() => clickFrondendAndBackend('backend', field)}>
+                      //     <span className={styles.icon}>√</span>
+                      //     backend
+                      //   </div>
+                      //   <div className={clsx(styles.checkItem, value.includes('frontend') && styles.selected)}
+                      //        onClick={() => clickFrondendAndBackend('frontend', field)}>
+                      //     <span className={styles.icon}>√</span>
+                      //     frontend
+                      //   </div>
+                      // </div>
                     )
                   }}
                   rules={{required: 'Please select injection'}}

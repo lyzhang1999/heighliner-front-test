@@ -3,13 +3,14 @@ import React, {useImperativeHandle, forwardRef, useState, useEffect} from "react
 import styles from "./index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
-import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
+import {LinkMethod} from "@/pages/[organization]/applications/creation";
 import {filter, get, set, trim} from "lodash-es";
 import {entryPathRule, pathRule, portRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrontendItemType, FrontendType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
+import {FormStateType} from "@/pages/[organization]/applications/creation/context";
 
 const widhtSx = {width: "250px"};
 
@@ -215,7 +216,7 @@ const Frontend = forwardRef(function Component(props: Props, ref) {
         <div className={clsx(styles.tab, !isRepo && styles.selected)}
              onClick={() => setIsRepo(false)}
         >
-          Scaffold by stack
+          Create new repo
         </div>
         <div className={clsx(styles.tab, isRepo && styles.selected)}
              onClick={() => setIsRepo(true)}

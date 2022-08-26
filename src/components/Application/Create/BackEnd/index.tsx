@@ -3,14 +3,15 @@ import React, {useImperativeHandle, forwardRef, useState} from "react";
 import styles from "../FrontEnd/index.module.scss";
 import {TextField, Switch, MenuItem, Select} from "@mui/material";
 import clsx from "clsx";
-import {FormStateType, LinkMethod} from "@/pages/[organization]/applications/creation";
-import {get, set, filter, isEmpty} from "lodash-es";
+import {LinkMethod} from "@/pages/[organization]/applications/creation";
+import {get, set, filter} from "lodash-es";
 import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
 import {getRepoListRes} from "@/api/application";
 import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
-import {CommonProps} from "@/utils/commonType";
+import {FormStateType} from "@/pages/[organization]/applications/creation/context";
+
 
 const widhtSx = {width: "250px"};
 
@@ -34,6 +35,9 @@ export const backItem: FrameItemType[] = [
     version: "1.7.7",
     language: 'golang',
     languageVersion: '1.18',
+    port: "8000",
+    entryFile: "main.go",
+    appType: "go"
   },
   // {
   //   img: "/img/application/spring.svg",
@@ -143,7 +147,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
         <div className={clsx(styles.tab, !isRepo && styles.selected)}
              onClick={() => setIsRepo(false)}
         >
-          Scaffold by stack
+          Create new repo
         </div>
         <div className={clsx(styles.tab, isRepo && styles.selected)}
              onClick={() => setIsRepo(true)}

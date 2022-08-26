@@ -1,5 +1,5 @@
 import {backItem} from "@/components/Application/Create/BackEnd";
-import {find, get, isEmpty, map, trim} from "lodash-es";
+import {filter, find, get, isEmpty, map, trim} from "lodash-es";
 import {frontItem} from "@/components/Application/Create/FrontEnd";
 import {FormStateType} from "@/pages/[organization]/applications/creation";
 import {getRepoListRes} from "@/api/application";
@@ -68,94 +68,6 @@ export interface Service {
   type: string;
 }
 
-
-const testdate = {
-  cluster_id: 4,
-  git_config: {
-    git_org_name: "ni9ht-org",
-    git_provider_id: 1,
-  },
-  middleware: [
-    {
-      Service: ["test-stack-ysz-11-backend"],
-      name: "pg",
-      password: "admin",
-      setting: {
-        storage: "10Gi",
-      },
-      type: "postgres",
-      username: "admin",
-    },
-  ],
-  name: "test-stack-ysz-11",
-  service: [
-    {
-      framework: {
-        name: "gin",
-        version: "1.7.7",
-      },
-      language: {
-        name: "golang",
-        version: "1.17",
-      },
-      name: "",
-      scaffold: true,
-      setting: {
-        env: [
-          {
-            name: "TEST_ENV_KEY",
-            value: "vadf123",
-          },
-        ],
-        expose: [
-          {
-            paths: [{path: "/api"}],
-            port: 8000,
-            rewrite: true,
-          },
-        ],
-        extended_fields: {
-          entry_file: "",
-        },
-        repo_url: "",
-      },
-      type: "backend",
-    },
-    {
-      framework: {
-        name: "nextjs",
-        version: "1.7.7",
-      },
-      language: {
-        name: "typescript",
-        version: "1.8",
-      },
-      name: "",
-      scaffold: true,
-      setting: {
-        env: [
-          {
-            name: "TEST_FRONTEND_ENV",
-            value: "aadf34",
-          },
-        ],
-        expose: [
-          {
-            paths: [{path: "/"}],
-            port: 80,
-            rewrite: false,
-          },
-        ],
-        extended_fields: {
-          entry_file: "",
-        },
-        repo_url: "",
-      },
-      type: "frontend",
-    },
-  ],
-};
-
 const componentInitState1 = {
   name: "",
   stack: "web-application",
@@ -183,7 +95,7 @@ export interface SelectAStackType {
 
 export const SelectAStackInitState: SelectAStackType = {
   [FieldsMap.name]: "",
-  [FieldsMap.stack]: "Web Application",
+  [FieldsMap.stack]: "micro",
 };
 
 export interface ProvidersType {
@@ -215,6 +127,44 @@ export interface EnvType {
   value: string
 }
 
+//   static input-------------------
+//   buildCommand: "",
+//   outputDir: "",
+//   devCommand: "",
+//   staticType: 'spa', // spa or mpa
+//   path404: "/404.html",
+//   node input---------------------
+//   buildCommand: "",
+//   outputDir: "",
+//   devCommand: "",
+//   staticType: 'spa', // spa or mpa
+//   deployCommand: "",
+//   path404: "/404.html",
+//   port: "",
+//   env: [],
+//   go input-----------------------
+//   entryFile: "",
+//   port: "",
+//   env: [],
+
+// @ts-ignore
+export const MicroServiceInitData = {
+
+  serviceName: "",
+  isRepo: false,
+  repoUrl: '',
+  repoName: "",
+  framework: '',
+  baseImage: '',
+  buildCommand: "",
+  devCommand: "",
+  runCommand: "",
+  port: "",
+  debugCommand: "",
+  outputDir: "",
+  env: [],
+  staticType: 'spa', // spa or mpa
+};
 
 export const BackendFrameWorkInitState: FrameworkType = {
   isRepo: false,
@@ -270,7 +220,7 @@ export const FrontendFrameWorkInitState: FrontendType = {
   rewrite: false,
   entryFile: "",
 
-  buildCommand: '',
+  buildCommand: 'yarn install && yarn build',
   outputDir: '',
   buildEnv: [],
   deployMode: 'static',
@@ -281,6 +231,14 @@ export const FrontendFrameWorkInitState: FrontendType = {
   path404: '',
   name: ''
 };
+
+export const NetworkInitData = {
+  path: '/',
+  rewrite: true,
+  isExport: true,
+  service: "",
+  port: '3000'
+}
 
 export interface MiddleWareType {
   name: string;
@@ -318,6 +276,9 @@ export interface FrameItemType {
   version: string,
   language: string,
   languageVersion: string,
+  port: string,
+  entryFile: string,
+  appType: string
 }
 
 
@@ -375,10 +336,10 @@ function getService(key: string, value: FrameworkType, frameList: FrameItemType[
     if (injection.includes(key)) {
       env = [...env, ...
         [
-          {name: 'DatabaseHost', value: 'postgresql'},
-          {name: 'DatabaseUser', value: username},
-          {name: 'DatabasePassword', value: password},
-          {name: 'DatabaseName', value: get(names, '0.v', '')},
+          // {name: 'DatabaseHost', value: 'postgresql'},
+          // {name: 'DatabaseUser', value: username},
+          // {name: 'DatabasePassword', value: password},
+          // {name: 'DatabaseName', value: get(names, '0.v', '')},
         ]
       ]
     }
@@ -564,3 +525,300 @@ export function getParams(formState: FormStateType, repoList: getRepoListRes[]) 
   }
   return body;
 }
+
+
+export function getMicroParams(formState: FormStateType, repoList: getRepoListRes[]) {
+  let {selectAStack, providers, middleWares, microService, networkData} = formState;
+  let {Name, Stack} = selectAStack;
+  let {[FieldsMap.gitProvider]: git_org_name, git_config: {git_provider_id}, cluster_id} = providers;
+
+  let middle = {};
+  if (!isEmpty(middleWares)) {
+    let {
+      name,
+      injection,
+      otherValue
+    } = get(middleWares, '0', {});
+    let {names, username, password, storage} = otherValue;
+    middle = {
+      postgres: {
+        service: injection.map(item => {
+          return {
+            database_env: [
+              {
+                name: "DB_NAME",
+                value: get(names, '0.v', ''),
+              },
+            ],
+            name: item,
+            password_key: "DatabasePassword",
+            username_key: "DatabaseUser",
+            host_key: "DatabaseHost",
+            // name_key: "DatabaseName"
+          }
+        }),
+        name: name,
+        enabled: true,
+        setting: {
+          storage: storage + 'Gi',
+          database: names.map(i => {
+            return {name: i.v}
+          }),
+          password: password,
+          username: username,
+        },
+      }
+    }
+  }
+
+  const body = {
+    name: Name,
+    type: Stack,
+    cluster_id,
+    git_config: {
+      git_org_name,
+      git_provider_id: Number(git_provider_id),
+    },
+    service: microService.map(item => getServiceItem(item, middleWares, networkData, repoList)),
+    middleware: middle,
+  }
+  return body;
+}
+
+function getServiceItem(item, middleWares, networkData, repoList) {
+  let {
+    serviceName, isRepo, repoUrl, framework, baseImage, buildCommand, devCommand, runCommand,
+    port, debugCommand, outputDir, env, staticType, repoName
+  } = item;
+
+  let expose_path = filter(networkData, (item) => item.service === serviceName);
+
+  expose_path = expose_path.map(item => {
+    let {path, rewrite} = item;
+    if (path === '/') {
+      rewrite = false;
+    }
+    return {
+      path,
+      rewrite,
+    }
+  })
+
+  if (isRepo) {
+    let thisRepo = find(repoList, {url: repoUrl});
+
+    return {
+      framework,
+      name: serviceName,
+      scaffold: false,
+      repo: {
+        name: get(thisRepo, 'repo_name', ""),
+        visibility: 'private'
+      },
+      setting: {
+        base_image: baseImage,
+        build_command: buildCommand,
+        run_command: runCommand,
+        port: Number(port),
+        dev_command: devCommand,
+        debug_command: debugCommand,
+        output_dir: outputDir,
+        static_type: staticType,
+        path404: "404.html"
+      },
+      env,
+      expose_path
+    }
+  } else {
+    let thisItem = find(FrameWorksList, {key: framework});
+    let buildCommand = get(thisItem, 'buildCommand', '');
+    let outputDir = get(thisItem, 'outputDir', '');
+    let runCommand = get(thisItem, 'runCommand', '');
+    let baseImage = get(thisItem, 'baseImage', '');
+    let devCommand = get(thisItem, 'devCommand', '');
+    let debugCommand = get(thisItem, 'debugCommand', '');
+    let port = get(thisItem, 'port', '');
+    let staticType = get(thisItem, 'staticType', '');
+    let env = get(thisItem, 'env', []);
+
+    return {
+      framework,
+      name: serviceName,
+      scaffold: true,
+      repo: {
+        name: repoName,
+        visibility: 'private'
+      },
+      setting: {
+        base_image: baseImage,
+        build_command: buildCommand,
+        run_command: runCommand,
+        port: Number(port),
+        dev_command: devCommand,
+        debug_command: debugCommand,
+        output_dir: outputDir,
+        static_type: staticType,
+        path404: "404.html"
+      },
+      env,
+      expose_path
+    }
+  }
+}
+
+
+export const FrameWorksList = [
+  {
+    img: "/img/application/next.svg",
+    name: 'Next.js',
+    key: "nextjs",
+
+    baseImage: "node:16",
+    buildCommand: 'yarn install && yarn build',
+    devCommand: "yarn install && yarn dev",
+    runCommand: 'yarn start',
+    debugCommand: 'yarn install && yarn dev',
+    outputDir: '',
+    port: '3000',
+    staticType: '',
+  },
+  {
+    img: "/img/application/create/vite.svg",
+    name: 'Vite',
+    key: "vite",
+    baseImage: "node:16",
+    buildCommand: 'yarn install && yarn build',
+    devCommand: "yarn install && yarn dev",
+    runCommand: "",
+    debugCommand: "",
+    port: "3000",
+    outputDir: 'dist',
+    staticType: "spa",
+  },
+  {
+    img: "/img/application/vue.svg",
+    name: 'Vue-Cli',
+    key: "vue",
+
+    baseImage: "node:16",
+    buildCommand: 'yarn install && yarn build',
+    devCommand: "yarn install && yarn dev",
+    runCommand: "",
+    debugCommand: "",
+    port: "3000",
+    outputDir: 'dist',
+    staticType: "spa",
+  },
+  {
+    img: "/img/application/create/create-react-app.svg",
+    name: 'React-App',
+    key: "react",
+
+    baseImage: "node:16",
+    buildCommand: 'yarn install --frozen-lockfile && yarn build',
+    devCommand: "yarn install && yarn dev",
+    runCommand: "",
+    debugCommand: "yarn install && yarn dev",
+    port: "3000",
+    outputDir: 'build',
+    staticType: "spa",
+  },
+
+  {
+    img: "/img/application/gin.svg",
+    name: 'Gin',
+    key: "gin",
+    baseImage: "golang:1.19",
+    buildCommand: 'go build -o build/app main.go',
+    devCommand: "go run main.go",
+    runCommand: "./app",
+    debugCommand: "go run main.go",
+    port: "8000",
+    outputDir: 'build',
+    staticType: "",
+  },
+  {
+    img: "/img/application/create/spring.png",
+    name: 'Spring',
+    key: "spring",
+    baseImage: "openjdk:18",
+    buildCommand: './gradlew build && cp "build/libs/*.jar build/libs/app.jar',
+    devCommand: "./gradlew -jar bootrun",
+    runCommand: "java -jar app.jar",
+    debugCommand: "./gradlew -jar bootrun --debug-jvm",
+    port: "8080",
+    outputDir: 'build/libs',
+    staticType: "",
+  },
+  {
+    img: "/img/application/create/flask.png",
+    name: 'Flask',
+    key: "flask",
+    baseImage: "python:3.10",
+    buildCommand: 'pip3 install -r requirements.txt',
+    devCommand: "pip3 install -r requirements.txt && python -m flask run",
+    runCommand: "gunicorn --workers=2 -b 0.0.0.0:5000",
+    debugCommand: "pip3 install -r requirements.txt && python -m flask run",
+    port: "5000",
+    outputDir: '',
+    staticType: "",
+  },
+  {
+    img: "/img/application/create/express.png",
+    name: 'Express',
+    key: "express",
+    baseImage: "node:16",
+    buildCommand: 'yarn install --frozen-lockfile',
+    devCommand: "yarn install && yarn start",
+    runCommand: "yarn start",
+    debugCommand: "yarn install && yarn start",
+    port: "3000",
+    outputDir: '.',
+    staticType: "",
+  },
+  {
+    img: "/img/application/create/ruby.png",
+    name: 'Sinatra',
+    key: "sinatra",
+    baseImage: "ruby:3-buster",
+    buildCommand: 'bundle install',
+    devCommand: "bundle exec ruby app.rb -o 0.0.0.0",
+    runCommand: "bundle exec rackup -o 0.0.0.0 -p 4567",
+    debugCommand: "bundle exec ruby app.rb -o 0.0.0.0",
+    port: "4567",
+    outputDir: '.',
+    staticType: "",
+  },
+  {
+    img: "/img/application/create/other.svg",
+    name: 'Other',
+    key: "other",
+    baseImage: "",
+    buildCommand: '',
+    devCommand: "",
+    runCommand: "",
+    debugCommand: "",
+    port: "",
+    outputDir: '',
+    staticType: "",
+  },
+]
+
+export const ImageList = [
+  "node:16",
+  "node:15",
+  "node:14",
+  "nginx:1.23",
+  "nginx:1.22",
+  "nginx:1.21",
+  "golang:1.19",
+  "go:1.18",
+  "openjdk:18",
+  "python:3.10"
+]
+
+
+
+
+
+

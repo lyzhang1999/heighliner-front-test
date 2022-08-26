@@ -337,10 +337,10 @@ export function getEnvs(appId: string): Promise<EnvItemRes[]> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appId}/envs`);
 }
 
-export interface GetEnvReq {
-  app_id: number;
-  env_id: number;
-}
+  export interface GetEnvReq {
+    app_id: number;
+    env_id: number;
+  }
 
 export type GetEnvRes = EnvItemRes;
 
@@ -450,6 +450,9 @@ export interface Service {
   type: ServiceType;
 }
 
+/**
+ * @Deprecated Use src/api/application/env-settings.ts instead.
+ */
 export interface GetEnvSettingRes {
   application: {
     deploy: Deploy;
@@ -466,8 +469,30 @@ export interface GetEnvSettingRes {
   is_update: true;
   middleware: Middleware[];
   scm: Scm;
+  operator_web_app: {
+    spec: {
+      type: "micro"; // Todo: determine all type.
+      domain: string;
+      service: Array<{
+        name: string;
+        baseImage: string;
+        scaffold: boolean;
+        repo: {
+          name: string;
+          visibility: "private" | "public", // Todo: Only this two type?
+        },
+        env?: Array<{
+          name: string;
+          value: string;
+        }>
+      }>
+    }
+  }
 }
 
+/**
+ * @Deprecated Use src/api/application/env-settings.ts instead.
+ */
 export function getEnvSetting({
   app_id,
   env_id,
@@ -477,6 +502,9 @@ export function getEnvSetting({
   );
 }
 
+/**
+ * @Deprecated Use src/api/application/env-settings.ts instead.
+ */
 export interface UpdateEnvSettingReq {
   app_id: number;
   env_id: number;
@@ -488,6 +516,9 @@ export interface UpdateEnvSettingReq {
   };
 }
 
+/**
+ * @Deprecated Use src/api/application/env-settings.ts instead.
+ */
 export function updateEnvSetting(req: UpdateEnvSettingReq) {
   return http.patch(
     `/orgs/${getOriIdByContext()}/applications/${req.app_id}/envs/${
@@ -497,14 +528,14 @@ export function updateEnvSetting(req: UpdateEnvSettingReq) {
   );
 }
 
-export interface AppRepoRes {
+export type AppRepoRes = Array<{
   git_organization: string;
   provider: string;
   repo_name: string;
   repo_url: string;
-}
+}>
 
-export function getApplicationRepos(appid: string): Promise<AppRepoRes[]> {
+export function getApplicationRepos(appid: string): Promise<AppRepoRes> {
   return http.get(`/orgs/${getOriIdByContext()}/applications/${appid}/repos`);
 }
 

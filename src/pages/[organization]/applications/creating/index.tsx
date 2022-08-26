@@ -119,7 +119,7 @@ const CreatingApplication = () => {
   useEffect(() => {
     getStatus(true);
     getStatusInterval = setInterval(getStatus, 5000);
-    renderLog();
+    // renderLog();
     return () => {
       getStatusInterval && clearInterval(getStatusInterval);
       durationTimeInterval && clearInterval(durationTimeInterval);
@@ -360,10 +360,10 @@ const CreatingApplication = () => {
             </div>
           </div>
         }
-        <div id="TERMINAL"
-             className={styles.terminal}
-        >
-        </div>
+        {/*<div id="TERMINAL"*/}
+        {/*     className={styles.terminal}*/}
+        {/*>*/}
+        {/*</div>*/}
       </div>
     </Layout>
   )

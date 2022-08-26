@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 export function useApplicationRepos(
   app_id: string
-): [AppRepoRes[], () => void] {
-  const [applicationRepos, setApplicationRepos] = useState<AppRepoRes[]>([]);
+): [AppRepoRes, () => void] {
+  const [applicationRepos, setApplicationRepos] = useState<AppRepoRes>([]);
 
   const flushApplicationRepos = () => {
     getApplicationRepos(app_id).then((res) => {

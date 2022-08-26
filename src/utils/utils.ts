@@ -178,7 +178,6 @@ export function getDefaultOrg(orgList: OrgList[] | undefined): OrgList {
   return defaultOrg as OrgList;
 }
 
-
 export function isProduct() {
   return location.host === "forkmain.com";
 }

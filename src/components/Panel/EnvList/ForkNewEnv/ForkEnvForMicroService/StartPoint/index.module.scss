@@ -1,0 +1,6 @@
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(auto, 100px) 1fr;
+  column-gap: 20px;
+  margin-bottom: 20px;
+}

@@ -35,6 +35,8 @@ import useEnv from "@/hooks/env";
 import styles from "./index.module.scss";
 import GitHubIssues from "@/components/Panel/EnvList/Setting/GitHubIssues";
 import { $$ } from "@/utils/console";
+import useEnvSetting from "@/hooks/envSetting";
+import SettingMicroService from "@/components/Panel/EnvList/Setting/SettingMicroService";
 
 interface Props extends CommonProps {}
 
@@ -50,6 +52,11 @@ export default function Settings(props: Props): React.ReactElement {
   const [env] = useEnv({
     app_id,
     env_id,
+  });
+
+  const [envSetting, flushEnvSetting] = useEnvSetting({
+    app_id: app_id,
+    env_id: env_id,
   });
 
   const { setGlobalLoading } = useGlobalLoading();
@@ -69,6 +76,12 @@ export default function Settings(props: Props): React.ReactElement {
   };
 
   const [confirmType, setConfirmType] = useState("");
+
+  const handleEnterKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && confirmType === (env?.name ?? "")) {
+      handleDeleteEnv();
+    }
+  }
 
   const handleDeleteEnv = () => {
     handleCloseDialog();
@@ -180,17 +193,33 @@ export default function Settings(props: Props): React.ReactElement {
             gap: "10px",
           }}
         >
+          {/* <SingleCollapsiblePanel title="Frontend" defaultIsExpanded={false}>
+            <Frontend />
+          </SingleCollapsiblePanel>
+          <SingleCollapsiblePanel title="Backend" defaultIsExpanded={false}>
+            <Backend />
+          </SingleCollapsiblePanel> */}
+          {envSetting?.service?.map((service, index) => (
+            <SingleCollapsiblePanel
+              title={`Service: ${service?.name}`}
+              defaultIsExpanded={false}
+              key={index}
+            >
+              <SettingMicroService
+                {...{
+                  origin: {
+                    env: service?.env,
+                    name: service?.name,
+                  },
+                }}
+              />
+            </SingleCollapsiblePanel>
+          ))}
           <SingleCollapsiblePanel
             title="Ralated Issues"
             defaultIsExpanded={false}
           >
             <GitHubIssues />
-          </SingleCollapsiblePanel>
-          <SingleCollapsiblePanel title="Frontend" defaultIsExpanded={false}>
-            <Frontend />
-          </SingleCollapsiblePanel>
-          <SingleCollapsiblePanel title="Backend" defaultIsExpanded={false}>
-            <Backend />
           </SingleCollapsiblePanel>
           <SingleCollapsiblePanel title="Danger Zone" defaultIsExpanded={false}>
             <div>
@@ -241,11 +270,7 @@ export default function Settings(props: Props): React.ReactElement {
               <TextField
                 value={confirmType}
                 onChange={(e) => setConfirmType(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleDeleteEnv();
-                  }
-                }}
+                onKeyDown={handleEnterKey}
                 size="small"
                 sx={{
                   width: "100%",

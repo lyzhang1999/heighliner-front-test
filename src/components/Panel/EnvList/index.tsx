@@ -13,8 +13,9 @@ import { EnvItemRes, ForkRes, StatusColor } from "@/api/application";
 import { formatDate, getQuery, getUrlEncodeName, Message } from "@/utils/utils";
 
 import styles from "./index.module.scss";
-import ForkNewEnv from "./ForkNewEnv";
+// import ForkEnvForWebApp from "./ForkNewEnv/ForkEnvForWebApp";
 import Link from "/public/img/application/panel/env/link.svg";
+import ForkEnvForMicroService from "./ForkNewEnv/ForkEnvForMicroService";
 
 export const itemClass = "CANVASITME";
 
@@ -265,14 +266,15 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                     width: "700px",
                   }}
                 >
-                  <ForkNewEnv
+                  {/* <ForkEnvForWebApp
                     {...{
                       forkSuccessCb: (res) => {
                         setModalDisplay(false);
                         forkSuccessCb && forkSuccessCb(res);
                       },
                     }}
-                  />
+                  /> */}
+                  <ForkEnvForMicroService />
                 </RightDrawer>
               </div>
             )}

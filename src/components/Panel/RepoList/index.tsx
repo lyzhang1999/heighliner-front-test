@@ -9,16 +9,16 @@ import { Button } from "@mui/material";
 import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
 
 interface Props {
-  repoList: AppRepoRes[];
+  repoList: AppRepoRes;
   git_provider_id: number;
   base_name?: string;
   head_name?: string;
-  envDetails?: Service[];
+  // envDetails?: Service[];
 }
 
 export default function RepoList({
   repoList,
-  envDetails,
+  // envDetails,
   git_provider_id,
   base_name,
   head_name,
@@ -65,10 +65,12 @@ export default function RepoList({
   const handleNewPR = (repo: AppRepoRes) => (e: any) => {
     e.stopPropagation();
 
-    const repoSettings = envDetails?.find(
-      (item) => item.name === repo.repo_name
-    )?.setting;
-    const startPoint: string = repoSettings?.fork.from || "main";
+    // const repoSettings = envDetails?.find(
+    //   (item) => item.name === repo.repo_name
+    // )?.setting;
+    // const startPoint: string = repoSettings?.fork.from || "main";
+    const startPoint: string = "main";
+
     const prUrl = `${repo.repo_url}/compare/${encodeURIComponent(
       startPoint
     )}...${encodeURIComponent(head_name || "")}`;

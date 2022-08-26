@@ -1,0 +1,225 @@
+
+.wrapper {
+  margin: 20px 0px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 10px;
+
+  .header {
+    .item {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px 0;
+
+      .label {
+        width: 200px;
+      }
+
+      .rightAction {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .bottomBtn {
+    margin-top: 10px;
+    //padding-right: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+
+@import "@/components/Application/Create/create.module.scss";
+@import "@/styles/globalVar.scss";
+@import "src/styles/_trick.scss";
+
+
+.selectWrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  .selectItem {
+    width: 80px;
+    height: 80px;
+    box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+    border: solid 2px #e9eaef;
+    background-color: #fff;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+
+    img {
+      text-align: center;
+      margin-bottom: 18px;
+      width: 100%;
+    }
+
+    .name {
+      position: absolute;
+      bottom: 4px;
+      left: 0px;
+      text-align: center;
+      width: 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(to right, #165abe 3%, #0493de 95%);
+    }
+  }
+
+  .selected {
+    @include chosenStatus;
+  }
+}
+
+
+.selectTab {
+  display: flex;
+  margin-top: 20px;
+
+  .tab {
+    cursor: pointer;
+    padding: 0 30px;
+    flex-grow: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #8598ac;
+    line-height: 47px;
+    background-color: #f4f6f8;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+  }
+
+  .selected {
+    color: #2e77ce;
+    background-color: #e4ebf2;
+  }
+}
+
+.formWrapper {
+  background-color: #e4ebf2;
+  border-radius: 14px;
+  border-top-left-radius: 0px;
+  padding: 10px;
+}
+
+.error {
+  @include errorStyle;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  margin: 10px 0;
+
+  .label {
+    width: 150px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #000;
+    line-height: 33px;
+    text-align: right;
+    padding-right: 20px;
+  }
+
+  .content {
+    width: calc(100% - 110px);
+  }
+
+  .add {
+    border-radius: 4px;
+    background-color: rgba(155, 172, 185, 0.5);
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    color: #0a1a24;
+    cursor: pointer;
+  }
+}
+
+.inputItem {
+  margin-bottom: 20px;
+  display: flex;
+
+  .left {
+
+  }
+
+  .right {
+
+  }
+
+  .deleteIcon {
+    margin-left: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .equal {
+    font-size: 20px;
+    margin: 0 10px;
+    line-height: 40px;
+  }
+}
+
+.repoLoading {
+  display: flex;
+  align-items: center;
+
+  .loadingIcon {
+    width: 18px;
+    height: 18px;
+    margin: 0 10px;
+    @include spin("clockwise");
+  }
+
+  .loadingText {
+    color: #525252;
+  }
+}
+
+
+.deployMode {
+  display: flex;
+
+  .deployItem {
+    //padding: 10px 20px;
+    width: 90px;
+    height: 50px;
+    box-shadow: 0 0 5px 0 rgba(144, 182, 255, 0.15);
+    border: solid 2px #e9eaef;
+    background-color: #fff;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-wrap: wrap;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .chosen {
+    //border: 1px solid blue;
+    @include chosenStatus;
+  }
+}
+
+
+.bottom {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+

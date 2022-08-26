@@ -253,7 +253,7 @@ export const InitMiddleWareItem = {
   injection: [],
   otherValue: {
     names: [{v: ''}],
-    username: 'admin',
+    username: 'postgres',
     password: "password",
     storage: '20'
   },

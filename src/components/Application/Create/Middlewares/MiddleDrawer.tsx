@@ -28,7 +28,7 @@ export default function MiddleDrawer({setModalDisplay, successCb, modalDisplay, 
   const {control, handleSubmit, formState: {errors}, getValues} = useForm({
     defaultValues: {
       names: names || [{v: ''}],
-      username: username || 'admin',
+      username: username || 'postgres',
       password: password || 'password',
       storage: storage || '10'
     },

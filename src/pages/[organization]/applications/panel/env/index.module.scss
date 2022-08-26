@@ -9,11 +9,8 @@
   column-gap: 3vw;
 
   .main {
-    display: grid;
-    grid-template-rows:
-      auto
-      auto
-      auto;
+    display: flex;
+    flex-direction: column;
     gap: 33px;
   }
 }

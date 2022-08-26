@@ -28,7 +28,7 @@ export const Middles = [
 
 const NetworkConfig = forwardRef(function Component(props: Props, ref) {
   const {submitCb, formState} = props;
-  let {middleWares, selectAStack, networkConfig, microService} = formState;
+  let {middleWares, selectAStack, networkData, microService} = formState;
   let {[FieldsMap.name]: name} = selectAStack;
 
   function getDefaultValue(): MiddleWareType {
@@ -40,7 +40,7 @@ const NetworkConfig = forwardRef(function Component(props: Props, ref) {
 
   const {control, handleSubmit, setValue, formState: {errors}, getValues, watch} = useForm({
     defaultValues: {
-      network: cloneDeep(networkConfig)
+      network: cloneDeep(networkData)
     },
   });
 

@@ -127,29 +127,29 @@ export interface EnvType {
   value: string
 }
 
-//   static input-------------------
-//   buildCommand: "",
-//   outputDir: "",
-//   devCommand: "",
-//   staticType: 'spa', // spa or mpa
-//   path404: "/404.html",
-//   node input---------------------
-//   buildCommand: "",
-//   outputDir: "",
-//   devCommand: "",
-//   staticType: 'spa', // spa or mpa
-//   deployCommand: "",
-//   path404: "/404.html",
-//   port: "",
-//   env: [],
-//   go input-----------------------
-//   entryFile: "",
-//   port: "",
-//   env: [],
+export enum StaticType {
+  SPA = "spa",
+  MPA = 'map'
+}
 
-// @ts-ignore
-export const MicroServiceInitData = {
+export interface MicroServiceType{
+  serviceName: string,
+  isRepo: boolean,
+  repoUrl: string,
+  repoName: string,
+  framework: string,
+  baseImage: string,
+  buildCommand: string,
+  devCommand: string,
+  runCommand: string,
+  port: string,
+  debugCommand: string,
+  outputDir: string,
+  env: EnvType[],
+  staticType: StaticType,
+}
 
+export const MicroServiceInitData: MicroServiceType = {
   serviceName: "",
   isRepo: false,
   repoUrl: '',
@@ -163,7 +163,7 @@ export const MicroServiceInitData = {
   debugCommand: "",
   outputDir: "",
   env: [],
-  staticType: 'spa', // spa or mpa
+  staticType: StaticType.SPA, // spa or mpa
 };
 
 export const BackendFrameWorkInitState: FrameworkType = {
@@ -667,7 +667,21 @@ function getServiceItem(item, middleWares, networkData, repoList) {
 }
 
 
-export const FrameWorksList = [
+export interface FrameWorkType {
+  img: string,
+  name: string,
+  key: string,
+  baseImage: string,
+  buildCommand: string,
+  devCommand: string,
+  runCommand: string,
+  debugCommand: string,
+  outputDir: string,
+  port: string,
+  staticType: string,
+}
+
+export const FrameWorksList: FrameWorkType[] = [
   {
     img: "/img/application/next.svg",
     name: 'Next.js',

@@ -21,7 +21,7 @@ const MicroService = forwardRef(function Component(props: Props, ref) {
 
   const {state, dispatch} = useContext(CreateContext);
   const {repoList} = state;
-  const [microList, setMicroList] = useState(microService);
+  const [microList, setMicroList] = useState<any>(microService);
   const [isNewFlag, setIsNewFlag] = useState<boolean>(false);
   const [spreadItem, setSpreadItem] = useState<number>(() => {
     let value = get(microList, '0.serviceName', '');
@@ -69,7 +69,7 @@ const MicroService = forwardRef(function Component(props: Props, ref) {
     <div>
       <div className={styles.microList}>
         {
-          microList.map((item, index) => {
+          microList.map((item: any, index: number) => {
             if (spreadItem === index) {
               return <ServiceItem
                 key={item.serviceName + index}

@@ -13,10 +13,7 @@ import {EnvType, FrameWorksList, ImageList} from "@/components/Application/Creat
 import {FormStateType} from "@/pages/[organization]/applications/creation/context";
 
 export interface Props {
-  submitCb: Function,
-  formState: FormStateType,
   repoList: getRepoListRes[] | boolean,
-
   currentIndex: any,
   microList: any,
   setSpreadItem: any,
@@ -86,12 +83,12 @@ export default function ServiceItem(p: Props) {
   //   return () => subscription.unsubscribe();
   // }, [watch]);
 
-  function frameworkChangeCb(key) {
+  function frameworkChangeCb(key: string) {
     let currentValue = getValues('framework');
     if ((key === 'other') || (currentValue === key)) {
       return;
     }
-    let thisFrameWork = find(FrameWorksList, {key: key});
+    let thisFrameWork: any = find(FrameWorksList, {key: key});
     thisFrameWork = pick(thisFrameWork, [
       "baseImage",
       "buildCommand",
@@ -103,15 +100,16 @@ export default function ServiceItem(p: Props) {
       "runCommand"
     ])
     Object.keys(thisFrameWork).map(item => {
+      // @ts-ignore
       setValue(item, thisFrameWork[item])
     })
   }
 
-  function isRepoChangeCb(value) {
+  function isRepoChangeCb(value: string) {
     let framework = getValues('framework');
     if (value) {
       if (framework) {
-        let thisFrameWork = find(FrameWorksList, {key: framework});
+        let thisFrameWork: any = find(FrameWorksList, {key: framework});
         thisFrameWork = pick(thisFrameWork, [
           "baseImage",
           "buildCommand",
@@ -122,6 +120,7 @@ export default function ServiceItem(p: Props) {
           "staticType",
           "runCommand"
         ])
+        // @ts-ignore
         Object.keys(thisFrameWork).map(item => {
           setValue(item, thisFrameWork[item])
         })
@@ -133,8 +132,7 @@ export default function ServiceItem(p: Props) {
     }
   }
 
-  function submit(value) {
-    console.warn(value);
+  function submit(value: any) {
     let list = cloneDeep(microList);
     set(list, currentIndex, value);
     setMicroList(list);
@@ -596,7 +594,7 @@ export default function ServiceItem(p: Props) {
                 />
                 {
                   errors.staticType?.message &&
-                  <div className={styles.error}>{errors.staticType?.message}</div>
+                  <div className={styles.error}>{get(errors, 'staticType.message', '')}</div>
                 }
               </div>
             </div>

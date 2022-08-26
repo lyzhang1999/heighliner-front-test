@@ -9,6 +9,7 @@ env:
   ORG: h8r-dev
   HELM_REPO: forkmain-deploy
   APP_NAME: forkmain
+  SERVICE_NAME: forkmain-frontend
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -66,12 +67,12 @@ jobs:
         uses: mikefarah/yq@master
         if: github.ref == 'refs/heads/main'
         with:
-          cmd: pathEnv=".${{ github.event.repository.name }}.image.tag" yq -i 'eval(strenv(pathEnv)) = "${{ steps.vars.outputs.head_commit }}"' ./${{ env.APP_NAME }}/values.yaml
+          cmd: pathEnv=".${{ env.SERVICE_NAME }}.image.tag" yq -i 'eval(strenv(pathEnv)) = "${{ steps.vars.outputs.head_commit }}"' ./${{ env.APP_NAME }}/values.yaml
       - name: Update helm values
         uses: mikefarah/yq@master
         if: steps.check_files.outputs.files_exists == 'true' && github.ref != 'refs/heads/main'
         with:
-          cmd: pathEnv=".${{ github.event.repository.name }}.image.tag" yq -i 'eval(strenv(pathEnv)) = "${{ steps.vars.outputs.head_commit }}"' ./${{ env.APP_NAME }}/env/${GITHUB_REF##*/}/values.yaml
+          cmd: pathEnv=".${{ env.SERVICE_NAME }}.image.tag" yq -i 'eval(strenv(pathEnv)) = "${{ steps.vars.outputs.head_commit }}"' ./${{ env.APP_NAME }}/env/${GITHUB_REF##*/}/values.yaml
       - name: Update helm repo
         if: steps.check_files.outputs.files_exists == 'true' || github.ref == 'refs/heads/main'
         run: |-

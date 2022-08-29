@@ -755,7 +755,7 @@ export const FrameWorksList: FrameWorkType[] = [
     name: 'Spring',
     key: "spring",
     baseImage: "openjdk:18",
-    buildCommand: './gradlew build && cp build/libs/*.jar build/libs/app.jar',
+    buildCommand: 'microdnf install findutils && ./gradlew build && cp build/libs/*.jar build/libs/app.jar',
     devCommand: "./gradlew bootrun",
     runCommand: "java -jar app.jar",
     debugCommand: "./gradlew bootrun --debug-jvm",

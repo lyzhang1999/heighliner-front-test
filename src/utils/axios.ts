@@ -1,7 +1,8 @@
-import axios, {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from 'axios';
-import {Message} from "@/utils/utils";
-import {get} from "lodash-es";
-import {deleteToken, getToken} from "@/utils/token";
+import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import { Message } from "@/utils/utils";
+import { get } from "lodash-es";
+import { deleteToken, getToken } from "@/utils/token";
+import { $$ } from './console';
 
 export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
 
@@ -26,7 +27,7 @@ http.interceptors.request.use((config: AxiosRequestConfig) => {
 })
 
 http.interceptors.response.use((res: AxiosResponse) => {
-  let {data} = res;
+  let { data } = res;
   // All page count
   let pageCount = get(res, ['headers', 'x-page-total'], '');
   // All item count 

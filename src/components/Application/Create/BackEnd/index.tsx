@@ -1,19 +1,20 @@
-import {Controller, useForm, useFieldArray} from "react-hook-form";
-import React, {useImperativeHandle, forwardRef, useState} from "react";
+import { Controller, useForm, useFieldArray } from "react-hook-form";
+import React, { useImperativeHandle, forwardRef, useState } from "react";
 import styles from "../FrontEnd/index.module.scss";
-import {TextField, Switch, MenuItem, Select} from "@mui/material";
+import { TextField, Switch, MenuItem, Select } from "@mui/material";
 import clsx from "clsx";
-import {LinkMethod} from "@/pages/[organization]/applications/creation";
-import {get, set, filter} from "lodash-es";
-import {pathRule, portRule, entryPathRule} from "@/utils/formRules";
-import {getRepoListRes} from "@/api/application";
-import {EnvType, FrameItemType, FrameworkType} from "@/components/Application/Create/util";
+import { LinkMethod } from "@/pages/[organization]/applications/creation";
+import { get, set, filter, isEmpty } from "lodash-es";
+import { pathRule, portRule, entryPathRule } from "@/utils/formRules";
+import { getRepoListRes } from "@/api/application";
+import { EnvType, FrameItemType, FrameworkType } from "@/components/Application/Create/util";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
-import {FormStateType} from "@/pages/[organization]/applications/creation/context";
+import { CommonProps } from "@/utils/commonType";
+import Selector from "@/basicComponents/Selector";
+import { FormStateType } from "@/pages/[organization]/applications/creation/context";
 
-
-const widhtSx = {width: "250px"};
+const widhtSx = { width: "250px" };
 
 export const IconFocusStyle = {
   background: '#fff',
@@ -52,12 +53,12 @@ export const backItem: FrameItemType[] = [
 ]
 
 const Backend = forwardRef(function Component(props: Props, ref) {
-  const {submitCb, formState, repoList} = props;
-  let {backend, frontend} = formState;
-  let {isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile} = backend;
+  const { submitCb, formState, repoList } = props;
+  let { backend, frontend } = formState;
+  let { isRepo: repo, framework, repo_url, env, exposePort, path, rewrite, entryFile } = backend;
   let [isRepo, setIsRepo] = useState<boolean>(repo);
 
-  const {control, handleSubmit, formState: {errors}, getValues} = useForm({
+  const { control, handleSubmit, formState: { errors }, getValues } = useForm({
     defaultValues: {
       path: path,
       env: env,
@@ -70,12 +71,12 @@ const Backend = forwardRef(function Component(props: Props, ref) {
     },
   });
 
-  const {fields, append, remove} = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "path"
   });
 
-  const {fields: envFields, append: envAppend, remove: envRemove} = useFieldArray({
+  const { fields: envFields, append: envAppend, remove: envRemove } = useFieldArray({
     control,
     name: "env"
   });
@@ -115,17 +116,17 @@ const Backend = forwardRef(function Component(props: Props, ref) {
           <Controller
             name={`framework`}
             control={control}
-            render={({field}) => (
+            render={({ field }) => (
               <div className={styles.selectWrapper}>
                 {
                   backItem.map(i => {
                     return (
                       <div key={i.name} className={clsx(styles.selectItem, (field.value === i.key) && styles.selected)}
-                           onClick={() => {
-                             field.onChange(i.key)
-                           }}
+                        onClick={() => {
+                          field.onChange(i.key)
+                        }}
                       >
-                        <img src={i.img} alt=""/>
+                        <img src={i.img} alt="" />
                         <div className={styles.name}>{i.name}</div>
                       </div>
                     )
@@ -145,12 +146,12 @@ const Backend = forwardRef(function Component(props: Props, ref) {
       </div>
       <div className={styles.selectTab}>
         <div className={clsx(styles.tab, !isRepo && styles.selected)}
-             onClick={() => setIsRepo(false)}
+          onClick={() => setIsRepo(false)}
         >
           Create new repo
         </div>
         <div className={clsx(styles.tab, isRepo && styles.selected)}
-             onClick={() => setIsRepo(true)}
+          onClick={() => setIsRepo(true)}
         >
           Use existing repo
         </div>
@@ -164,33 +165,33 @@ const Backend = forwardRef(function Component(props: Props, ref) {
               <Controller
                 name={`repo_url`}
                 control={control}
-                render={({field}) => (
-                  <Select
-                    value={field.value}
-                    onChange={field.onChange}
-                    size="small"
-                    sx={{background: "#fff", width: "250px"}}
-                  >
+                render={({ field }) => (
+                  <>
                     {
-                      !repoList &&
-                      <div className={styles.repoLoading}>
-                        <img src="/img/application/create/loading.png" alt="" className={styles.loadingIcon}/>
-                        <span className={styles.loadingText}>
-                          Loading Repositories List
-                        </span>
-                      </div>
+                      Array.isArray(repoList) ?
+                        <Selector
+                          filterProps={{ size: "small" }}
+                          List={repoList.map(item => ({ value: item.repo_name, key: item.url }))}
+                          isLoading={false}
+                          onChange={field.onChange}
+                          defaultValue={field.value}
+                          placeholder="please choose repositry" /> :
+                        <Selector
+                          filterProps={{ size: "small" }}
+                          List={[]}
+                          isLoading={true}
+                          onChange={field.onChange}
+                          loadingText="Loading Repositories List"
+                          placeholder="please choose repositry" />
                     }
-                    {
-                      repoList && (repoList as getRepoListRes[]).map(item => {
-                        return (
-                          <MenuItem value={item.url} key={item.url}>{item.repo_name}</MenuItem>
-                        )
-                      })
-                    }
-                  </Select>
+                  </>
                 )}
                 rules={{
-                  required: "Please select a repo",
+                  // required: 'please choose repository',
+                  validate: e => {
+                    console.log(e);
+                    return ''
+                  }
                 }}
               />
               {
@@ -208,7 +209,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
               <Controller
                 name={`entryFile`}
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <TextField
                     size="small"
                     sx={IconFocusStyle}
@@ -233,7 +234,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
               <Controller
                 name={`exposePort`}
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <TextField
                     size="small"
                     sx={IconFocusStyle}
@@ -260,7 +261,7 @@ const Backend = forwardRef(function Component(props: Props, ref) {
                   <Controller
                     name={`path.${index}.v`}
                     control={control}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TextField
                         size="small"
                         sx={IconFocusStyle}
@@ -290,11 +291,11 @@ const Backend = forwardRef(function Component(props: Props, ref) {
                 {
                   (fields.length > 1) &&
                   <img src="/img/application/delete.svg" alt="" onClick={() => remove(index)}
-                       className={styles.deleteIcon}/>
+                    className={styles.deleteIcon} />
                 }
               </div>
             ))}
-            <div className={styles.add} onClick={() => append({v: ''})}>
+            <div className={styles.add} onClick={() => append({ v: '' })}>
               ADD ONE
             </div>
           </div>
@@ -305,8 +306,8 @@ const Backend = forwardRef(function Component(props: Props, ref) {
             <Controller
               name={`rewrite`}
               control={control}
-              render={({field}) => (
-                <Switch checked={field.value} onChange={field.onChange}/>
+              render={({ field }) => (
+                <Switch checked={field.value} onChange={field.onChange} />
               )}
             />
           </div>
@@ -320,10 +321,10 @@ const Backend = forwardRef(function Component(props: Props, ref) {
                   <Controller
                     name={`env.${index}.name`}
                     control={control}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TextField
                         size="small"
-                        sx={{...IconFocusStyle, width: '150px'}}
+                        sx={{ ...IconFocusStyle, width: '150px' }}
                         value={field.value}
                         onChange={field.onChange}
                       />
@@ -345,21 +346,21 @@ const Backend = forwardRef(function Component(props: Props, ref) {
                   }
                 </div>
                 <span className={styles.equal}>
-                 =
+                  =
                 </span>
                 <div className={styles.right}>
                   <Controller
                     name={`env.${index}.value`}
                     control={control}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TextField
                         size="small"
-                        sx={{...IconFocusStyle, width: '150px'}}
+                        sx={{ ...IconFocusStyle, width: '150px' }}
                         value={field.value}
                         onChange={field.onChange}
                       />
                     )}
-                    rules={{required: 'Please input env value'}}
+                    rules={{ required: 'Please input env value' }}
                   />
                   {
                     get(errors, `env.${index}.value.message`) &&
@@ -367,14 +368,14 @@ const Backend = forwardRef(function Component(props: Props, ref) {
                   }
                 </div>
                 <img src="/img/application/delete.svg" alt="" onClick={() => envRemove(index)}
-                     className={styles.deleteIcon}/>
+                  className={styles.deleteIcon} />
               </div>
             ))}
-            <div className={styles.add} onClick={() => envAppend({name: "", value: ''})}>
+            <div className={styles.add} onClick={() => envAppend({ name: "", value: '' })}>
               ADD ONE
             </div>
             <ImportEnvByJson addEnvByJson={addEnvByJson} />
-            <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
+            <ImportEnvFileByJson addEnvByJson={addEnvByJson} />
           </div>
         </div>
       </div>

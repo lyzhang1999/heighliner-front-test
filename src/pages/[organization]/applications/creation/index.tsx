@@ -5,22 +5,22 @@ import Middlewares from "@/components/Application/Create/Middlewares";
 
 import CreateAppLayout from "@/components/CreateAppLayout";
 import Layout from "@/components/Layout";
-import React, {useReducer, useRef, useEffect} from "react";
+import React, { useReducer, useRef, useEffect } from "react";
 import Provider from "@/components/Application/Create/Provider";
 import {
   getParams,
   getMicroParams,
 } from "@/components/Application/Create/util";
-import {cloneDeep, get} from "lodash-es";
-import {createApp, createAppRes, getRepoListReq, getRepoListRes, getTheRepoList} from "@/api/application";
-import {getUrlEncodeName, Message} from "@/utils/utils";
-import {useRouter} from "next/router";
-import {CreateContext, FormStateType, State} from "@/pages/[organization]/applications/creation/context";
-import {initState, reducer} from "./context";
+import { cloneDeep, get } from "lodash-es";
+import { createApp, createAppRes, getRepoListReq, getRepoListRes, getTheRepoList } from "@/api/application";
+import { getUrlEncodeName, Message } from "@/utils/utils";
+import { useRouter } from "next/router";
+import { CreateContext, FormStateType, State } from "@/pages/[organization]/applications/creation/context";
+import { initState, reducer } from "./context";
 import MicroService from "@/components/Application/Create/MicroService";
 import NetworkConfig from "@/components/Application/Create/NetworkConfig";
-import {getClusterList} from "@/api/cluster";
-import {getGitProviderOrganizations} from "@/api/gitProviders";
+import { getClusterList } from "@/api/cluster";
+import { getGitProviderOrganizations } from "@/api/gitProviders";
 
 export enum LinkMethod {
   BACK = 'back',
@@ -30,7 +30,7 @@ export enum LinkMethod {
 export default function Create(): React.ReactElement {
   const router = useRouter();
   const [state, dispatch] = useReducer(reducer, initState);
-  const {repoList, index, formState} = state;
+  const { repoList, index, formState } = state;
   let stack: string = get(formState, "selectAStack.Stack", '');
 
   let nextIndex = 1;
@@ -43,16 +43,16 @@ export default function Create(): React.ReactElement {
 
   function getRepoList(body: getRepoListReq) {
     getTheRepoList(body).then(res => {
-      dispatch({repoList: res});
+      dispatch({ repoList: res });
     })
   }
 
   useEffect(() => {
     getClusterList().then(res => {
-      dispatch({clusterList: res});
+      dispatch({ clusterList: res });
     })
     getGitProviderOrganizations().then((res) => {
-      dispatch({gitProviderOrganizations: res})
+      dispatch({ gitProviderOrganizations: res })
     });
   }, [])
 
@@ -92,8 +92,8 @@ export default function Create(): React.ReactElement {
   function submitCb(key: string, value: object, isBack?: boolean) {
     console.warn(value)
     if ((key === 'providers') && !isBack) {
-      let {git_provider_id, owner_name, owner_type} = get(value, 'git_config', {});
-      getRepoList({git_provider_id, owner_name, owner_type});
+      let { git_provider_id, owner_name, owner_type } = get(value, 'git_config', {});
+      getRepoList({ git_provider_id, owner_name, owner_type });
     }
     dispatch({
       formState: {
@@ -108,7 +108,7 @@ export default function Create(): React.ReactElement {
       })
     } else {
       setTimeout(() => {
-        dispatch({index: nextIndex})
+        dispatch({ index: nextIndex })
       }, 100)
     }
   }
@@ -127,30 +127,30 @@ export default function Create(): React.ReactElement {
   let mapComponent = [];
   if (stack === 'web') {
     mapComponent = [
-      <SelectAStack {...props} key="SelectAStack"/>,
-      <Provider {...props} key="Provider"/>,
-      <BackEnd {...props} key="BackEnd"/>,
-      <FrontEnd {...props} key="FrontEnd"/>,
-      <Middlewares {...props} key="Middlewares"/>
+      <SelectAStack {...props} key="SelectAStack" />,
+      <Provider {...props} key="Provider" />,
+      <BackEnd {...props} key="BackEnd" />,
+      <FrontEnd {...props} key="FrontEnd" />,
+      <Middlewares {...props} key="Middlewares" />
     ]
   } else if (stack === 'micro') {
     mapComponent = [
-      <SelectAStack {...props} key="SelectAStack"/>,
-      <Provider {...props} key="Provider"/>,
-      <MicroService {...props} key="MicroService"/>,
-      <NetworkConfig {...props} key="NetworkConfig"/>,
-      <Middlewares {...props} key="Middlewares"/>
+      <SelectAStack {...props} key="SelectAStack" />,
+      <Provider {...props} key="Provider" />,
+      <MicroService {...props} key="MicroService" />,
+      <NetworkConfig {...props} key="NetworkConfig" />,
+      <Middlewares {...props} key="Middlewares" />
     ]
   } else {
     mapComponent = [
       // <MicroService {...props} key="MicroService"/>,
-      <SelectAStack {...props} key="SelectAStack"/>,
+      <SelectAStack {...props} key="SelectAStack" />,
     ]
   }
 
   return (
     <Layout notStandardLayout>
-      <CreateContext.Provider value={{state, dispatch}}>
+      <CreateContext.Provider value={{ state, dispatch }}>
         <CreateAppLayout
           {...{
             index,

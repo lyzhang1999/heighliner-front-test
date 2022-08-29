@@ -605,14 +605,14 @@ function getServiceItem(item, middleWares, networkData, repoList) {
   })
 
   if (isRepo) {
-    let thisRepo = find(repoList, {url: repoUrl});
+    // let thisRepo = find(repoList, {url: repoUrl});
 
     return {
       framework,
       name: serviceName,
       scaffold: false,
       repo: {
-        name: get(thisRepo, 'repo_name', ""),
+        name: repoUrl,
         visibility: 'private'
       },
       setting: {

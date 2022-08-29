@@ -771,7 +771,7 @@ export const FrameWorksList: FrameWorkType[] = [
     baseImage: "python:3.10",
     buildCommand: 'pip3 install -r requirements.txt',
     devCommand: "pip3 install -r requirements.txt && python -m flask run",
-    runCommand: "gunicorn --workers=2 -b 0.0.0.0:5000",
+    runCommand: "gunicorn --workers=2 -b 0.0.0.0:5000 app:app",
     debugCommand: "pip3 install -r requirements.txt && python -m flask run",
     port: "5000",
     outputDir: '',

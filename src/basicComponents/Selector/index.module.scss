@@ -35,7 +35,7 @@
 }
 
 .listContainer {
-  overflow-y: auto;
+  overflow: hidden auto;
   max-height: 250px;
 
   &::-webkit-scrollbar {

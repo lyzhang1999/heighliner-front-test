@@ -2,7 +2,6 @@ import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'a
 import { Message } from "@/utils/utils";
 import { get } from "lodash-es";
 import { deleteToken, getToken } from "@/utils/token";
-import { $$ } from './console';
 
 export const baseURL = process.env.NEXT_PUBLIC_DOMAIN
 

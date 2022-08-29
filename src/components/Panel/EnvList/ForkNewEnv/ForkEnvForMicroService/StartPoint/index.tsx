@@ -18,14 +18,15 @@ import {
   GetBranchesRes,
 } from "@/api/gitProviders";
 import { cloneDeep } from "lodash-es";
+import Selector from "@/basicComponents/Selector";
 
 interface Props extends CommonProps {
   control: Control<MicroServiceFormFieldValues>;
   error:
-    | Array<{
-        [MicroServiceFormFieldName.BRANCH_NAME]?: FieldError;
-      }>
-    | undefined;
+  | Array<{
+    [MicroServiceFormFieldName.BRANCH_NAME]?: FieldError;
+  }>
+  | undefined;
 }
 
 export default function StartPoint({
@@ -85,44 +86,34 @@ export default function StartPoint({
                         error &&
                         error[index] &&
                         error[index][MicroServiceFormFieldName.BRANCH_NAME] !==
-                          undefined
+                        undefined
                       }
                     >
-                      <Select
-                        size="small"
-                        value={field.value}
-                        onChange={field.onChange}
-                        defaultValue={
-                          startPoint[MicroServiceFormFieldName.BRANCH_NAME]
+                      <Selector
+                        filterProps={{ size: "small" }}
+                        List={
+                          !selectableBranches ||
+                            !selectableBranches[
+                            startPoint[MicroServiceFormFieldName.SERVICE_NAME]
+                            ] ? [{
+                              value: startPoint[MicroServiceFormFieldName.BRANCH_NAME],
+                              key: startPoint[MicroServiceFormFieldName.BRANCH_NAME]
+                            }] :
+                            selectableBranches[
+                              startPoint[MicroServiceFormFieldName.SERVICE_NAME]
+                            ].map((branch) => ({
+                              key: branch.name,
+                              value: branch.name
+                            }))
                         }
+                        onChange={field.onChange}
+                        defaultValue={field.value}
                         onOpen={handleOpenSelect(
                           startPoint[MicroServiceFormFieldName.SERVICE_NAME]
                         )}
                       >
-                        {!selectableBranches ||
-                        !selectableBranches[
-                          startPoint[MicroServiceFormFieldName.SERVICE_NAME]
-                        ] ? (
-                          <MenuItem
-                            key={
-                              startPoint[MicroServiceFormFieldName.BRANCH_NAME]
-                            }
-                            value={
-                              startPoint[MicroServiceFormFieldName.BRANCH_NAME]
-                            }
-                          >
-                            {startPoint[MicroServiceFormFieldName.BRANCH_NAME]}
-                          </MenuItem>
-                        ) : (
-                          selectableBranches[
-                            startPoint[MicroServiceFormFieldName.SERVICE_NAME]
-                          ].map((branch) => (
-                            <MenuItem key={branch.name} value={branch.name}>
-                              {branch.name}
-                            </MenuItem>
-                          ))
-                        )}
-                      </Select>
+
+                      </Selector>
 
                       <FormHelperText>
                         {error &&

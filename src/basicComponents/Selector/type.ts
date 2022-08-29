@@ -17,6 +17,7 @@ export interface selectorProps extends CommonProps {
   placeholder?: string
   loadingNode?: ReactNode
   loadingIconUrl?: string
+  onOpen?: (event: any) => void
 }
 interface List {
   key: string

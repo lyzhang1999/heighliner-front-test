@@ -1,16 +1,17 @@
-import {Controller, useFieldArray, useForm} from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import styles from './serviceItem.module.scss';
-import {TextField, Divider, Select, MenuItem, Button} from "@mui/material";
-import {cloneDeep, dropRight, filter, find, get, pick, set} from "lodash-es";
-import React, {useEffect, useState,} from "react";
-import {IconFocusStyle, StaticDeployModeList} from "@/components/Application/Create/FrontEnd";
+import { TextField, Divider, Select, MenuItem, Button } from "@mui/material";
+import { cloneDeep, dropRight, filter, find, get, pick, set } from "lodash-es";
+import React, { useEffect, useState, } from "react";
+import { IconFocusStyle, StaticDeployModeList } from "@/components/Application/Create/FrontEnd";
 import clsx from "clsx";
-import {getRepoListRes} from "@/api/application";
-import {nameRule, portRule} from "@/utils/formRules";
+import { getRepoListRes } from "@/api/application";
+import { nameRule, portRule } from "@/utils/formRules";
 import ImportEnvByJson from "@/components/ImportEnvByJson";
 import ImportEnvFileByJson from "@/components/ImportEnvFileByJson";
-import {EnvType, FrameWorksList, ImageList} from "@/components/Application/Create/util";
-import {FormStateType} from "@/pages/[organization]/applications/creation/context";
+import { EnvType, FrameWorksList, ImageList } from "@/components/Application/Create/util";
+import { FormStateType } from "@/pages/[organization]/applications/creation/context";
+import Selector from "@/basicComponents/Selector";
 
 export interface Props {
   repoList: getRepoListRes[] | boolean,
@@ -22,7 +23,7 @@ export interface Props {
 }
 
 export default function ServiceItem(p: Props) {
-  let {repoList, currentIndex, microList, setSpreadItem, setMicroList, isNewFlag} = p;
+  let { repoList, currentIndex, microList, setSpreadItem, setMicroList, isNewFlag } = p;
   const [render, setRender] = useState<null>(null);
   // let [isRepo, setIsRepo] = useState<boolean>(false);
 
@@ -45,7 +46,7 @@ export default function ServiceItem(p: Props) {
     staticType
   } = value;
 
-  const {control, handleSubmit, formState: {errors}, getValues, watch, setValue} = useForm({
+  const { control, handleSubmit, formState: { errors }, getValues, watch, setValue } = useForm({
     defaultValues: {
       serviceName,
       isRepo,
@@ -65,7 +66,7 @@ export default function ServiceItem(p: Props) {
     },
   });
 
-  const {fields: deployFields, append: deployAppend, remove: deployRemove} = useFieldArray({
+  const { fields: deployFields, append: deployAppend, remove: deployRemove } = useFieldArray({
     control,
     name: "env"
   });
@@ -88,7 +89,7 @@ export default function ServiceItem(p: Props) {
     if ((key === 'other') || (currentValue === key)) {
       return;
     }
-    let thisFrameWork: any = find(FrameWorksList, {key: key});
+    let thisFrameWork: any = find(FrameWorksList, { key: key });
     thisFrameWork = pick(thisFrameWork, [
       "baseImage",
       "buildCommand",
@@ -109,7 +110,7 @@ export default function ServiceItem(p: Props) {
     let framework = getValues('framework');
     if (value) {
       if (framework) {
-        let thisFrameWork: any = find(FrameWorksList, {key: framework});
+        let thisFrameWork: any = find(FrameWorksList, { key: framework });
         thisFrameWork = pick(thisFrameWork, [
           "baseImage",
           "buildCommand",
@@ -176,7 +177,7 @@ export default function ServiceItem(p: Props) {
               <Controller
                 name={`serviceName`}
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <TextField
                     size="small"
                     value={field.value}
@@ -212,26 +213,26 @@ export default function ServiceItem(p: Props) {
             </div>
           </div>
         </div>
-        <Divider/>
+        <Divider />
 
         <Controller
           name={`isRepo`}
           control={control}
-          render={({field}) => (
+          render={({ field }) => (
             <div className={styles.selectTab}>
               <div className={clsx(styles.tab, !field.value && styles.selected)}
-                   onClick={() => {
-                     isRepoChangeCb(false);
-                     field.onChange(false)
-                   }}
+                onClick={() => {
+                  isRepoChangeCb(false);
+                  field.onChange(false)
+                }}
               >
                 Create new repo
               </div>
               <div className={clsx(styles.tab, field.value && styles.selected)}
-                   onClick={() => {
-                     isRepoChangeCb(true);
-                     field.onChange(true)
-                   }}
+                onClick={() => {
+                  isRepoChangeCb(true);
+                  field.onChange(true)
+                }}
               >
                 Use existing repo
               </div>
@@ -247,7 +248,7 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`repoName`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
@@ -280,31 +281,19 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`repoUrl`}
                   control={control}
-                  render={({field}) => (
-                    <Select
-                      value={field.value || undefined}
-                      onChange={field.onChange}
-                      size="small"
-                      sx={{background: "#fff", width: "250px"}}
-                      placeholder="select a repo"
-                    >
+                  render={({ field }) => (
+                    <>
                       {
-                        !repoList &&
-                        <div className={styles.repoLoading}>
-                          <img src="/img/application/create/loading.png" alt="" className={styles.loadingIcon}/>
-                          <span className={styles.loadingText}>
-                          Loading Repositories List
-                        </span>
-                        </div>
+                        <Selector
+                          filterProps={{ size: "small" }}
+                          List={Array.isArray(repoList) ? repoList.map(item => ({ value: item.repo_name, key: item.url })) : []}
+                          isLoading={!Array.isArray(repoList)}
+                          onChange={field.onChange}
+                          defaultValue={field.value}
+                          placeholder="select a repo"
+                          loadingText="Loading Repositories List" />
                       }
-                      {
-                        repoList && (repoList as getRepoListRes[]).map(item => {
-                          return (
-                            <MenuItem value={item.url} key={item.url}>{item.repo_name}</MenuItem>
-                          )
-                        })
-                      }
-                    </Select>
+                    </>
                   )}
                   rules={{
                     required: "Please select a repo",
@@ -323,21 +312,21 @@ export default function ServiceItem(p: Props) {
               <Controller
                 name={`framework`}
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <div className={styles.selectWrapper}>
                     {
                       (getValues("isRepo") ? FrameWorksList : dropRight(FrameWorksList)).map(i => {
                         return (
                           <div key={i.name}
-                               className={clsx(styles.selectItem, (field.value === i.key) && styles.selected)}
-                               onClick={() => {
-                                 frameworkChangeCb(i.key);
-                                 field.onChange(i.key)
-                               }}
+                            className={clsx(styles.selectItem, (field.value === i.key) && styles.selected)}
+                            onClick={() => {
+                              frameworkChangeCb(i.key);
+                              field.onChange(i.key)
+                            }}
                           >
                             {
                               i.img &&
-                              <img src={i.img} alt="" style={{width: '40px', "maxHeight": "40px"}}/>
+                              <img src={i.img} alt="" style={{ width: '40px', "maxHeight": "40px" }} />
                             }
                             <div className={styles.name}>{i.name}</div>
                           </div>
@@ -364,14 +353,14 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`baseImage`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
 
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="node:16"
+                    // placeholder="node:16"
                     />
 
                     // <Select
@@ -411,16 +400,16 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`buildCommand`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="yarn install && yarn build"
+                    // placeholder="yarn install && yarn build"
                     />
                   )}
-                  // rules={{required: "Please enter build command"}}
+                // rules={{required: "Please enter build command"}}
                 />
                 {
                   errors.buildCommand?.message &&
@@ -438,16 +427,16 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`runCommand`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="yarn install && yarn build"
+                    // placeholder="yarn install && yarn build"
                     />
                   )}
-                  // rules={{required: "Please enter run command"}}
+                // rules={{required: "Please enter run command"}}
                 />
                 {
                   errors.runCommand?.message &&
@@ -464,16 +453,16 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`debugCommand`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="run debugger"
+                    // placeholder="run debugger"
                     />
                   )}
-                  // rules={{required: "Please enter debug command"}}
+                // rules={{required: "Please enter debug command"}}
                 />
                 {
                   errors.debugCommand?.message &&
@@ -492,16 +481,16 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`devCommand`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="yarn dev"
+                    // placeholder="yarn dev"
                     />
                   )}
-                  // rules={{...pathRule, required: "Please entry dev command"}}
+                // rules={{...pathRule, required: "Please entry dev command"}}
                 />
                 {
                   errors.devCommand?.message &&
@@ -519,16 +508,16 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`outputDir`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="dist"
+                    // placeholder="dist"
                     />
                   )}
-                  // rules={{...pathRule, required: "Please entry output directory"}}
+                // rules={{...pathRule, required: "Please entry output directory"}}
                 />
                 {
                   errors.outputDir?.message &&
@@ -546,13 +535,13 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`port`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <TextField
                       size="small"
                       sx={IconFocusStyle}
                       value={field.value}
                       onChange={field.onChange}
-                      // placeholder="3000"
+                    // placeholder="3000"
                     />
                   )}
                   rules={portRule}
@@ -572,12 +561,12 @@ export default function ServiceItem(p: Props) {
                 <Controller
                   name={`staticType`}
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <Select
                       value={field.value}
                       onChange={field.onChange}
                       size="small"
-                      sx={{background: "#fff", width: "250px"}}
+                      sx={{ background: "#fff", width: "250px" }}
                     >
                       {
                         StaticDeployModeList.map(item => {
@@ -610,10 +599,10 @@ export default function ServiceItem(p: Props) {
                       <Controller
                         name={`env.${index}.name`}
                         control={control}
-                        render={({field}) => (
+                        render={({ field }) => (
                           <TextField
                             size="small"
-                            sx={{...IconFocusStyle, width: '150px'}}
+                            sx={{ ...IconFocusStyle, width: '150px' }}
                             value={field.value}
                             onChange={field.onChange}
                           />
@@ -635,21 +624,21 @@ export default function ServiceItem(p: Props) {
                       }
                     </div>
                     <span className={styles.equal}>
-                 =
-                </span>
+                      =
+                    </span>
                     <div className={styles.right}>
                       <Controller
                         name={`env.${index}.value`}
                         control={control}
-                        render={({field}) => (
+                        render={({ field }) => (
                           <TextField
                             size="small"
-                            sx={{...IconFocusStyle, width: '150px'}}
+                            sx={{ ...IconFocusStyle, width: '150px' }}
                             value={field.value}
                             onChange={field.onChange}
                           />
                         )}
-                        rules={{required: 'Please input env value'}}
+                        rules={{ required: 'Please input env value' }}
                       />
                       {
                         get(errors, `env.${index}.value.message`) &&
@@ -657,10 +646,10 @@ export default function ServiceItem(p: Props) {
                       }
                     </div>
                     <img src="/img/application/delete.svg" alt="" onClick={() => deployRemove(index)}
-                         className={styles.deleteIcon}/>
+                      className={styles.deleteIcon} />
                   </div>
                 ))}
-                <div className={styles.add} onClick={() => deployAppend({name: "", value: ''})}>
+                <div className={styles.add} onClick={() => deployAppend({ name: "", value: '' })}>
                   ADD ONE
                 </div>
               </div>
@@ -671,8 +660,8 @@ export default function ServiceItem(p: Props) {
             <div className={styles.item}>
               <div className={styles.label}></div>
               <div className={styles.content}>
-                <ImportEnvByJson addEnvByJson={addEnvByJson}/>
-                <ImportEnvFileByJson addEnvByJson={addEnvByJson}/>
+                <ImportEnvByJson addEnvByJson={addEnvByJson} />
+                <ImportEnvFileByJson addEnvByJson={addEnvByJson} />
               </div>
             </div>
           }
@@ -685,7 +674,7 @@ export default function ServiceItem(p: Props) {
             Cancel
           </Button>
         }
-        <Button variant="contained" sx={{marginLeft: "20px"}} onClick={handleSubmit(submit)}>
+        <Button variant="contained" sx={{ marginLeft: "20px" }} onClick={handleSubmit(submit)}>
           Confirm
         </Button>
       </div>

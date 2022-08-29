@@ -4,7 +4,7 @@ import { selectorProps } from "./type";
 import styles from "./index.module.scss";
 import { defaultloadingIconUrl } from "./const";
 export default function Selector(props: selectorProps) {
-  const { filterProps, List, isLoading, loadingText, onChange, defaultValue, placeholder, loadingNode, loadingIconUrl } = props
+  const { filterProps, List, isLoading, loadingText, onChange, defaultValue, placeholder, loadingNode, loadingIconUrl, onOpen } = props
   const [isListShow, setIsListShow] = useState(isLoading === undefined ? false : !isLoading)
   const [isInputShow, setIsInputShow] = useState(false)
   const [optionValue, setOptionValue] = useState(defaultValue || '')
@@ -37,6 +37,7 @@ export default function Selector(props: selectorProps) {
                 }, 200);
               }}
               autoFocus
+              autoComplete="off"
             />
           ) : (
             // 展示框
@@ -46,6 +47,7 @@ export default function Selector(props: selectorProps) {
               placeholder={placeholder}
               onClick={showInput}
               onFocus={showInput}
+              autoComplete="off"
             />
           )
         }
@@ -82,6 +84,7 @@ export default function Selector(props: selectorProps) {
                             setOptionValue((e.target as any).dataset.value)
                             onChange((e.target as any).dataset.value)
                             setIsInputShow(false)
+                            onOpen && onOpen(e)
                           }}
                           data-value={item.value}>
                           {item.value}

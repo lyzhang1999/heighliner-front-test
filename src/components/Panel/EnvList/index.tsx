@@ -42,27 +42,27 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
       env_id: number,
       release_id: number
     ) =>
-    () => {
-      switch (page) {
-        case "env panel":
-          router.push(
-            `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-          );
-          break;
-        case "env settings":
-          router.push(
-            `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
-          );
-          break;
-        case "logs":
-          router.push(
-            `/${getUrlEncodeName()}/applications/creating?app_id=${getQuery(
-              "app_id"
-            )}&release_id=${release_id}&foromPane=true`
-          );
-          break;
-      }
-    };
+      () => {
+        switch (page) {
+          case "env panel":
+            router.push(
+              `/${getUrlEncodeName()}/applications/panel/env?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+            );
+            break;
+          case "env settings":
+            router.push(
+              `/${getUrlEncodeName()}/applications/panel/env/settings?app_id=${app_id}&release_id=${release_id}&env_id=${env_id}`
+            );
+            break;
+          case "logs":
+            router.push(
+              `/${getUrlEncodeName()}/applications/creating?app_id=${getQuery(
+                "app_id"
+              )}&release_id=${release_id}&foromPane=true`
+            );
+            break;
+        }
+      };
 
   return (
     <div className={styles.wrapper}>
@@ -77,6 +77,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
           />
         ))}
       {envlist.map((i, index) => {
+
         return (
           <Fragment key={index}>
             <div
@@ -245,7 +246,7 @@ export default function EnvList({ spreadCb, envlist, forkSuccessCb }: Props) {
                       i.last_release.id
                     )}
                   >
-                    Link
+                    {`${formatDate(Number(i.create_time) * 1000)}`}
                   </span>
                 </div>
               </div>

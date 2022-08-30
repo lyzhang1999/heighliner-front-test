@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 import {ApplicationObject, ApplicationStatus} from "@/api/application";
-import {getUrlEncodeName} from "@/utils/utils";
+import {formatDate, getUrlEncodeName} from "@/utils/utils";
 import {useRouter} from "next/router";
 import {find, get} from "lodash-es";
 import {ClusterItem} from "@/api/cluster";
@@ -135,6 +135,9 @@ export default function ApplicationList({
                   </div>
                   <div className={styles.status}>
                     Cluster: <span className={styles.value}> {cluster && cluster}</span>
+                  </div>
+                  <div className={styles.status}>
+                    Create time: <span className={styles.value}> {`${formatDate(Number(item.create_time)*1000)}`}</span>
                   </div>
                   {
                     get(item, ['stack', 'name']) &&
